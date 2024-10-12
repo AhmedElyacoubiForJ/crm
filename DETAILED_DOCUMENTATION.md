@@ -3,7 +3,14 @@
 ## Projektbeschreibung
 Dieses Projekt ist eine Implementierung eines **Customer Relationship Management Systems (CRM)**, das es Mitarbeitern ermöglicht, Kunden zu verwalten, Notizen zu Interaktionen zu hinterlegen und Kunden nach bestimmten Kriterien zu durchsuchen. Kunden werden Mitarbeitern zugeordnet und jede Kundeninteraktion wird als Notiz dokumentiert.
 
-## Entitäten
+## Implementierungsprozess
+> Zuerst werden die Entities identifiziert, daraus JPA Entities spezifiziert und für jeweils eine Repository erstellt.
+> Bei Bedarf werden custom Queries hinzugefügt. Danach werden Unit-Tests implementiert, um die Funktionalität und Integrität jeder Entität und ihrer Beziehungen zu überprüfen.
+> Parallel dazu wird die Geschäftslogik in den Service-Schichten definiert und implementiert, wobei die Services ebenfalls umfassend getestet werden.
+> Schließlich werden Integrationstests durchgeführt, um sicherzustellen, dass alle Systemkomponenten nahtlos zusammenarbeiten.
+
+
+## Entitäten Beschreibung
 ### Customer
 Die `Customer`-Entität repräsentiert einen Kunden und hat folgende Attribute:
 - `id` (Long): Primärschlüssel
