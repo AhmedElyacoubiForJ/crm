@@ -57,7 +57,11 @@ Das `InteractionType`-Enum definiert die verschiedenen Arten von Interaktionen:
 - `testCreateCustomerWithoutEmployeeFailed`: Testet, ob ein Kunde ohne zugeordneten Mitarbeiter nicht gespeichert werden kann und eine `DataIntegrityViolationException` auslöst.
 - `testCreateReadUpdateDelete`: Ein umfassender Test, der die CRUD-Operationen für die `Customer`-Entität abdeckt.
 
-```java
+<details>
+<summary>Klicke hier, um den Code anzuzeigen</summary>
+
+```
+java
 @SpringBootTest
 public class CustomerRepositoryTests {
 
@@ -135,3 +139,4 @@ public class CustomerRepositoryTests {
     }
 }
 ```
+</details>
