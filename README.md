@@ -50,6 +50,11 @@
 ## Beispiel:
 Um eine Notiz zu erstellen, sende eine POST-Anfrage an `/notes`.
 
+## TODO
+- JPA Entities spezifizieren
+- Repositories
+- Services
+
 
 
 
