@@ -32,7 +32,8 @@ public class Customer {
     @OneToMany(
             mappedBy = "customer",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     List<Note> notes;
 }

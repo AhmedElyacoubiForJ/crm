@@ -4,6 +4,7 @@ import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.InteractionType;
 import edu.yacoubi.crm.model.Note;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -11,7 +12,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,6 +24,9 @@ class CustomerRepositoryTest {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private NoteRepository noteRepository;
 
     @Test
     public void testCreateReadUpdateDelete() {
@@ -202,5 +205,61 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    public void testDeleteCustomerWithNotes() {}
+    @Transactional
+    public void testCascadeDeleteCustomerWithNotes() {
+        // Given
+        Employee employee = Employee.builder()
+                .firstName("Jane")
+                .lastName("Doe")
+                .email("jane.doe@example.com")
+                .department("Sales")
+                .build();
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        Customer customer = Customer.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .email("john.doe@example.com")
+                .phone("1234567890")
+                .address("123 Main St")
+                .lastInteractionDate(LocalDate.now())
+                .employee(savedEmployee)
+                .build();
+        Customer savedCustomer = underTest.save(customer);
+
+        // Create notes
+        Note note1 = Note.builder()
+                .content("First interaction")
+                .date(LocalDate.now())
+                .interactionType(InteractionType.EMAIL)
+                .customer(savedCustomer)
+                .build();
+
+        Note note2 = Note.builder()
+                .content("Follow-up call")
+                .date(LocalDate.now().plusDays(1))
+                .interactionType(InteractionType.PHONE_CALL)
+                .customer(savedCustomer)
+                .build();
+
+        // Create a mutable list and add notes
+        List<Note> notes = new ArrayList<>();
+        notes.add(note1);
+        notes.add(note2);
+        savedCustomer.setNotes(notes);
+
+        // Save the customer again with notes
+        underTest.save(savedCustomer);
+
+        // When
+        underTest.deleteById(savedCustomer.getId());
+
+        // Then
+        // Assert that the customer is deleted
+        assertNull(underTest.findById(savedCustomer.getId()).orElse(null));
+
+        // Assert that the notes are also deleted
+        List<Note> notesList = noteRepository.findAll();
+        assertTrue(notesList.isEmpty());
+    }
 }
