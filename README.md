@@ -33,7 +33,9 @@
    - **Suche**: Die Mitarbeiter sollen Kunden nach Name, E-Mail oder Telefonnummer durchsuchen können.
    - **Interaktionen anzeigen**: Zeige Interaktionen eines Kunden geordnet nach dem Datum an.
 5. **Zukunftspläne**
-   - Implementierung ... 
+   - Sicherheitsmechanismen wie Authentifizierung und Autorisierung
+   - Integration von Analytik-Tools
+   - Automatisierten E-Mail-Kampagnen 
 
 ## Technologien
 - java 17

@@ -1,11 +1,13 @@
 package edu.yacoubi.crm.model;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
 @Entity
 @Data
+@Builder
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

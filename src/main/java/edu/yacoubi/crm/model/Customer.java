@@ -1,6 +1,7 @@
 package edu.yacoubi.crm.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Builder
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +26,9 @@ public class Customer {
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
+    // Notizen sind keine eigenständigen Entitäten, sondern direkt
+    // mit dem Kunden verbunden.
+    // Beim Löschen eines Kunden auch die dazugehörigen Notizen werden gelöscht.
     @OneToMany(
             mappedBy = "customer",
             fetch = FetchType.LAZY,
