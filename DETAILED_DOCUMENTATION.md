@@ -147,12 +147,6 @@ public class CustomerRepositoryTests {
 - `itShouldUpdateCustomer`: Testet die Aktualisierung eines bestehenden Kunden.
 - `itShouldDeleteCustomer`: Testet das Löschen eines Kunden.
 
-### Service-Tests
-- `itShouldCreateCustomer`: Testet die Erstellung eines neuen Kunden.
-- `itShouldFindCustomerById`: Testet das Finden eines Kunden nach ID.
-- `itShouldUpdateCustomer`: Testet die Aktualisierung eines bestehenden Kunden.
-- `itShouldDeleteCustomer`: Testet das Löschen eines Kunden.
-
 <details>
 <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
 
