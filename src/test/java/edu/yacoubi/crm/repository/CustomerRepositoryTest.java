@@ -124,6 +124,8 @@ class CustomerRepositoryTest {
     @Test
     @Transactional
     // Cascade test
+    // Notizen sind keine eigenständigen Entitäten, sondern direkt mit dem Kunden verbunden.
+    // Beim Löschen eines Kunden auch die dazugehörigen Notizen werden gelöscht.
     public void itShouldDeleteCustomerNotesIfCustomerDeleted() {
         // Given
         Employee employee = TestDataUtil.createEmployeeA();

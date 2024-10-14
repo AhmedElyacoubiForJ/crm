@@ -27,9 +27,6 @@ public class Customer {
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
-    // Notizen sind keine eigenständigen Entitäten, sondern direkt
-    // mit dem Kunden verbunden.
-    // Beim Löschen eines Kunden auch die dazugehörigen Notizen werden gelöscht.
     @OneToMany(
             mappedBy = "customer",
             fetch = FetchType.LAZY,
@@ -39,11 +36,17 @@ public class Customer {
     List<Note> notes;
 
     public void addNote(Note note) {
+        if (notes == null) {
+            notes = new ArrayList<>();
+        }
         notes.add(note);
         note.setCustomer(this);
     }
 
     public void removeNote(Note note) {
+        if (notes == null) {
+            return;
+        }
         notes.remove(note);
         note.setCustomer(null);
     }
