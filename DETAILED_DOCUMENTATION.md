@@ -58,11 +58,11 @@ Das `InteractionType`-Enum definiert die verschiedenen Arten von Interaktionen:
 - `testCreateReadUpdateDelete`: Ein umfassender Test, der die CRUD-Operationen für die `Customer`-Entität abdeckt.
 
 <details>
-<summary>Klicke hier, um den Code anzuzeigen</summary>
+<summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
 
 ```
 java
-@SpringBootTest
+@DataJpaTest
 public class CustomerRepositoryTests {
 
     @Autowired

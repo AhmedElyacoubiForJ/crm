@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,4 +37,14 @@ public class Customer {
             orphanRemoval = true
     )
     List<Note> notes;
+
+    public void addNote(Note note) {
+        notes.add(note);
+        note.setCustomer(this);
+    }
+
+    public void removeNote(Note note) {
+        notes.remove(note);
+        note.setCustomer(null);
+    }
 }
