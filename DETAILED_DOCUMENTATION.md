@@ -243,7 +243,7 @@ Das `InteractionType`-Enum definiert die verschiedenen Arten von Interaktionen:
     ```
     </details>
 
-### Service-Tests
+### Service-Unit-Tests
 - `itShouldCreateCustomer`: Testet die Erstellung eines neuen Kunden.
 - `itShouldFindCustomerById`: Testet das Finden eines Kunden anhand der ID.
 - `itShouldUpdateCustomer`: Testet die Aktualisierung eines bestehenden Kunden.
@@ -403,3 +403,9 @@ class CustomerServiceImplUnitTest {
 }
 ```
 </details>
+
+### Service-Integration-Tests
+> Integrationstests verwenden tatsächliche Implementierungen, um sicherzustellen, dass alle Komponenten des Systems reibungslos zusammenarbeiten.
+> Sie prüfen die Interaktionen zwischen verschiedenen Modulen und erkennen Probleme, die in isolierten Unit-Tests möglicherweise nicht auftreten.
+
+## Customer-Integration-Tests
