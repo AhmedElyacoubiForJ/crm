@@ -54,92 +54,89 @@ Das `InteractionType`-Enum definiert die verschiedenen Arten von Interaktionen:
 
 ## Tests
 ### Datenbankintegrität
-- `testCreateCustomerWithoutEmployeeFailed`: Testet, ob ein Kunde ohne zugeordneten Mitarbeiter nicht gespeichert werden kann und eine `DataIntegrityViolationException` auslöst.
-- `testCreateReadUpdateDelete`: Ein umfassender Test, der die CRUD-Operationen für die `Customer`-Entität abdeckt.
-
-<details>
-<summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
-
-```
-java
-@DataJpaTest
-public class CustomerRepositoryTests {
+- `CustomerRepositoryTest`: Setup-Klasse, die dafür zuständig tests für die JPA Entity Customer Model durchzuführen.
+   <details>
+    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+    
+    ```
+    @DataJpaTest
+    class CustomerRepositoryTest {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerRepository underTest;
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    @Test
-    public void testCreateCustomerWithoutEmployeeFailed() {
-        // Given
-        Customer customer = Customer.builder()
-                .firstName("John")
-                .lastName("Doe")
-                .email("john.doe@example.com")
-                .phone("1234567890")
-                .address("123 Main St")
-                .lastInteractionDate(LocalDate.now())
-                .build();
-
-        // When
-        DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () -> {
-            customerRepository.save(customer);
-        });
-
-        // Then
-        String expectedMessage = "not-null property references a null";
-        assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
+    @Autowired
+    private NoteRepository noteRepository;  
+    
+    // Test Methods
     }
+    ```
+    </details>
 
+- `itShouldPerformAllCRUDOperations`: Ein umfassender Test, der die CRUD-Operationen für die `Customer`-Entität abdeckt.
+    <details>
+    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+
+    ```
     @Test
-    public void testCreateReadUpdateDelete() {
-        // Create a new employee
-        Employee employee = Employee.builder()
-                .firstName("Jane")
-                .lastName("Doe")
-                .email("jane.doe@example.com")
-                .department("Sales")
-                .build();
-
-        // Save the employee
+    public void itShouldPerformAllCRUDOperations() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeA();
         Employee savedEmployee = employeeRepository.save(employee);
-
         // Create a new customer and associate with saved employee
-        Customer customer = Customer.builder()
-                .firstName("John")
-                .lastName("Doe")
-                .email("john.doe@example.com")
-                .phone("1234567890")
-                .address("123 Main St")
-                .lastInteractionDate(LocalDate.now())
-                .employee(savedEmployee) // associate customer with employee
-                .build();
-
-        // Save the customer
-        Customer savedCustomer = customerRepository.save(customer);
-
-        // Read the customer
-        Customer foundCustomer = customerRepository.findById(savedCustomer.getId()).orElse(null);
+        Customer customer = TestDataUtil.createCustomerA(savedEmployee);
+        // When
+        Customer savedCustomer = underTest.save(customer);
+        // Then
+        Customer foundCustomer = underTest.findById(savedCustomer.getId()).orElse(null);
         assertNotNull(foundCustomer);
         assertEquals("John", foundCustomer.getFirstName());
 
         // Update the customer
         foundCustomer.setFirstName("Jane");
-        customerRepository.save(foundCustomer);
-        Customer updatedCustomer = customerRepository.findById(savedCustomer.getId()).orElse(null);
+        underTest.save(foundCustomer);
+        Customer updatedCustomer = underTest.findById(savedCustomer.getId()).orElse(null);
         assertNotNull(updatedCustomer);
         assertEquals("Jane", updatedCustomer.getFirstName());
 
         // Delete the customer
-        customerRepository.delete(updatedCustomer);
-        Customer deletedCustomer = customerRepository.findById(savedCustomer.getId()).orElse(null);
+        underTest.delete(updatedCustomer);
+        Customer deletedCustomer = underTest.findById(savedCustomer.getId()).orElse(null);
         assertNull(deletedCustomer);
     }
-}
-```
-</details>
+    ```
+    </details>
+    
+- `itShouldThrowWhenCreateCustomerWithoutEmployee`: Testet, ob ein Kunde ohne zugeordneten Mitarbeiter nicht gespeichert werden kann und eine `DataIntegrityViolationException` auslöst.
+    <details>
+    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+
+    ```
+    @Test
+    // Foreign key constraints
+    public void itShouldThrowWhenCreateCustomerWithoutEmployee() {
+        // Given
+        // Create a new customer without an employee
+        Customer customer = TestDataUtil.createCustomerB(null);
+        // When
+        // This should throw an exception because the employee is missing
+        DataIntegrityViolationException exception = assertThrows(
+                DataIntegrityViolationException.class, () -> underTest.save(customer));
+        // Then
+        String expectedMessage = "not-null property references a null";
+        assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
+    }
+    ```
+    </details>
+
+- `itShouldReturnCustomerByEmail`:  ...
+- `itShouldNotReturnCustomerByNotExistingEmail`: ...
+- `itShouldCreateNotesToCustomer`: ...
+- `itShouldDeleteCustomerNotesIfCustomerDeleted`: Beim Löschen eines Kunden, soll auch die dazugehörigen Notizen gelöscht werden.
+    
 
 ### Service-Tests
 - `itShouldCreateCustomer`: Testet die Erstellung eines neuen Kunden.
