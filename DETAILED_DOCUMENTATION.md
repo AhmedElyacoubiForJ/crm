@@ -132,27 +132,136 @@ Das `InteractionType`-Enum definiert die verschiedenen Arten von Interaktionen:
     ```
     </details>
 
-- `itShouldReturnCustomerByEmail`:  ...
-- `itShouldNotReturnCustomerByNotExistingEmail`: ...
-- `itShouldCreateNotesToCustomer`: ...
+- `itShouldReturnCustomerByEmail`: `Custom-Query` Test die Suche nach ein Kunde per E-Mail.
+    <details>
+    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+
+    ```
+    @Test
+    public void itShouldReturnCustomerByEmail() {
+        // Given
+        String email = "jane.smith@example.com";
+        Employee employee = TestDataUtil.createEmployeeC();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer customer = TestDataUtil.createCustomerB(savedEmployee);
+        underTest.save(customer);
+        // When
+        Customer foundCustomer = underTest.findByEmail(email).orElse(null);
+        // Then
+        assertNotNull(foundCustomer);
+        assertEquals(email, foundCustomer.getEmail());
+    }
+    ```
+    </details>
+- `itShouldNotReturnCustomerByNotExistingEmail`: Test die Suche einer nicht existierender Kunde per E-Mail.
+    <details>
+    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+
+    ```
+    @Test
+    public void itShouldNotReturnCustomerByNotExistingEmail() {
+        // Given
+        String notExistingEmail = "not.existing@example.com";
+        // When
+        Customer foundCustomer = underTest.findByEmail(notExistingEmail).orElse(null);
+        // Then
+        assertNull(foundCustomer);
+    }
+    ```
+    </details>
+- `itShouldCreateNotesToCustomer`: Test die zuordnung von Notizen zur Kunde.
+    <details>
+    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+
+    ```
+    @Test
+    public void itShouldCreateNotesToCustomer() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeC();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer customer = TestDataUtil.createCustomerC(savedEmployee);
+        Customer savedCustomer = underTest.save(customer);
+
+        // Create and associate notes
+        List<Note> notes = new ArrayList<>();
+        Note noteA = TestDataUtil.createNoteA(savedCustomer);
+        Note noteB = TestDataUtil.createNoteB(savedCustomer);
+        notes.add(noteA);
+        notes.add(noteB);
+        savedCustomer.setNotes(notes);
+
+        // When
+        underTest.save(savedCustomer);
+
+        // Then
+        Customer foundCustomer = underTest.findById(savedCustomer.getId()).orElse(null);
+        assertNotNull(foundCustomer);
+        assertEquals(2, foundCustomer.getNotes().size());
+        assertEquals(notes.get(0).getContent(), foundCustomer.getNotes().get(0).getContent());
+        assertEquals(notes.get(1).getContent(), foundCustomer.getNotes().get(1).getContent());
+    }
+    ```
+    </details>
 - `itShouldDeleteCustomerNotesIfCustomerDeleted`: Beim Löschen eines Kunden, soll auch die dazugehörigen Notizen gelöscht werden.
-    
+    <details>
+    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+
+    ```
+    @Test
+    @Transactional
+    // Cascade test
+    // Notizen sind keine eigenständigen Entitäten, sondern direkt mit dem Kunden verbunden.
+    // Beim Löschen eines Kunden auch die dazugehörigen Notizen werden gelöscht.
+    public void itShouldDeleteCustomerNotesIfCustomerDeleted() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeA();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer customer = TestDataUtil.createCustomerB(savedEmployee);
+        Customer savedCustomer = underTest.save(customer);
+
+        // Create and associate notes
+        List<Note> notes = new ArrayList<>();
+        Note noteA = TestDataUtil.createNoteA(savedCustomer);
+        Note noteB = TestDataUtil.createNoteB(savedCustomer);
+        Note noteC = TestDataUtil.createNoteC(savedCustomer);
+        notes.add(noteA);
+        notes.add(noteB);
+        notes.add(noteC);
+        savedCustomer.setNotes(notes);
+        underTest.save(savedCustomer);
+
+        // When
+        underTest.deleteById(savedCustomer.getId());
+
+        // Then
+        // Assert that the customer is deleted
+        assertNull(underTest.findById(savedCustomer.getId()).orElse(null));
+        // Assert that the notes are also deleted
+        List<Note> notesList = noteRepository.findAll();
+        assertTrue(notesList.isEmpty());
+    }
+    ```
+    </details>
 
 ### Service-Tests
 - `itShouldCreateCustomer`: Testet die Erstellung eines neuen Kunden.
-- `itShouldFindCustomerById`: Testet das Finden eines Kunden nach ID.
+- `itShouldFindCustomerById`: Testet das Finden eines Kunden anhand der ID.
 - `itShouldUpdateCustomer`: Testet die Aktualisierung eines bestehenden Kunden.
 - `itShouldDeleteCustomer`: Testet das Löschen eines Kunden.
+- `itShouldFindCustomerPerEmail`: Testet das Finden eines Kunden anhand der E-Mail.
+- `itShouldThrowExceptionWhenCustomerDoesNotExist`: Testet das Werfen einer Ausnahme, wenn der Kunde nichts existiert.
+- `itShouldNotThrowExceptionWhenCustomerExists`: Testet das Nicht-Werfen einer Ausnahme, wenn der kunde existiert.
 
 <details>
 <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
 
 ```
-java
+package edu.yacoubi.crm.service.impl;
+
 import edu.yacoubi.crm.TestDataUtil;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
-import edu.yacoubi.crm.service.impl.CustomerServiceImpl;
+import edu.yacoubi.crm.service.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -163,9 +272,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 class CustomerServiceImplUnitTest {
-
     @Mock
     private CustomerRepository customerRepository;
 
@@ -244,6 +353,53 @@ class CustomerServiceImplUnitTest {
         // Then
         verify(customerRepository, times(1)).deleteById(customerId);
     }
+
+    @Test
+    public void itShouldFindCustomerPerEmail() {
+        // Given
+        String email = "test@example.com";
+        Customer customer = TestDataUtil.createCustomerA(null);
+        customer.setEmail(email);
+        when(customerRepository.findByEmail(email)).thenReturn(Optional.of(customer));
+
+        // When
+        Optional<Customer> foundCustomer = underTest.getCustomerByEmail(email);
+
+        // Then
+        assertTrue(foundCustomer.isPresent());
+        assertEquals(email, foundCustomer.get().getEmail());
+        verify(customerRepository, times(1)).findByEmail(email);
+    }
+
+    @Test
+    public void itShouldThrowExceptionWhenCustomerDoesNotExist() {
+        // Given
+        Long customerId = 1L;
+        when(customerRepository.existsById(customerId)).thenReturn(false);
+
+        // When & Then
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class, () -> underTest.getCustomerById(customerId));
+        assertEquals("Customer not found with ID:", exception.getMessage());
+    }
+
+    @Test
+    public void itShouldNotThrowExceptionWhenCustomerExists() {
+        // Given
+        Long customerId = 1L;
+        Customer customer = TestDataUtil.createCustomerA(null);
+        customer.setId(customerId);
+        when(customerRepository.existsById(customerId)).thenReturn(true);
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
+
+        // When
+        Optional<Customer> foundCustomer = underTest.getCustomerById(customerId);
+
+        // Then
+        assertTrue(foundCustomer.isPresent());
+        assertEquals(customer.getEmail(), foundCustomer.get().getEmail());
+    }
+
 }
 ```
 </details>

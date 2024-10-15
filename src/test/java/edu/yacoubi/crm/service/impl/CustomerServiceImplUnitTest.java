@@ -3,6 +3,7 @@ package edu.yacoubi.crm.service.impl;
 import edu.yacoubi.crm.TestDataUtil;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
+import edu.yacoubi.crm.service.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,8 +14,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 class CustomerServiceImplUnitTest {
@@ -96,4 +95,51 @@ class CustomerServiceImplUnitTest {
         // Then
         verify(customerRepository, times(1)).deleteById(customerId);
     }
+
+    @Test
+    public void itShouldFindCustomerPerEmail() {
+        // Given
+        String email = "test@example.com";
+        Customer customer = TestDataUtil.createCustomerA(null);
+        customer.setEmail(email);
+        when(customerRepository.findByEmail(email)).thenReturn(Optional.of(customer));
+
+        // When
+        Optional<Customer> foundCustomer = underTest.getCustomerByEmail(email);
+
+        // Then
+        assertTrue(foundCustomer.isPresent());
+        assertEquals(email, foundCustomer.get().getEmail());
+        verify(customerRepository, times(1)).findByEmail(email);
+    }
+
+    @Test
+    public void itShouldThrowExceptionWhenCustomerDoesNotExist() {
+        // Given
+        Long customerId = 1L;
+        when(customerRepository.existsById(customerId)).thenReturn(false);
+
+        // When & Then
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class, () -> underTest.getCustomerById(customerId));
+        assertEquals("Customer not found with ID:", exception.getMessage());
+    }
+
+    @Test
+    public void itShouldNotThrowExceptionWhenCustomerExists() {
+        // Given
+        Long customerId = 1L;
+        Customer customer = TestDataUtil.createCustomerA(null);
+        customer.setId(customerId);
+        when(customerRepository.existsById(customerId)).thenReturn(true);
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
+
+        // When
+        Optional<Customer> foundCustomer = underTest.getCustomerById(customerId);
+
+        // Then
+        assertTrue(foundCustomer.isPresent());
+        assertEquals(customer.getEmail(), foundCustomer.get().getEmail());
+    }
+
 }
