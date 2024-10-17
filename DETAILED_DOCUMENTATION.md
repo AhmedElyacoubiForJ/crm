@@ -54,194 +54,376 @@ Das `InteractionType`-Enum definiert die verschiedenen Arten von Interaktionen:
 
 ## Tests
 ### Datenbankintegrität
-- `CustomerRepositoryTest`: Setup-Klasse, die dafür zuständig tests für die JPA Entity Customer Model durchzuführen.
-   <details>
-    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+1. Customer:
+   - `CustomerRepositoryTest`: Setup-Klasse, die dafür zuständig tests für die JPA Entity Customer Model durchzuführen.
+      <details>
+       <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
     
-    ```
+       ```
+       @DataJpaTest
+       class CustomerRepositoryTest {
+
+       @Autowired
+       private CustomerRepository underTest;
+
+       @Autowired
+       private EmployeeRepository employeeRepository;
+
+       @Autowired
+       private NoteRepository noteRepository;  
+    
+       // Test Methods
+       }
+       ```
+       </details>
+
+   - `itShouldPerformAllCRUDOperations`: Ein umfassender Test, der die CRUD-Operationen für die `Customer`-Entität abdeckt.
+       <details>
+       <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+
+       ```
+       @Test
+       public void itShouldPerformAllCRUDOperations() {
+           // Given
+           Employee employee = TestDataUtil.createEmployeeA();
+           Employee savedEmployee = employeeRepository.save(employee);
+           // Create a new customer and associate with saved employee
+           Customer customer = TestDataUtil.createCustomerA(savedEmployee);
+           // When
+           Customer savedCustomer = underTest.save(customer);
+           // Then
+           Customer foundCustomer = underTest.findById(savedCustomer.getId()).orElse(null);
+           assertNotNull(foundCustomer);
+           assertEquals("John", foundCustomer.getFirstName());
+
+           // Update the customer
+           foundCustomer.setFirstName("Jane");
+           underTest.save(foundCustomer);
+           Customer updatedCustomer = underTest.findById(savedCustomer.getId()).orElse(null);
+           assertNotNull(updatedCustomer);
+           assertEquals("Jane", updatedCustomer.getFirstName());
+
+           // Delete the customer
+           underTest.delete(updatedCustomer);
+           Customer deletedCustomer = underTest.findById(savedCustomer.getId()).orElse(null);
+           assertNull(deletedCustomer);
+       }
+       ```
+       </details>
+    
+   - `itShouldThrowWhenCreateCustomerWithoutEmployee`: Testet, ob ein Kunde ohne zugeordneten Mitarbeiter nicht gespeichert werden kann und eine `DataIntegrityViolationException` auslöst.
+       <details>
+       <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+
+       ```
+       @Test
+       // Foreign key constraints
+       public void itShouldThrowWhenCreateCustomerWithoutEmployee() {
+           // Given
+           // Create a new customer without an employee
+           Customer customer = TestDataUtil.createCustomerB(null);
+           // When
+           // This should throw an exception because the employee is missing
+           DataIntegrityViolationException exception = assertThrows(
+                   DataIntegrityViolationException.class, () -> underTest.save(customer));
+           // Then
+           String expectedMessage = "not-null property references a null";
+           assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
+       }
+       ```
+       </details>
+
+   - `itShouldReturnCustomerByEmail`: `Custom-Query` Test die Suche nach ein Kunde per E-Mail.
+       <details>
+       <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+
+       ```
+       @Test
+       public void itShouldReturnCustomerByEmail() {
+           // Given
+           String email = "jane.smith@example.com";
+           Employee employee = TestDataUtil.createEmployeeC();
+           Employee savedEmployee = employeeRepository.save(employee);
+           Customer customer = TestDataUtil.createCustomerB(savedEmployee);
+           underTest.save(customer);
+           // When
+           Customer foundCustomer = underTest.findByEmail(email).orElse(null);
+           // Then
+           assertNotNull(foundCustomer);
+           assertEquals(email, foundCustomer.getEmail());
+       }
+       ```
+       </details>
+   - `itShouldNotReturnCustomerByNotExistingEmail`: Test die Suche einer nicht existierender Kunde per E-Mail.
+       <details>
+       <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+
+       ```
+       @Test
+       public void itShouldNotReturnCustomerByNotExistingEmail() {
+           // Given
+           String notExistingEmail = "not.existing@example.com";
+           // When
+           Customer foundCustomer = underTest.findByEmail(notExistingEmail).orElse(null);
+           // Then
+           assertNull(foundCustomer);
+       }
+       ```
+       </details>
+   - `itShouldCreateNotesToCustomer`: Test die zuordnung von Notizen zur Kunde.
+       <details>
+       <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+
+       ```
+       @Test
+       public void itShouldCreateNotesToCustomer() {
+           // Given
+           Employee employee = TestDataUtil.createEmployeeC();
+           Employee savedEmployee = employeeRepository.save(employee);
+           Customer customer = TestDataUtil.createCustomerC(savedEmployee);
+           Customer savedCustomer = underTest.save(customer);
+
+           // Create and associate notes
+           List<Note> notes = new ArrayList<>();
+           Note noteA = TestDataUtil.createNoteA(savedCustomer);
+           Note noteB = TestDataUtil.createNoteB(savedCustomer);
+           notes.add(noteA);
+           notes.add(noteB);
+           savedCustomer.setNotes(notes);
+
+           // When
+           underTest.save(savedCustomer);
+
+           // Then
+           Customer foundCustomer = underTest.findById(savedCustomer.getId()).orElse(null);
+           assertNotNull(foundCustomer);
+           assertEquals(2, foundCustomer.getNotes().size());
+           assertEquals(notes.get(0).getContent(), foundCustomer.getNotes().get(0).getContent());
+           assertEquals(notes.get(1).getContent(), foundCustomer.getNotes().get(1).getContent());
+       }
+       ```
+       </details>
+   - `itShouldDeleteCustomerNotesIfCustomerDeleted`: Beim Löschen eines Kunden, soll auch die dazugehörigen Notizen gelöscht werden.
+       <details>
+       <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+
+       ```
+       @Test
+       @Transactional
+       // Cascade test
+       // Notizen sind keine eigenständigen Entitäten, sondern direkt mit dem Kunden verbunden.
+       // Beim Löschen eines Kunden auch die dazugehörigen Notizen werden gelöscht.
+       public void itShouldDeleteCustomerNotesIfCustomerDeleted() {
+           // Given
+           Employee employee = TestDataUtil.createEmployeeA();
+           Employee savedEmployee = employeeRepository.save(employee);
+           Customer customer = TestDataUtil.createCustomerB(savedEmployee);
+           Customer savedCustomer = underTest.save(customer);
+
+           // Create and associate notes
+           List<Note> notes = new ArrayList<>();
+           Note noteA = TestDataUtil.createNoteA(savedCustomer);
+           Note noteB = TestDataUtil.createNoteB(savedCustomer);
+           Note noteC = TestDataUtil.createNoteC(savedCustomer);
+           notes.add(noteA);
+           notes.add(noteB);
+           notes.add(noteC);
+           savedCustomer.setNotes(notes);
+           underTest.save(savedCustomer);
+
+           // When
+           underTest.deleteById(savedCustomer.getId());
+
+           // Then
+           // Assert that the customer is deleted
+           assertNull(underTest.findById(savedCustomer.getId()).orElse(null));
+           // Assert that the notes are also deleted
+           List<Note> notesList = noteRepository.findAll();
+           assertTrue(notesList.isEmpty());
+       }
+       ```
+       </details>
+2. Note:
+    - `itShouldPerformAllCRUDOperations`: ....
+    - `itShouldThrowWhenCreatingNoteWithoutCustomer`: ....
+    - `itShouldReturnNotesByCustomerId`: ....
+    - `itShouldReturnNoNotesWhenCustomerHasNoNotes`: ....
+    - `itShouldThrowWhenContentIsNull`: ....
+    - `itShouldThrowWhenDateIsNull`: ....
+    - `itShouldThrowWhenInteractionTypeIsNull`: ....
+    <details>
+       <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
+    
+   ```
+   
+    package edu.yacoubi.crm.repository;
+    import edu.yacoubi.crm.TestDataUtil;
+    import edu.yacoubi.crm.model.Customer;
+    import edu.yacoubi.crm.model.Employee;
+    import edu.yacoubi.crm.model.InteractionType;
+    import edu.yacoubi.crm.model.Note;
+    import org.junit.jupiter.api.Test;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+    import org.springframework.dao.DataIntegrityViolationException;
+    import org.springframework.dao.InvalidDataAccessApiUsageException;
+    
+    import java.time.LocalDate;
+    import java.util.List;
+    
+    import static org.junit.jupiter.api.Assertions.*;
+    
     @DataJpaTest
-    class CustomerRepositoryTest {
-
-    @Autowired
-    private CustomerRepository underTest;
-
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
-    @Autowired
-    private NoteRepository noteRepository;  
+    class NoteRepositoryTest {
     
-    // Test Methods
-    }
-    ```
-    </details>
-
-- `itShouldPerformAllCRUDOperations`: Ein umfassender Test, der die CRUD-Operationen für die `Customer`-Entität abdeckt.
-    <details>
-    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
-
-    ```
-    @Test
-    public void itShouldPerformAllCRUDOperations() {
-        // Given
-        Employee employee = TestDataUtil.createEmployeeA();
-        Employee savedEmployee = employeeRepository.save(employee);
-        // Create a new customer and associate with saved employee
-        Customer customer = TestDataUtil.createCustomerA(savedEmployee);
-        // When
-        Customer savedCustomer = underTest.save(customer);
-        // Then
-        Customer foundCustomer = underTest.findById(savedCustomer.getId()).orElse(null);
-        assertNotNull(foundCustomer);
-        assertEquals("John", foundCustomer.getFirstName());
-
-        // Update the customer
-        foundCustomer.setFirstName("Jane");
-        underTest.save(foundCustomer);
-        Customer updatedCustomer = underTest.findById(savedCustomer.getId()).orElse(null);
-        assertNotNull(updatedCustomer);
-        assertEquals("Jane", updatedCustomer.getFirstName());
-
-        // Delete the customer
-        underTest.delete(updatedCustomer);
-        Customer deletedCustomer = underTest.findById(savedCustomer.getId()).orElse(null);
-        assertNull(deletedCustomer);
-    }
-    ```
-    </details>
+        @Autowired
+        EmployeeRepository employeeRepository;
+        @Autowired
+        CustomerRepository customerRepository;
+        @Autowired
+        private NoteRepository underTest;
     
-- `itShouldThrowWhenCreateCustomerWithoutEmployee`: Testet, ob ein Kunde ohne zugeordneten Mitarbeiter nicht gespeichert werden kann und eine `DataIntegrityViolationException` auslöst.
-    <details>
-    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
-
-    ```
-    @Test
-    // Foreign key constraints
-    public void itShouldThrowWhenCreateCustomerWithoutEmployee() {
-        // Given
-        // Create a new customer without an employee
-        Customer customer = TestDataUtil.createCustomerB(null);
-        // When
-        // This should throw an exception because the employee is missing
-        DataIntegrityViolationException exception = assertThrows(
-                DataIntegrityViolationException.class, () -> underTest.save(customer));
-        // Then
-        String expectedMessage = "not-null property references a null";
-        assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
+        @Test
+        public void itShouldPerformAllCRUDOperations() {
+            // Given
+            Employee employee = TestDataUtil.createEmployeeA();
+            Employee savedEmployee = employeeRepository.save(employee);
+            Customer customer = TestDataUtil.createCustomerA(savedEmployee);
+            Customer savedCustomer = customerRepository.save(customer);
+            // ...request
+            Note note = TestDataUtil.createNoteA(savedCustomer);
+    
+            // When
+            Note savedNote = underTest.save(note);
+            Note foundNote = underTest.findById(savedNote.getId()).orElse(null);
+            assertNotNull(foundNote);
+            assertEquals("First interaction", foundNote.getContent());
+            assertEquals(savedCustomer, foundNote.getCustomer());
+    
+            // Then
+            foundNote.setContent("Updated Note");
+            underTest.save(foundNote);
+            Note updatedNote = underTest.findById(foundNote.getId()).orElse(null);
+            assertNotNull(updatedNote);
+            assertEquals("Updated Note", updatedNote.getContent());
+            underTest.deleteById(foundNote.getId());
+            Note deletedNote = underTest.findById(foundNote.getId()).orElse(null);
+            assertNull(deletedNote);
+        }
+    
+        @Test
+        public void itShouldThrowWhenCreatingNoteWithoutCustomer() {
+            // Given
+            Note note = TestDataUtil.createNoteB(null);
+    
+            // When
+            DataIntegrityViolationException exception = assertThrows(
+                    DataIntegrityViolationException.class, () -> underTest.save(note));
+    
+            // Then
+            String expectedMessage = "not-null property references a null";
+            assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
+        }
+    
+        @Test
+        public void itShouldReturnNotesByCustomerId() {
+            // Given
+            Employee employee = TestDataUtil.createEmployeeA();
+            Employee savedEmployee = employeeRepository.save(employee);
+            Customer customer = TestDataUtil.createCustomerA(savedEmployee);
+            customer = customerRepository.save(customer);
+            Note noteA = TestDataUtil.createNoteA(customer);
+            Note noteB = TestDataUtil.createNoteB(customer);
+            Note noteC = TestDataUtil.createNoteC(customer);
+            underTest.save(noteA);
+            underTest.save(noteB);
+            underTest.save(noteC);
+    
+            // When
+            List<Note> foundNotes = underTest.findAllByCustomerId(customer.getId());
+    
+            // Then
+            assertEquals(3, foundNotes.size());
+        }
+    
+        @Test
+        public void itShouldReturnNoNotesWhenCustomerHasNoNotes() {
+            // Given
+            Employee employee = TestDataUtil.createEmployeeA();
+            Employee savedEmployee = employeeRepository.save(employee);
+            Customer customer = TestDataUtil.createCustomerA(savedEmployee);
+            customer = customerRepository.save(customer);
+    
+            // When
+            List<Note> foundNotes = underTest.findAllByCustomerId(customer.getId());
+    
+            // Then
+            assertTrue(foundNotes.isEmpty());
+        }
+    
+        @Test
+        public void itShouldThrowWhenContentIsNull() {
+            // Given
+            Employee employee = TestDataUtil.createEmployeeA();
+            Employee savedEmployee = employeeRepository.save(employee);
+            Customer customer = TestDataUtil.createCustomerA(savedEmployee);
+            Note note = Note.builder()
+                    .content(null)
+                    .date(LocalDate.now())
+                    .interactionType(InteractionType.EMAIL)
+                    .customer(customer)
+                    .build();
+            //underTest.save(note);
+            // When
+            InvalidDataAccessApiUsageException exception = assertThrows(
+                    InvalidDataAccessApiUsageException.class, () -> underTest.save(note));
+    
+            // Then
+            String expectedMessage = "Not-null property references a transient value";
+            assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
+        }
+    
+        @Test
+        public void itShouldThrowWhenDateIsNull() {
+            // Given
+            Employee employee = TestDataUtil.createEmployeeA();
+            Employee savedEmployee = employeeRepository.save(employee);
+            Customer customer = TestDataUtil.createCustomerA(savedEmployee);
+            Customer savedCustomer = customerRepository.save(customer);
+    
+            Note note = TestDataUtil.createNoteA(savedCustomer);
+            note.setDate(null);
+            // When
+            DataIntegrityViolationException exception = assertThrows(
+                    DataIntegrityViolationException.class, () -> underTest.save(note));
+    
+            // Then
+            String expectedMessage = "not-null property references a null or transient value";
+            assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
+        }
+    
+        @Test
+        public void itShouldThrowWhenInteractionTypeIsNull() {
+            // Given
+            Employee employee = TestDataUtil.createEmployeeA();
+            Employee savedEmployee = employeeRepository.save(employee);
+            Customer customer = TestDataUtil.createCustomerA(savedEmployee);
+            Customer savedCustomer = customerRepository.save(customer);
+    
+            Note note = TestDataUtil.createNoteA(savedCustomer);
+            note.setInteractionType(null);
+            // When
+            DataIntegrityViolationException exception = assertThrows(
+                    DataIntegrityViolationException.class, () -> underTest.save(note));
+    
+            // Then
+            String expectedMessage = "not-null property references a null or transient value";
+            assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
+        }
     }
-    ```
+     ```
     </details>
-
-- `itShouldReturnCustomerByEmail`: `Custom-Query` Test die Suche nach ein Kunde per E-Mail.
-    <details>
-    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
-
-    ```
-    @Test
-    public void itShouldReturnCustomerByEmail() {
-        // Given
-        String email = "jane.smith@example.com";
-        Employee employee = TestDataUtil.createEmployeeC();
-        Employee savedEmployee = employeeRepository.save(employee);
-        Customer customer = TestDataUtil.createCustomerB(savedEmployee);
-        underTest.save(customer);
-        // When
-        Customer foundCustomer = underTest.findByEmail(email).orElse(null);
-        // Then
-        assertNotNull(foundCustomer);
-        assertEquals(email, foundCustomer.getEmail());
-    }
-    ```
-    </details>
-- `itShouldNotReturnCustomerByNotExistingEmail`: Test die Suche einer nicht existierender Kunde per E-Mail.
-    <details>
-    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
-
-    ```
-    @Test
-    public void itShouldNotReturnCustomerByNotExistingEmail() {
-        // Given
-        String notExistingEmail = "not.existing@example.com";
-        // When
-        Customer foundCustomer = underTest.findByEmail(notExistingEmail).orElse(null);
-        // Then
-        assertNull(foundCustomer);
-    }
-    ```
-    </details>
-- `itShouldCreateNotesToCustomer`: Test die zuordnung von Notizen zur Kunde.
-    <details>
-    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
-
-    ```
-    @Test
-    public void itShouldCreateNotesToCustomer() {
-        // Given
-        Employee employee = TestDataUtil.createEmployeeC();
-        Employee savedEmployee = employeeRepository.save(employee);
-        Customer customer = TestDataUtil.createCustomerC(savedEmployee);
-        Customer savedCustomer = underTest.save(customer);
-
-        // Create and associate notes
-        List<Note> notes = new ArrayList<>();
-        Note noteA = TestDataUtil.createNoteA(savedCustomer);
-        Note noteB = TestDataUtil.createNoteB(savedCustomer);
-        notes.add(noteA);
-        notes.add(noteB);
-        savedCustomer.setNotes(notes);
-
-        // When
-        underTest.save(savedCustomer);
-
-        // Then
-        Customer foundCustomer = underTest.findById(savedCustomer.getId()).orElse(null);
-        assertNotNull(foundCustomer);
-        assertEquals(2, foundCustomer.getNotes().size());
-        assertEquals(notes.get(0).getContent(), foundCustomer.getNotes().get(0).getContent());
-        assertEquals(notes.get(1).getContent(), foundCustomer.getNotes().get(1).getContent());
-    }
-    ```
-    </details>
-- `itShouldDeleteCustomerNotesIfCustomerDeleted`: Beim Löschen eines Kunden, soll auch die dazugehörigen Notizen gelöscht werden.
-    <details>
-    <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
-
-    ```
-    @Test
-    @Transactional
-    // Cascade test
-    // Notizen sind keine eigenständigen Entitäten, sondern direkt mit dem Kunden verbunden.
-    // Beim Löschen eines Kunden auch die dazugehörigen Notizen werden gelöscht.
-    public void itShouldDeleteCustomerNotesIfCustomerDeleted() {
-        // Given
-        Employee employee = TestDataUtil.createEmployeeA();
-        Employee savedEmployee = employeeRepository.save(employee);
-        Customer customer = TestDataUtil.createCustomerB(savedEmployee);
-        Customer savedCustomer = underTest.save(customer);
-
-        // Create and associate notes
-        List<Note> notes = new ArrayList<>();
-        Note noteA = TestDataUtil.createNoteA(savedCustomer);
-        Note noteB = TestDataUtil.createNoteB(savedCustomer);
-        Note noteC = TestDataUtil.createNoteC(savedCustomer);
-        notes.add(noteA);
-        notes.add(noteB);
-        notes.add(noteC);
-        savedCustomer.setNotes(notes);
-        underTest.save(savedCustomer);
-
-        // When
-        underTest.deleteById(savedCustomer.getId());
-
-        // Then
-        // Assert that the customer is deleted
-        assertNull(underTest.findById(savedCustomer.getId()).orElse(null));
-        // Assert that the notes are also deleted
-        List<Note> notesList = noteRepository.findAll();
-        assertTrue(notesList.isEmpty());
-    }
-    ```
-    </details>
+      
 
 ### Service-Unit-Tests
 - `itShouldCreateCustomer`: Testet die Erstellung eines neuen Kunden.
