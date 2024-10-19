@@ -1,76 +1,85 @@
 # Customer Relationship App (CRM)
 
 ## Projektbeschreibung:
-> Dieses Projekt ist eine Implementierung für ***Customer Relationship Management System***, in dem es Mitarbeiter ermöglichen,
-> Kunden zu verwalten, Notizen zu Interaktionen zu hinterlegen und Kunden nach bestimmten Kriterien zu durchsuchen.
-> Kunden werden Mitarbeitern zugeordnet, und jede Kundeninteraktionen wird als Notiz dokumentiert.
+Dieses Projekt ist eine Implementierung eines **Customer Relationship Management Systems** (CRM), das Mitarbeitern ermöglicht, Kunden zu verwalten, Notizen zu Interaktionen zu hinterlegen und Kunden nach bestimmten Kriterien zu durchsuchen. Kunden werden Mitarbeitern zugeordnet, und jede Kundeninteraktion wird als Notiz dokumentiert. Dieses Projekt wird mit Spring Boot, Spring Data JPA und React entwickelt.
 
 ## Details:
 1. **Kunde (Customer)**:
     - Ein Kunde hat die folgenden Eigenschaften:
-      - Vorname (firstname) und Nachname (lastname)
-      - E-Mail-Adresse (email)
-      - Telefonnummer (phone)
-      - Adresse (address)
-      - Datum der letzten Interaktion (lastInteractionDate)
+        - Vorname (firstname) und Nachname (lastname)
+        - E-Mail-Adresse (email)
+        - Telefonnummer (phone)
+        - Adresse (address)
+        - Datum der letzten Interaktion (lastInteractionDate)
     - Jeder Kunde kann mehrere **Notizen** zu Interaktionen haben.
+
 2. **Notizen (Note)**:
-   - Eine Notiz gehört zu einer Kunde und dokumentiert eine Interaktion mit ihm.
-   - Eigenschaften einer Notiz:
-      - Inhalt der Notiz (content)
-      - Datum der Notiz (date)
-      - Typ der Deklaration (interActionType) - als Enumeration (z.B. EMAIL, PHONE_CALL, MEETING)
+    - Eine Notiz gehört zu einem Kunden und dokumentiert eine Interaktion mit ihm.
+    - Eigenschaften einer Notiz:
+        - Inhalt der Notiz (content)
+        - Datum der Notiz (date)
+        - Typ der Interaktion (interactionType) - als Enumeration (z.B. EMAIL, PHONE_CALL, MEETING)
+
 3. **Mitarbeiter (Employee)**:
-   - Jeder Kunde wird einen Mitarbeiter zugeordnet.
-   - Eigenschaften eines Mitarbeiters:
-     - Vorname (firstname) und Nachname (lastName)
-     - E-Mail-Adresse (email)
-     - Abteilung (department)
-   - Ein Mitarbeiter kann mehrere Kunden betreuen, aber jeder Kunde gehört nur zu einem Mitarbeiter.
+    - Jeder Kunde wird einem Mitarbeiter zugeordnet.
+    - Eigenschaften eines Mitarbeiters:
+        - Vorname (firstname) und Nachname (lastname)
+        - E-Mail-Adresse (email)
+        - Abteilung (department)
+    - Ein Mitarbeiter kann mehrere Kunden betreuen, aber jeder Kunde gehört nur zu einem Mitarbeiter.
+
 4. **Funktionale Anforderungen**:
-   - **Kundenverwaltung**: Die App soll es ermöglichen, Kunden zu erstellen, zu aktualisieren, zu löschen und anzusehen.
-   - **Notizenverwaltung**: Mitarbeiter sollen Notizen zu Kunden erstellen, aktualisieren und löschen können.
-   - **Suche**: Die Mitarbeiter sollen Kunden nach Name, E-Mail oder Telefonnummer durchsuchen können.
-   - **Interaktionen anzeigen**: Zeige Interaktionen eines Kunden geordnet nach dem Datum an.
-5. **Zukunftspläne**
-   - Sicherheitsmechanismen wie Authentifizierung und Autorisierung
-   - Integration von Analytik-Tools
-   - Automatisierten E-Mail-Kampagnen 
+    - **Kundenverwaltung**: Die App soll es ermöglichen, Kunden zu erstellen, zu aktualisieren, zu löschen und anzusehen.
+    - **Notizenverwaltung**: Mitarbeiter sollen Notizen zu Kunden erstellen, aktualisieren und löschen können.
+    - **Suche**: Die Mitarbeiter sollen Kunden nach Name, E-Mail oder Telefonnummer durchsuchen können.
+    - **Interaktionen anzeigen**: Zeige Interaktionen eines Kunden geordnet nach dem Datum an.
+
+5. **Zukunftspläne**:
+    - Sicherheitsmechanismen wie Authentifizierung und Autorisierung
+    - Integration von Analytik-Tools
+    - Automatisierte E-Mail-Kampagnen
+
+## Geplante Schritte
+1. **Backend-Entwicklung**:
+    - Implementierung der Geschäftslogik und Datenpersistenz mit Spring Boot und Spring Data JPA.
+    - Erstellung von Unit-Tests und Integrationstests für alle wichtigen Komponenten.
+
+2. **GUI-Entwicklung mit Spring MVC**:
+    - Erstellung grundlegender Views zur Verwaltung von Kunden und Notizen.
+    - Bereitstellung erster funktionaler Oberflächen für Testzwecke.
+
+3. **RESTful APIs**:
+    - Implementierung von REST-APIs, um den Zugriff von externen Clients zu ermöglichen.
+    - Sicherstellen, dass alle CRUD-Operationen über die APIs verfügbar sind.
+
+4. **React-Client**:
+    - Entwicklung einer modernen Single-Page Application mit React.
+    - Integration der REST-APIs zur Datenmanipulation und Anzeige.
+
+5. **Dokumentation**:
+    - Regelmäßige Aktualisierung der README.md-Datei, um den Fortschritt und die nächsten Schritte zu dokumentieren.
+
+## Aktueller Stand
+- Backend-Entwicklung ist abgeschlossen.
+- Erste GUI-Entwicklung mit Spring MVC in Arbeit.
+- REST-APIs und React-Client folgen als nächste Schritte.
 
 ## Technologien
-- java 17
+- Java 17
 - Spring Boot
 - JPA
-- H2
-- JUnit für unit-tests
+- H2 (Development) / PostgreSQL (Production)
+- JUnit für Unit-Tests
 
 ## Installation
 1. Klone das Repository.
 2. Führe `mvn clean install` aus.
 3. Starte die Anwendung mit `mvn spring-boot:run`.
 
-## Beispiel:
+## Beispiel
 Um eine Notiz zu erstellen, sende eine POST-Anfrage an `/notes`.
 
 ## TODO
 - JPA Entities spezifizieren
 - Repositories
 - Services
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
