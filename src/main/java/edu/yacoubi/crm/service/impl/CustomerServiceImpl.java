@@ -28,7 +28,7 @@ public class CustomerServiceImpl implements ICustomerService {
     // Finden eines Kunden nach ID
     public Optional<Customer> getCustomerById(Long id) {
         log.info("Fetching customer with ID: {}", id);
-        isExisting(id);
+        ensureCustomerExists(id);
         return customerRepository.findById(id);
     }
 
@@ -36,14 +36,14 @@ public class CustomerServiceImpl implements ICustomerService {
     // Aktualisieren eines bestehenden Kunden
     public Customer updateCustomer(Long id, Customer customer) {
         log.info("Updating Customer with ID: {}", id);
-        isExisting(id);
+        ensureCustomerExists(id);
         return customerRepository.save(customer);
     }
 
     @Override
     public void deleteCustomer(Long id) {
         log.info("Deleting Customer with ID: {}", id);
-        isExisting(id);
+        ensureCustomerExists(id);
         customerRepository.deleteById(id);
     }
 
@@ -53,10 +53,12 @@ public class CustomerServiceImpl implements ICustomerService {
         return customerRepository.findByEmail(email);
     }
 
-    private void isExisting(Long id) {
+    @Override
+    public void ensureCustomerExists(Long id) {
+        log.info("Ensuring customer with ID: {} exists", id);
         if (!customerRepository.existsById(id)) {
             log.warn("Customer not found with ID: {}", id);
-            throw new ResourceNotFoundException("Customer not found with ID:");
+            throw new ResourceNotFoundException("Customer not found with ID: " + id);
         }
     }
 }

@@ -122,7 +122,7 @@ class CustomerServiceImplUnitTest {
         // When & Then
         ResourceNotFoundException exception = assertThrows(
                 ResourceNotFoundException.class, () -> underTest.getCustomerById(customerId));
-        assertEquals("Customer not found with ID:", exception.getMessage());
+        assertEquals("Customer not found with ID: " + customerId, exception.getMessage());
     }
 
     @Test

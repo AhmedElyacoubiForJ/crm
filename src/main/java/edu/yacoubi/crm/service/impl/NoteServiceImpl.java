@@ -39,25 +39,27 @@ public class NoteServiceImpl implements INoteService{
     @Override
     public Note updateNote(Long id, Note note) {
         log.info("Updating Note with ID: {}", id);
-        isExisting(id);
+        validateNoteId(id);
         return noteRepository.save(note);
     }
 
     @Override
     public void deleteNote(Long id) {
         log.info("Deleting Note with ID: {}", id);
-        isExisting(id);
+        validateNoteId(id);
         noteRepository.deleteById(id);
     }
 
     @Override
     public List<Note> getNotesByCustomerId(Long customerId) {
         log.info("Fetching notes for customer with ID: {}", customerId);
-        isExisting(customerId);
+        // Da die Ausnahme bereits geworfen wird, wenn der Kunde nicht existiert
+        customerService.ensureCustomerExists(customerId);
+
         return noteRepository.findAllByCustomerId(customerId);
     }
 
-    private void isExisting(Long id) {
+    private void validateNoteId(Long id) {
         if (!noteRepository.existsById(id)) {
             throw new ResourceNotFoundException("Note not found with ID: " + id);
         }

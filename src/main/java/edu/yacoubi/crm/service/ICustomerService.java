@@ -14,4 +14,6 @@ public interface ICustomerService {
     void deleteCustomer(Long id);
 
     Optional<Customer> getCustomerByEmail(String email);
+
+    void ensureCustomerExists(Long id);
 }
