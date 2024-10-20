@@ -1,8 +1,6 @@
 package edu.yacoubi.crm.controllers;
 
-import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.service.ICustomerService;
-import edu.yacoubi.crm.service.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,14 +18,14 @@ public class CustomerViewController {
     @GetMapping
     public String listCustomers(Model model) {
         //model.addAttribute("customers", customerService.findAll());
-        return "customer/customer-list";
+        return "templates/customer/customer-list";
     }
 
     @GetMapping("/{id}")
     public String getCustomerById(@PathVariable Long id, Model model) {
         //Customer customer = customerService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
-        model.addAttribute("customer", null);
-        return "customer/customer-detail";
+        model.addAttribute("templates/customer", null);
+        return "templates/customer/customer-detail";
     }
 
     // Weitere Methoden zur Erstellung und Aktualisierung von Kunden
