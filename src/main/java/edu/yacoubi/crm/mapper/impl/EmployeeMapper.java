@@ -6,7 +6,7 @@ import edu.yacoubi.crm.model.Employee;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmployeeMapperImpl implements IMapper<Employee, EmployeeDTO> {
+public class EmployeeMapper implements IMapper<Employee, EmployeeDTO> {
     @Override
     public EmployeeDTO mapTo(Employee employee) {
         return EmployeeDTO.builder()
