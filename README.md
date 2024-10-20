@@ -95,6 +95,21 @@ Dieses Projekt ist eine Implementierung eines **Customer Relationship Management
 1. Klone das Repository.
 2. Führe `mvn clean install` aus.
 3. Starte die Anwendung mit `mvn spring-boot:run`.
+4. **Stelle sicher, dass [cURL](https://curl.se/download.html) installiert ist:**
+   ```sh
+   curl --version
+   ```
+5. Verwende cURL, um HTTP-Anfragen an unserem Server zu senden.
+    - `GET-Anfrage`:
+      ```sh
+      curl -X GET http://localhost:8080/api/resources
+      ```
+    -  `POST-Anfrage`:
+      ```sh
+      curl -X POST -H "Content-Type: application/json" -d '{"key":"value"}' http://localhost:8080/api/resources
+      ```
+6. Weitere Details findest du in der [Testing-Dokumentation](TESTING.md).
+
 
 ## Beispiel
 Um eine Notiz zu erstellen, sende eine POST-Anfrage an `/notes`.
