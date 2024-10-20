@@ -44,22 +44,29 @@ Dieses Projekt ist eine Implementierung eines **Customer Relationship Management
     - Implementierung der Geschäftslogik und Datenpersistenz mit Spring Boot und Spring Data JPA.
     - Erstellung von Unit-Tests und Integrationstests für alle wichtigen Komponenten.
 
-2. **GUI-Entwicklung mit Spring MVC**:
+2. **Einführung von DTOs**:
+    - Einführung von Data Transfer Objects (DTOs) zur Entkopplung der Datenbankstruktur und der API-Schichten.
+    - Beispiel: `CustomerDTO`, `EmployeeDTO` 
+
+3. **Globaler Exception-Handler**:
+    - Definition eines globalen Exception-Handlers zur zentralen Fehlerbehandlung.
+
+4. **GUI-Entwicklung mit Spring MVC**:
     - Erstellung grundlegender Views zur Verwaltung von Kunden und Notizen.
     - Bereitstellung erster funktionaler Oberflächen für Testzwecke.
 
-3. **RESTful APIs**:
+5. **RESTful APIs**:
     - Implementierung von REST-APIs, um den Zugriff von externen Clients zu ermöglichen.
     - Sicherstellen, dass alle CRUD-Operationen über die APIs verfügbar sind.
 
-4. **React-Client**:
+6. **React-Client**:
     - Entwicklung einer modernen Single-Page Application mit React.
     - Integration der REST-APIs zur Datenmanipulation und Anzeige.
 
-5. **Dokumentation**:
+7. **Dokumentation**:
     - Regelmäßige Aktualisierung der README.md-Datei, um den Fortschritt und die nächsten Schritte zu dokumentieren.
 
-6. **Projektstruktur**
+8. **Projektstruktur**
     - **controllers**: Enthält Controller-Klassen für die Spring MVC Views und APIs.
     - **model**: Definiert die JPA-Entitäten
     - **repository**: Enthält die Schnittstellen für den Datenzugriff.
@@ -67,7 +74,7 @@ Dieses Projekt ist eine Implementierung eines **Customer Relationship Management
     - **templates**: Enthält HTML-Templates für die Spring MVC Views.
     - **test**: Beinhaltet die Unit-Tests und Integrationstests für das Projekt.
 
-7. **Verzeichnisstruktur**
+9. **Verzeichnisstruktur**
     - **src/main/java**: Enthält den Anwendungsquellcode.
     - **src/main/resources**: Beinhaltet Ressourcen wie `application.properties` und HTML-Templates.
     - **src/test/java**: Beinhaltet die Testklassen.
