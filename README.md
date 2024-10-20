@@ -46,7 +46,12 @@ Dieses Projekt ist eine Implementierung eines **Customer Relationship Management
 
 2. **Einführung von DTOs**:
     - Einführung von Data Transfer Objects (DTOs) zur Entkopplung der Datenbankstruktur und der API-Schichten.
-    - Beispiel: `CustomerDTO`, `EmployeeDTO` 
+    - Beispiel:
+      - `CustomerDTO` - [Code ansehen](src/main/java/edu/yacoubi/crm/dto/CustomerDTO.java)
+      - `EmployeeDTO` - [Code ansehen](src/main/java/edu/yacoubi/crm/dto/EmployeeDTO.java)
+    - Implementierung der Mapper basierend auf [IMapper](src/main/java/edu/yacoubi/crm/mapper/IMapper.java):
+      - `CustomerMapper` - [Code ansehen](src/main/java/edu/yacoubi/crm/mapper/impl/CustomerMapper.java)
+      - `EmployeeMapper` - [Code ansehen](src/main/java/edu/yacoubi/crm/mapper/impl/EmployeeMapper.java)
 
 3. **Globaler Exception-Handler**:
     - Definition eines globalen Exception-Handlers zur zentralen Fehlerbehandlung.
