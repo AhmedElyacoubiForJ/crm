@@ -30,7 +30,7 @@ Dieses Projekt ist eine Implementierung eines **Customer Relationship Management
 
 4. **Funktionale Anforderungen**:
     - **Kundenverwaltung**: Die App soll es ermöglichen, Kunden zu erstellen, zu aktualisieren, zu löschen und anzusehen.
-    - **Notizenverwaltung**: Mitarbeiter sollen Notizen zu Kunden erstellen, aktualisieren und löschen können.
+    - **Notizen verwaltung**: Mitarbeiter sollen Notizen zu Kunden erstellen, aktualisieren und löschen können.
     - **Suche**: Die Mitarbeiter sollen Kunden nach Name, E-Mail oder Telefonnummer durchsuchen können.
     - **Interaktionen anzeigen**: Zeige Interaktionen eines Kunden geordnet nach dem Datum an.
 
@@ -58,6 +58,19 @@ Dieses Projekt ist eine Implementierung eines **Customer Relationship Management
 
 5. **Dokumentation**:
     - Regelmäßige Aktualisierung der README.md-Datei, um den Fortschritt und die nächsten Schritte zu dokumentieren.
+
+6. **Projektstruktur**
+    - **controllers**: Enthält Controller-Klassen für die Spring MVC Views und APIs.
+    - **model**: Definiert die JPA-Entitäten
+    - **repository**: Enthält die Schnittstellen für den Datenzugriff.
+    - **service**: Implementiert die geschäftslogik.
+    - **templates**: Enthält HTML-Templates für die Spring MVC Views.
+    - **test**: Beinhaltet die Unit-Tests und Integrationstests für das Projekt.
+
+7. **Verzeichnisstruktur**
+    - **src/main/java**: Enthält den Anwendungsquellcode.
+    - **src/main/resources**: Beinhaltet Ressourcen wie `application.properties` und HTML-Templates.
+    - **src/test/java**: Beinhaltet die Testklassen.
 
 ## Aktueller Stand
 - Backend-Entwicklung ist abgeschlossen.
