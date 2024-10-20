@@ -1,4 +1,5 @@
 package edu.yacoubi.crm.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,5 +24,6 @@ public class Employee {
     private String department;
 
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("employee")
     List<Customer> customers;
 }
