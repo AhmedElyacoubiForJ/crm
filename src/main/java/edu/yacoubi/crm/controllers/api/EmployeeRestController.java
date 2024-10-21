@@ -49,6 +49,15 @@ public class EmployeeRestController {
         EmployeeDTO savedEmployeeDTO = employeeMapper.mapTo(savedEmployee);
         return ResponseEntity.ok(savedEmployeeDTO);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
+        Employee existingEmployee = employeeService.getEmployeeById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
+        Employee employeeRequest = employeeMapper.mapFrom(employeeDTO);
+        employeeRequest.setId(id);
+        Employee updatedEmployee = employeeService.updateEmployee(employeeRequest);
+        EmployeeDTO updatedEmployeeDTO = employeeMapper.mapTo(updatedEmployee);
+        return ResponseEntity.ok(updatedEmployeeDTO);
+    }
 }
-
-
