@@ -5,6 +5,7 @@ import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.mapper.IMapper;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
+import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -62,12 +63,18 @@ public class CustomerRestController {
         Customer existingCustomer = customerService.getCustomerById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
 
+        // Laden der bestehenden Notizen, um sicherzustellen, dass sie referenziert werden
+        List<Note> existingNotes = existingCustomer.getNotes();
+
+        // Mapping des DTO auf das Entität-Objekt, ohne die bestehende Notizen zu überschreiben
         Customer customerRequest = customerMapper.mapFrom(customerDTO);
         customerRequest.setId(id);
         customerRequest.setEmployee(existingCustomer.getEmployee());
+        customerRequest.setNotes(existingNotes); // Setzen der bestehenden Notizen
 
         Customer updatedCustomer = customerService.updateCustomer(id, customerRequest);
         CustomerDTO updatedCustomerDTO = customerMapper.mapTo(updatedCustomer);
+
         return ResponseEntity.ok(updatedCustomerDTO);
     }
 
