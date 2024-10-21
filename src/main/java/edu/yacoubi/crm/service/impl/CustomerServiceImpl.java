@@ -3,7 +3,7 @@ package edu.yacoubi.crm.service.impl;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.service.ICustomerService;
-import edu.yacoubi.crm.service.exception.ResourceNotFoundException;
+import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

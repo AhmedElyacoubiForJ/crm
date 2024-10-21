@@ -5,7 +5,7 @@ import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.repository.NoteRepository;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.INoteService;
-import edu.yacoubi.crm.service.exception.ResourceNotFoundException;
+import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
