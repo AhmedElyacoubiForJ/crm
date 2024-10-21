@@ -1,6 +1,7 @@
 package edu.yacoubi.crm.service.impl;
 
 import edu.yacoubi.crm.TestDataUtil;
+import edu.yacoubi.crm.dto.CustomerDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.EmployeeRepository;
@@ -11,6 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -114,5 +118,25 @@ class CustomerServiceImplIntegrationTest {
         // Then
         assertNotNull(foundCustomer);
         assertEquals(savedCustomer.getId(), foundCustomer.getId());
+    }
+
+    @Test
+    public void itShouldFindCustomerByExample() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeA();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer customerA = TestDataUtil.createCustomerA(savedEmployee);
+        Customer customerB = TestDataUtil.createCustomerB(savedEmployee);
+        customerRepository.save(customerA);
+        customerRepository.save(customerB);
+
+        CustomerDTO customerDTO = CustomerDTO.builder().firstName("John").build();
+
+        // When
+        List<Customer> foundCustomers = underTest.findCustomersByExample(customerDTO);
+
+        // Then
+        assertEquals(1, foundCustomers.size());
+        assertEquals(customerA.getId(), foundCustomers.get(0).getId());
     }
 }

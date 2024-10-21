@@ -1,11 +1,14 @@
 package edu.yacoubi.crm.service.impl;
 
+import edu.yacoubi.crm.dto.CustomerDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,6 +62,29 @@ public class CustomerServiceImpl implements ICustomerService {
         log.info("Fetching customer with email: {}", email);
         return customerRepository.findByEmail(email);
     }
+    @Override
+    public List<Customer> findCustomersByExample(CustomerDTO customerDTO) {
+        Customer customerProbe = new Customer();
+
+        if (customerDTO.getFirstName() != null) {
+            customerProbe.setFirstName(customerDTO.getFirstName());
+        }
+        if (customerDTO.getLastName() != null) {
+            customerProbe.setLastName(customerDTO.getLastName());
+        }
+        if (customerDTO.getEmail() != null) {
+            customerProbe.setEmail(customerDTO.getEmail());
+        }
+        // Setze weitere Felder nach Bedarf
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("id", "notes"); // Ignoriere Felder, die nicht relevant sind
+                //.withIncludeNullValues();
+
+        Example<Customer> example = Example.of(customerProbe, matcher);
+        return customerRepository.findAll(example);
+    }
+
 
     @Override
     public void ensureCustomerExists(Long id) {
