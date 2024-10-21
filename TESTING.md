@@ -72,3 +72,27 @@ curl -X GET http://localhost:8080/api/v1/resources
   "department": "HR"
  }
 ```
+
+- POST-Anfrage zur Erstellung eines customers
+```sh
+   curl -X POST "http://localhost:8080/api/customers?employeeId=1" -H "Content-Type: application/json" -d '{
+  "firstName": "Max",
+  "firstName": "Max",
+  "lastName": "Mustermann",
+  "email": "max.mustermann@example.com",
+  "lastInteractionDate": "2023-12-05T12:34:56Z"
+}'
+```
+- Beispiel Antwort (neue Customer):
+```
+  {
+  "id":1,
+  "firstName":"Max",
+  "lastName":"Mustermann",
+  "email":"max.mustermann@example.com",
+  "phone":null,
+  "address":null,
+  "lastInteractionDate":"2023-12-05",
+  "employeeId":1
+  }
+```
