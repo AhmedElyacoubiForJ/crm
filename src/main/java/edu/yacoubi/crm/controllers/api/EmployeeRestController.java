@@ -5,7 +5,7 @@ import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.mapper.IMapper;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.service.IEmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,16 +14,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/employees")
+@RequiredArgsConstructor
 public class EmployeeRestController {
 
     private final IEmployeeService employeeService;
     private final IMapper<Employee, EmployeeDTO> employeeMapper;
-
-    @Autowired
-    public EmployeeRestController(IEmployeeService employeeService, IMapper<Employee, EmployeeDTO> employeeMapper) {
-        this.employeeService = employeeService;
-        this.employeeMapper = employeeMapper;
-    }
 
     @GetMapping
     public List<EmployeeDTO> getAllEmployees() {

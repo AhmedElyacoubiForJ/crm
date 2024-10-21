@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,6 +16,12 @@ import java.util.Optional;
 @Slf4j
 public class CustomerServiceImpl implements ICustomerService {
     private final CustomerRepository customerRepository;
+
+    @Override
+    public List<Customer> getAllCustomers() {
+        log.info("Fetching all Customers");
+        return customerRepository.findAll();
+    }
 
     @Override
     // Erstellen eines neuen Kunden
