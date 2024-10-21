@@ -5,7 +5,7 @@ import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.repository.CustomerRepository;
-import edu.yacoubi.crm.service.exception.ResourceNotFoundException;
+import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

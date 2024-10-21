@@ -3,7 +3,7 @@ package edu.yacoubi.crm.service.impl;
 import edu.yacoubi.crm.TestDataUtil;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
-import edu.yacoubi.crm.service.exception.ResourceNotFoundException;
+import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
