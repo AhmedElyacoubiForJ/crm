@@ -41,4 +41,10 @@ public class EmployeeServiceImpl implements IEmployeeService {
         log.info("Deleting Employee: {}", employee);
         employeeRepository.delete(employee);
     }
+
+    @Override
+    public Employee updateEmployee(Employee employee) {
+        log.info("Updating Employee: {}", employee);
+        return employeeRepository.save(employee);
+    }
 }
