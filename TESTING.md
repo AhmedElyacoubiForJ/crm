@@ -1,6 +1,18 @@
 # Testing-Dokumentation
 
 ## HTTP-Anfragen mit cURL
+- **Stelle sicher, dass [cURL](https://curl.se/download.html) installiert ist:**
+   ```sh
+   curl --version
+   ```
+- Verwende cURL, um HTTP-Anfragen an unserem Server zu senden.
+    - `GET-Anfrage`:
+      ```sh
+      curl -X GET http://localhost:8080/api/resources
+      ```
+    -  `POST-Anfrage`:
+       ```sh
+       curl -X POST -H "Content-Type: application/json" -d '{"key":"value"}' http://localhost:8080/api/resources
 
 ### Get-Anfrage
 

@@ -100,24 +100,56 @@ Dieses Projekt ist eine Implementierung eines **Customer Relationship Management
 1. Klone das Repository.
 2. Führe `mvn clean install` aus.
 3. Starte die Anwendung mit `mvn spring-boot:run`.
-4. **Stelle sicher, dass [cURL](https://curl.se/download.html) installiert ist:**
-   ```sh
-   curl --version
-   ```
-5. Verwende cURL, um HTTP-Anfragen an unserem Server zu senden.
-    - `GET-Anfrage`:
-      ```sh
-      curl -X GET http://localhost:8080/api/resources
-      ```
-    -  `POST-Anfrage`:
-      ```sh
-      curl -X POST -H "Content-Type: application/json" -d '{"key":"value"}' http://localhost:8080/api/resources
-      ```
-6. Weitere Details findest du in der [Testing-Dokumentation](TESTING.md).
 
+## Profile Konfiguration
+Diese Anwendung verwendet verschiedene Profile für die Test- und Produktionsumgebung.
+- **Testprofil**: Verwendet eine in-memory H2-Datenbank im PostgreSQL-Modus.
+- **Produktionsprofil**: Verwendet eine PostgreSQL-Datenbank.
 
-## Beispiel
-Um eine Notiz zu erstellen, sende eine POST-Anfrage an `/notes`.
+### Testumgebung
+Die Konfigurationsdatei für die Testumgebung ist `application-test.properties`.
+```properties
+# application-test.properties
+spring.application.name=crm
+spring.datasource.url=jdbc:h2:mem:crm;MODE=PostgreSQL
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.h2.console.enabled=true
+```
+
+### Produktionsumgebung
+Die Konfigurationsdatei für die Produktionsumgebung ist application-prod.properties.
+```properties
+# application-prod.properties
+spring.application.name=crm
+spring.datasource.url=jdbc:postgresql://crmdb
+spring.datasource.driverClassName=org.postgresql.Driver
+spring.datasource.username=${DB_USER_NAME}
+spring.datasource.password=${DB_PASSWORD}
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.h2.console.enabled=false
+```
+
+### Aktivieren der Profile
+- Stelle sicher, dass du die Profile in deiner application.properties Datei aktivierst.
+```properties
+# application.properties
+spring.profiles.active=test # or prod
+```
+
+### Verwendung der Profile
+- Du kannst die Profile über die Kommandozeile oder deine IDE aktivieren.
+```sh
+./mvnw  spring-boot:run -Dspring-boot.run.profiles=test
+```
+- IDE (IntelliJ IDEA):
+   - Gehe zu Run > Edit Configurations.
+   - Wähle deine Spring Boot Konfiguration aus.
+   - Füge im Feld Active profiles test hinzu.
+
+## [API Testing-Dokumentation](TESTING.md)
 
 ## TODO
 - JPA Entities spezifizieren
