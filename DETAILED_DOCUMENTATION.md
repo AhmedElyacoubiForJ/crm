@@ -243,6 +243,10 @@ Das `InteractionType`-Enum definiert die verschiedenen Arten von Interaktionen:
        }
        ```
        </details>
+   -  **updateCustomerByExample**:
+   > Die Methode updateCustomerByExample ermöglicht es, bestimmte Eigenschaften eines Kunden basierend auf einem Beispiel (CustomerDTO) zu aktualisieren.
+   > Dies sorgt für eine gezielte Aktualisierung der Daten, ohne die gesamte Entität zu überschreiben.
+
 2. Note:
     - `itShouldPerformAllCRUDOperations`: ....
     - `itShouldThrowWhenCreatingNoteWithoutCustomer`: ....

@@ -96,3 +96,21 @@ curl -X GET http://localhost:8080/api/v1/resources
   "employeeId":1
   }
 ```
+- PUT-Anfrage zum Aktualisieren eines customers
+```sh
+   curl -X PUT "http://localhost:8080/api/customers/1/updateByExample" -H "Content-Type: application/json; charset=utf-8" -d @customerDTO.json
+}'
+```
+- Beispiel Antwort (neue Customer):
+```
+  {
+  "id":1,
+  "firstName":"Max Updated",
+  "lastName":"Mustermann",
+  "email":"max_updated.mustermann@example.com",
+  "phone":null,
+  "address":"Neue Straße 123",
+  "lastInteractionDate":"2023-12-05",
+  "employeeId":1
+  }
+```
