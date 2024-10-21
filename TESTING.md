@@ -39,3 +39,24 @@ curl -X GET http://localhost:8080/api/v1/resources
   "department": "Sales"
 }
 ```
+- PUT-Anfrage zur Aktualisierung eines bestehenden Employees:
+```sh
+  curl -X PUT http://localhost:8080/api/employees/1 \
+     -H "Content-Type: application/json" \
+     -d '{
+           "firstName": "Jane",
+           "lastName": "Doe",
+           "email": "jane.doe@example.com",
+           "department": "HR"
+         }'
+```
+- Beispiel Antwort (aktualisierter Employee):
+```
+  {
+  "id": 1,
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@example.com",
+  "department": "HR"
+ }
+```
