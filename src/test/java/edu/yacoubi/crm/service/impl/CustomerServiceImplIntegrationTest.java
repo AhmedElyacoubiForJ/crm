@@ -133,7 +133,7 @@ class CustomerServiceImplIntegrationTest {
         CustomerDTO customerDTO = CustomerDTO.builder().firstName("John").build();
 
         // When
-        List<Customer> foundCustomers = underTest.findCustomersByExample(customerDTO);
+        List<Customer> foundCustomers = underTest.getCustomersByExample(customerDTO);
 
         // Then
         assertEquals(1, foundCustomers.size());

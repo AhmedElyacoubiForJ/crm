@@ -1,6 +1,7 @@
 package edu.yacoubi.crm.repository;
 
 import edu.yacoubi.crm.TestDataUtil;
+import edu.yacoubi.crm.dto.CustomerDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
@@ -153,5 +154,27 @@ class CustomerRepositoryTest {
         // Assert that the notes are also deleted
         List<Note> notesList = noteRepository.findAll();
         assertTrue(notesList.isEmpty());
+    }
+
+    @Test
+    @Transactional
+    public void itShouldUpdateCustomerByExample() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeA();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer customer = TestDataUtil.createCustomerA(savedEmployee);
+        Customer savedCustomer = underTest.save(customer);
+
+        // Example customer DTO with new address
+        CustomerDTO customerExample = CustomerDTO.builder()
+                .address("Neue Straße 123")
+                .build();
+
+        // When
+        Customer updatedCustomer = underTest.updateCustomerByExample(customerExample, savedCustomer.getId());
+
+        // Then
+        assertNotNull(updatedCustomer);
+        assertEquals("Neue Straße 123", updatedCustomer.getAddress());
     }
 }
