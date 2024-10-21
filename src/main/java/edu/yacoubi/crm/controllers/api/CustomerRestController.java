@@ -78,6 +78,15 @@ public class CustomerRestController {
         return ResponseEntity.ok(updatedCustomerDTO);
     }
 
+    @PutMapping("/{id}/updateByExample")
+    public ResponseEntity<CustomerDTO> updateCustomerByExample(
+            @PathVariable Long id,
+            @RequestBody CustomerDTO customerDTO) {
+        Customer updatedCustomer = customerService.updateCustomerByExample(customerDTO, id);
+        CustomerDTO updatedCustomerDTO = customerMapper.mapTo(updatedCustomer);
+        return ResponseEntity.ok(updatedCustomerDTO);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
         customerService.getCustomerById(id)

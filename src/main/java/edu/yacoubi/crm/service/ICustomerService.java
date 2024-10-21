@@ -3,7 +3,6 @@ package edu.yacoubi.crm.service;
 import edu.yacoubi.crm.dto.CustomerDTO;
 import edu.yacoubi.crm.model.Customer;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,5 +21,7 @@ public interface ICustomerService {
 
     List<Customer> getAllCustomers();
 
-    List<Customer> findCustomersByExample(CustomerDTO customerDTO);
+    List<Customer> getCustomersByExample(CustomerDTO customerDTO);
+
+    Customer updateCustomerByExample(CustomerDTO customerExample, Long id);
 }

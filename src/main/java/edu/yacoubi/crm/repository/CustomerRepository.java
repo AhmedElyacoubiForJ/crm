@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long>, QueryByExampleExecutor<Customer> {
+public interface CustomerRepository extends
+        JpaRepository<Customer, Long>,
+        QueryByExampleExecutor<Customer>,
+        CustomCustomerRepository {
     Optional<Customer> findByEmail(String email);
 }

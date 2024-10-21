@@ -1,10 +1,11 @@
 package edu.yacoubi.crm.service.impl;
 
 import edu.yacoubi.crm.dto.CustomerDTO;
+import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.service.ICustomerService;
-import edu.yacoubi.crm.exception.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
@@ -62,8 +63,9 @@ public class CustomerServiceImpl implements ICustomerService {
         log.info("Fetching customer with email: {}", email);
         return customerRepository.findByEmail(email);
     }
+
     @Override
-    public List<Customer> findCustomersByExample(CustomerDTO customerDTO) {
+    public List<Customer> getCustomersByExample(CustomerDTO customerDTO) {
         Customer customerProbe = new Customer();
 
         if (customerDTO.getFirstName() != null) {
@@ -79,10 +81,19 @@ public class CustomerServiceImpl implements ICustomerService {
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnorePaths("id", "notes"); // Ignoriere Felder, die nicht relevant sind
-                //.withIncludeNullValues();
+        //.withIncludeNullValues();
 
         Example<Customer> example = Example.of(customerProbe, matcher);
         return customerRepository.findAll(example);
+    }
+
+    @Override
+    @Transactional
+    public Customer updateCustomerByExample(CustomerDTO customerExample, Long id) {
+        log.info("Updating Customer with ID: {} using example", id);
+        Customer existingCustomer = customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
+        return customerRepository.updateCustomerByExample(customerExample, id);
     }
 
 
