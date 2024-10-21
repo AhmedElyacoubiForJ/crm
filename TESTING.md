@@ -114,3 +114,22 @@ curl -X GET http://localhost:8080/api/v1/resources
   "employeeId":1
   }
 ```
+- POST-Anfrage zur Erstellung eine Note
+```sh
+   curl -X POST "http://localhost:8080/api/notes?customerId=1" -H "Content-Type: application/json" -d '{
+  "content": "Meeting with client",
+  "date": "2023-12-01",
+  "interactionType": "MEETING"
+}'
+
+```
+- Beispiel Antwort (neue Customer):
+```
+  {
+  "id":1,
+  "content":"Meeting with client",
+  "date":"2023-12-01",
+  "interactionType":"MEETING",
+  "customerId":1
+  }
+```
