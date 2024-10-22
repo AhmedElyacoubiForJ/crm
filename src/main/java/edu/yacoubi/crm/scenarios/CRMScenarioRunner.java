@@ -28,6 +28,7 @@ public class CRMScenarioRunner implements CommandLineRunner {
         setupEmployeesAndCustomers();
         scenarioLoginAndInteraction();
         scenarioCreateCustomerAndAssignEmployee();
+        scenarioUpdateCustomerDetails();
     }
 
     private void setupEmployeesAndCustomers() {
@@ -111,5 +112,20 @@ public class CRMScenarioRunner implements CommandLineRunner {
         customerService.createCustomer(newCustomer);
 
         System.out.println("Neuer Kunde erfolgreich erstellt und Mitarbeiter zugewiesen.");
+    }
+
+    // Szenario zur Aktualisierung von Kundendaten
+    private void scenarioUpdateCustomerDetails() {
+        // Kunden finden
+        Customer customer = customerService.getCustomerByEmail("c.customerB@gmail.com")
+                .orElseThrow(() -> new RuntimeException("Kunde nicht gefunden"));
+
+        // Kundendaten aktualisieren
+        customer.setPhone("5556667777");
+        customer.setAddress("Updated Address");
+
+        customerService.updateCustomer(customer.getId(), customer);
+
+        System.out.println("Kundendaten erfolgreich aktualisiert.");
     }
 }
