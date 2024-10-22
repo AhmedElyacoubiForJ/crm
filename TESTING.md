@@ -114,7 +114,7 @@ curl -X GET http://localhost:8080/api/v1/resources
   "employeeId":1
   }
 ```
-- POST-Anfrage zur Erstellung eine Note
+- POST (eine neue Notiz erstellen):
 ```sh
    curl -X POST "http://localhost:8080/api/notes?customerId=1" -H "Content-Type: application/json" -d '{
   "content": "Meeting with client",
@@ -133,7 +133,7 @@ curl -X GET http://localhost:8080/api/v1/resources
   "customerId":1
   }
 ```
-- PUT-Anfrage, um Note zu aktualisieren.
+- PUT (eine Notiz aktualisieren):
 ```sh
    curl -X PUT "http://localhost:8080/api/notes/1" -H "Content-Type: application/json" -d '{
   "content": "Updated meeting with client",
@@ -150,6 +150,29 @@ curl -X GET http://localhost:8080/api/v1/resources
   "content":"Updated meeting with client",
   "date":"2023-12-02",
   "interactionType":"PHONE_CALL",
+  "customerId":1
+  }
+```
+- DELETE (eine Notiz löschen):
+```sh
+   curl -i -X DELETE "http://localhost:8080/api/notes/1"
+```
+- Beispiel Antwort (note delete):
+```
+  HTTP/1.1 204 
+  Date: Tue, 22 Oct 2024 01:06:35 GMT
+```
+- GET (eine Notiz abrufen):
+```sh
+   curl -X GET "http://localhost:8080/api/notes/1"
+```
+- Beispiel Antwort (eine Notiz abrufen):
+```
+  {
+  "id":5,
+  "content":"Meeting with client",
+  "date":"2023-12-01",
+  "interactionType":"MEETING",
   "customerId":1
   }
 ```
