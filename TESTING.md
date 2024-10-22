@@ -133,3 +133,23 @@ curl -X GET http://localhost:8080/api/v1/resources
   "customerId":1
   }
 ```
+- PUT-Anfrage, um Note zu aktualisieren.
+```sh
+   curl -X PUT "http://localhost:8080/api/notes/1" -H "Content-Type: application/json" -d '{
+  "content": "Updated meeting with client",
+  "date": "2023-12-02",
+  "interactionType": "PHONE_CALL"
+}'
+
+
+```
+- Beispiel Antwort (note update):
+```
+  {
+  "id":1,
+  "content":"Updated meeting with client",
+  "date":"2023-12-02",
+  "interactionType":"PHONE_CALL",
+  "customerId":1
+  }
+```

@@ -25,12 +25,14 @@ public class NoteRestController {
     @Autowired
     private IMapper<Note, NoteDTO> mapper;
 
-
     // Beispiel für einen GET-Endpunkt
     @GetMapping("/{id}")
     public ResponseEntity<NoteDTO> getNoteById(@PathVariable Long id) {
-        Note existingNote = noteService.getNoteById(id).
-                orElseThrow(() -> new ResourceNotFoundException("Note not found with ID: " + id));
+        Note existingNote = noteService
+                .getNoteById(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Note not found with ID: " + id)
+                );
         NoteDTO noteDTO = mapper.mapTo(existingNote);
 
         return ResponseEntity.ok(noteDTO);
@@ -38,7 +40,9 @@ public class NoteRestController {
 
     // Beispiel für einen POST-Endpunkt
     @PostMapping
-    public ResponseEntity<NoteDTO> createNote(@RequestBody NoteDTO noteDTO, @RequestParam Long customerId) {
+    public ResponseEntity<NoteDTO> createNote(
+            @RequestBody NoteDTO noteDTO,
+            @RequestParam Long customerId) {
         // Note in Entity umwandeln
         Note note = mapper.mapFrom(noteDTO);
 
@@ -51,13 +55,25 @@ public class NoteRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdNoteDTO);
     }
 
-
-
     // Beispiel für einen PUT-Endpunkt
     @PutMapping("/{id}")
-    public ResponseEntity<NoteDTO> updateNote(@PathVariable Long id, @RequestBody NoteDTO noteDTO) {
-        noteService.updateNote(id, new Note());
-        return ResponseEntity.ok(null);
+    public ResponseEntity<NoteDTO> updateNote(
+            @PathVariable Long id,
+            @RequestBody NoteDTO noteDTO) {
+
+        Note existingNote = noteService.getNoteById(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Note not found with ID: " + id)
+                );
+        Note noteRequest = mapper.mapFrom(noteDTO);
+        noteRequest.setId(id);
+        noteRequest.setCustomer(existingNote.getCustomer());
+
+        Note updatedNote = noteService.updateNote(id, noteRequest);
+
+        NoteDTO updatedNoteDTO = mapper.mapTo(updatedNote);
+
+        return ResponseEntity.ok(updatedNoteDTO);
     }
 
     // Beispiel für einen DELETE-Endpunkt
@@ -66,6 +82,5 @@ public class NoteRestController {
         noteService.deleteNote(id);
         return ResponseEntity.noContent().build();
     }
-
 }
 
