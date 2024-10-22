@@ -47,4 +47,10 @@ public class EmployeeServiceImpl implements IEmployeeService {
         log.info("Updating Employee: {}", employee);
         return employeeRepository.save(employee);
     }
+
+    @Override
+    public Optional<Employee> getEmployeeByEmail(String email) {
+        log.info("Fetching Employee with email: {}", email);
+        return employeeRepository.findByEmail(email);
+    }
 }

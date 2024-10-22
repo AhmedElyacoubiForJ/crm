@@ -15,4 +15,6 @@ public interface IEmployeeService {
     void deleteEmployee(Employee employee);
 
     Employee updateEmployee(Employee employee);
+
+    Optional<Employee> getEmployeeByEmail(String mail);
 }

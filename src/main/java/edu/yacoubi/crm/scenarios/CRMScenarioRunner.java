@@ -27,6 +27,7 @@ public class CRMScenarioRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         setupEmployeesAndCustomers();
         scenarioLoginAndInteraction();
+        scenarioCreateCustomerAndAssignEmployee();
     }
 
     private void setupEmployeesAndCustomers() {
@@ -84,8 +85,31 @@ public class CRMScenarioRunner implements CommandLineRunner {
         System.out.println("Interaktion erfolgreich gespeichert.");
     }
 
-    // Hier kannst du weitere Szenarien hinzufügen
-    private void scenarioAnotherUseCase() {
-        // Implementiere hier ein weiteres Szenario
+    // Szenario zur Erstellung eines neuen Kunden und Zuweisung eines Mitarbeiters.
+    private void scenarioCreateCustomerAndAssignEmployee() {
+        Employee employee = employeeService
+                .getEmployeeByEmail("employeeB@example.com")
+                .orElseGet(() -> employeeService.createEmployee(
+                        Employee.builder()
+                                .firstName("BFirstname")
+                                .lastName("BLastname")
+                                .email("employeeB@example.com")
+                                .department("Support")
+                                .build())
+                );
+
+        Customer newCustomer = Customer.builder()
+                .firstName("CFIrstname")
+                .lastName("CLastname")
+                .email("new.customer@example.com")
+                .phone("1231231230")
+                .address("789 Elm St")
+                .lastInteractionDate(LocalDate.now())
+                .employee(employee)
+                .build();
+
+        customerService.createCustomer(newCustomer);
+
+        System.out.println("Neuer Kunde erfolgreich erstellt und Mitarbeiter zugewiesen.");
     }
 }
