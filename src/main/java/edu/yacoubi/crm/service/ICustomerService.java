@@ -24,4 +24,8 @@ public interface ICustomerService {
     List<Customer> getCustomersByExample(CustomerDTO customerDTO);
 
     Customer updateCustomerByExample(CustomerDTO customerExample, Long id);
+
+    Optional<Customer> getCustomerByEmailWithNotesAndEmployeeCustomers(String email);
+
+    //Customer getCustomerWithNotes(Long id);
 }

@@ -5,12 +5,13 @@ import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.service.ICustomerService;
-import jakarta.transaction.Transactional;
+//import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -96,6 +97,22 @@ public class CustomerServiceImpl implements ICustomerService {
         return customerRepository.updateCustomerByExample(customerExample, id);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Customer> getCustomerByEmailWithNotesAndEmployeeCustomers(String email) {
+        return customerRepository.findByEmailWithNotesAndEmployeeCustomers(email);
+    }
+
+//    @Override
+//    @Transactional(
+//            readOnly = true
+//    )
+//    public Customer getCustomerWithNotes(Long id) {
+//        log.info("Fetching customer with ID: {} including notes", id);
+//        Customer customer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Kunde nicht gefunden"));
+//        customer.getNotes().size(); // Durch den Zugriff werden die Notes initialisiert
+//        return customer;
+//    }
 
     @Override
     public void ensureCustomerExists(Long id) {
