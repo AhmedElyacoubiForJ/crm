@@ -2,6 +2,9 @@ package edu.yacoubi.crm.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -18,11 +21,23 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "First name is mandatory")
     private String firstName;
+
+    @NotBlank(message = "Last name is mandatory")
     private String lastName;
+
+    @NotBlank(message = "Email is mandatory")
+    @Email(message = "Email should be valid")
     private String email;
+
+    @NotBlank(message = "Phone number is mandatory")
+    @Size(min = 10, max = 15, message = "Phone number must be between 10 and 15 characters")
     private String phone;
+
+    @Size(max = 100, message = "Address must not exceed 100 characters")
     private String address;
+
     private LocalDate lastInteractionDate;
 
     @ManyToOne
@@ -37,20 +52,15 @@ public class Customer {
             orphanRemoval = true
     )
     @ToString.Exclude
-    List<Note> notes;
+    @Builder.Default
+    private List<Note> notes = new ArrayList<>();
 
     public void addNote(Note note) {
-        if (notes == null) {
-            notes = new ArrayList<>();
-        }
         notes.add(note);
         note.setCustomer(this);
     }
 
     public void removeNote(Note note) {
-        if (notes == null) {
-            return;
-        }
         notes.remove(note);
         note.setCustomer(null);
     }
