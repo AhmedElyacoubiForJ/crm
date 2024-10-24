@@ -20,12 +20,12 @@ INSERT INTO customer (first_name, last_name, email, phone, address, last_interac
 -- Create Notes
 INSERT INTO note (interaction_type, content, date, customer_id) VALUES
 ('MEETING', 'Meeting with Max', '2024-10-22', 1),
-('CALL', 'Call with Erika', '2024-10-22', 2),
+('PHONE_CALL', 'Call with Erika', '2024-10-22', 2),
 ('EMAIL', 'Email to Hans', '2024-10-22', 3),
 ('MEETING', 'Meeting with Petra', '2024-10-22', 4),
-('CALL', 'Call with Klaus', '2024-10-22', 5),
+('PHONE_CALL', 'Call with Klaus', '2024-10-22', 5),
 ('EMAIL', 'Email to Lisa', '2024-10-22', 6),
 ('MEETING', 'Meeting with Frank', '2024-10-22', 7),
-('CALL', 'Call with Sandra', '2024-10-22', 8),
+('PHONE_CALL', 'Call with Sandra', '2024-10-22', 8),
 ('EMAIL', 'Email to Gerd', '2024-10-22', 9),
 ('MEETING', 'Meeting with Ute', '2024-10-22', 10);
