@@ -1,4 +1,4 @@
-package edu.yacoubi.crm.controllers.view;
+package edu.yacoubi.crm.controllers.toviews;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

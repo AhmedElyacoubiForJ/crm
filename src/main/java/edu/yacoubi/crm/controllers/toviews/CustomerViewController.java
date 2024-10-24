@@ -1,4 +1,4 @@
-package edu.yacoubi.crm.controllers.view;
+package edu.yacoubi.crm.controllers.toviews;
 
 import edu.yacoubi.crm.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
