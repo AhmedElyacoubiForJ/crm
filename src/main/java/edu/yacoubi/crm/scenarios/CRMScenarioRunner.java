@@ -8,7 +8,6 @@ import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.service.INoteService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -131,6 +130,7 @@ public class CRMScenarioRunner implements CommandLineRunner {
 
         System.out.println("Kundendaten erfolgreich aktualisiert.");
     }
+
     // Szenario zum Hinzufügen einer Notiz zu einem bestehenden Kunden
     private void scenarioAddNoteToExistingCustomer() {
         // Kunden finden
@@ -146,7 +146,9 @@ public class CRMScenarioRunner implements CommandLineRunner {
 
         noteService.createNoteForCustomer(newNote, customer.getId());
 
-        Customer customerF = customerService.getCustomerByEmail("c.customerB@gmail.com").orElseThrow(() -> new RuntimeException("Kunde nicht gef"));
+        Customer customerF = customerService
+                .getCustomerByEmail("c.customerB@gmail.com")
+                .orElseThrow(() -> new RuntimeException("Kunde nicht gef"));
 
         // Lazy loading problem
         //System.out.println(customerF.getNotes());
@@ -169,30 +171,32 @@ public class CRMScenarioRunner implements CommandLineRunner {
         noteService.createNoteForCustomer(newNote, customer.getId());
 
         // Kunden und Notizen laden
-        Customer customerF = customerService.getCustomerByEmailWithNotesAndEmployeeCustomers("c.customerB@gmail.com")
+        Customer customerF = customerService
+                .getCustomerByEmailWithNotesAndEmployeeCustomers("c.customerB@gmail.com")
                 .orElseThrow(() -> new RuntimeException("Kunde nicht gefunden"));
 
         System.out.println(customerF.getNotes());
         System.out.println("Neue Notiz erfolgreich hinzugefügt.");
     }
-    // Zweiter Ansatz: Lazy Loading mit @Transactional
-//    private void scenarioAddNoteToExistingCustomerSecondApproach() {
-//        // Kunden finden
-//        Customer customer = customerService.getCustomerByEmail("c.customerB@gmail.com")
-//                .orElseThrow(() -> new RuntimeException("Kunde nicht gefunden"));
-//        // Neue Notiz erstellen
-//        Note newNote = Note.builder()
-//                .interactionType(InteractionType.EMAIL)
-//                .content("Follow-up Email sent")
-//                .date(LocalDate.now())
-//                .build();
-//        noteService.createNoteForCustomer(newNote, customer.getId());
-//
-//        // Kunden und Notizen laden mit Lazy Loading
-//        Customer customerF = customerService.getCustomerWithNotes(customer.getId());
-//
-//        System.out.println(customerF.getNotes());
-//        System.out.println("Neue Notiz erfolgreich hinzugefügt.");
-//    }
 
+    // Zweiter Ansatz: Lazy Loading mit @Transactional
+    private void scenarioAddNoteToExistingCustomerSecondApproach() {
+        // Kunden finden
+        Customer customer = customerService.getCustomerByEmail("c.customerB@gmail.com")
+                .orElseThrow(() -> new RuntimeException("Kunde nicht gefunden"));
+
+        // Neue Notiz erstellen
+        Note newNote = Note.builder()
+                .interactionType(InteractionType.EMAIL)
+                .content("Follow-up Email sent")
+                .date(LocalDate.now())
+                .build();
+        noteService.createNoteForCustomer(newNote, customer.getId());
+
+        // Kunden und Notizen laden mit Lazy Loading
+        Customer customerF = customerService.getCustomerWithNotes(customer.getId());
+
+        System.out.println(customerF.getNotes());
+        System.out.println("Neue Notiz erfolgreich hinzugefügt.");
+    }
 }

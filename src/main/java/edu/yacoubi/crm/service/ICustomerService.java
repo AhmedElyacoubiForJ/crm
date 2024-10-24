@@ -27,5 +27,5 @@ public interface ICustomerService {
 
     Optional<Customer> getCustomerByEmailWithNotesAndEmployeeCustomers(String email);
 
-    //Customer getCustomerWithNotes(Long id);
+    Customer getCustomerWithNotes(Long id);
 }

@@ -103,16 +103,16 @@ public class CustomerServiceImpl implements ICustomerService {
         return customerRepository.findByEmailWithNotesAndEmployeeCustomers(email);
     }
 
-//    @Override
-//    @Transactional(
-//            readOnly = true
-//    )
-//    public Customer getCustomerWithNotes(Long id) {
-//        log.info("Fetching customer with ID: {} including notes", id);
-//        Customer customer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Kunde nicht gefunden"));
-//        customer.getNotes().size(); // Durch den Zugriff werden die Notes initialisiert
-//        return customer;
-//    }
+    @Override
+    @Transactional(readOnly = true)
+    public Customer getCustomerWithNotes(Long id) {
+        log.info("Fetching customer with ID: {} including notes", id);
+        Customer customer = customerRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Kunde nicht gefunden"));
+        customer.getNotes().size(); // Durch den Zugriff werden die Notes initialisiert
+        return customer;
+    }
 
     @Override
     public void ensureCustomerExists(Long id) {
