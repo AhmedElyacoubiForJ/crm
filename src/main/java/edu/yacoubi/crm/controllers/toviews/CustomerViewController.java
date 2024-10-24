@@ -1,32 +1,44 @@
 package edu.yacoubi.crm.controllers.toviews;
 
+import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.service.ICustomerService;
+import edu.yacoubi.crm.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-@RequestMapping("/customers")
 public class CustomerViewController {
 
     @Autowired
     private ICustomerService customerService;
 
-    @GetMapping
-    public String listCustomers(Model model) {
-        //model.addAttribute("customers", customerService.findAll());
-        return "templates/customer/customer-list";
+    @Autowired
+    private IEmployeeService employeeService;
+
+    @GetMapping("/customers/new")
+    public String showCreateCustomerForm(Model model) {
+        model.addAttribute("customer", new Customer());
+        model.addAttribute("employees", employeeService.getAllEmployees());  // Mitarbeiterliste
+        return "customer/customer-form";  // Gibt die HTML-Seite für die Kundenerstellung zurück
     }
 
-    @GetMapping("/{id}")
-    public String getCustomerById(@PathVariable Long id, Model model) {
-        //Customer customer = customerService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
-        model.addAttribute("templates/customer", null);
-        return "templates/customer/customer-detail";
+    @PostMapping("/customers")
+    public String createCustomer(@ModelAttribute Customer customer) {
+        customerService.createCustomer(customer);  // Speichert den Kunden in der Datenbank
+        return "redirect:/customers";  // Leitet zur Kundenliste weiter
     }
+
+
+    @GetMapping("/customers")
+    public String listCustomers(Model model) {
+        model.addAttribute("customers", customerService.getAllCustomers());  // Lädt alle Kunden aus der Datenbank
+        return "customer/customer-list";  // Ruft die HTML-Seite 'customer_list.html' auf
+    }
+
 
     // Weitere Methoden zur Erstellung und Aktualisierung von Kunden
 }
