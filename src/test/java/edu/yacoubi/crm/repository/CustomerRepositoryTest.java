@@ -65,8 +65,9 @@ class CustomerRepositoryTest {
         // This should throw an exception because the employee is missing
         DataIntegrityViolationException exception = assertThrows(
                 DataIntegrityViolationException.class, () -> underTest.save(customer));
+
         // Then
-        String expectedMessage = "not-null property references a null";
+        String expectedMessage = "NULL not allowed for column";
         assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
     }
 

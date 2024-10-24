@@ -5,6 +5,7 @@ import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.InteractionType;
 import edu.yacoubi.crm.model.Note;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -64,7 +65,7 @@ class NoteRepositoryTest {
                 DataIntegrityViolationException.class, () -> underTest.save(note));
 
         // Then
-        String expectedMessage = "not-null property references a null";
+        String expectedMessage = "NULL not allowed for column \"CUSTOMER_ID\"; SQL statement:";
         assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
     }
 
@@ -137,11 +138,11 @@ class NoteRepositoryTest {
         Note note = TestDataUtil.createNoteA(savedCustomer);
         note.setDate(null);
         // When
-        DataIntegrityViolationException exception = assertThrows(
-                DataIntegrityViolationException.class, () -> underTest.save(note));
+        ConstraintViolationException exception = assertThrows(
+                ConstraintViolationException.class, () -> underTest.save(note));
 
         // Then
-        String expectedMessage = "not-null property references a null or transient value";
+        String expectedMessage = "Date is mandatory";
         assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
     }
 
@@ -156,11 +157,11 @@ class NoteRepositoryTest {
         Note note = TestDataUtil.createNoteA(savedCustomer);
         note.setInteractionType(null);
         // When
-        DataIntegrityViolationException exception = assertThrows(
-                DataIntegrityViolationException.class, () -> underTest.save(note));
+        ConstraintViolationException exception = assertThrows(
+                ConstraintViolationException.class, () -> underTest.save(note));
 
         // Then
-        String expectedMessage = "not-null property references a null or transient value";
+        String expectedMessage = "Interaction type is mandatory";
         assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
     }
 }
