@@ -42,6 +42,7 @@ public class CustomerRestController {
     }
 
     @Operation(summary = "Create a new customer", description = "This operation creates a new customer in the CRM system.")
+    @PostMapping
     public ResponseEntity<CustomerDTO> createCustomer(
             @RequestParam Long employeeId,
             @RequestBody CustomerDTO customerRequestDTO) {
@@ -80,6 +81,7 @@ public class CustomerRestController {
     }
 
     @Operation(summary = "Update customer by example", description = "Update the details of an existing customer using a provided example.")
+    @PutMapping("/{id}/updateByExample")
     public ResponseEntity<CustomerDTO> updateCustomerByExample(
             @PathVariable Long id,
             @RequestBody CustomerDTO customerDTO) {
