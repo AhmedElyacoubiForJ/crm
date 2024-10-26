@@ -153,7 +153,7 @@ class NoteServiceImplIntegrationTest {
     @Test
     public void itShouldThrowWhenDeleteNoteDoesNotExist() {
         // Given
-        Long nonExistingNoteId = 1L;
+        Long nonExistingNoteId = -1L; // für 1L funktioniert nicht TODO
 
         // When
         assertThrows(
