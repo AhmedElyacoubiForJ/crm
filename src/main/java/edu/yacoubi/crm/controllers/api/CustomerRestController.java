@@ -8,6 +8,7 @@ import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +20,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/customers")
 @RequiredArgsConstructor
 public class CustomerRestController {
-
     private final ICustomerService customerService;
     private final IEmployeeService employeeService;
     private final IMapper<Customer, CustomerDTO> customerMapper;
 
+    @Operation(summary = "Get all customers", description = "Retrieve a list of all customers in the CRM system.")
     @GetMapping
     public List<CustomerDTO> getAllCustomers() {
         return customerService.getAllCustomers().stream()
@@ -31,6 +32,7 @@ public class CustomerRestController {
                 .collect(Collectors.toList());
     }
 
+    @Operation(summary = "Get customer by ID", description = "Retrieve a customer by their unique ID.")
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id) {
         Customer customer = customerService.getCustomerById(id)
@@ -39,14 +41,12 @@ public class CustomerRestController {
         return ResponseEntity.ok(customerDTO);
     }
 
-    @PostMapping
+    @Operation(summary = "Create a new customer", description = "This operation creates a new customer in the CRM system.")
     public ResponseEntity<CustomerDTO> createCustomer(
             @RequestParam Long employeeId,
             @RequestBody CustomerDTO customerRequestDTO) {
         Employee existingEmployee = employeeService.getEmployeeById(employeeId)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Employee not found with ID: " + employeeId)
-                );
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + employeeId));
 
         Customer customerRequest = customerMapper.mapFrom(customerRequestDTO);
         customerRequest.setEmployee(existingEmployee);
@@ -56,6 +56,7 @@ public class CustomerRestController {
         return ResponseEntity.ok(customerResponseDTO);
     }
 
+    @Operation(summary = "Update customer", description = "Update the details of an existing customer by their unique ID.")
     @PutMapping("/{id}")
     public ResponseEntity<CustomerDTO> updateCustomer(
             @PathVariable Long id,
@@ -78,7 +79,7 @@ public class CustomerRestController {
         return ResponseEntity.ok(updatedCustomerDTO);
     }
 
-    @PutMapping("/{id}/updateByExample")
+    @Operation(summary = "Update customer by example", description = "Update the details of an existing customer using a provided example.")
     public ResponseEntity<CustomerDTO> updateCustomerByExample(
             @PathVariable Long id,
             @RequestBody CustomerDTO customerDTO) {
@@ -87,12 +88,11 @@ public class CustomerRestController {
         return ResponseEntity.ok(updatedCustomerDTO);
     }
 
+    @Operation(summary = "Delete customer", description = "Delete an existing customer by their unique ID.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
         customerService.getCustomerById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id)
-                );
-
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
         customerService.deleteCustomer(id);
         return ResponseEntity.noContent().build();
     }

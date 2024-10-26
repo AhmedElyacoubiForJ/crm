@@ -5,6 +5,7 @@ import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.mapper.IMapper;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.service.IEmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +17,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/employees")
 @RequiredArgsConstructor
 public class EmployeeRestController {
-
     private final IEmployeeService employeeService;
     private final IMapper<Employee, EmployeeDTO> employeeMapper;
 
+    @Operation(summary = "Get all employees", description = "Retrieve a list of all employees in the CRM system.")
     @GetMapping
     public List<EmployeeDTO> getAllEmployees() {
         return employeeService.getAllEmployees().stream()
@@ -27,16 +28,16 @@ public class EmployeeRestController {
                 .collect(Collectors.toList());
     }
 
+    @Operation(summary = "Get employee by ID", description = "Retrieve an employee by their unique ID.")
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id) {
         Employee employee = employeeService.getEmployeeById(id)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Employee not found with ID: " + id)
-                );
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
         EmployeeDTO employeeDTO = employeeMapper.mapTo(employee);
         return ResponseEntity.ok(employeeDTO);
     }
 
+    @Operation(summary = "Create a new employee", description = "This operation creates a new employee in the CRM system.")
     @PostMapping
     public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
         Employee employee = employeeMapper.mapFrom(employeeDTO);
@@ -45,6 +46,7 @@ public class EmployeeRestController {
         return ResponseEntity.ok(savedEmployeeDTO);
     }
 
+    @Operation(summary = "Update employee", description = "Update the details of an existing employee by their unique ID.")
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
         Employee existingEmployee = employeeService.getEmployeeById(id)
