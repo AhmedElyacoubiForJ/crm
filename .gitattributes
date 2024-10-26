@@ -2,3 +2,4 @@
 *.sh eol=lf
 *.bat eol=crlf
 *.properties eol=lf
+*.xml eol=lf
