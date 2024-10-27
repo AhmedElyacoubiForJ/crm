@@ -1,6 +1,5 @@
 package edu.yacoubi.crm.controllers.api;
 
-import edu.yacoubi.crm.dto.EmployeeDTO;
 import edu.yacoubi.crm.dto.EmployeeRequestDTO;
 import edu.yacoubi.crm.dto.EmployeeResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
@@ -36,8 +35,8 @@ public class EmployeeRestController {
     public ResponseEntity<EmployeeResponseDTO> getEmployeeById(@PathVariable Long id) {
         Employee employee = employeeService.getEmployeeById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
-        EmployeeResponseDTO employeeResponseDTODTO = employeeResponseMapper.mapTo(employee);
-        return ResponseEntity.ok(employeeResponseDTODTO);
+        EmployeeResponseDTO employeeResponseDTO = employeeResponseMapper.mapTo(employee);
+        return ResponseEntity.ok(employeeResponseDTO);
     }
 
     @Operation(summary = "Create a new employee", description = "This operation creates a new employee in the CRM system.")
@@ -51,10 +50,10 @@ public class EmployeeRestController {
 
     @Operation(summary = "Update employee", description = "Update the details of an existing employee by their unique ID.")
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequestDTO employeeDTO) {
+    public ResponseEntity<EmployeeResponseDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequestDTO employeeRequestDTO) {
         Employee existingEmployee = employeeService.getEmployeeById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
-        Employee employeeRequest = employeeRequestMapper.mapFrom(employeeDTO);
+        Employee employeeRequest = employeeRequestMapper.mapFrom(employeeRequestDTO);
         employeeRequest.setId(id);
         Employee updatedEmployee = employeeService.updateEmployee(employeeRequest);
         EmployeeResponseDTO updatedEmployeeDTO = employeeResponseMapper.mapTo(updatedEmployee);

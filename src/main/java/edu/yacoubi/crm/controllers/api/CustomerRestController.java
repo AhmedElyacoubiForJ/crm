@@ -5,7 +5,6 @@ import edu.yacoubi.crm.dto.CustomerRequestDTO;
 import edu.yacoubi.crm.dto.CustomerResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.mapper.IMapper;
-import edu.yacoubi.crm.mapper.impl.CustomerRequestMapper;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 public class CustomerRestController {
     private final ICustomerService customerService;
     private final IEmployeeService employeeService;
-    private final IMapper<Customer, CustomerDTO> customerMapper;
     private final IMapper<Customer, CustomerRequestDTO> cRequestMapper;
     private final IMapper<Customer, CustomerResponseDTO> cResponseMapper;
 
@@ -42,8 +40,8 @@ public class CustomerRestController {
     public ResponseEntity<CustomerResponseDTO> getCustomerById(@PathVariable Long id) {
         Customer customer = customerService.getCustomerById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
-        CustomerResponseDTO customerDTO = cResponseMapper.mapTo(customer);
-        return ResponseEntity.ok(customerDTO);
+        CustomerResponseDTO customerResponseDTO = cResponseMapper.mapTo(customer);
+        return ResponseEntity.ok(customerResponseDTO);
     }
 
     @Operation(summary = "Create a new customer", description = "This operation creates a new customer in the CRM system.")
@@ -80,8 +78,8 @@ public class CustomerRestController {
         customerRequest.setNotes(existingNotes); // Setzen der bestehenden Notizen
 
         Customer updatedCustomer = customerService.updateCustomer(id, customerRequest);
-        CustomerResponseDTO updatedCustomerDTO = cResponseMapper.mapTo(updatedCustomer);
-        return ResponseEntity.ok(updatedCustomerDTO);
+        CustomerResponseDTO customerResponseDTO = cResponseMapper.mapTo(updatedCustomer);
+        return ResponseEntity.ok(customerResponseDTO);
     }
 
     @Operation(summary = "Update customer by example", description = "Update the details of an existing customer using a provided example.")
