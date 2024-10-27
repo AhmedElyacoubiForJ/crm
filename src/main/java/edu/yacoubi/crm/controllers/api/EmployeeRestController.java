@@ -1,6 +1,7 @@
 package edu.yacoubi.crm.controllers.api;
 
 import edu.yacoubi.crm.dto.EmployeeDTO;
+import edu.yacoubi.crm.dto.EmployeeRequestDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.mapper.IMapper;
 import edu.yacoubi.crm.model.Employee;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class EmployeeRestController {
     private final IEmployeeService employeeService;
     private final IMapper<Employee, EmployeeDTO> employeeMapper;
+    private final IMapper<Employee, EmployeeRequestDTO> employeeRequestMapper;
 
     @Operation(summary = "Get all employees", description = "Retrieve a list of all employees in the CRM system.")
     @GetMapping
@@ -37,11 +39,21 @@ public class EmployeeRestController {
         return ResponseEntity.ok(employeeDTO);
     }
 
+//    @Operation(summary = "Create a new employee", description = "This operation creates a new employee in the CRM system.")
+//    @PostMapping
+//    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
+//        Employee employee = employeeMapper.mapFrom(employeeDTO);
+//        Employee savedEmployee = employeeService.createEmployee(employee);
+//        EmployeeDTO savedEmployeeDTO = employeeMapper.mapTo(savedEmployee);
+//        return ResponseEntity.ok(savedEmployeeDTO);
+//    }
+
     @Operation(summary = "Create a new employee", description = "This operation creates a new employee in the CRM system.")
     @PostMapping
-    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        Employee employee = employeeMapper.mapFrom(employeeDTO);
+    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeRequestDTO employeeRequestDTO) {
+        Employee employee = employeeRequestMapper.mapFrom(employeeRequestDTO);
         Employee savedEmployee = employeeService.createEmployee(employee);
+        // später zu EmployeeResponseDTO, wenn alle Anfragen mit EmployeeRequestDTO fertig geändert
         EmployeeDTO savedEmployeeDTO = employeeMapper.mapTo(savedEmployee);
         return ResponseEntity.ok(savedEmployeeDTO);
     }
