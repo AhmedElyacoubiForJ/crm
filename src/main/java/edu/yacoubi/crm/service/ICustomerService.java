@@ -1,6 +1,7 @@
 package edu.yacoubi.crm.service;
 
 import edu.yacoubi.crm.dto.CustomerDTO;
+import edu.yacoubi.crm.dto.CustomerRequestDTO;
 import edu.yacoubi.crm.model.Customer;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public interface ICustomerService {
 
     List<Customer> getCustomersByExample(CustomerDTO customerDTO);
 
-    Customer updateCustomerByExample(CustomerDTO customerExample, Long id);
+    Customer updateCustomerByExample(CustomerRequestDTO customerExample, Long id);
 
     Optional<Customer> getCustomerByEmailWithNotesAndEmployeeCustomers(String email);
 

@@ -1,6 +1,7 @@
 package edu.yacoubi.crm.service.impl;
 
 import edu.yacoubi.crm.dto.CustomerDTO;
+import edu.yacoubi.crm.dto.CustomerRequestDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
@@ -90,7 +91,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     @Transactional
-    public Customer updateCustomerByExample(CustomerDTO customerExample, Long id) {
+    public Customer updateCustomerByExample(CustomerRequestDTO customerExample, Long id) {
         log.info("Updating Customer with ID: {} using example", id);
         Customer existingCustomer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));

@@ -86,12 +86,12 @@ public class CustomerRestController {
 
     @Operation(summary = "Update customer by example", description = "Update the details of an existing customer using a provided example.")
     @PutMapping("/{id}/updateByExample")
-    public ResponseEntity<CustomerDTO> updateCustomerByExample(
+    public ResponseEntity<CustomerResponseDTO> updateCustomerByExample(
             @PathVariable Long id,
-            @RequestBody CustomerDTO customerDTO) {
-        Customer updatedCustomer = customerService.updateCustomerByExample(customerDTO, id);
-        CustomerDTO updatedCustomerDTO = customerMapper.mapTo(updatedCustomer);
-        return ResponseEntity.ok(updatedCustomerDTO);
+            @RequestBody CustomerRequestDTO customerRequestDTO) {
+        Customer updatedCustomer = customerService.updateCustomerByExample(customerRequestDTO, id);
+        CustomerResponseDTO customerResponseDTO = cResponseMapper.mapTo(updatedCustomer);
+        return ResponseEntity.ok(customerResponseDTO);
     }
 
     @Operation(summary = "Delete customer", description = "Delete an existing customer by their unique ID.")

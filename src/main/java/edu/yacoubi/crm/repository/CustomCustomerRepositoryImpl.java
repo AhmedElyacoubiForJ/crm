@@ -1,6 +1,7 @@
 package edu.yacoubi.crm.repository;
 
 import edu.yacoubi.crm.dto.CustomerDTO;
+import edu.yacoubi.crm.dto.CustomerRequestDTO;
 import edu.yacoubi.crm.model.Customer;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -15,7 +16,7 @@ public class CustomCustomerRepositoryImpl implements CustomCustomerRepository {
     private EntityManager entityManager;
 
     @Override
-    public Customer updateCustomerByExample(CustomerDTO customerExample, Long id) {
+    public Customer updateCustomerByExample(CustomerRequestDTO customerExample, Long id) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaUpdate<Customer> update = cb.createCriteriaUpdate(Customer.class);
         Root<Customer> root = update.from(Customer.class);

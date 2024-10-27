@@ -1,7 +1,7 @@
 package edu.yacoubi.crm.repository;
 
 import edu.yacoubi.crm.TestDataUtil;
-import edu.yacoubi.crm.dto.CustomerDTO;
+import edu.yacoubi.crm.dto.CustomerRequestDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
@@ -168,7 +168,7 @@ class CustomerRepositoryIntegrationTest {
         Customer savedCustomer = underTest.save(customer);
 
         // Example customer DTO with new address
-        CustomerDTO customerExample = CustomerDTO.builder()
+        CustomerRequestDTO customerExample = CustomerRequestDTO.builder()
                 .address("Neue Straße 123")
                 .build();
 
