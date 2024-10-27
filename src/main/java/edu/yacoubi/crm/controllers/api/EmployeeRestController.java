@@ -34,11 +34,11 @@ public class EmployeeRestController {
 
     @Operation(summary = "Get employee by ID", description = "Retrieve an employee by their unique ID.")
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<EmployeeResponseDTO> getEmployeeById(@PathVariable Long id) {
         Employee employee = employeeService.getEmployeeById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
-        EmployeeDTO employeeDTO = employeeMapper.mapTo(employee);
-        return ResponseEntity.ok(employeeDTO);
+        EmployeeResponseDTO employeeResponseDTODTO = employeeResponseMapper.mapTo(employee);
+        return ResponseEntity.ok(employeeResponseDTODTO);
     }
 
     @Operation(summary = "Create a new employee", description = "This operation creates a new employee in the CRM system.")
