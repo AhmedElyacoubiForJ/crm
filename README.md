@@ -143,7 +143,8 @@ spring.profiles.active=test # or prod
 ### Verwendung der Profile
 - Du kannst die Profile über die Kommandozeile oder deine IDE aktivieren.
 ```sh
-./mvnw  spring-boot:run -Dspring-boot.run.profiles=test
+./mvnw test
+
 ```
 - IDE (IntelliJ IDEA):
    - Gehe zu Run > Edit Configurations.
@@ -152,7 +153,17 @@ spring.profiles.active=test # or prod
 
 ## [API Testing-Dokumentation](TESTING.md)
 
-## TODO
-- JPA Entities spezifizieren
-- Repositories
-- Services
+## TODOs
+- JPA Entities spezifizieren: DONE
+- Repositories: DONE
+- Services: DONE
+- DTOs: Done
+- DTOs Mapper: DONE
+- Repositories Unit-Tests: Done (to check)
+- Repositories Integrationstestes: Done (to check)
+- Services Init-Tests: Done (to check)
+- Services IntegrationsTests: Done (to check)
+- RestApi Endpoints-Implementations: DONE
+- RestApi Swagger-Documentations: DONE (könnte verbessert werden)
+- RestApi IntegrationsTests: TODO
+- Spring MVC views Implementations: DONE (teilweise verbesserung notwendig)
