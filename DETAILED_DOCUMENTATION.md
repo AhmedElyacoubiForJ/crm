@@ -55,13 +55,13 @@ Das `InteractionType`-Enum definiert die verschiedenen Arten von Interaktionen:
 ## Tests
 ### Datenbankintegrität
 1. Customer:
-   - `CustomerRepositoryTest`: Setup-Klasse, die dafür zuständig tests für die JPA Entity Customer Model durchzuführen.
+   - `CustomerRepositoryIntegrationTest`: Setup-Klasse, die dafür zuständig tests für die JPA Entity Customer Model durchzuführen.
       <details>
        <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
     
        ```
        @DataJpaTest
-       class CustomerRepositoryTest {
+       class CustomerRepositoryIntegrationTest {
 
        @Autowired
        private CustomerRepository underTest;
@@ -246,7 +246,9 @@ Das `InteractionType`-Enum definiert die verschiedenen Arten von Interaktionen:
    -  **updateCustomerByExample**:
    > Die Methode updateCustomerByExample ermöglicht es, bestimmte Eigenschaften eines Kunden basierend auf einem Beispiel (CustomerDTO) zu aktualisieren.
    > Dies sorgt für eine gezielte Aktualisierung der Daten, ohne die gesamte Entität zu überschreiben.
-
+   - `Pflichtfeld-Validierung`: Testet, ob das Feld "Phone" nicht `null` sein darf.
+   - `Längen-Validierung`: Testet, ob das Feld "Phone" die richtige Länge hat.
+   - `Initialisierung-Validierung`: Testet, ob die `notes`-Liste initialisiert ist.
 2. Note:
     - `itShouldPerformAllCRUDOperations`: ....
     - `itShouldThrowWhenCreatingNoteWithoutCustomer`: ....
