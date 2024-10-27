@@ -2,6 +2,7 @@ package edu.yacoubi.crm.controllers.api;
 
 import edu.yacoubi.crm.dto.EmployeeDTO;
 import edu.yacoubi.crm.dto.EmployeeRequestDTO;
+import edu.yacoubi.crm.dto.EmployeeResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.mapper.IMapper;
 import edu.yacoubi.crm.model.Employee;
@@ -21,12 +22,13 @@ public class EmployeeRestController {
     private final IEmployeeService employeeService;
     private final IMapper<Employee, EmployeeDTO> employeeMapper;
     private final IMapper<Employee, EmployeeRequestDTO> employeeRequestMapper;
+    private final IMapper<Employee, EmployeeResponseDTO> employeeResponseMapper;
 
     @Operation(summary = "Get all employees", description = "Retrieve a list of all employees in the CRM system.")
     @GetMapping
-    public List<EmployeeDTO> getAllEmployees() {
+    public List<EmployeeResponseDTO> getAllEmployees() {
         return employeeService.getAllEmployees().stream()
-                .map(employeeMapper::mapTo)
+                .map(employeeResponseMapper::mapTo)
                 .collect(Collectors.toList());
     }
 
@@ -38,15 +40,6 @@ public class EmployeeRestController {
         EmployeeDTO employeeDTO = employeeMapper.mapTo(employee);
         return ResponseEntity.ok(employeeDTO);
     }
-
-//    @Operation(summary = "Create a new employee", description = "This operation creates a new employee in the CRM system.")
-//    @PostMapping
-//    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
-//        Employee employee = employeeMapper.mapFrom(employeeDTO);
-//        Employee savedEmployee = employeeService.createEmployee(employee);
-//        EmployeeDTO savedEmployeeDTO = employeeMapper.mapTo(savedEmployee);
-//        return ResponseEntity.ok(savedEmployeeDTO);
-//    }
 
     @Operation(summary = "Create a new employee", description = "This operation creates a new employee in the CRM system.")
     @PostMapping
