@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class EmployeeViewController {
@@ -19,26 +18,26 @@ public class EmployeeViewController {
     // Zeigt die Seite zum Erstellen eines neuen Mitarbeiters
     @GetMapping("/employees/new")
     public String showCreateEmployeeForm(Model model) {
-        System.out.println("##################################");
-        System.out.println("showCreateEmployeeForm");
-
-        model.addAttribute("employee", new Employee());  // Neues Employee-Objekt zum Binden ans Formular
-        return "employee/employee-form";  // Ruft die HTML-Seite 'create_employee.html' auf
+        // Neues Employee-Objekt zum Binden ans Formular
+        model.addAttribute("employee", new Employee());
+        // Ruft die HTML-Seite 'employee-form.html' auf
+        return "employee/employee-form";
     }
 
     // Verarbeitet das Formular zum Erstellen eines Mitarbeiters
     @PostMapping("/employees")
     public String createEmployee(@ModelAttribute Employee employee) {
-        employeeService.createEmployee(employee);  // Speichert den neuen Mitarbeiter in der Datenbank
-        return "redirect:/employees";  // Leitet zur Mitarbeiterliste weiter (optional)
+        employeeService.createEmployee(employee);
+        // Leitet zur Mitarbeiterliste weiter
+        return "redirect:/employees";
     }
 
     // Zeigt eine Liste der Mitarbeiter (optional)
     @GetMapping("/employees")
     public String listEmployees(Model model) {
-        model.addAttribute("employees", employeeService.getAllEmployees());  // Lädt alle Mitarbeiter aus der Datenbank
-        return "employee/employee-list";  // Eine weitere HTML-Seite für die Mitarbeiterliste
+        model.addAttribute("employees", employeeService.getAllEmployees());
+        // Eine weitere HTML-Seite für die Mitarbeiterliste
+        return "employee/employee-list";
     }
-
 }
 
