@@ -64,9 +64,9 @@ public class CustomerRestController {
 
     @Operation(summary = "Update customer", description = "Update the details of an existing customer by their unique ID.")
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerDTO> updateCustomer(
+    public ResponseEntity<CustomerResponseDTO> updateCustomer(
             @PathVariable Long id,
-            @RequestBody CustomerDTO customerDTO) {
+            @RequestBody CustomerRequestDTO customerRequestDTO) {
         Customer existingCustomer = customerService.getCustomerById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
 
@@ -74,14 +74,13 @@ public class CustomerRestController {
         List<Note> existingNotes = existingCustomer.getNotes();
 
         // Mapping des DTO auf das Entität-Objekt, ohne die bestehende Notizen zu überschreiben
-        Customer customerRequest = customerMapper.mapFrom(customerDTO);
+        Customer customerRequest = cRequestMapper.mapFrom(customerRequestDTO);
         customerRequest.setId(id);
         customerRequest.setEmployee(existingCustomer.getEmployee());
         customerRequest.setNotes(existingNotes); // Setzen der bestehenden Notizen
 
         Customer updatedCustomer = customerService.updateCustomer(id, customerRequest);
-        CustomerDTO updatedCustomerDTO = customerMapper.mapTo(updatedCustomer);
-
+        CustomerResponseDTO updatedCustomerDTO = cResponseMapper.mapTo(updatedCustomer);
         return ResponseEntity.ok(updatedCustomerDTO);
     }
 
