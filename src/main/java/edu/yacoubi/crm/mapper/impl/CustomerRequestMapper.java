@@ -17,7 +17,6 @@ public class CustomerRequestMapper implements IMapper<Customer, CustomerRequestD
                 .phone(customer.getPhone())
                 .address(customer.getAddress())
                 .lastInteractionDate(customer.getLastInteractionDate())
-                .employeeId(customer.getEmployee().getId())
                 .build();
     }
 
@@ -30,7 +29,7 @@ public class CustomerRequestMapper implements IMapper<Customer, CustomerRequestD
                 .phone(customerDTO.getPhone())
                 .address(customerDTO.getAddress())
                 .lastInteractionDate(customerDTO.getLastInteractionDate())
-                .employee(Employee.builder().id(customerDTO.getEmployeeId()).build())
+                //.employee(Employee.builder().id(customerDTO.getEmployeeId()).build())
                 .build();
     }
 }

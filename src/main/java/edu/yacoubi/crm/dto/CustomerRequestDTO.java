@@ -14,5 +14,4 @@ public class CustomerRequestDTO {
     private String phone;
     private String address;
     private LocalDate lastInteractionDate;
-    private Long employeeId; // Referenz auf Employee
 }

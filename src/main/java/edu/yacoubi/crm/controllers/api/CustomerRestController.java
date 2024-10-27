@@ -48,17 +48,17 @@ public class CustomerRestController {
 
     @Operation(summary = "Create a new customer", description = "This operation creates a new customer in the CRM system.")
     @PostMapping
-    public ResponseEntity<CustomerDTO> createCustomer(
+    public ResponseEntity<CustomerResponseDTO> createCustomer(
             @RequestParam Long employeeId,
-            @RequestBody CustomerDTO customerRequestDTO) {
+            @RequestBody CustomerRequestDTO customerRequestDTO) {
         Employee existingEmployee = employeeService.getEmployeeById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + employeeId));
 
-        Customer customerRequest = customerMapper.mapFrom(customerRequestDTO);
+        Customer customerRequest = cRequestMapper.mapFrom(customerRequestDTO);
         customerRequest.setEmployee(existingEmployee);
 
-        Customer customerResponse = customerService.createCustomer(customerRequest);
-        CustomerDTO customerResponseDTO = customerMapper.mapTo(customerResponse);
+        Customer savedCustomer = customerService.createCustomer(customerRequest);
+        CustomerResponseDTO customerResponseDTO = cResponseMapper.mapTo(savedCustomer);
         return ResponseEntity.ok(customerResponseDTO);
     }
 
