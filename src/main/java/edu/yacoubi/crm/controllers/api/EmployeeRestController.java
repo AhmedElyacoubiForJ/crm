@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EmployeeRestController {
     private final IEmployeeService employeeService;
-    private final IMapper<Employee, EmployeeDTO> employeeMapper;
     private final IMapper<Employee, EmployeeRequestDTO> employeeRequestMapper;
     private final IMapper<Employee, EmployeeResponseDTO> employeeResponseMapper;
 
@@ -43,23 +42,22 @@ public class EmployeeRestController {
 
     @Operation(summary = "Create a new employee", description = "This operation creates a new employee in the CRM system.")
     @PostMapping
-    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeRequestDTO employeeRequestDTO) {
+    public ResponseEntity<EmployeeResponseDTO> createEmployee(@RequestBody EmployeeRequestDTO employeeRequestDTO) {
         Employee employee = employeeRequestMapper.mapFrom(employeeRequestDTO);
         Employee savedEmployee = employeeService.createEmployee(employee);
-        // später zu EmployeeResponseDTO, wenn alle Anfragen mit EmployeeRequestDTO fertig geändert
-        EmployeeDTO savedEmployeeDTO = employeeMapper.mapTo(savedEmployee);
+        EmployeeResponseDTO savedEmployeeDTO = employeeResponseMapper.mapTo(savedEmployee);
         return ResponseEntity.ok(savedEmployeeDTO);
     }
 
     @Operation(summary = "Update employee", description = "Update the details of an existing employee by their unique ID.")
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
+    public ResponseEntity<EmployeeResponseDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequestDTO employeeDTO) {
         Employee existingEmployee = employeeService.getEmployeeById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
-        Employee employeeRequest = employeeMapper.mapFrom(employeeDTO);
+        Employee employeeRequest = employeeRequestMapper.mapFrom(employeeDTO);
         employeeRequest.setId(id);
         Employee updatedEmployee = employeeService.updateEmployee(employeeRequest);
-        EmployeeDTO updatedEmployeeDTO = employeeMapper.mapTo(updatedEmployee);
+        EmployeeResponseDTO updatedEmployeeDTO = employeeResponseMapper.mapTo(updatedEmployee);
         return ResponseEntity.ok(updatedEmployeeDTO);
     }
 }
