@@ -1,8 +1,11 @@
 package edu.yacoubi.crm.controllers.api;
 
 import edu.yacoubi.crm.dto.CustomerDTO;
+import edu.yacoubi.crm.dto.CustomerRequestDTO;
+import edu.yacoubi.crm.dto.CustomerResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.mapper.IMapper;
+import edu.yacoubi.crm.mapper.impl.CustomerRequestMapper;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
@@ -23,12 +26,14 @@ public class CustomerRestController {
     private final ICustomerService customerService;
     private final IEmployeeService employeeService;
     private final IMapper<Customer, CustomerDTO> customerMapper;
+    private final IMapper<Customer, CustomerRequestDTO> cRequestMapper;
+    private final IMapper<Customer, CustomerResponseDTO> cResponseMapper;
 
     @Operation(summary = "Get all customers", description = "Retrieve a list of all customers in the CRM system.")
     @GetMapping
-    public List<CustomerDTO> getAllCustomers() {
+    public List<CustomerResponseDTO> getAllCustomers() {
         return customerService.getAllCustomers().stream()
-                .map(customerMapper::mapTo)
+                .map(cResponseMapper::mapTo)
                 .collect(Collectors.toList());
     }
 
