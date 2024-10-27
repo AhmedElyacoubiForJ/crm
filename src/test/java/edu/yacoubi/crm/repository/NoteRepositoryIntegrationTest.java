@@ -18,7 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class NoteRepositoryTest {
+class NoteRepositoryIntegrationTest {
 
     @Autowired
     EmployeeRepository employeeRepository;

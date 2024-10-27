@@ -6,6 +6,7 @@ import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -17,7 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class CustomerRepositoryTest {
+class CustomerRepositoryIntegrationTest {
 
     @Autowired
     private CustomerRepository underTest;
@@ -177,5 +178,128 @@ class CustomerRepositoryTest {
         // Then
         assertNotNull(updatedCustomer);
         assertEquals("Neue Straße 123", updatedCustomer.getAddress());
+    }
+
+    @Test
+    public void itShouldThrowValidationExceptionForInvalidCustomer() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeA();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer invalidCustomer = new Customer(); // Invalid because of missing fields
+        invalidCustomer.setEmployee(savedEmployee);
+
+        // When & Then
+        assertThrows(ConstraintViolationException.class, () -> {
+            underTest.save(invalidCustomer);
+        });
+    }
+
+    @Test
+    public void itShouldThrowValidationExceptionForInvalidEmail() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeA();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer invalidCustomer = TestDataUtil.createCustomerA(savedEmployee);
+        invalidCustomer.setEmail("a.b.de"); // Invalid Email Value
+
+        // When & Then
+        assertThrows(ConstraintViolationException.class, () -> {
+            underTest.save(invalidCustomer);
+        });
+    }
+
+    @Test
+    public void itShouldThrowValidationExceptionForShortString() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeA();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer invalidCustomer = TestDataUtil.createCustomerA(savedEmployee);
+        invalidCustomer.setPhone("21"); // Too short
+
+        // When & Then
+        assertThrows(ConstraintViolationException.class, () -> {
+            underTest.save(invalidCustomer);
+        });
+    }
+
+    // test notes list if initialized
+    @Test
+    @Transactional
+    public void itShouldConfirmNotesListAlreadyInitialized() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeA();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer customer = TestDataUtil.createCustomerA(savedEmployee);
+        underTest.save(customer);
+
+        // When
+        Customer foundCustomer = underTest.findById(customer.getId()).orElse(null);
+
+        // Then
+        assertNotNull(foundCustomer.getNotes());
+        assertTrue(foundCustomer.getNotes().isEmpty());
+    }
+
+    @Test
+    public void itShouldThrowValidationExceptionForMissingPhoneNumber() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeA();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer invalidCustomer = TestDataUtil.createCustomerA(savedEmployee);
+        invalidCustomer.setPhone(null); // Missing phone number
+
+        // When & Then
+        assertThrows(ConstraintViolationException.class, () -> {
+            underTest.save(invalidCustomer);
+        });
+    }
+
+    @Test
+    public void itShouldThrowValidationExceptionForTooShortPhoneNumber() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeA();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer invalidCustomer = TestDataUtil.createCustomerA(savedEmployee);
+        invalidCustomer.setPhone("21"); // Too short
+
+        // When & Then
+        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> {
+            underTest.save(invalidCustomer);
+        });
+        String expectedMessage = "Phone number must be between 10 and 15 characters";
+        assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
+    }
+
+    @Test
+    public void itShouldThrowValidationExceptionForTooLongPhoneNumber() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeA();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer invalidCustomer = TestDataUtil.createCustomerA(savedEmployee);
+        invalidCustomer.setPhone("12345678901234567890"); // Too long
+
+        // When & Then
+        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> {
+            underTest.save(invalidCustomer);
+        });
+        String expectedMessage = "Phone number must be between 10 and 15 characters";
+        assertTrue(exception.getMessage().contains(expectedMessage), expectedMessage);
+    }
+
+    @Test
+    public void itShouldSaveCustomerWithValidPhoneNumber() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeA();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer validCustomer = TestDataUtil.createCustomerA(savedEmployee);
+        validCustomer.setPhone("1234567890"); // Valid phone number
+
+        // When
+        Customer savedCustomer = underTest.save(validCustomer);
+
+        // Then
+        Customer foundCustomer = underTest.findById(savedCustomer.getId()).orElse(null);
+        assertNotNull(foundCustomer);
+        assertEquals("1234567890", foundCustomer.getPhone());
     }
 }
