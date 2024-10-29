@@ -1,7 +1,7 @@
 package edu.yacoubi.crm.service.impl;
 
 import edu.yacoubi.crm.TestDataUtil;
-import edu.yacoubi.crm.dto.CustomerDTO;
+import edu.yacoubi.crm.dto.CustomerRequestDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.EmployeeRepository;
@@ -130,7 +130,7 @@ class CustomerServiceImplIntegrationTest {
         customerRepository.save(customerA);
         customerRepository.save(customerB);
 
-        CustomerDTO customerDTO = CustomerDTO.builder().firstName("John").build();
+        CustomerRequestDTO customerDTO = CustomerRequestDTO.builder().firstName("John").build();
 
         // When
         List<Customer> foundCustomers = underTest.getCustomersByExample(customerDTO);

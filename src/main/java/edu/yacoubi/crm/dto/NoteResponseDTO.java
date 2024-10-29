@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class NoteDTO {
+public class NoteResponseDTO {
     private Long id;
     private String content;
     private LocalDate date;

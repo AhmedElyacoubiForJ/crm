@@ -1,6 +1,5 @@
 package edu.yacoubi.crm.repository;
 
-import edu.yacoubi.crm.dto.CustomerDTO;
 import edu.yacoubi.crm.dto.CustomerRequestDTO;
 import edu.yacoubi.crm.model.Customer;
 import jakarta.persistence.EntityManager;

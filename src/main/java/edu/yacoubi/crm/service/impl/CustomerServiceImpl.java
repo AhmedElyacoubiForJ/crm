@@ -1,6 +1,5 @@
 package edu.yacoubi.crm.service.impl;
 
-import edu.yacoubi.crm.dto.CustomerDTO;
 import edu.yacoubi.crm.dto.CustomerRequestDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
@@ -67,7 +66,7 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public List<Customer> getCustomersByExample(CustomerDTO customerDTO) {
+    public List<Customer> getCustomersByExample(CustomerRequestDTO customerDTO) {
         Customer customerProbe = new Customer();
 
         if (customerDTO.getFirstName() != null) {

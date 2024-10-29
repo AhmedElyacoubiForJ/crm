@@ -2,7 +2,7 @@ package edu.yacoubi.crm.controllers.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.yacoubi.crm.TestDataUtil;
-import edu.yacoubi.crm.dto.CustomerDTO;
+import edu.yacoubi.crm.dto.CustomerRequestDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.CustomerRepository;
@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,7 +43,7 @@ class CustomerRestControllerTest {
         Customer customer = TestDataUtil.createCustomerA(savedEmployee);
         Customer savedCustomer = customerRepository.save(customer);
 
-        CustomerDTO customerExample = CustomerDTO.builder()
+        CustomerRequestDTO customerExample = CustomerRequestDTO.builder()
                 .address("Neue Straße 123")
                 .build();
 
