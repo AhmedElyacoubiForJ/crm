@@ -1,12 +1,14 @@
-package edu.yacoubi.crm.controllers;
+package edu.yacoubi.crm.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.yacoubi.crm.dto.*;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
 
-public class Mapper {
-    private Mapper() {
+public class ValueMapper {
+    private ValueMapper() {
     }
 
     public static NoteResponseDTO convertToResponseDTO(Note note) {
@@ -69,5 +71,14 @@ public class Mapper {
                 .lastInteractionDate(customer.getLastInteractionDate())
                 .employeeId(customer.getEmployee().getId())
                 .build();
+    }
+
+    public static String jsonAsString(Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
