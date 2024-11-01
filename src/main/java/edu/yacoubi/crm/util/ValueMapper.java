@@ -77,8 +77,7 @@ public class ValueMapper {
         try {
             return new ObjectMapper().writeValueAsString(obj);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error converting object to JSON string", e);
         }
-        return null;
     }
 }

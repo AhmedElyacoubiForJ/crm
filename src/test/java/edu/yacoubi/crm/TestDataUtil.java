@@ -1,5 +1,8 @@
 package edu.yacoubi.crm;
 
+import edu.yacoubi.crm.dto.CustomerRequestDTO;
+import edu.yacoubi.crm.dto.EmployeeRequestDTO;
+import edu.yacoubi.crm.dto.NoteRequestDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.InteractionType;
@@ -13,6 +16,15 @@ public final class TestDataUtil {
 
     public static Employee createEmployeeA() {
         return Employee.builder()
+                .firstName("Jon")
+                .lastName("Wayne")
+                .email("jon.wayne@example.com")
+                .department("Sales")
+                .build();
+    }
+
+    public static EmployeeRequestDTO createEmployeeRequestDTOA() {
+        return EmployeeRequestDTO.builder()
                 .firstName("Jon")
                 .lastName("Wayne")
                 .email("jon.wayne@example.com")
@@ -50,6 +62,17 @@ public final class TestDataUtil {
                 .build();
     }
 
+    public static CustomerRequestDTO createCustomerRequestDTOA() {
+        return CustomerRequestDTO.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .email("john.doe@example.com")
+                .phone("1234567890")
+                .address("123 Main St")
+                .lastInteractionDate(LocalDate.now())
+                .build();
+    }
+
     public static Customer createCustomerB(Employee employee) {
         return Customer.builder()
                 .firstName("Jane")
@@ -81,6 +104,15 @@ public final class TestDataUtil {
                 .interactionType(InteractionType.EMAIL)
                 .customer(customer)
                 .build();
+    }
+
+    public static NoteRequestDTO createNoteRequestDTOA(Customer customer) {
+        return NoteRequestDTO.builder()
+               .content("First interaction")
+               .date(LocalDate.now())
+               .interactionType(InteractionType.EMAIL)
+               .customerId(customer.getId())
+               .build();
     }
 
     public static Note createNoteB(Customer customer) {
