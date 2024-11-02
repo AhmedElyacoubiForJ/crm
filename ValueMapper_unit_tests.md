@@ -21,54 +21,54 @@
 <details>
 <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
 
-```java
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
-public class ValueMapper {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    static {
-        objectMapper.registerModule(new JavaTimeModule());
-    }
-
-    private ValueMapper() {}
-
-    public static NoteResponseDTO convertToResponseDTO(Note note) {
-        // Methode zur Konvertierung einer Note in NoteResponseDTO
-    }
-
-    public static Note convertToEntity(NoteRequestDTO noteRequestDTO) {
-        // Methode zur Konvertierung von NoteRequestDTO in Note
-    }
-
-    public static EmployeeResponseDTO convertToResponseDTO(Employee employee) {
-        // Methode zur Konvertierung eines Employee in EmployeeResponseDTO
-    }
-
-    public static Employee convertToEntity(EmployeeRequestDTO employeeRequestDTO) {
-        // Methode zur Konvertierung von EmployeeRequestDTO in Employee
-    }
-
-    public static Customer convertToEntity(CustomerRequestDTO customerRequestDTO) {
-        // Methode zur Konvertierung von CustomerRequestDTO in Customer
-    }
-
-    public static CustomerResponseDTO convertToResponseDTO(Customer customer) {
-        // Methode zur Konvertierung eines Customers in CustomerResponseDTO
-    }
-
-    public static String jsonAsString(Object obj) {
-        try {
-            return objectMapper.writeValueAsString(obj);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error converting object to JSON string", e);
+    ```java
+    import com.fasterxml.jackson.core.JsonProcessingException;
+    import com.fasterxml.jackson.databind.ObjectMapper;
+    import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+    
+    public class ValueMapper {
+        private static final ObjectMapper objectMapper = new ObjectMapper();
+    
+        static {
+            objectMapper.registerModule(new JavaTimeModule());
+        }
+    
+        private ValueMapper() {}
+    
+        public static NoteResponseDTO convertToResponseDTO(Note note) {
+            // Methode zur Konvertierung einer Note in NoteResponseDTO
+        }
+    
+        public static Note convertToEntity(NoteRequestDTO noteRequestDTO) {
+            // Methode zur Konvertierung von NoteRequestDTO in Note
+        }
+    
+        public static EmployeeResponseDTO convertToResponseDTO(Employee employee) {
+            // Methode zur Konvertierung eines Employee in EmployeeResponseDTO
+        }
+    
+        public static Employee convertToEntity(EmployeeRequestDTO employeeRequestDTO) {
+            // Methode zur Konvertierung von EmployeeRequestDTO in Employee
+        }
+    
+        public static Customer convertToEntity(CustomerRequestDTO customerRequestDTO) {
+            // Methode zur Konvertierung von CustomerRequestDTO in Customer
+        }
+    
+        public static CustomerResponseDTO convertToResponseDTO(Customer customer) {
+            // Methode zur Konvertierung eines Customers in CustomerResponseDTO
+        }
+    
+        public static String jsonAsString(Object obj) {
+            try {
+                return objectMapper.writeValueAsString(obj);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("Error converting object to JSON string", e);
+            }
         }
     }
-}
-
-```
+    
+    ```
 </details>
 
 ## JUnit-Tests
