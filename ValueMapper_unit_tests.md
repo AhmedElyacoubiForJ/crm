@@ -21,7 +21,7 @@
 <details>
 <summary style="color: blue"><strong>Klicke hier, um den Code anzuzeigen</strong></summary>
 
-    ```java
+```java
     import com.fasterxml.jackson.core.JsonProcessingException;
     import com.fasterxml.jackson.databind.ObjectMapper;
     import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -67,8 +67,7 @@
             }
         }
     }
-    
-    ```
+```
 </details>
 
 ## JUnit-Tests

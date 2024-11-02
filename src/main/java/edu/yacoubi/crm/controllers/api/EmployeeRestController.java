@@ -42,6 +42,7 @@ public class EmployeeRestController {
         APIResponse<List<EmployeeResponseDTO>> response = APIResponse
                 .<List<EmployeeResponseDTO>>builder()
                 .status("success")
+                .statusCode(HttpStatus.OK.value())
                 .data(employeeResponseDTOList)
                 .build();
 
