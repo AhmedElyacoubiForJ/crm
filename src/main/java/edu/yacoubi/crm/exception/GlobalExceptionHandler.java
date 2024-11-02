@@ -1,45 +1,63 @@
 package edu.yacoubi.crm.exception;
 
-import edu.yacoubi.crm.dto.ErrorResponse;
+import edu.yacoubi.crm.dto.APIResponse;
+import edu.yacoubi.crm.dto.ErrorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An unexpected error occurred: " + ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<APIResponse<Object>> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        List<ErrorDTO> errors = List.of(new ErrorDTO("Resource", ex.getMessage()));
+        APIResponse<Object> response = APIResponse.<Object>builder()
+                .status("error")
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .errors(errors)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach(
-                error -> {
-                    String fieldName = ((FieldError) error).getField();
-                    String errorMessage = error.getDefaultMessage();
-                    errors.put(fieldName, errorMessage);
-                });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<APIResponse<Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        List<ErrorDTO> errors = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> new ErrorDTO(error.getField(), error.getDefaultMessage()))
+                .collect(Collectors.toList());
+
+        APIResponse<Object> response = APIResponse.<Object>builder()
+                .status("error")
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .errors(errors)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<APIResponse<Object>> handleGeneralException(Exception ex) {
+        List<ErrorDTO> errors = List.of(new ErrorDTO("Exception", "An unexpected error occurred: " + ex.getMessage()));
+        APIResponse<Object> response = APIResponse.<Object>builder()
+                .status("error")
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .errors(errors)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<APIResponse<Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        List<ErrorDTO> errors = List.of(new ErrorDTO("Argument", ex.getMessage()));
+        APIResponse<Object> response = APIResponse.<Object>builder()
+                .status("error")
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .errors(errors)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

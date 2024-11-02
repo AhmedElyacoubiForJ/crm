@@ -1,5 +1,6 @@
 package edu.yacoubi.crm.controllers.api;
 
+import edu.yacoubi.crm.dto.APIResponse;
 import edu.yacoubi.crm.dto.EmployeeRequestDTO;
 import edu.yacoubi.crm.dto.EmployeeResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,26 +32,44 @@ public class EmployeeRestController {
             description = "Retrieve a list of all employees in the CRM system."
     )
     @GetMapping
-    public List<EmployeeResponseDTO> getAllEmployees() {
+    public ResponseEntity<APIResponse> getAllEmployees() {
         log.info("EmployeeRestController::getAllEmployees request");
-        return employeeService.getAllEmployees().stream()
+
+        List<EmployeeResponseDTO> employeeResponseDTOList = employeeService.getAllEmployees().stream()
                 .map(ValueMapper::convertToResponseDTO)
                 .collect(Collectors.toList());
+
+        APIResponse<List<EmployeeResponseDTO>> response = APIResponse
+                .<List<EmployeeResponseDTO>>builder()
+                .status("success")
+                .data(employeeResponseDTOList)
+                .build();
+
+        log.info("EmployeeRestController::getAllEmployees response {}", jsonAsString(response));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     @Operation(
             summary = "Get employee by ID",
             description = "Retrieve an employee by their unique ID."
     )
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDTO> getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<APIResponse<EmployeeResponseDTO>> getEmployeeById(@PathVariable Long id) {
         log.info("EmployeeRestController::getEmployeeById request id {}", id);
+
         Employee existingEmployee = employeeService.getEmployeeById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
-        EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(existingEmployee);
 
-        log.info("EmployeeRestController::getEmployeeById response {}", jsonAsString(employeeResponseDTO));
-        return ResponseEntity.ok(employeeResponseDTO);
+        EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(existingEmployee);
+        APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .data(employeeResponseDTO)
+                .build();
+
+        log.info("EmployeeRestController::getEmployeeById response {}", jsonAsString(response));
+        return ResponseEntity.ok(response);
     }
 
     @Operation(
@@ -57,15 +77,22 @@ public class EmployeeRestController {
             description = "This operation creates a new employee in the CRM system."
     )
     @PostMapping
-    public ResponseEntity<EmployeeResponseDTO> createEmployee(@Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
+    public ResponseEntity<APIResponse<EmployeeResponseDTO>> createEmployee(
+            @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
         log.info("EmployeeRestController::createEmployee request {}", jsonAsString(employeeRequestDTO));
 
         Employee employee = convertToEntity(employeeRequestDTO);
         Employee savedEmployee = employeeService.createEmployee(employee);
-        EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(savedEmployee);
 
-        log.info("EmployeeRestController::createEmployee response {}", jsonAsString(employeeResponseDTO));
-        return ResponseEntity.ok(employeeResponseDTO);
+        EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(savedEmployee);
+        APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
+                .status("success")
+                .statusCode(HttpStatus.CREATED.value())
+                .data(employeeResponseDTO)
+                .build();
+
+        log.info("EmployeeRestController::createEmployee response {}", jsonAsString(response));
+        return ResponseEntity.ok(response);
     }
 
     @Operation(
@@ -73,19 +100,27 @@ public class EmployeeRestController {
             description = "Update the details of an existing employee by their unique ID."
     )
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeResponseDTO> updateEmployee(
+    public ResponseEntity<APIResponse<EmployeeResponseDTO>> updateEmployee(
             @PathVariable Long id,
             @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
         log.info("EmployeeRestController::updateEmployee request id {}, employee {}", id, jsonAsString(employeeRequestDTO));
+
         Employee existingEmployee = employeeService.getEmployeeById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
+
         Employee employeeRequest = convertToEntity(employeeRequestDTO);
         employeeRequest.setId(id);
 
         Employee updatedEmployee = employeeService.updateEmployee(employeeRequest);
         EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(updatedEmployee);
+        APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .data(employeeResponseDTO)
+                .build();
 
-        log.info("EmployeeRestController::updateEmployee response {}", jsonAsString(employeeResponseDTO));
-        return ResponseEntity.ok(employeeResponseDTO);
+
+        log.info("EmployeeRestController::updateEmployee response {}", jsonAsString(response));
+        return ResponseEntity.ok(response);
     }
 }
