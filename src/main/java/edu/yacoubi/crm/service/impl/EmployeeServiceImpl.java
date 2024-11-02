@@ -1,5 +1,6 @@
 package edu.yacoubi.crm.service.impl;
 
+import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.service.IEmployeeService;
@@ -19,38 +20,48 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public Employee createEmployee(Employee employee) {
-        log.info("Creating new Employee");
+        log.info("EmployeeServiceImpl::createEmployee employee {}", employee);
         // Hier könnte auch eine Validierungslogik hinzukommen
         return employeeRepository.save(employee);
     }
 
     @Override
     public List<Employee> getAllEmployees() {
-        log.info("Fetching all Employees");
+        log.info("EmployeeServiceImpl::getAllEmployees");
         return employeeRepository.findAll();
     }
 
     @Override
     public Optional<Employee> getEmployeeById(Long id) {
-        log.info("Fetching Employee with ID: {}", id);
+        log.info("EmployeeServiceImpl::getEmployeeById id {}", id);
         return employeeRepository.findById(id);
     }
 
     @Override
     public void deleteEmployee(Employee employee) {
-        log.info("Deleting Employee: {}", employee);
+        log.info("EmployeeServiceImpl::deleteEmployee employee: {}", employee);
+        if (!employeeRepository.existsById(employee.getId())) {
+            log.warn("Employee not found with ID: {}", employee.getId());
+            throw new ResourceNotFoundException("Employee not found with ID: " + employee.getId());
+        }
         employeeRepository.delete(employee);
     }
 
     @Override
     public Employee updateEmployee(Employee employee) {
-        log.info("Updating Employee: {}", employee);
+        log.info("EmployeeServiceImpl::updateEmployee employee: {}", employee);
+        // Validierung einfügen, falls notwendig
+        if (!employeeRepository.existsById(employee.getId())) {
+            log.warn("Employee not found with ID: {}", employee.getId());
+            throw new ResourceNotFoundException("Employee not found with ID: " + employee.getId());
+        }
         return employeeRepository.save(employee);
     }
 
     @Override
     public Optional<Employee> getEmployeeByEmail(String email) {
-        log.info("Fetching Employee with email: {}", email);
+        log.info("EmployeeServiceImpl::getEmployeeByEmail email: {}", email);
         return employeeRepository.findByEmail(email);
     }
 }
+
