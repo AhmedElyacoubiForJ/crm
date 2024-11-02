@@ -7,6 +7,7 @@ import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.util.ValueMapper;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +57,7 @@ public class EmployeeRestController {
             description = "This operation creates a new employee in the CRM system."
     )
     @PostMapping
-    public ResponseEntity<EmployeeResponseDTO> createEmployee(@RequestBody EmployeeRequestDTO employeeRequestDTO) {
+    public ResponseEntity<EmployeeResponseDTO> createEmployee(@Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
         log.info("EmployeeRestController::createEmployee request {}", jsonAsString(employeeRequestDTO));
 
         Employee employee = convertToEntity(employeeRequestDTO);
@@ -74,7 +75,7 @@ public class EmployeeRestController {
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponseDTO> updateEmployee(
             @PathVariable Long id,
-            @RequestBody EmployeeRequestDTO employeeRequestDTO) {
+            @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
         log.info("EmployeeRestController::updateEmployee request id {}, employee {}", id, jsonAsString(employeeRequestDTO));
         Employee existingEmployee = employeeService.getEmployeeById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
