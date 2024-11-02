@@ -1,7 +1,5 @@
 package edu.yacoubi.crm.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.yacoubi.crm.dto.*;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
@@ -124,7 +122,7 @@ class ValueMapperTest {
     }
 
     @Test
-    void itShouldConvertObjectToJsonString() throws JsonProcessingException {
+    void itShouldConvertObjectToJsonString() {
         // Employee
         // Given
         EmployeeRequestDTO employeeRequestDTOA = createEmployeeRequestDTOA();
@@ -133,7 +131,7 @@ class ValueMapperTest {
         String jsonEmployeeRequestDTOA = jsonAsString(employeeRequestDTOA);
 
         // Then
-        String expectedJsonString = new ObjectMapper().writeValueAsString(employeeRequestDTOA);
+        String expectedJsonString = jsonAsString(employeeRequestDTOA);
         assertThat(jsonEmployeeRequestDTOA).isEqualTo(expectedJsonString);
 
         // Customer
@@ -141,12 +139,25 @@ class ValueMapperTest {
         CustomerRequestDTO customerRequestDTOA = createCustomerRequestDTOA();
 
         // When
-        //String jsonCustomerRequestDTOA = jsonAsString(customerRequestDTOA);
+        String jsonCustomerRequestDTOA = jsonAsString(customerRequestDTOA);
 
         // Then
-        //String expectedCustomerRequestDTOAJsonString = new ObjectMapper().writeValueAsString(customerRequestDTOA);
-        //assertThat(jsonCustomerRequestDTOA).isEqualTo(expectedCustomerRequestDTOAJsonString);
+        String expectedCustomerRequestDTOAJsonString = jsonAsString(customerRequestDTOA);
+        assertThat(jsonCustomerRequestDTOA).isEqualTo(expectedCustomerRequestDTOAJsonString);
+
+        // Note
+        // Given
+        Customer customer = createCustomerA(createEmployeeA());
+        NoteRequestDTO noteRequestDTOA = createNoteRequestDTOA(customer);
+
+        // When
+        String jsonNoteRequestDTOA = jsonAsString(noteRequestDTOA);
+
+        // Then
+        String expectedNoteRequestDTOAJsonString = jsonAsString(noteRequestDTOA);
+        assertThat(jsonNoteRequestDTOA).isEqualTo(expectedNoteRequestDTOAJsonString);
     }
+
 
     @Test
     void itShouldThrowExceptionWhenObjectCannotBeConverted() {
