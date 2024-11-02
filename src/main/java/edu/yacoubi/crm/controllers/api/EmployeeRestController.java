@@ -1,6 +1,7 @@
 package edu.yacoubi.crm.controllers.api;
 
 import edu.yacoubi.crm.dto.APIResponse;
+import edu.yacoubi.crm.dto.EmployeePatchDTO;
 import edu.yacoubi.crm.dto.EmployeeRequestDTO;
 import edu.yacoubi.crm.dto.EmployeeResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
@@ -124,4 +125,42 @@ public class EmployeeRestController {
         log.info("EmployeeRestController::updateEmployee response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
+    @Operation(
+            summary = "Partial update employee",
+            description = "Partial update of an existing employee by their unique ID."
+    )
+    @PatchMapping("/{id}")
+    public ResponseEntity<APIResponse<EmployeeResponseDTO>> patchEmployee(
+            @PathVariable Long id,
+            @RequestBody EmployeePatchDTO employeePatchDTO) {
+        log.info("EmployeeRestController::patchEmployee request id {}, employee {}", id, jsonAsString(employeePatchDTO));
+
+        Employee existingEmployee = employeeService.getEmployeeById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
+
+        if (employeePatchDTO.getFirstName() != null) {
+            existingEmployee.setFirstName(employeePatchDTO.getFirstName());
+        }
+        if (employeePatchDTO.getLastName() != null) {
+            existingEmployee.setLastName(employeePatchDTO.getLastName());
+        }
+        if (employeePatchDTO.getEmail() != null) {
+            existingEmployee.setEmail(employeePatchDTO.getEmail());
+        }
+        if (employeePatchDTO.getDepartment() != null) {
+            existingEmployee.setDepartment(employeePatchDTO.getDepartment());
+        }
+
+        Employee updatedEmployee = employeeService.updateEmployee(existingEmployee);
+        EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(updatedEmployee);
+        APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .data(employeeResponseDTO)
+                .build();
+
+        log.info("EmployeeRestController::patchEmployee response {}", jsonAsString(response));
+        return ResponseEntity.ok(response);
+    }
+
 }

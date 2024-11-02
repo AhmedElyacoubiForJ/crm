@@ -32,7 +32,6 @@ public class CustomerServiceImpl implements ICustomerService {
     // Erstellen eines neuen Kunden
     public Customer createCustomer(Customer customer) {
         log.info("Creating new Customer");
-        // Hier wird später die Validierungslogik hinzugefügt
         return customerRepository.save(customer);
     }
 
