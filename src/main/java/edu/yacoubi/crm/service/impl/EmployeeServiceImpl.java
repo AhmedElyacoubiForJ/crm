@@ -1,12 +1,18 @@
 package edu.yacoubi.crm.service.impl;
 
+import edu.yacoubi.crm.dto.EmployeePatchDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.service.IEmployeeService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaUpdate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +23,8 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements IEmployeeService {
 
     private final EmployeeRepository employeeRepository;
+
+    private final EntityManager entityManager;
 
     @Override
     public Employee createEmployee(Employee employee) {
@@ -62,6 +70,40 @@ public class EmployeeServiceImpl implements IEmployeeService {
     public Optional<Employee> getEmployeeByEmail(String email) {
         log.info("EmployeeServiceImpl::getEmployeeByEmail email: {}", email);
         return employeeRepository.findByEmail(email);
+    }
+
+    @Override
+    @Transactional
+    public void partialUpdateEmployee(Long id, EmployeePatchDTO employeePatchDTO) {
+        log.info("EmployeeServiceImpl::partialUpdateEmployee id: {}, employeePatchDTO: {}", id, employeePatchDTO);
+
+        if (!employeeRepository.existsById(id)) {
+            log.warn("Employee not found with ID: {}", id);
+            throw new ResourceNotFoundException("Employee not found with ID: " + id);
+        }
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaUpdate<Employee> update = cb.createCriteriaUpdate(Employee.class);
+        Root<Employee> root = update.from(Employee.class);
+
+        if (employeePatchDTO.getFirstName() != null) {
+            update.set(root.get("firstName"), employeePatchDTO.getFirstName());
+        }
+        if (employeePatchDTO.getLastName() != null) {
+            update.set(root.get("lastName"), employeePatchDTO.getLastName());
+        }
+        if (employeePatchDTO.getEmail() != null) {
+            update.set(root.get("email"), employeePatchDTO.getEmail());
+        }
+        if (employeePatchDTO.getDepartment() != null) {
+            update.set(root.get("department"), employeePatchDTO.getDepartment());
+        }
+
+        update.where(cb.equal(root.get("id"), id));
+
+        log.info("Partial update executed for employee ID: {}", id);
+        entityManager.createQuery(update).executeUpdate();
+        ;
     }
 }
 

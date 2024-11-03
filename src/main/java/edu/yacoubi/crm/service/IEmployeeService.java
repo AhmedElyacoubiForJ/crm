@@ -1,5 +1,6 @@
 package edu.yacoubi.crm.service;
 
+import edu.yacoubi.crm.dto.EmployeePatchDTO;
 import edu.yacoubi.crm.model.Employee;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface IEmployeeService {
     Employee updateEmployee(Employee employee);
 
     Optional<Employee> getEmployeeByEmail(String mail);
+
+    void partialUpdateEmployee(Long id, EmployeePatchDTO employeePatchDTO);
 }
