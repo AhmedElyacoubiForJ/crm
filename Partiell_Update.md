@@ -1,8 +1,8 @@
 ## Dokumentation: Partielle Updates für Employee
 
 # Übersicht
-    > Diese Dokumentation beschreibt zwei Ansätze zur Durchführung partieller Updates an der `Employee`-Ressource in diesem Projekt.
-    > Beide Ansätze ermöglichen es, nur ausgewählte Felder eines bestehenden Datensatzes zu aktualisieren.
+> Diese Dokumentation beschreibt zwei Ansätze zur Durchführung partieller Updates an der `Employee`-Ressource in diesem Projekt.
+> Beide Ansätze ermöglichen es, nur ausgewählte Felder eines bestehenden Datensatzes zu aktualisieren.
 
 # Ansatz 1: Partielles Update mit `EmployeePatchDTO`
 1. **Beschreibung**
