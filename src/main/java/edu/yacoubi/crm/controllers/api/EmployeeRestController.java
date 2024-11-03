@@ -33,7 +33,7 @@ public class EmployeeRestController {
             description = "Retrieve a list of all employees in the CRM system."
     )
     @GetMapping
-    public ResponseEntity<APIResponse> getAllEmployees() {
+    public ResponseEntity<APIResponse<List<EmployeeResponseDTO>>> getAllEmployees() {
         log.info("EmployeeRestController::getAllEmployees request");
 
         List<EmployeeResponseDTO> employeeResponseDTOList = employeeService.getAllEmployees().stream()

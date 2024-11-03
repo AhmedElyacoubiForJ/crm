@@ -1,7 +1,9 @@
 package edu.yacoubi.crm.controllers.api;
 
+import edu.yacoubi.crm.dto.APIResponse;
 import edu.yacoubi.crm.dto.CustomerRequestDTO;
 import edu.yacoubi.crm.dto.CustomerResponseDTO;
+import edu.yacoubi.crm.dto.EmployeeResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
@@ -12,6 +14,7 @@ import edu.yacoubi.crm.util.ValueMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +36,22 @@ public class CustomerRestController {
             description = "Retrieve a list of all customers in the CRM system."
     )
     @GetMapping
-    public List<CustomerResponseDTO> getAllCustomers() {
+    public ResponseEntity<APIResponse<List<CustomerResponseDTO>>> getAllCustomers() {
         log.info("CustomerRestController::getAllCustomers");
-        return customerService.getAllCustomers().stream()
+
+        List<CustomerResponseDTO> customerResponseDTOList = customerService.getAllCustomers().stream()
                 .map(ValueMapper::convertToResponseDTO)
                 .collect(Collectors.toList());
+
+        APIResponse<List<CustomerResponseDTO>> response = APIResponse
+                .<List<CustomerResponseDTO>>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .data(customerResponseDTOList)
+                .build();
+
+        log.info("CustomerRestController::getAllCustomers response {}", jsonAsString(response));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(
@@ -45,16 +59,21 @@ public class CustomerRestController {
             description = "Retrieve a customer by their unique ID."
     )
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerResponseDTO> getCustomerById(@PathVariable Long id) {
+    public ResponseEntity<APIResponse<CustomerResponseDTO>> getCustomerById(@PathVariable Long id) {
         log.info("CustomerRestController::getCustomerById request id {}", id);
 
         Customer existingCustomer = customerService.getCustomerById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
         CustomerResponseDTO customerResponseDTO = convertToResponseDTO(existingCustomer);
 
-        log.info("CustomerRestController::getCustomer response dto {}", customerResponseDTO);
+        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .data(customerResponseDTO)
+                .build();
 
-        return ResponseEntity.ok(customerResponseDTO);
+        log.info("CustomerRestController::getCustomer response dto {}", response);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(
