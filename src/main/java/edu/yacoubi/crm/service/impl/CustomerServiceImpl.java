@@ -1,10 +1,15 @@
 package edu.yacoubi.crm.service.impl;
 
+import edu.yacoubi.crm.dto.CustomerPatchDTO;
 import edu.yacoubi.crm.dto.CustomerRequestDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.service.ICustomerService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaUpdate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
@@ -20,6 +25,7 @@ import java.util.Optional;
 @Slf4j
 public class CustomerServiceImpl implements ICustomerService {
     private final CustomerRepository customerRepository;
+    private final EntityManager entityManager;
 
     @Override
     public List<Customer> getAllCustomers() {
@@ -87,6 +93,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     @Transactional
+    @Deprecated // Example nur für suche, obwohl die Methode funktioniert.
     public Customer updateCustomerByExample(CustomerRequestDTO customerExample, Long id) {
         log.info("CustomerServiceImpl::updateCustomerByExample id {}, customerExample {}", id, customerExample);
         Customer existingCustomer = customerRepository.findById(id)
@@ -110,6 +117,34 @@ public class CustomerServiceImpl implements ICustomerService {
                 .orElseThrow(() -> new RuntimeException("Kunde nicht gefunden"));
         customer.getNotes().size(); // Durch den Zugriff werden die Notes initialisiert
         return customer;
+    }
+
+    @Override
+    @Transactional
+    public void partialUpdateCustomer(Long id, CustomerPatchDTO customerPatchDTO) {
+        log.info("CustomerServiceImpl::partialUpdateCustomer id {}, customerPatchDTO {}", id, customerPatchDTO);
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaUpdate<Customer> update = cb.createCriteriaUpdate(Customer.class);
+        Root<Customer> root = update.from(Customer.class);
+
+        if (customerPatchDTO.getFirstName() != null) {
+            update.set(root.get("firstName"), customerPatchDTO.getFirstName());
+        }
+        if (customerPatchDTO.getLastName() != null) {
+            update.set(root.get("lastName"), customerPatchDTO.getLastName());
+        }
+        if (customerPatchDTO.getEmail() != null) {
+            update.set(root.get("email"), customerPatchDTO.getEmail());
+        }
+        if (customerPatchDTO.getAddress() != null) {
+            update.set(root.get("address"), customerPatchDTO.getAddress());
+        }
+
+        update.where(cb.equal(root.get("id"), id));
+
+        log.info("Partial update executed for customer ID: {}", id);
+        entityManager.createQuery(update).executeUpdate();
     }
 
     @Override

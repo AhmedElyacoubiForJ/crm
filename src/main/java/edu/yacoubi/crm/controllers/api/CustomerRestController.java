@@ -1,9 +1,6 @@
 package edu.yacoubi.crm.controllers.api;
 
-import edu.yacoubi.crm.dto.APIResponse;
-import edu.yacoubi.crm.dto.CustomerRequestDTO;
-import edu.yacoubi.crm.dto.CustomerResponseDTO;
-import edu.yacoubi.crm.dto.EmployeeResponseDTO;
+import edu.yacoubi.crm.dto.*;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
@@ -149,36 +146,77 @@ public class CustomerRestController {
     }
 
     @Operation(
-            summary = "Partial update of customer by example",
+            summary = "Partial update of customer by example, Deprecated",
             description = "Partial update of an existing customer using a provided example."
     )
     @PutMapping("/{id}/updateByExample")
-    public ResponseEntity<CustomerResponseDTO> updateCustomerByExample(
+    @Deprecated
+    public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomerByExample(
             @PathVariable Long id,
             @RequestBody CustomerRequestDTO customerRequestDTO) {
         log.info("CustomerRestController::updateCustomerByExample request id {}, customer dto {}", id, jsonAsString(customerRequestDTO));
 
         Customer updatedCustomer = customerService.updateCustomerByExample(customerRequestDTO, id);
         CustomerResponseDTO customerResponseDTO = convertToResponseDTO(updatedCustomer);
+        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .data(customerResponseDTO)
+                .build();
 
-        log.info("CustomerRestController::updateCustomerByExample response dto {}", jsonAsString(customerResponseDTO));
-        return ResponseEntity.ok(customerResponseDTO);
+        log.info("CustomerRestController::updateCustomerByExample response dto {}", jsonAsString(response));
+        return ResponseEntity.ok(response);
     }
 
     @Operation(
+            summary = "Partial update of customer",
+            description = "Partial update of an existing customer by their unique ID."
+    )
+    @PatchMapping("/{id}")
+    public ResponseEntity<APIResponse<CustomerResponseDTO>> patchCustomer(
+            @PathVariable Long id,
+            @Valid @RequestBody CustomerPatchDTO customerPatchDTO) {
+        log.info("CustomerRestController::patchCustomer request id {}, customer dto {}", id, jsonAsString(customerPatchDTO));
 
+        customerService.partialUpdateCustomer(id, customerPatchDTO);
+
+        Customer updatedCustomer = customerService.getCustomerById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
+
+        CustomerResponseDTO customerResponseDTO = convertToResponseDTO(updatedCustomer);
+        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .data(customerResponseDTO)
+                .build();
+
+        log.info("CustomerRestController::patchCustomer response {}", jsonAsString(response));
+        return ResponseEntity.ok(response);
+    }
+
+
+    @Operation(
             summary = "Delete customer",
             description = "Delete an existing customer by their unique ID."
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
+    public ResponseEntity<APIResponse<Void>> deleteCustomer(@PathVariable Long id) {
         log.info("CustomerRestController::deleteCustomer request id {}", id);
 
+        // Check if the customer exists, throw exception if not found
         customerService.getCustomerById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
-        customerService.deleteCustomer(id);
 
-        log.info("CustomerRestController::deleteCustomer");
-        return ResponseEntity.noContent().build();
+        // Delete the customer
+        customerService.deleteCustomer(id);
+        log.info("Customer successfully deleted, id: {}", id);
+
+        // Build the API response
+        APIResponse<Void> response = APIResponse.<Void>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 }

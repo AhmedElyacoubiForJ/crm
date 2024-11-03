@@ -1,5 +1,6 @@
 package edu.yacoubi.crm.service;
 
+import edu.yacoubi.crm.dto.CustomerPatchDTO;
 import edu.yacoubi.crm.dto.CustomerRequestDTO;
 import edu.yacoubi.crm.model.Customer;
 
@@ -28,4 +29,6 @@ public interface ICustomerService {
     Optional<Customer> getCustomerByEmailWithNotesAndEmployeeCustomers(String email);
 
     Customer getCustomerWithNotes(Long id);
+
+    void partialUpdateCustomer(Long id, CustomerPatchDTO customerPatchDTO);
 }
