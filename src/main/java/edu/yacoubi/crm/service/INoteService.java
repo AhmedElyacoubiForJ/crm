@@ -1,5 +1,6 @@
 package edu.yacoubi.crm.service;
 
+import edu.yacoubi.crm.dto.note.NotePatchDTO;
 import edu.yacoubi.crm.model.Note;
 import java.util.Optional;
 import java.util.List;
@@ -20,4 +21,6 @@ public interface INoteService {
 
     // Finden aller Notizen eines Kunden nach Kunden-ID
     List<Note> getNotesByCustomerId(Long customerId);
+
+    void partialUpdateNote(Long id, NotePatchDTO notePatchDTO);
 }
