@@ -2,7 +2,7 @@ package edu.yacoubi.crm.controllers.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.yacoubi.crm.TestDataUtil;
-import edu.yacoubi.crm.dto.CustomerRequestDTO;
+import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.CustomerRepository;
@@ -36,6 +36,7 @@ class CustomerRestControllerTest {
 
 
     //@Test
+    // TODO
     public void itShouldUpdateCustomerByExample() throws Exception {
         // Given
         Employee employee = TestDataUtil.createEmployeeA();
