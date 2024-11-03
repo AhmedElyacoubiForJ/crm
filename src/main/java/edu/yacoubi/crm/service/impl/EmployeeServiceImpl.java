@@ -103,7 +103,6 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
         log.info("Partial update executed for employee ID: {}", id);
         entityManager.createQuery(update).executeUpdate();
-        ;
     }
 }
 
