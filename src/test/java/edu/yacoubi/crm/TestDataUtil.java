@@ -1,8 +1,8 @@
 package edu.yacoubi.crm;
 
-import edu.yacoubi.crm.dto.CustomerRequestDTO;
-import edu.yacoubi.crm.dto.EmployeeRequestDTO;
-import edu.yacoubi.crm.dto.NoteRequestDTO;
+import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
+import edu.yacoubi.crm.dto.employee.EmployeeRequestDTO;
+import edu.yacoubi.crm.dto.note.NoteRequestDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.InteractionType;

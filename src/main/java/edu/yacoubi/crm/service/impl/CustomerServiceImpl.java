@@ -1,7 +1,7 @@
 package edu.yacoubi.crm.service.impl;
 
-import edu.yacoubi.crm.dto.CustomerPatchDTO;
-import edu.yacoubi.crm.dto.CustomerRequestDTO;
+import edu.yacoubi.crm.dto.customer.CustomerPatchDTO;
+import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;

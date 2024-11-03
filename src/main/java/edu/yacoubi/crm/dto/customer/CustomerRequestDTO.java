@@ -1,4 +1,4 @@
-package edu.yacoubi.crm.dto;
+package edu.yacoubi.crm.dto.customer;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -33,3 +33,4 @@ public class CustomerRequestDTO {
     @NotNull(message = "LastInteractionDate is mandatory")
     private LocalDate lastInteractionDate;
 }
+

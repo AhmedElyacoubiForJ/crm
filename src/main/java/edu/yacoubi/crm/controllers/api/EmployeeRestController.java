@@ -1,9 +1,9 @@
 package edu.yacoubi.crm.controllers.api;
 
 import edu.yacoubi.crm.dto.APIResponse;
-import edu.yacoubi.crm.dto.EmployeePatchDTO;
-import edu.yacoubi.crm.dto.EmployeeRequestDTO;
-import edu.yacoubi.crm.dto.EmployeeResponseDTO;
+import edu.yacoubi.crm.dto.employee.EmployeePatchDTO;
+import edu.yacoubi.crm.dto.employee.EmployeeRequestDTO;
+import edu.yacoubi.crm.dto.employee.EmployeeResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.service.IEmployeeService;

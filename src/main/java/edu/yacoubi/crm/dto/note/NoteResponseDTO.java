@@ -1,4 +1,4 @@
-package edu.yacoubi.crm.dto;
+package edu.yacoubi.crm.dto.note;
 
 import edu.yacoubi.crm.model.InteractionType;
 import lombok.Builder;

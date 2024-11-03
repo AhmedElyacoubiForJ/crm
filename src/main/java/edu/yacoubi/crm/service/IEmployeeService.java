@@ -1,6 +1,6 @@
 package edu.yacoubi.crm.service;
 
-import edu.yacoubi.crm.dto.EmployeePatchDTO;
+import edu.yacoubi.crm.dto.employee.EmployeePatchDTO;
 import edu.yacoubi.crm.model.Employee;
 
 import java.util.List;

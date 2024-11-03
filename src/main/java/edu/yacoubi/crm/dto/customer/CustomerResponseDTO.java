@@ -1,4 +1,4 @@
-package edu.yacoubi.crm.dto;
+package edu.yacoubi.crm.dto.customer;
 
 import lombok.Builder;
 import lombok.Data;

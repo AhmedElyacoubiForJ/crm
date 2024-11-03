@@ -1,9 +1,8 @@
 package edu.yacoubi.crm.controllers.api;
 
 import edu.yacoubi.crm.dto.APIResponse;
-import edu.yacoubi.crm.dto.CustomerResponseDTO;
-import edu.yacoubi.crm.dto.NoteRequestDTO;
-import edu.yacoubi.crm.dto.NoteResponseDTO;
+import edu.yacoubi.crm.dto.note.NoteRequestDTO;
+import edu.yacoubi.crm.dto.note.NoteResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;

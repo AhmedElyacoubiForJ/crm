@@ -1,4 +1,4 @@
-package edu.yacoubi.crm.dto;
+package edu.yacoubi.crm.dto.employee;
 
 import jakarta.validation.constraints.Email;
 import lombok.Builder;
