@@ -114,11 +114,11 @@ public class CustomerRestController {
     }
 
     @Operation(
-            summary = "Update customer",
-            description = "Update the details of an existing customer by their unique ID."
+            summary = "Full update of customer",
+            description = "Full update of an existing customer by their unique ID."
     )
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerResponseDTO> updateCustomer(
+    public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomer(
             @PathVariable Long id,
             @RequestBody CustomerRequestDTO customerRequestDTO) {
         log.info("CustomerRestController::updateCustomer request id {}, customer dto {}", id, jsonAsString(customerRequestDTO));
@@ -138,13 +138,19 @@ public class CustomerRestController {
         Customer updatedCustomer = customerService.updateCustomer(id, customerRequest);
         CustomerResponseDTO customerResponseDTO = convertToResponseDTO(updatedCustomer);
 
-        log.info("CustomerRestController::updateCustomer response dto {}", jsonAsString(customerResponseDTO));
-        return ResponseEntity.ok(customerResponseDTO);
+        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .data(customerResponseDTO)
+                .build();
+
+        log.info("CustomerRestController::updateCustomer response dto {}", jsonAsString(response));
+        return ResponseEntity.ok(response);
     }
 
     @Operation(
-            summary = "Update customer by example",
-            description = "Update the details of an existing customer using a provided example."
+            summary = "Partial update of customer by example",
+            description = "Partial update of an existing customer using a provided example."
     )
     @PutMapping("/{id}/updateByExample")
     public ResponseEntity<CustomerResponseDTO> updateCustomerByExample(
