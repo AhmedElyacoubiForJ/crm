@@ -1,5 +1,7 @@
 package edu.yacoubi.crm.controllers.api;
 
+import edu.yacoubi.crm.dto.APIResponse;
+import edu.yacoubi.crm.dto.CustomerResponseDTO;
 import edu.yacoubi.crm.dto.NoteRequestDTO;
 import edu.yacoubi.crm.dto.NoteResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
@@ -13,8 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static edu.yacoubi.crm.util.ValueMapper.convertToEntity;
-import static edu.yacoubi.crm.util.ValueMapper.convertToResponseDTO;
+import static edu.yacoubi.crm.util.ValueMapper.*;
 
 @RestController
 @RequestMapping("/api/notes")
@@ -29,24 +30,29 @@ public class NoteRestController {
             description = "Retrieve a note by its unique ID."
     )
     @GetMapping("/{id}")
-    public ResponseEntity<NoteResponseDTO> getNoteById(@PathVariable Long id) {
+    public ResponseEntity<APIResponse<NoteResponseDTO>> getNoteById(@PathVariable Long id) {
         log.info("NoteRestController::getNoteById request id {}", id);
 
         Note existingNote = noteService.getNoteById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Note not found with ID: " + id));
         NoteResponseDTO noteResponseDTO = convertToResponseDTO(existingNote);
 
-        log.info("NoteRestController::getNoteById response {}", noteResponseDTO);
-        return ResponseEntity.ok(noteResponseDTO);
-    }
+        APIResponse<NoteResponseDTO> response = APIResponse.<NoteResponseDTO>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .data(noteResponseDTO)
+                .build();
 
+        log.info("NoteRestController::getNoteById response {}", jsonAsString(response));
+        return ResponseEntity.ok(response);
+    }
 
     @Operation(
             summary = "Create a new note",
             description = "This operation creates a new note for a specified customer in the CRM system."
     )
     @PostMapping
-    public ResponseEntity<NoteResponseDTO> createNote(
+    public ResponseEntity<APIResponse<NoteResponseDTO>> createNote(
             @RequestBody NoteRequestDTO noteRequestDTO,
             @RequestParam Long customerId) {
         log.info("NoteRestController::createNote request id {}, note {}", customerId, noteRequestDTO);
@@ -57,16 +63,22 @@ public class NoteRestController {
         Note createdNote = noteService.createNoteForCustomer(noteRequest, customerId);
         NoteResponseDTO noteResponseDTO = convertToResponseDTO(createdNote);
 
-        log.info("NoteRestController::createNote response {}", noteResponseDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(noteResponseDTO);
+        APIResponse<NoteResponseDTO> response = APIResponse.<NoteResponseDTO>builder()
+                .status("success")
+                .statusCode(HttpStatus.CREATED.value())
+                .data(noteResponseDTO)
+                .build();
+
+        log.info("NoteRestController::createNote response {}", jsonAsString(response));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @Operation(
-            summary = "Update note",
-            description = "Update the details of an existing note by its unique ID."
+            summary = "Full update note",
+            description = "Full update of an existing note by its unique ID."
     )
     @PutMapping("/{id}")
-    public ResponseEntity<NoteResponseDTO> updateNote(
+    public ResponseEntity<APIResponse<NoteResponseDTO>> updateNote(
             @PathVariable Long id,
             @RequestBody NoteRequestDTO noteRequestDTO) {
         log.info("NoteRestController::updateNote request id {}, note {}", id, noteRequestDTO);
@@ -81,8 +93,14 @@ public class NoteRestController {
         Note updatedNote = noteService.updateNote(id, noteRequest);
         NoteResponseDTO noteResponseDTO = convertToResponseDTO(updatedNote);
 
-        log.info("NoteRestController::updateNote response {}", noteResponseDTO);
-        return ResponseEntity.ok(noteResponseDTO);
+        APIResponse<NoteResponseDTO> response = APIResponse.<NoteResponseDTO>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .data(noteResponseDTO)
+                .build();
+
+        log.info("NoteRestController::updateNote response {}", jsonAsString(response));
+        return ResponseEntity.ok(response);
     }
 
     @Operation(
@@ -90,13 +108,18 @@ public class NoteRestController {
             description = "Delete an existing note by its unique ID."
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNoteById(@PathVariable Long id) {
+    public ResponseEntity<APIResponse<Void>> deleteNoteById(@PathVariable Long id) {
         log.info("NoteRestController::deleteNoteById request id {}", id);
 
         noteService.deleteNote(id);
 
-        log.info("NoteRestController::deleteNote response");
-        return ResponseEntity.noContent().build();
+        APIResponse<Void> response = APIResponse.<Void>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .build();
+
+        log.info("NoteRestController::deleteNote");
+        return ResponseEntity.ok(response);
     }
 }
 
