@@ -12,12 +12,14 @@ import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.util.ValueMapper;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,7 +74,7 @@ public class CustomerRestController {
                 .data(customerResponseDTO)
                 .build();
 
-        log.info("CustomerRestController::getCustomer response dto {}", response);
+        log.info("CustomerRestController::getCustomer response dto {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -81,13 +83,19 @@ public class CustomerRestController {
             description = "This operation creates a new customer in the CRM system."
     )
     @PostMapping
-    public ResponseEntity<CustomerResponseDTO> createCustomer(
+    public ResponseEntity<APIResponse<CustomerResponseDTO>> createCustomer(
             @RequestParam Long employeeId,
-            @RequestBody CustomerRequestDTO customerRequestDTO) {
+            @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
         log.info("CustomerRestController::createCustomer request employeeId {}, customer dto {}", employeeId, jsonAsString(customerRequestDTO));
 
         Employee existingEmployee = employeeService.getEmployeeById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + employeeId));
+
+        // Setze lastInteractionDate auf das aktuelle Datum, wenn es vor oder nach dem aktuellen Datum liegt
+        if (customerRequestDTO.getLastInteractionDate().isAfter(LocalDate.now()) ||
+                customerRequestDTO.getLastInteractionDate().isBefore(LocalDate.now())) {
+            customerRequestDTO.setLastInteractionDate(LocalDate.now());
+        }
 
         Customer customerRequest = convertToEntity(customerRequestDTO);
         customerRequest.setEmployee(existingEmployee);
@@ -95,9 +103,14 @@ public class CustomerRestController {
         Customer savedCustomer = customerService.createCustomer(customerRequest);
         CustomerResponseDTO customerResponseDTO = convertToResponseDTO(savedCustomer);
 
-        log.info("CustomerRestController::createCustomer response dto {}", jsonAsString(customerResponseDTO));
+        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
+                .status("success")
+                .statusCode(HttpStatus.CREATED.value())
+                .data(customerResponseDTO)
+                .build();
 
-        return ResponseEntity.ok(customerResponseDTO);
+        log.info("CustomerRestController::createCustomer response dto {}", jsonAsString(response));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @Operation(
@@ -159,7 +172,7 @@ public class CustomerRestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
         customerService.deleteCustomer(id);
 
-        log.info("CustomerRestController::deleteCustomer response");
+        log.info("CustomerRestController::deleteCustomer");
         return ResponseEntity.noContent().build();
     }
 }
