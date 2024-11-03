@@ -5,7 +5,6 @@ import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.service.ICustomerService;
-//import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
@@ -24,21 +23,19 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public List<Customer> getAllCustomers() {
-        log.info("Fetching all Customers");
+        log.info("CustomerServiceImpl::getAllCustomers");
         return customerRepository.findAll();
     }
 
     @Override
-    // Erstellen eines neuen Kunden
     public Customer createCustomer(Customer customer) {
-        log.info("Creating new Customer");
+        log.info("CustomerServiceImpl::createCustomer customer {}", customer);
         return customerRepository.save(customer);
     }
 
     @Override
-    // Finden eines Kunden nach ID
     public Optional<Customer> getCustomerById(Long id) {
-        log.info("Fetching customer with ID: {}", id);
+        log.info("CustomerServiceImpl::getCustomerById id {}", id);
         ensureCustomerExists(id);
         return customerRepository.findById(id);
     }
@@ -46,26 +43,27 @@ public class CustomerServiceImpl implements ICustomerService {
     @Override
     // Aktualisieren eines bestehenden Kunden
     public Customer updateCustomer(Long id, Customer customer) {
-        log.info("Updating Customer with ID: {}", id);
+        log.info("CustomerServiceImpl::updateCustomer id {}, customer {}", id, customer);
         ensureCustomerExists(id);
         return customerRepository.save(customer);
     }
 
     @Override
     public void deleteCustomer(Long id) {
-        log.info("Deleting Customer with ID: {}", id);
+        log.info("CustomerServiceImpl::deleteCustomer id: {}", id);
         ensureCustomerExists(id);
         customerRepository.deleteById(id);
     }
 
     @Override
     public Optional<Customer> getCustomerByEmail(String email) {
-        log.info("Fetching customer with email: {}", email);
+        log.info("CustomerServiceImpl::getCustomerByEmail email: {}", email);
         return customerRepository.findByEmail(email);
     }
 
     @Override
     public List<Customer> getCustomersByExample(CustomerRequestDTO customerDTO) {
+        log.info("CustomerServiceImpl::getCustomersByExample customerDTO {}", customerDTO);
         Customer customerProbe = new Customer();
 
         if (customerDTO.getFirstName() != null) {
@@ -90,7 +88,7 @@ public class CustomerServiceImpl implements ICustomerService {
     @Override
     @Transactional
     public Customer updateCustomerByExample(CustomerRequestDTO customerExample, Long id) {
-        log.info("Updating Customer with ID: {} using example", id);
+        log.info("CustomerServiceImpl::updateCustomerByExample id {}, customerExample {}", id, customerExample);
         Customer existingCustomer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
         return customerRepository.updateCustomerByExample(customerExample, id);
@@ -99,13 +97,14 @@ public class CustomerServiceImpl implements ICustomerService {
     @Override
     @Transactional(readOnly = true)
     public Optional<Customer> getCustomerByEmailWithNotesAndEmployeeCustomers(String email) {
+        log.info("CustomerServiceImpl::getCustomerByEmailWithNotesAndEmployeeCustomers email: {}", email);
         return customerRepository.findByEmailWithNotesAndEmployeeCustomers(email);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Customer getCustomerWithNotes(Long id) {
-        log.info("Fetching customer with ID: {} including notes", id);
+        log.info("CustomerServiceImpl::getCustomerWithNotes id: {}", id);
         Customer customer = customerRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Kunde nicht gefunden"));
@@ -115,7 +114,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public void ensureCustomerExists(Long id) {
-        log.info("Ensuring customer with ID: {} exists", id);
+        log.info("CustomerServiceImpl::ensureCustomerExists id: {} exists", id);
         if (!customerRepository.existsById(id)) {
             log.warn("Customer not found with ID: {}", id);
             throw new ResourceNotFoundException("Customer not found with ID: " + id);
