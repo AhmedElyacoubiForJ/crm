@@ -15,6 +15,7 @@ public class EmployeeRequestDTO {
     private String lastName;
 
     @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is mandatory")
     private String email;
 
     @NotBlank(message = "Department is mandatory")
