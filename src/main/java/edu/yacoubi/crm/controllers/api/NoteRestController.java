@@ -1,6 +1,7 @@
 package edu.yacoubi.crm.controllers.api;
 
 import edu.yacoubi.crm.dto.APIResponse;
+import edu.yacoubi.crm.dto.note.NotePatchDTO;
 import edu.yacoubi.crm.dto.note.NoteRequestDTO;
 import edu.yacoubi.crm.dto.note.NoteResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
@@ -103,6 +104,33 @@ public class NoteRestController {
     }
 
     @Operation(
+            summary = "Partial update of note",
+            description = "Partial update of an existing note by their unique ID."
+    )
+    @PatchMapping("/{id}")
+    public ResponseEntity<APIResponse<NoteResponseDTO>> patchNote(
+            @PathVariable Long id,
+            @RequestBody NotePatchDTO notePatchDTO) {
+        log.info("NoteRestController::patchNote request id {}, note {}", id, jsonAsString(notePatchDTO));
+
+        noteService.partialUpdateNote(id, notePatchDTO);
+
+        Note updatedNote = noteService.getNoteById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Note not found with ID: " + id)
+        );
+        NoteResponseDTO noteResponseDTO = convertToResponseDTO(updatedNote);
+
+        APIResponse<NoteResponseDTO> response = APIResponse.<NoteResponseDTO>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .data(noteResponseDTO)
+                .build();
+
+        log.info("NoteRestController::patchNote response {}", jsonAsString(response));
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(
             summary = "Delete note",
             description = "Delete an existing note by its unique ID."
     )
@@ -114,11 +142,11 @@ public class NoteRestController {
 
         APIResponse<Void> response = APIResponse.<Void>builder()
                 .status("success")
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.NO_CONTENT.value())
                 .build();
 
         log.info("NoteRestController::deleteNote");
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
 }
 
