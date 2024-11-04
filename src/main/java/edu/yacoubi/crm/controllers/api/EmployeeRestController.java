@@ -170,7 +170,7 @@ public class EmployeeRestController {
     @PatchMapping("/{id}")
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> patchEmployee(
             @PathVariable Long id,
-            @RequestBody EmployeePatchDTO employeePatchDTO) {
+            @Valid @RequestBody EmployeePatchDTO employeePatchDTO) {
         log.info("EmployeeRestController::patchEmployee request id {}, employee {}", id, jsonAsString(employeePatchDTO));
 
         employeeService.partialUpdateEmployee(id, employeePatchDTO);

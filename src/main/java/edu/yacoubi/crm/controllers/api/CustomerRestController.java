@@ -120,7 +120,7 @@ public class CustomerRestController {
     @PutMapping("/{id}")
     public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomer(
             @PathVariable Long id,
-            @RequestBody CustomerRequestDTO customerRequestDTO) {
+            @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
         log.info("CustomerRestController::updateCustomer request id {}, customer dto {}", id, jsonAsString(customerRequestDTO));
 
         Customer existingCustomer = customerService.getCustomerById(id)
@@ -156,7 +156,7 @@ public class CustomerRestController {
     @Deprecated
     public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomerByExample(
             @PathVariable Long id,
-            @RequestBody CustomerRequestDTO customerRequestDTO) {
+            @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
         log.info("CustomerRestController::updateCustomerByExample request id {}, customer dto {}", id, jsonAsString(customerRequestDTO));
 
         Customer updatedCustomer = customerService.updateCustomerByExample(customerRequestDTO, id);

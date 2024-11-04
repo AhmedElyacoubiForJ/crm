@@ -9,6 +9,7 @@ import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.INoteService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -53,7 +54,7 @@ public class NoteRestController {
     )
     @PostMapping
     public ResponseEntity<APIResponse<NoteResponseDTO>> createNote(
-            @RequestBody NoteRequestDTO noteRequestDTO,
+            @Valid @RequestBody NoteRequestDTO noteRequestDTO,
             @RequestParam Long customerId) {
         log.info("NoteRestController::createNote request id {}, note {}", customerId, noteRequestDTO);
 
@@ -80,7 +81,7 @@ public class NoteRestController {
     @PutMapping("/{id}")
     public ResponseEntity<APIResponse<NoteResponseDTO>> updateNote(
             @PathVariable Long id,
-            @RequestBody NoteRequestDTO noteRequestDTO) {
+            @Valid @RequestBody NoteRequestDTO noteRequestDTO) {
         log.info("NoteRestController::updateNote request id {}, note {}", id, noteRequestDTO);
 
         Note existingNote = noteService.getNoteById(id)
@@ -110,7 +111,7 @@ public class NoteRestController {
     @PatchMapping("/{id}")
     public ResponseEntity<APIResponse<NoteResponseDTO>> patchNote(
             @PathVariable Long id,
-            @RequestBody NotePatchDTO notePatchDTO) {
+            @Valid @RequestBody NotePatchDTO notePatchDTO) {
         log.info("NoteRestController::patchNote request id {}, note {}", id, jsonAsString(notePatchDTO));
 
         noteService.partialUpdateNote(id, notePatchDTO);
