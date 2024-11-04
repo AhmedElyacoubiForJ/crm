@@ -1,0 +1,39 @@
+/* Datei: styles.css */
+
+/* Hintergrundfarbe für die Navbar */
+.navbar {
+    background-color: #f8f9fa; /* Helle Hintergrundfarbe */
+}
+
+/* Stil für die Hauptüberschrift */
+h2 {
+    color: #343a40; /* Dunkelgraue Schriftfarbe */
+    margin-top: 20px;
+}
+
+/* Stil für die Tabelle */
+.table {
+    margin-top: 20px;
+}
+
+/* Stil für die Tabellenzeilen */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #e9ecef; /* Hellgraue Hintergrundfarbe für ungerade Zeilen */
+}
+
+/* Stil für die Aktion-Buttons */
+.btn-primary {
+    background-color: #007bff; /* Blau für den Bearbeiten-Button */
+    border-color: #007bff;
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Rot für den Löschen-Button */
+    border-color: #dc3545;
+}
+
+/* Stil für die Pagination */
+.pagination {
+    margin-top: 20px;
+    justify-content: center;
+}
