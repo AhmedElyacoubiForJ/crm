@@ -20,4 +20,8 @@ public interface IEmployeeService {
     Optional<Employee> getEmployeeByEmail(String mail);
 
     void partialUpdateEmployee(Long id, EmployeePatchDTO employeePatchDTO);
+
+    Optional<List<Employee>> getEmployeesByNameLike(String search);
+
+    Optional<List<Employee>> getEmployeesByEmailLike(String emailSearchString);
 }

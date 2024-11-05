@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -38,7 +38,15 @@
     <!-- Search and Filter -->
     <div class="row mb-4">
         <div class="col-md-6">
-            <input type="text" class="form-control" placeholder="Suche nach Name oder E-Mail...">
+            <form th:action="@{/employees}" method="get">
+                <input
+                        type="text"
+                        class="form-control"
+                        name="search"
+                        placeholder="Suche nach Name oder E-Mail..."
+                >
+                <button type="submit" class="btn btn-primary mt-2">Suche</button>
+            </form>
         </div>
     </div>
 

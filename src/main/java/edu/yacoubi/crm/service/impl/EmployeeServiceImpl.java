@@ -104,5 +104,17 @@ public class EmployeeServiceImpl implements IEmployeeService {
         log.info("Partial update executed for employee ID: {}", id);
         entityManager.createQuery(update).executeUpdate();
     }
+
+    @Override
+    public Optional<List<Employee>> getEmployeesByNameLike(String nameSearchString) {
+        log.info("EmployeeServiceImpl::getEmployeesByNameLike searchString: {}", nameSearchString);
+        return employeeRepository.findByFirstNameIgnoreCaseContaining(nameSearchString);
+    }
+
+    @Override
+    public Optional<List<Employee>> getEmployeesByEmailLike(String emailSearchString) {
+        log.info("EmployeeServiceImpl::getEmployeesByEmailLike searchString: {}", emailSearchString);
+        return employeeRepository.findByEmailIgnoreCaseContaining(emailSearchString);
+    }
 }
 
