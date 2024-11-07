@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,28 +29,60 @@ import static edu.yacoubi.crm.util.ValueMapper.*;
 public class EmployeeRestController {
     private final IEmployeeService employeeService;
 
+//    @Operation(
+//            summary = "Get all employees",
+//            description = "Retrieve a list of all employees in the CRM system."
+//    )
+//    @GetMapping
+//    public ResponseEntity<APIResponse<List<EmployeeResponseDTO>>> getAllEmployees() {
+//        log.info("EmployeeRestController::getAllEmployees request");
+//
+//        List<EmployeeResponseDTO> employeeResponseDTOList = employeeService.getAllEmployees().stream()
+//                .map(ValueMapper::convertToResponseDTO)
+//                .collect(Collectors.toList());
+//
+//        APIResponse<List<EmployeeResponseDTO>> response = APIResponse
+//                .<List<EmployeeResponseDTO>>builder()
+//                .status("success")
+//                .statusCode(HttpStatus.OK.value())
+//                .data(employeeResponseDTOList)
+//                .build();
+//
+//        log.info("EmployeeRestController::getAllEmployees response {}", jsonAsString(response));
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+
     @Operation(
             summary = "Get all employees",
-            description = "Retrieve a list of all employees in the CRM system."
+            description = "Retrieve a list of all employees in the CRM system with pagination and optional search."
     )
     @GetMapping
-    public ResponseEntity<APIResponse<List<EmployeeResponseDTO>>> getAllEmployees() {
+    public ResponseEntity<APIResponse<Page<EmployeeResponseDTO>>> getAllEmployees(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "search", required = false) String search) {
         log.info("EmployeeRestController::getAllEmployees request");
 
-        List<EmployeeResponseDTO> employeeResponseDTOList = employeeService.getAllEmployees().stream()
-                .map(ValueMapper::convertToResponseDTO)
-                .collect(Collectors.toList());
+        Page<Employee> employeesPage;
+        if (search != null && !search.isEmpty()) {
+            employeesPage = employeeService.getEmployeesByFirstNameOrDepartment(search, page, size);
+        } else {
+            employeesPage = employeeService.getEmployeesWithPagination(page, size);
+        }
 
-        APIResponse<List<EmployeeResponseDTO>> response = APIResponse
-                .<List<EmployeeResponseDTO>>builder()
+        Page<EmployeeResponseDTO> employeeResponseDTOPage = employeesPage.map(ValueMapper::convertToResponseDTO);
+
+        APIResponse<Page<EmployeeResponseDTO>> response = APIResponse
+                .<Page<EmployeeResponseDTO>>builder()
                 .status("success")
                 .statusCode(HttpStatus.OK.value())
-                .data(employeeResponseDTOList)
+                .data(employeeResponseDTOPage)
                 .build();
 
         log.info("EmployeeRestController::getAllEmployees response {}", jsonAsString(response));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
 
     @Operation(
