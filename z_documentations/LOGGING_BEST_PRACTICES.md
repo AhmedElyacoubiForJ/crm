@@ -85,5 +85,5 @@
    </details>
 
 # Zusammenfassung
-> Diese Dokumentation fasst die Best Practices für das Logging im EmployeeRestController zusammen,
+> Diese Dokumentation fasst die Best Practices für das Logging im `EmployeeRestController` zusammen,
 > um wichtige Informationen effizient zu protokollieren und die Performance der Anwendung zu optimieren.

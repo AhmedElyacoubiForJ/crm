@@ -87,7 +87,7 @@ public class EmployeeRestController {
                 .build();
 
         log.info("Response successfully created.");
-        log.debug("Response details: {}", response);
+        log.debug("Response details: {}", jsonAsString(response));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
