@@ -12,21 +12,22 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static edu.yacoubi.crm.util.ValueMapper.*;
 
 @RestController
 @RequestMapping("/api/employees")
 @RequiredArgsConstructor
-@Slf4j
+//@Slf4j
 public class EmployeeRestController {
+    private static final Logger log = LoggerFactory.getLogger(EmployeeRestController.class);
+
     private final IEmployeeService employeeService;
 
 //    @Operation(
@@ -61,12 +62,18 @@ public class EmployeeRestController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam(value = "search", required = false) String search) {
-        log.info("EmployeeRestController::getAllEmployees request");
+
+        log.info("EmployeeRestController::getAllEmployees starting to fetch employees...");
+        log.debug("EmployeeRestController::getAllEmployees request received - page: {}, size: {}, search: {}", page, size, search);
 
         Page<Employee> employeesPage;
         if (search != null && !search.isEmpty()) {
+            log.info("Retrieving employees with pagination and Search query");
+            log.debug("Retrieving employees with pagination and Search query - page: {}, size: {}, search: {}", page, size, search);
             employeesPage = employeeService.getEmployeesByFirstNameOrDepartment(search, page, size);
         } else {
+            log.info("Retrieving employees with pagination");
+            log.debug("Retrieving employees with pagination - page: {}, size: {}, search: {}", page, size, search);
             employeesPage = employeeService.getEmployeesWithPagination(page, size);
         }
 
@@ -79,7 +86,8 @@ public class EmployeeRestController {
                 .data(employeeResponseDTOPage)
                 .build();
 
-        log.info("EmployeeRestController::getAllEmployees response {}", jsonAsString(response));
+        log.info("Response successfully created.");
+        log.debug("Response details: {}", response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
