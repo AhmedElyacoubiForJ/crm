@@ -1,6 +1,9 @@
 package edu.yacoubi.crm.repository;
 
 import edu.yacoubi.crm.model.Customer;
+import edu.yacoubi.crm.model.Employee;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +24,5 @@ public interface CustomerRepository extends
     @Query("SELECT c FROM Customer c WHERE c.email = :email")
     Optional<Customer> findByEmailWithNotesAndEmployeeCustomers(@Param("email") String email);
 
+    Page<Customer> findAll(Pageable pageable);
 }

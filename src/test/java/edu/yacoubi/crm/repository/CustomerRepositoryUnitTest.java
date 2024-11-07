@@ -13,9 +13,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -148,4 +152,28 @@ class CustomerRepositoryUnitTest {
         assertNull(entityManager.find(Note.class, persistedAndFlushNoteA.getId()));
         assertNull(entityManager.find(Note.class, persistedAndFlushNoteB.getId()));
     }
+
+    @Test
+    public void itShouldReturnAllCustomersPaged() {
+        // Given
+        Employee employee = entityManager.find(Employee.class, 1L);
+        for (int i = 0; i < 10; i++) {
+            Customer customer = TestDataUtil.createCustomerA(employee);
+            customer.setEmail(i + customer.getEmail());
+            underTest.save(customer);
+        }
+
+
+        // When
+        Pageable pageable = PageRequest.of(0, 1);
+        Page<Customer> customers = underTest.findAll(pageable);
+
+        // Then
+        assertEquals(10, customers.getTotalElements());
+        assertEquals(10, customers.getTotalPages());
+        assertEquals(1, customers.getContent().size());
+    }
+
+
+
 }

@@ -43,7 +43,7 @@
                         type="text"
                         class="form-control"
                         name="search"
-                        placeholder="Suche nach Name oder E-Mail..."
+                        placeholder="Suche nach Name oder Department..."
                 >
                 <button type="submit" class="btn btn-primary mt-2">Suche</button>
             </form>
@@ -62,7 +62,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="employee : ${employees}">
+        <tr th:each="employee : ${employeesPage.getContent()}">
             <td th:text="${employee.id}"></td>
             <td th:text="${employee.firstName}"></td>
             <td th:text="${employee.lastName}"></td>
@@ -76,14 +76,24 @@
         </tbody>
     </table>
 
-    <!-- Pagination Placeholder -->
+    <!-- Pagination -->
     <nav aria-label="Page navigation example">
         <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Vorherige</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Nächste</a></li>
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/employees(page=${currentPage - 1})}">
+                    Vorherige
+                </a>
+            </li>
+            <li class="page-item" th:each="pageNum, iterStat : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == pageNum} ? 'active'">
+                <a class="page-link" th:href="@{/employees(page=${pageNum})}" th:text="${pageNum + 1}">
+                    1
+                </a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/employees(page=${currentPage + 1})}">
+                    Nächste
+                </a>
+            </li>
         </ul>
     </nav>
 </div>

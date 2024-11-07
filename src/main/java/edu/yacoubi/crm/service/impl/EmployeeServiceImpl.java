@@ -11,6 +11,9 @@ import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +40,12 @@ public class EmployeeServiceImpl implements IEmployeeService {
     public List<Employee> getAllEmployees() {
         log.info("EmployeeServiceImpl::getAllEmployees");
         return employeeRepository.findAll();
+    }
+
+    @Override
+    public Page<Employee> getEmployeesWithPagination(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return employeeRepository.findAll(pageable);
     }
 
     @Override
@@ -106,15 +115,30 @@ public class EmployeeServiceImpl implements IEmployeeService {
     }
 
     @Override
-    public Optional<List<Employee>> getEmployeesByNameLike(String nameSearchString) {
-        log.info("EmployeeServiceImpl::getEmployeesByNameLike searchString: {}", nameSearchString);
-        return employeeRepository.findByFirstNameIgnoreCaseContaining(nameSearchString);
+    public Optional<List<Employee>> getEmployeesByFirstName(String fNameString) {
+        log.info("EmployeeServiceImpl::getEmployeesByNameLike searchString: {}", fNameString);
+        return employeeRepository.findByFirstNameIgnoreCaseContaining(fNameString);
     }
 
     @Override
-    public Optional<List<Employee>> getEmployeesByEmailLike(String emailSearchString) {
-        log.info("EmployeeServiceImpl::getEmployeesByEmailLike searchString: {}", emailSearchString);
-        return employeeRepository.findByEmailIgnoreCaseContaining(emailSearchString);
+    public Optional<List<Employee>> getEmployeesByEmail(String emailString) {
+        log.info("EmployeeServiceImpl::getEmployeesByEmailLike emailString: {}", emailString);
+        return employeeRepository.findByEmailIgnoreCaseContaining(emailString);
+    }
+
+    @Override
+    public Page<Employee> getEmployeesByFirstNameOrDepartment(
+            String searchString,
+            int page,
+            int size) {
+        log.info("EmployeeServiceImpl::searchByFirstNameOrDepartment searchString: {}, page: {}, size: {}", searchString, page, size);
+        Pageable pageable = PageRequest.of(page, size);
+
+        return employeeRepository.findByFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase(
+                searchString,
+                searchString,
+                pageable
+        );
     }
 }
 
