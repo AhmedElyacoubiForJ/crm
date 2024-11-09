@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,25 +34,59 @@ public class CustomerRestController {
     private final ICustomerService customerService;
     private final IEmployeeService employeeService;
 
+//    @Operation(
+//            summary = "Get all customers",
+//            description = "Retrieve a list of all customers in the CRM system."
+//    )
+//    @GetMapping
+//    public ResponseEntity<APIResponse<List<CustomerResponseDTO>>> getAllCustomers() {
+//        log.info("CustomerRestController::getAllCustomers");
+//
+//        List<CustomerResponseDTO> customerResponseDTOList = customerService.getAllCustomers().stream()
+//                .map(ValueMapper::convertToResponseDTO)
+//                .collect(Collectors.toList());
+//
+//        APIResponse<List<CustomerResponseDTO>> response = APIResponse
+//                .<List<CustomerResponseDTO>>builder()
+//                .status("success")
+//                .statusCode(HttpStatus.OK.value())
+//                .data(customerResponseDTOList)
+//                .build();
+//
+//        log.info("CustomerRestController::getAllCustomers response {}", jsonAsString(response));
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+
     @Operation(
             summary = "Get all customers",
-            description = "Retrieve a list of all customers in the CRM system."
+            description = "Retrieve a list of all customers in the CRM system with pagination and optional search."
     )
     @GetMapping
-    public ResponseEntity<APIResponse<List<CustomerResponseDTO>>> getAllCustomers() {
-        log.info("CustomerRestController::getAllCustomers");
+    public ResponseEntity<APIResponse<Page<CustomerResponseDTO>>> getAllCustomers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search) {
 
-        List<CustomerResponseDTO> customerResponseDTOList = customerService.getAllCustomers().stream()
-                .map(ValueMapper::convertToResponseDTO)
-                .collect(Collectors.toList());
+        log.info("CustomerRestController::getAllEmployees starting to fetch employees...");
+        log.debug("CustomerRestController::getAllEmployees request received - page: {}, size: {}, search: {}", page, size, search);
 
-        APIResponse<List<CustomerResponseDTO>> response = APIResponse
-                .<List<CustomerResponseDTO>>builder()
+        Page<Customer> customersPage;
+        if (search != null && !search.isEmpty()) {
+            // Filtere nach Vorname oder E-Mail, falls ein Suchbegriff vorhanden ist
+            customersPage = customerService.getCustomersByFirstNameOrEmail(search, page, size);
+        } else {
+            // Keine Suche, also alle Kunden abfragen
+            customersPage = customerService.getCustomersWithPagination(page, size);
+        }
+
+        Page<CustomerResponseDTO> customerResponseDTOPage = customersPage.map(ValueMapper::convertToResponseDTO);
+        APIResponse<Page<CustomerResponseDTO>> response = APIResponse.<Page<CustomerResponseDTO>>builder()
                 .status("success")
                 .statusCode(HttpStatus.OK.value())
-                .data(customerResponseDTOList)
+                .data(customerResponseDTOPage)
                 .build();
 
+        log.info("Response successfully created.");
         log.info("CustomerRestController::getAllCustomers response {}", jsonAsString(response));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
