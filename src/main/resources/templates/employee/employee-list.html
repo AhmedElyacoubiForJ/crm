@@ -79,7 +79,7 @@
     </table>
 
     <!-- Pagination -->
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Employee Page navigation">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                 <a class="page-link" th:href="@{/employees(page=${currentPage - 1})}">Vorherige</a>

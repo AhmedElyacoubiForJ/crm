@@ -25,4 +25,10 @@ public interface CustomerRepository extends
     Optional<Customer> findByEmailWithNotesAndEmployeeCustomers(@Param("email") String email);
 
     Page<Customer> findAll(Pageable pageable);
+
+    Page<Customer> findByFirstNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+            String firstName,
+            String email,
+            Pageable pageable
+    );
 }

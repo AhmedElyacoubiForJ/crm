@@ -3,6 +3,8 @@ package edu.yacoubi.crm.service;
 import edu.yacoubi.crm.dto.customer.CustomerPatchDTO;
 import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.model.Customer;
+import edu.yacoubi.crm.model.Employee;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,4 +33,8 @@ public interface ICustomerService {
     Customer getCustomerWithNotes(Long id);
 
     void partialUpdateCustomer(Long id, CustomerPatchDTO customerPatchDTO);
+
+    Page<Customer> getCustomersByFirstNameOrEmail(String search, int page, int size);
+
+    Page<Customer> getCustomersWithPagination(int page, int size);
 }

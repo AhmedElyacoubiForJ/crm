@@ -12,8 +12,7 @@ import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -145,6 +144,24 @@ public class CustomerServiceImpl implements ICustomerService {
 
         log.info("Partial update executed for customer ID: {}", id);
         entityManager.createQuery(update).executeUpdate();
+    }
+
+    @Override
+    public Page<Customer> getCustomersByFirstNameOrEmail(String search, int page, int size) {
+        log.info("CustomerServiceImpl::getCustomersByFirstNameOrEmail searchString: {}, page: {}, size: {}", search, page, size);
+
+        Pageable pageable = PageRequest.of(page, size);
+        return customerRepository.findByFirstNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                search,
+                search,
+                pageable
+        );
+    }
+
+    @Override
+    public Page<Customer> getCustomersWithPagination(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return customerRepository.findAll(pageable);
     }
 
     @Override
