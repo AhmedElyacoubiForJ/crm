@@ -67,6 +67,7 @@ Dieses Projekt ist eine Implementierung eines **Customer Relationship Management
 6. **React-Client**:
     - Entwicklung einer modernen Single-Page Application mit React.
     - Integration der REST-APIs zur Datenmanipulation und Anzeige.
+    - Das Frontend-Repository für dieses Projekt findest du hier: [CRM React Frontend](https://github.com/AhmedElyacoubiForJ/crm-react)
 
 7. **Dokumentation**:
     - Regelmäßige Aktualisierung der README.md-Datei, um den Fortschritt und die nächsten Schritte zu dokumentieren.
