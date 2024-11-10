@@ -1,7 +1,6 @@
 package edu.yacoubi.crm.controllers.toviews;
 
 import edu.yacoubi.crm.model.Customer;
-import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,7 @@ public class CustomerViewController {
         Page<Customer> customersPage;
 
         if (search!= null && !search.isEmpty()) {
-            // Filtere nach Vorname oder Email, falls ein Suchbegriff vorhanden ist
+            // Filtere nach Vorname oder E-Mail, falls ein Suchbegriff vorhanden ist
             customersPage = customerService.getCustomersByFirstNameOrEmail(search, page, size);
         } else {
             // Keine Filterung, nur Paging
