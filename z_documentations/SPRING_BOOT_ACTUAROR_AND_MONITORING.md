@@ -112,41 +112,56 @@ scrape_configs:
       - targets: ['localhost:8080']
 ```
 
+**Prometheus starten**:
+1. **Prometheus herunterladen**:
+   - Gehen Sie zur offiziellen [Prometheus Download-Seite](https://prometheus.io/download/).
+   - Wählen Sie die passende Version für Ihr Betriebssystem aus und laden Sie das Archiv herunter.
+2. **Entpacken Sie die ZIP-Datei** in ein Verzeichnis Ihrer Wahl.
+3. **Navigieren Sie zum entpackten Verzeichnis**.
+4. **Erstellen Sie eine Konfigurationsdatei namens `prometheus.yml`** im selben Verzeichnis wie die entpackte Datei (falls noch nicht vorhanden).
+5. **Starten Sie den Prometheus-Server**:
+   - Öffnen Sie ein Terminal oder eine Eingabeaufforderung.
+   - Navigieren Sie zu dem Verzeichnis, in dem Sie Prometheus entpackt haben.
+   - Starten Sie den Prometheus-Server mit dem folgenden Befehl:
+    ```sh
+    ./prometheus --config.file=prometheus.yml
+    ```
+
 #### Grafana Integration
 
 1. **Grafana installieren und starten**:
-    - Laden Sie Grafana von der [offiziellen Website](https://grafana.com/grafana/download) herunter und installieren Sie es.
-    - Entpacken Sie die ZIP-Datei in ein Verzeichnis Ihrer Wahl.
-    - Navigieren Sie zum entpackten Verzeichnis und öffnen Sie das Terminal oder die Eingabeaufforderung.
-    - Navigieren Sie zum `bin`-Verzeichnis von Grafana:
-        ```sh
-        cd path/to/grafana/bin
-        ```
-    - Starten Sie den Grafana-Server:
-        ```sh
-        ./grafana-server web
-        ```
-    - Öffnen Sie das Grafana-Webinterface in Ihrem Browser unter `http://localhost:3000`.
+   - Laden Sie Grafana von der [offiziellen Website](https://grafana.com/grafana/download) herunter und installieren Sie es.
+   - Entpacken Sie die ZIP-Datei in ein Verzeichnis Ihrer Wahl.
+   - Navigieren Sie zum entpackten Verzeichnis und öffnen Sie das Terminal oder die Eingabeaufforderung.
+   - Navigieren Sie zum `bin`-Verzeichnis von Grafana:
+       ```sh
+       cd path/to/grafana/bin
+       ```
+   - Starten Sie den Grafana-Server:
+       ```sh
+       ./grafana-server web
+       ```
+   - Öffnen Sie das Grafana-Webinterface in Ihrem Browser unter `http://localhost:3000`.
 
 2. **Datenquelle hinzufügen**:
-    - Melden Sie sich bei Grafana an (Standardbenutzername: `admin`, Standardpasswort: `admin`).
-    - Gehen Sie zu "Configuration" > "Data Sources".
-    - Klicken Sie auf "Add data source" und wählen Sie "Prometheus".
-    - Geben Sie die URL Ihres Prometheus-Servers an:
-        ```sh
-        http://localhost:9090
-        ```
-    - Klicken Sie auf "Save & Test", um sicherzustellen, dass die Verbindung funktioniert.
+   - Melden Sie sich bei Grafana an (Standardbenutzername: `admin`, Standardpasswort: `admin`).
+   - Gehen Sie zu "Configuration" > "Data Sources".
+   - Klicken Sie auf "Add data source" und wählen Sie "Prometheus".
+   - Geben Sie die URL Ihres Prometheus-Servers an:
+       ```sh
+       http://localhost:9090
+       ```
+   - Klicken Sie auf "Save & Test", um sicherzustellen, dass die Verbindung funktioniert.
 
 3. **Dashboards erstellen**:
-    - Erstellen Sie ein neues Dashboard in Grafana:
-        - Gehen Sie zu "Create" > "Dashboard".
-    - Fügen Sie Panels hinzu, um verschiedene Metriken zu visualisieren:
-        - Klicken Sie auf "Add new panel".
-        - Wählen Sie die Prometheus-Datenquelle aus.
-        - Geben Sie eine Abfrage ein, z.B. `http_server_requests_seconds_count{job="spring-actuator"}`.
-        - Wählen Sie den gewünschten Visualisierungstyp aus (z.B. Graph, Bar Gauge, Table).
-    - Passen Sie das Panel an und speichern Sie das Dashboard.
+   - Erstellen Sie ein neues Dashboard in Grafana:
+      - Gehen Sie zu "Create" > "Dashboard".
+   - Fügen Sie Panels hinzu, um verschiedene Metriken zu visualisieren:
+      - Klicken Sie auf "Add new panel".
+      - Wählen Sie die Prometheus-Datenquelle aus.
+      - Geben Sie eine Abfrage ein, z.B. `http_server_requests_seconds_count{job="spring-actuator"}`.
+      - Wählen Sie den gewünschten Visualisierungstyp aus (z.B. Graph, Bar Gauge, Table).
+   - Passen Sie das Panel an und speichern Sie das Dashboard.
 
 ### Beispiel einer einfachen Abfrage in Grafana:
 ```promql
