@@ -1,9 +1,9 @@
 package edu.yacoubi.crm.controllers.api;
 
-import edu.yacoubi.crm.dto.*;
+import edu.yacoubi.crm.dto.APIResponse;
 import edu.yacoubi.crm.dto.customer.CustomerPatchDTO;
-import edu.yacoubi.crm.dto.customer.CustomerResponseDTO;
 import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
+import edu.yacoubi.crm.dto.customer.CustomerResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static edu.yacoubi.crm.util.ValueMapper.*;
 
