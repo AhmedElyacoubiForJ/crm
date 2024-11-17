@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS note;
-DROP TABLE IF EXISTS user_roles;
+DROP TABLE IF EXISTS user_role;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS user_customer;
 DROP TABLE IF EXISTS user_employee;
