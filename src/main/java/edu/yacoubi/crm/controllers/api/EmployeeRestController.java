@@ -228,4 +228,30 @@ public class EmployeeRestController {
         log.info("EmployeeRestController::patchEmployee response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
+
+    @Operation(
+            summary = "Delete employee",
+            description = "Delete an existing employee by their unique ID."
+    )
+    @DeleteMapping("/{id}")
+    public ResponseEntity<APIResponse<Void>> deleteEmployee(@PathVariable Long id) {
+        log.info("EmployeeRestController::deleteEmployee request id {}", id);
+
+        employeeService.getEmployeeById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Employee not found with ID: " + id)
+        );
+
+        employeeService.deleteEmployee(id);
+
+        APIResponse<Void> response = APIResponse.<Void>builder()
+               .status("success")
+               .statusCode(HttpStatus.NO_CONTENT.value())
+               .build();
+
+        log.info("EmployeeRestController::deleteEmployee response {}", jsonAsString(response));
+        return ResponseEntity.ok(response);
+    }
+
+
+
 }

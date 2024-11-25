@@ -55,13 +55,13 @@ public class EmployeeServiceImpl implements IEmployeeService {
     }
 
     @Override
-    public void deleteEmployee(Employee employee) {
-        log.info("EmployeeServiceImpl::deleteEmployee employee: {}", employee);
-        if (!employeeRepository.existsById(employee.getId())) {
-            log.warn("Employee not found with ID: {}", employee.getId());
-            throw new ResourceNotFoundException("Employee not found with ID: " + employee.getId());
+    public void deleteEmployee(Long id) {
+        log.info("EmployeeServiceImpl::deleteEmployee id: {}", id);
+        if (!employeeRepository.existsById(id)) {
+            log.warn("Employee not found with ID: {}", id);
+            throw new ResourceNotFoundException("Employee not found with ID: " + id);
         }
-        employeeRepository.delete(employee);
+        employeeRepository.deleteById(id);
     }
 
     @Override
