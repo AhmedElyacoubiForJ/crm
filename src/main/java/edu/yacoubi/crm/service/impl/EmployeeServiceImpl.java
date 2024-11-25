@@ -2,9 +2,12 @@ package edu.yacoubi.crm.service.impl;
 
 import edu.yacoubi.crm.dto.employee.EmployeePatchDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
+import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.EmployeeRepository;
+import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
+import edu.yacoubi.crm.service.IInactiveEmployeeService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaUpdate;
@@ -26,6 +29,10 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements IEmployeeService {
 
     private final EmployeeRepository employeeRepository;
+
+    private final IInactiveEmployeeService inactiveEmployeeService;
+
+    private final ICustomerService customerService;
 
     private final EntityManager entityManager;
 
@@ -140,5 +147,42 @@ public class EmployeeServiceImpl implements IEmployeeService {
                 pageable
         );
     }
+
+    @Override
+    public void deleteAndArchiveEmployee(Long id) {
+        log.info("EmployeeServiceImpl::deleteAndArchiveEmployee id: {}", id);
+
+        Employee employee = employeeRepository.findById(id).orElseThrow(
+                () -> {
+                    log.warn("Employee not found with ID: {}", id);
+                    return new ResourceNotFoundException("Employee not found with ID: " + id);
+                }
+        );
+
+        // Kunden neu zuweisen (Implementiere diese Logik entsprechend)
+        reassignCustomers(employee.getId());
+
+        // Archivierung des Mitarbeiters
+        inactiveEmployeeService.createInactiveEmployee(employee);
+
+        // Löschen des Mitarbeiters
+        employeeRepository.delete(employee);
+
+        log.info("Employee deleted and archived with ID: {}", id);
+    }
+
+    @Override public void assignCustomerToEmployee(Long customerId, Long employeeId) {
+        customerService.assignCustomerToEmployee(customerId, employeeId); // Delegation an CustomerService
+    }
+
+    private void reassignCustomers(Long employeeId) {
+        List<Customer> customers = customerService.findCustomersByEmployeeId(employeeId);
+        for (Customer customer : customers) {
+            // Logik zur neuen Zuweisung, z.B. an einen Standardmitarbeiter oder nach bestimmten Regeln
+            Long newEmployeeId = 1L ; // Logik zur Bestimmung des neuen Mitarbeiters
+            customerService.assignCustomerToEmployee(customer.getId(), newEmployeeId);
+        }
+    }
+
 }
 

@@ -37,4 +37,8 @@ public interface ICustomerService {
     Page<Customer> getCustomersByFirstNameOrEmail(String search, int page, int size);
 
     Page<Customer> getCustomersWithPagination(int page, int size);
+
+    void assignCustomerToEmployee(Long customerId, Long employeeId);
+
+    List<Customer> findCustomersByEmployeeId(Long employeeId);
 }

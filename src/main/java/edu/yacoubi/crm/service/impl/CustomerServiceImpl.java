@@ -4,7 +4,9 @@ import edu.yacoubi.crm.dto.customer.CustomerPatchDTO;
 import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
+import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.CustomerRepository;
+import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.service.ICustomerService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -23,7 +25,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class CustomerServiceImpl implements ICustomerService {
+
     private final CustomerRepository customerRepository;
+
+    private final EmployeeRepository employeeRepository;
+
     private final EntityManager entityManager;
 
     @Override
@@ -162,6 +168,24 @@ public class CustomerServiceImpl implements ICustomerService {
     public Page<Customer> getCustomersWithPagination(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return customerRepository.findAll(pageable);
+    }
+
+    @Override
+    public void assignCustomerToEmployee(Long customerId, Long employeeId) {
+        Customer customer = customerRepository.findById(customerId).orElseThrow(
+                () -> new ResourceNotFoundException("Customer not found with ID: " + customerId)
+        );
+
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+                () -> new ResourceNotFoundException("Employee not found with ID: " + employeeId)
+        );
+
+        customer.setEmployee(employee);
+        customerRepository.save(customer);
+    }
+
+    @Override public List<Customer> findCustomersByEmployeeId(Long employeeId) {
+        return customerRepository.findByEmployeeId(employeeId);
     }
 
     @Override

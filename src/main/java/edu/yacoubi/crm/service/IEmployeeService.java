@@ -30,4 +30,8 @@ public interface IEmployeeService {
     Optional<List<Employee>> getEmployeesByEmail(String searchString);
 
     Page<Employee> getEmployeesByFirstNameOrDepartment(String search, int page, int size);
+
+    void deleteAndArchiveEmployee(Long id);
+
+    void assignCustomerToEmployee(Long customerId, Long employeeId);
 }
