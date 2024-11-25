@@ -20,6 +20,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -174,6 +175,21 @@ class CustomerRepositoryUnitTest {
         assertEquals(1, customers.getContent().size());
     }
 
+    @Test
+    public void itShouldReturnCustomersByEmployeeId() {
+        // Given
+        Employee employee = entityManager.find(Employee.class, 1L);
+        Customer customerA = TestDataUtil.createCustomerA(employee);
+        Customer customerB = TestDataUtil.createCustomerB(employee);
+        underTest.save(customerA);
+        underTest.save(customerB);
 
+        // When
+        List<Customer> customersByEmployeeId = underTest.findByEmployeeId(employee.getId());
 
+        // Then
+        assertEquals(2, customersByEmployeeId.size());
+        assertTrue(customersByEmployeeId.contains(customerA));
+        assertTrue(customersByEmployeeId.contains(customerB));
+    }
 }
