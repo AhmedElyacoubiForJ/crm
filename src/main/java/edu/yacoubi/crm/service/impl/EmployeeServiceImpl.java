@@ -176,7 +176,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     }
 
     private void reassignCustomers(Long employeeId) {
-        List<Customer> customers = customerService.findCustomersByEmployeeId(employeeId);
+        List<Customer> customers = customerService.getCustomersByEmployeeId(employeeId);
         for (Customer customer : customers) {
             // Logik zur neuen Zuweisung, z.B. an einen Standardmitarbeiter oder nach bestimmten Regeln
             Long newEmployeeId = 1L ; // Logik zur Bestimmung des neuen Mitarbeiters

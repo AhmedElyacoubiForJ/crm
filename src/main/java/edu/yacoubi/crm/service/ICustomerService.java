@@ -3,7 +3,6 @@ package edu.yacoubi.crm.service;
 import edu.yacoubi.crm.dto.customer.CustomerPatchDTO;
 import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.model.Customer;
-import edu.yacoubi.crm.model.Employee;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -40,5 +39,5 @@ public interface ICustomerService {
 
     void assignCustomerToEmployee(Long customerId, Long employeeId);
 
-    List<Customer> findCustomersByEmployeeId(Long employeeId);
+    List<Customer> getCustomersByEmployeeId(Long employeeId);
 }

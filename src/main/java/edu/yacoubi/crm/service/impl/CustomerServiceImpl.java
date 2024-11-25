@@ -184,7 +184,8 @@ public class CustomerServiceImpl implements ICustomerService {
         customerRepository.save(customer);
     }
 
-    @Override public List<Customer> findCustomersByEmployeeId(Long employeeId) {
+    @Override
+    public List<Customer> getCustomersByEmployeeId(Long employeeId) {
         return customerRepository.findByEmployeeId(employeeId);
     }
 

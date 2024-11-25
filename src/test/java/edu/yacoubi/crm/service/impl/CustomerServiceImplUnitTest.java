@@ -1,24 +1,30 @@
 package edu.yacoubi.crm.service.impl;
 
 import edu.yacoubi.crm.TestDataUtil;
-import edu.yacoubi.crm.model.Customer;
-import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
+import edu.yacoubi.crm.model.Customer;
+import edu.yacoubi.crm.model.Employee;
+import edu.yacoubi.crm.repository.CustomerRepository;
+import edu.yacoubi.crm.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 class CustomerServiceImplUnitTest {
     @Mock
     private CustomerRepository customerRepository;
+
+    @Mock
+    private EmployeeRepository employeeRepository;
 
     @InjectMocks
     private CustomerServiceImpl underTest;
@@ -140,6 +146,29 @@ class CustomerServiceImplUnitTest {
         // Then
         assertTrue(foundCustomer.isPresent());
         assertEquals(customer.getEmail(), foundCustomer.get().getEmail());
+    }
+
+    @Test
+    public void itShouldReturnCustomersByEmployeeId() {
+        // Given
+        Long employeeId = 1L;
+        List<Customer> customers = Arrays.asList(
+                TestDataUtil.createCustomerA(null),
+                TestDataUtil.createCustomerB(null)
+        );
+        Employee employeeA = TestDataUtil.createEmployeeA();
+        employeeA.setId(employeeId);
+        customers.forEach(customer -> customer.setEmployee(employeeA));
+        when(customerRepository.findByEmployeeId(employeeId)).thenReturn(customers);
+
+        // When
+        List<Customer> foundCustomers = underTest.getCustomersByEmployeeId(employeeId);
+
+        // Then
+        assertEquals(customers.size(), foundCustomers.size());
+        assertTrue(foundCustomers.containsAll(customers));
+        //assertEquals(customers, foundCustomers); // Wenn Reihenfolge eine Rolle spielt
+        verify(customerRepository, times(1)).findByEmployeeId(employeeId);
     }
 
 }
