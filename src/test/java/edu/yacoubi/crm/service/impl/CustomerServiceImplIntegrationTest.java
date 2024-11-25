@@ -139,4 +139,26 @@ class CustomerServiceImplIntegrationTest {
         assertEquals(1, foundCustomers.size());
         assertEquals(customerA.getId(), foundCustomers.get(0).getId());
     }
+
+    @Test
+    @Transactional
+    public void itShouldReturnCustomersByEmployeeId() {
+        // Given
+        Employee employee = TestDataUtil.createEmployeeA();
+        Employee savedEmployee = employeeRepository.save(employee);
+        Customer customerA = TestDataUtil.createCustomerA(savedEmployee);
+        Customer customerB = TestDataUtil.createCustomerB(savedEmployee);
+        customerRepository.save(customerA);
+        customerRepository.save(customerB);
+
+        // When
+        List<Customer> foundCustomers = underTest.getCustomersByEmployeeId(savedEmployee.getId());
+
+        // Then
+        assertEquals(2, foundCustomers.size());
+        assertEquals(customerA.getFirstName(), foundCustomers.get(0).getFirstName());
+
+        assertTrue(foundCustomers.contains(customerA));
+        assertTrue(foundCustomers.contains(customerB));
+    }
 }
