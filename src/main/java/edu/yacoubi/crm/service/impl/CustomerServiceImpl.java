@@ -8,6 +8,7 @@ import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.service.ICustomerService;
+import edu.yacoubi.crm.service.IInactiveEmployeeService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaUpdate;

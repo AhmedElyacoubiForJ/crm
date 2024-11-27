@@ -24,6 +24,7 @@ public class Role {
     @NotBlank
     private String roleName;
 
+    @Builder.Default
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 }

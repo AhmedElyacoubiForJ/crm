@@ -149,40 +149,46 @@ public class EmployeeServiceImpl implements IEmployeeService {
     }
 
     @Override
-    public void deleteAndArchiveEmployee(Long id) {
-        log.info("EmployeeServiceImpl::deleteAndArchiveEmployee id: {}", id);
+    public void reassignCustomersAndDeleteEmployee(Long employeeId, Long newEmployeeId) {
+        log.info("EmployeeServiceImpl::reassignCustomersAndDeleteEmployee employeeId: {}, newEmployeeId: {}", employeeId, newEmployeeId);
 
-        Employee employee = employeeRepository.findById(id).orElseThrow(
+        Employee oldEmployee = employeeRepository.findById(employeeId).orElseThrow(
                 () -> {
-                    log.warn("Employee not found with ID: {}", id);
-                    return new ResourceNotFoundException("Employee not found with ID: " + id);
+                    log.error("Employee not found with ID: {}", employeeId);
+                    return new ResourceNotFoundException("Employee not found with ID: " + employeeId);
+                }
+        );
+        Employee newEmployee = employeeRepository.findById(newEmployeeId).orElseThrow(
+                () -> {
+                    log.error("Employee not found with ID: {}", newEmployeeId);
+                    return new IllegalArgumentException("Employee not found with ID: " + newEmployeeId);
                 }
         );
 
-        // Kunden neu zuweisen (Implementiere diese Logik entsprechend)
-        reassignCustomers(employee.getId());
+        // Kunden neu zuweisen
+        reassignCustomers(oldEmployee.getId(), newEmployee.getId());
 
         // Archivierung des Mitarbeiters
-        inactiveEmployeeService.createInactiveEmployee(employee);
+        inactiveEmployeeService.createInactiveEmployee(oldEmployee);
 
         // Löschen des Mitarbeiters
-        employeeRepository.delete(employee);
+        employeeRepository.delete(oldEmployee);
 
-        log.info("Employee deleted and archived with ID: {}", id);
+        log.info("Employee deleted and archived with ID: {}", employeeId);
     }
 
-    @Override public void assignCustomerToEmployee(Long customerId, Long employeeId) {
+    @Override
+    public void assignCustomerToEmployee(Long customerId, Long employeeId) {
         customerService.assignCustomerToEmployee(customerId, employeeId); // Delegation an CustomerService
     }
 
-    private void reassignCustomers(Long employeeId) {
+    private void reassignCustomers(Long employeeId, Long newEmployeeId) {
+        log.info("Reassigning customer ID: {} to new employee ID: {}", employeeId, newEmployeeId);
+
         List<Customer> customers = customerService.getCustomersByEmployeeId(employeeId);
         for (Customer customer : customers) {
-            // Logik zur neuen Zuweisung, z.B. an einen Standardmitarbeiter oder nach bestimmten Regeln
-            Long newEmployeeId = 1L ; // Logik zur Bestimmung des neuen Mitarbeiters
             customerService.assignCustomerToEmployee(customer.getId(), newEmployeeId);
         }
     }
-
 }
 

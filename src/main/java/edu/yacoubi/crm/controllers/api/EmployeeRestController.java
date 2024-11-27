@@ -252,6 +252,16 @@ public class EmployeeRestController {
         return ResponseEntity.ok(response);
     }
 
-
-
+    @Operation(
+            summary = "Assign customer to new employee and delete old employee",
+            description = "Assign a customer to an employee by their unique ID."
+    )
+    @PostMapping("/employees/{employeeId}/reassign-and-delete")
+    // POST /employees/42/reassign-and-delete?newEmployeeId=15
+    public ResponseEntity<String> reassignAndDeleteEmployee(
+            @PathVariable Long employeeId,
+            @RequestParam Long newEmployeeId) {
+        employeeService.reassignCustomersAndDeleteEmployee(employeeId, newEmployeeId);
+        return ResponseEntity.ok("Employee reassigned and deleted successfully.");
+    }
 }

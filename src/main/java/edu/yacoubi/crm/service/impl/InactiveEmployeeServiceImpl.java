@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -27,5 +29,10 @@ public class InactiveEmployeeServiceImpl implements IInactiveEmployeeService {
                 .build();
 
         return inactiveEmployeeRepository.save(inactiveEmployee);
+    }
+
+    @Override
+    public Optional<InactiveEmployee> getInactiveEmployeeById(Long id) {
+        return inactiveEmployeeRepository.findById(id);
     }
 }

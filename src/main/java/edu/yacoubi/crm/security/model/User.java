@@ -33,6 +33,7 @@ public class User {
 
     private boolean enabled;
 
+    @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",

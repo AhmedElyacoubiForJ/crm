@@ -3,7 +3,6 @@ package edu.yacoubi.crm.service;
 import edu.yacoubi.crm.dto.employee.EmployeePatchDTO;
 import edu.yacoubi.crm.model.Employee;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +30,7 @@ public interface IEmployeeService {
 
     Page<Employee> getEmployeesByFirstNameOrDepartment(String search, int page, int size);
 
-    void deleteAndArchiveEmployee(Long id);
+    void reassignCustomersAndDeleteEmployee(Long employeeId, Long newEmployeeId);
 
     void assignCustomerToEmployee(Long customerId, Long employeeId);
 }
