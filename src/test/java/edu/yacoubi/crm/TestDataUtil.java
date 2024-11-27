@@ -23,6 +23,15 @@ public final class TestDataUtil {
                 .build();
     }
 
+    public static Employee createStandardEmployee() {
+        return Employee.builder()
+                .firstName("Bruce")
+                .lastName("Wayne")
+                .email("bruce.wayne@example.com")
+                .department("Sales")
+                .build();
+    }
+
     public static EmployeeRequestDTO createEmployeeRequestDTOA() {
         return EmployeeRequestDTO.builder()
                 .firstName("Jon")
