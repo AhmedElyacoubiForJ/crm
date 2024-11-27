@@ -11,7 +11,6 @@ import edu.yacoubi.crm.util.ValueMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -229,39 +228,44 @@ public class EmployeeRestController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(
-            summary = "Delete employee",
-            description = "Delete an existing employee by their unique ID."
-    )
-    @DeleteMapping("/{id}")
-    public ResponseEntity<APIResponse<Void>> deleteEmployee(@PathVariable Long id) {
-        log.info("EmployeeRestController::deleteEmployee request id {}", id);
+//    @Operation(
+//            summary = "Delete employee",
+//            description = "Delete an existing employee by their unique ID."
+//    )
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<APIResponse<Void>> deleteEmployee(@PathVariable Long id) {
+//        log.info("EmployeeRestController::deleteEmployee request id {}", id);
+//
+//        employeeService.getEmployeeById(id).orElseThrow(
+//                () -> new ResourceNotFoundException("Employee not found with ID: " + id)
+//        );
+//
+//        employeeService.deleteEmployee(id);
+//
+//        APIResponse<Void> response = APIResponse.<Void>builder()
+//               .status("success")
+//               .statusCode(HttpStatus.NO_CONTENT.value())
+//               .build();
+//
+//        log.info("EmployeeRestController::deleteEmployee response {}", jsonAsString(response));
+//        return ResponseEntity.ok(response);
+//    }
 
-        employeeService.getEmployeeById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Employee not found with ID: " + id)
-        );
-
-        employeeService.deleteEmployee(id);
-
-        APIResponse<Void> response = APIResponse.<Void>builder()
-               .status("success")
-               .statusCode(HttpStatus.NO_CONTENT.value())
-               .build();
-
-        log.info("EmployeeRestController::deleteEmployee response {}", jsonAsString(response));
-        return ResponseEntity.ok(response);
-    }
 
     @Operation(
             summary = "Assign customer to new employee and delete old employee",
             description = "Assign a customer to an employee by their unique ID."
     )
-    @PostMapping("/employees/{employeeId}/reassign-and-delete")
-    // POST /employees/42/reassign-and-delete?newEmployeeId=15
+    @DeleteMapping("/{employeeId}/reassignAndDelete")
+    // POST /employees/1/reassignAndDelete?newEmployeeId=2
     public ResponseEntity<String> reassignAndDeleteEmployee(
             @PathVariable Long employeeId,
             @RequestParam Long newEmployeeId) {
-        employeeService.reassignCustomersAndDeleteEmployee(employeeId, newEmployeeId);
-        return ResponseEntity.ok("Employee reassigned and deleted successfully.");
+        try {
+            employeeService.deleteEmployee(employeeId, newEmployeeId);
+            return ResponseEntity.ok("Employee customers reassigned and deleted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 }

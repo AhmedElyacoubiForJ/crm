@@ -62,16 +62,6 @@ public class EmployeeServiceImpl implements IEmployeeService {
     }
 
     @Override
-    public void deleteEmployee(Long id) {
-        log.info("EmployeeServiceImpl::deleteEmployee id: {}", id);
-        if (!employeeRepository.existsById(id)) {
-            log.warn("Employee not found with ID: {}", id);
-            throw new ResourceNotFoundException("Employee not found with ID: " + id);
-        }
-        employeeRepository.deleteById(id);
-    }
-
-    @Override
     public Employee updateEmployee(Employee employee) {
         log.info("EmployeeServiceImpl::updateEmployee employee: {}", employee);
         // Validierung einfügen, falls notwendig
@@ -149,7 +139,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     }
 
     @Override
-    public void reassignCustomersAndDeleteEmployee(Long employeeId, Long newEmployeeId) {
+    public void deleteEmployee(Long employeeId, Long newEmployeeId) {
         log.info("EmployeeServiceImpl::reassignCustomersAndDeleteEmployee employeeId: {}, newEmployeeId: {}", employeeId, newEmployeeId);
 
         Employee oldEmployee = employeeRepository.findById(employeeId).orElseThrow(

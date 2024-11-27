@@ -44,7 +44,7 @@ class EmployeeServiceImplUnitTest {
     }
 
     @Test
-    void itShouldReassignCustomersAndDeleteEmployee() {
+    void itShouldDeleteEmployee() {
         // Given
         Long oldEmployeeId = 1L;
         Long newEmployeeId = 2L;
@@ -63,7 +63,7 @@ class EmployeeServiceImplUnitTest {
                 .thenReturn(Arrays.asList(customer1, customer2));
 
         // When
-        underTest.reassignCustomersAndDeleteEmployee(oldEmployeeId, newEmployeeId);
+        underTest.deleteEmployee(oldEmployeeId, newEmployeeId);
 
         // Then
         verify(customerService, times(1)).assignCustomerToEmployee(customer1.getId(), newEmployeeId);

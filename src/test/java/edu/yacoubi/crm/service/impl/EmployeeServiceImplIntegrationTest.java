@@ -4,7 +4,6 @@ import edu.yacoubi.crm.TestDataUtil;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.InactiveEmployee;
-import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.repository.InactiveEmployeeRepository;
 import edu.yacoubi.crm.service.ICustomerService;
@@ -54,7 +53,7 @@ class EmployeeServiceIntegrationTest {
     @Test
     void itShouldReassignCustomersAndDeleteEmployee() {
         // When
-        underTest.reassignCustomersAndDeleteEmployee(oldEmployee.getId(), newEmployee.getId());
+        underTest.deleteEmployee(oldEmployee.getId(), newEmployee.getId());
 
         // Then
         // Assert: Überprüfung, dass alle Kunden neu zugewiesen wurden

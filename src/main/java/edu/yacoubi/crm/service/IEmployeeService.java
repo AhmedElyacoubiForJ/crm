@@ -16,8 +16,6 @@ public interface IEmployeeService {
 
     Optional<Employee> getEmployeeById(Long id);
 
-    void deleteEmployee(Long id);
-
     Employee updateEmployee(Employee employee);
 
     Optional<Employee> getEmployeeByEmail(String mail);
@@ -30,7 +28,7 @@ public interface IEmployeeService {
 
     Page<Employee> getEmployeesByFirstNameOrDepartment(String search, int page, int size);
 
-    void reassignCustomersAndDeleteEmployee(Long employeeId, Long newEmployeeId);
+    void deleteEmployee(Long employeeId, Long newEmployeeId);
 
     void assignCustomerToEmployee(Long customerId, Long employeeId);
 }
