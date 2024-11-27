@@ -19,7 +19,7 @@ public class EmployeeViewController {
     private IEmployeeService employeeService;
 
     // Initialisiert Testdaten
-    @PostConstruct
+    //@PostConstruct
     public void initTestData() {
         for (int i = 1; i <= 27; i++) {
             Employee employee = new Employee();
