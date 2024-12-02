@@ -159,11 +159,11 @@ spring.profiles.active=test # or prod
 - Services: DONE
 - DTOs: Done
 - DTOs Mapper: DONE
-- Repositories Unit-Tests: Done (to check)
-- Repositories Integrationstestes: Done (to check)
-- Services Init-Tests: Done (to check)
-- Services IntegrationsTests: Done (to check)
+- Repositories Unit-Tests: Done
+- Repositories Integrationstestes: Done
+- Services Unit-Tests: Done
+- Services IntegrationsTests: Done
 - RestApi Endpoints-Implementations: DONE
 - RestApi Swagger-Documentations: DONE (könnte verbessert werden)
-- RestApi IntegrationsTests: TODO
+- RestApi Unit-,IntegrationsTests: TODO
 - Spring MVC views Implementations: DONE (teilweise verbesserung notwendig)
