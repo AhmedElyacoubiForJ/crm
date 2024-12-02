@@ -257,7 +257,6 @@ public class EmployeeRestController {
             description = "Assign a customer to an employee by their unique ID."
     )
     @DeleteMapping("/{employeeId}/reassignAndDelete")
-    // POST /employees/1/reassignAndDelete?newEmployeeId=2
     public ResponseEntity<String> reassignAndDeleteEmployee(
             @PathVariable Long employeeId,
             @RequestParam Long newEmployeeId) {

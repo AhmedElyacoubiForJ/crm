@@ -37,8 +37,8 @@ class EmployeeServiceIntegrationTest {
 
     private Employee oldEmployee;
     private Employee newEmployee;
-    private Customer customer1;
-    private Customer customer2;
+    private Customer customerA;
+    private Customer customerB;
 
     @BeforeEach
     void setUp() {
@@ -46,8 +46,8 @@ class EmployeeServiceIntegrationTest {
         oldEmployee = employeeRepository.save(TestDataUtil.createEmployeeA());
         newEmployee = employeeRepository.save(TestDataUtil.createStandardEmployee());
 
-        customer1 = customerService.createCustomer(TestDataUtil.createCustomerA(oldEmployee));
-        customer2 = customerService.createCustomer(TestDataUtil.createCustomerB(oldEmployee));
+        customerA = customerService.createCustomer(TestDataUtil.createCustomerA(oldEmployee));
+        customerB = customerService.createCustomer(TestDataUtil.createCustomerB(oldEmployee));
     }
 
     @Test
