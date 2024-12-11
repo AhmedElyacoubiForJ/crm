@@ -4,6 +4,7 @@ import edu.yacoubi.crm.model.Employee;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             String department,
             Pageable pageable
     );
+    @Query("SELECT distinct e.department FROM Employee e")
+    Optional<List<String>> findAllDepartments();
 }

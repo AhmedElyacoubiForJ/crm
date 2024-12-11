@@ -31,4 +31,6 @@ public interface IEmployeeService {
     void deleteEmployee(Long employeeId, Long newEmployeeId);
 
     void assignCustomerToEmployee(Long customerId, Long employeeId);
+
+    Optional<List<String>> getAllDepartments();
 }

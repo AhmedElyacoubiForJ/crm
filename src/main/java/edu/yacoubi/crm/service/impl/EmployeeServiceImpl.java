@@ -172,6 +172,12 @@ public class EmployeeServiceImpl implements IEmployeeService {
         customerService.assignCustomerToEmployee(customerId, employeeId); // Delegation an CustomerService
     }
 
+    @Override
+    public Optional<List<String>> getAllDepartments() {
+        log.info("EmployeeServiceImpl::getAllDepartments");
+        return employeeRepository.findAllDepartments();
+    }
+
     private void reassignCustomers(Long employeeId, Long newEmployeeId) {
         log.info("Reassigning customer ID: {} to new employee ID: {}", employeeId, newEmployeeId);
 

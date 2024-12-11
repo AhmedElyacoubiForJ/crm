@@ -88,6 +88,24 @@ class EmployeeRepositoryUnitTest {
         assertEquals(1, byFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase.getTotalPages());
         assertEquals(1, byFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase.getContent().size());
         assertTrue(byFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase.getContent().contains(employeeA));
+    }
 
+    @Test
+    public void itShouldReturnAllDepartments() {
+        // Given
+        Employee employeeA = TestDataUtil.createEmployeeA();
+        employeeA.setDepartment("Sales");
+        Employee employeeB = TestDataUtil.createEmployeeB();
+        employeeB.setDepartment("Marketing");
+        underTest.saveAll(List.of(employeeA, employeeB));
+
+        // When
+        Optional<List<String>> allDepartments = underTest.findAllDepartments();
+
+        // Then
+        assertTrue(allDepartments.isPresent());
+        assertEquals(2, allDepartments.get().size());
+        assertTrue(allDepartments.get().contains("Sales"));
+        assertTrue(allDepartments.get().contains("Marketing"));
     }
 }

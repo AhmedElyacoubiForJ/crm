@@ -18,6 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 import static edu.yacoubi.crm.util.ValueMapper.*;
 
 @RestController
@@ -89,7 +92,6 @@ public class EmployeeRestController {
         log.debug("Response details: {}", jsonAsString(response));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
 
     @Operation(
@@ -266,5 +268,15 @@ public class EmployeeRestController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
+    }
+
+    // get all departments
+    @GetMapping("/departments")
+    public ResponseEntity<List<String>> getAllDepartments() {
+        Optional<List<String>> allDepartments = employeeService.getAllDepartments();
+
+        return ResponseEntity.ok(allDepartments.get());
+
+
     }
 }
