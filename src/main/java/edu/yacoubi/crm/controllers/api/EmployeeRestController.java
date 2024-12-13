@@ -270,13 +270,24 @@ public class EmployeeRestController {
         }
     }
 
-    // get all departments
+    @Operation(
+            summary = "Get all departments",
+            description = "Get all departments in the CRM system."
+    )
     @GetMapping("/departments")
-    public ResponseEntity<List<String>> getAllDepartments() {
+    public ResponseEntity<APIResponse<List<String>>> getAllDepartments() {
+        log.info("EmployeeRestController::getAllDepartments request");
+
         Optional<List<String>> allDepartments = employeeService.getAllDepartments();
 
-        return ResponseEntity.ok(allDepartments.get());
+        APIResponse<List<String>> response = APIResponse
+                .<List<String>>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .data(allDepartments.get())
+                .build();
 
-
+        log.info("EmployeeRestController::getAllDepartments response {}", jsonAsString(response));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

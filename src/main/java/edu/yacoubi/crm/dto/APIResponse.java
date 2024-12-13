@@ -17,6 +17,6 @@ public class APIResponse<T> {
     private String status;
     private int statusCode;
     private String message;
-    private List<ErrorDTO> errors;
+    private List<ValidationError> errors;
     private T data;
 }
