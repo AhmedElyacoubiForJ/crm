@@ -32,29 +32,6 @@ public class EmployeeRestController {
 
     private final IEmployeeService employeeService;
 
-//    @Operation(
-//            summary = "Get all employees",
-//            description = "Retrieve a list of all employees in the CRM system."
-//    )
-//    @GetMapping
-//    public ResponseEntity<APIResponse<List<EmployeeResponseDTO>>> getAllEmployees() {
-//        log.info("EmployeeRestController::getAllEmployees request");
-//
-//        List<EmployeeResponseDTO> employeeResponseDTOList = employeeService.getAllEmployees().stream()
-//                .map(ValueMapper::convertToResponseDTO)
-//                .collect(Collectors.toList());
-//
-//        APIResponse<List<EmployeeResponseDTO>> response = APIResponse
-//                .<List<EmployeeResponseDTO>>builder()
-//                .status("success")
-//                .statusCode(HttpStatus.OK.value())
-//                .data(employeeResponseDTOList)
-//                .build();
-//
-//        log.info("EmployeeRestController::getAllEmployees response {}", jsonAsString(response));
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
-
     @Operation(
             summary = "Get all employees",
             description = "Retrieve a list of all employees in the CRM system with pagination and optional search."
@@ -167,43 +144,6 @@ public class EmployeeRestController {
         log.info("EmployeeRestController::updateEmployee response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
-//    @Operation(
-//            summary = "Partial update employee",
-//            description = "Partial update of an existing employee by their unique ID."
-//    )
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<APIResponse<EmployeeResponseDTO>> patchEmployee(
-//            @PathVariable Long id,
-//            @RequestBody EmployeePatchDTO employeePatchDTO) {
-//        log.info("EmployeeRestController::patchEmployee request id {}, employee {}", id, jsonAsString(employeePatchDTO));
-//
-//        Employee existingEmployee = employeeService.getEmployeeById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
-//
-//        if (employeePatchDTO.getFirstName() != null) {
-//            existingEmployee.setFirstName(employeePatchDTO.getFirstName());
-//        }
-//        if (employeePatchDTO.getLastName() != null) {
-//            existingEmployee.setLastName(employeePatchDTO.getLastName());
-//        }
-//        if (employeePatchDTO.getEmail() != null) {
-//            existingEmployee.setEmail(employeePatchDTO.getEmail());
-//        }
-//        if (employeePatchDTO.getDepartment() != null) {
-//            existingEmployee.setDepartment(employeePatchDTO.getDepartment());
-//        }
-//
-//        Employee updatedEmployee = employeeService.updateEmployee(existingEmployee);
-//        EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(updatedEmployee);
-//        APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
-//                .status("success")
-//                .statusCode(HttpStatus.OK.value())
-//                .data(employeeResponseDTO)
-//                .build();
-//
-//        log.info("EmployeeRestController::patchEmployee response {}", jsonAsString(response));
-//        return ResponseEntity.ok(response);
-//    }
 
     @Operation(
             summary = "Partial update employee",
@@ -229,30 +169,6 @@ public class EmployeeRestController {
         log.info("EmployeeRestController::patchEmployee response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
-
-//    @Operation(
-//            summary = "Delete employee",
-//            description = "Delete an existing employee by their unique ID."
-//    )
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<APIResponse<Void>> deleteEmployee(@PathVariable Long id) {
-//        log.info("EmployeeRestController::deleteEmployee request id {}", id);
-//
-//        employeeService.getEmployeeById(id).orElseThrow(
-//                () -> new ResourceNotFoundException("Employee not found with ID: " + id)
-//        );
-//
-//        employeeService.deleteEmployee(id);
-//
-//        APIResponse<Void> response = APIResponse.<Void>builder()
-//               .status("success")
-//               .statusCode(HttpStatus.NO_CONTENT.value())
-//               .build();
-//
-//        log.info("EmployeeRestController::deleteEmployee response {}", jsonAsString(response));
-//        return ResponseEntity.ok(response);
-//    }
-
 
     @Operation(
             summary = "Assign customer to new employee and delete old employee",
