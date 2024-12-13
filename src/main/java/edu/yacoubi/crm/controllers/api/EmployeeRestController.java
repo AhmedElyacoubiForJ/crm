@@ -140,7 +140,6 @@ public class EmployeeRestController {
                 .data(employeeResponseDTO)
                 .build();
 
-
         log.info("EmployeeRestController::updateEmployee response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
@@ -175,16 +174,27 @@ public class EmployeeRestController {
             description = "Assign a customer to an employee by their unique ID."
     )
     @DeleteMapping("/{employeeId}/reassignAndDelete")
-    public ResponseEntity<String> reassignAndDeleteEmployee(
+    public ResponseEntity<APIResponse<Void>> reassignAndDeleteEmployee(
             @PathVariable Long employeeId,
             @RequestParam Long newEmployeeId) {
-        try {
-            employeeService.deleteEmployee(employeeId, newEmployeeId);
-            return ResponseEntity.ok("Employee customers reassigned and deleted successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        log.info(
+                "EmployeeRestController::reassignAndDeleteEmployee request employeeId {}, newEmployeeId {}",
+                employeeId,
+                newEmployeeId
+        );
+
+        employeeService.deleteEmployee(employeeId, newEmployeeId);
+
+        APIResponse<Void> response = APIResponse.<Void>builder()
+                .status("success")
+                .statusCode(HttpStatus.OK.value())
+                .message("Employee customers reassigned and deleted successfully.")
+                .build();
+
+        log.info("EmployeeRestController::reassignAndDeleteEmployee response {}", jsonAsString(response));
+        return ResponseEntity.ok(response);
     }
+
 
     @Operation(
             summary = "Get all departments",
