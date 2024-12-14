@@ -70,7 +70,6 @@ public class EmployeeRestController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
     @Operation(
             summary = "Get employee by ID",
             description = "Retrieve an employee by their unique ID."
@@ -194,7 +193,6 @@ public class EmployeeRestController {
         log.info("EmployeeRestController::reassignAndDeleteEmployee response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
-
 
     @Operation(
             summary = "Get all departments",
