@@ -169,7 +169,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public void assignCustomerToEmployee(Long customerId, Long employeeId) {
-        customerService.assignCustomerToEmployee(customerId, employeeId); // Delegation an CustomerService
+        customerService.reassignCustomerToEmployee(customerId, employeeId); // Delegation an CustomerService
     }
 
     @Override
@@ -178,12 +178,12 @@ public class EmployeeServiceImpl implements IEmployeeService {
         return employeeRepository.findAllDepartments();
     }
 
-    private void reassignCustomers(Long employeeId, Long newEmployeeId) {
-        log.info("Reassigning customer ID: {} to new employee ID: {}", employeeId, newEmployeeId);
+    private void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
+        log.info("Reassigning customer ID: {} to new employee ID: {}", oldEmployeeId, newEmployeeId);
 
-        List<Customer> customers = customerService.getCustomersByEmployeeId(employeeId);
+        List<Customer> customers = customerService.getCustomersByEmployeeId(oldEmployeeId);
         for (Customer customer : customers) {
-            customerService.assignCustomerToEmployee(customer.getId(), newEmployeeId);
+            customerService.reassignCustomerToEmployee(customer.getId(), newEmployeeId);
         }
     }
 }

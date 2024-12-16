@@ -161,13 +161,13 @@ public class EmployeeServiceImpl implements IEmployeeService {
         for (Customer customer : customers) {
             // Implementiere Logik zur neuen Zuweisung
             Long newEmployeeId = 1L; // Logik zur Bestimmung des neuen Mitarbeiters
-            customerService.assignCustomerToEmployee(customer.getId(), newEmployeeId);
+            customerService.reassignCustomerToEmployee(customer.getId(), newEmployeeId);
         }
     }
 
     @Override
     public void assignCustomerToEmployee(Long customerId, Long employeeId) {
-        customerService.assignCustomerToEmployee(customerId, employeeId);
+        customerService.reassignCustomerToEmployee(customerId, employeeId);
     }
 }
 ```

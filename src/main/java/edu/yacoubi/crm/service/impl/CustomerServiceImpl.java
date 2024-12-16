@@ -8,7 +8,6 @@ import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.service.ICustomerService;
-import edu.yacoubi.crm.service.IInactiveEmployeeService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaUpdate;
@@ -28,9 +27,7 @@ import java.util.Optional;
 public class CustomerServiceImpl implements ICustomerService {
 
     private final CustomerRepository customerRepository;
-
     private final EmployeeRepository employeeRepository;
-
     private final EntityManager entityManager;
 
     @Override
@@ -172,7 +169,7 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public void assignCustomerToEmployee(Long customerId, Long employeeId) {
+    public void reassignCustomerToEmployee(Long customerId, Long employeeId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(
                 () -> new ResourceNotFoundException("Customer not found with ID: " + customerId)
         );
@@ -196,6 +193,15 @@ public class CustomerServiceImpl implements ICustomerService {
         if (!customerRepository.existsById(id)) {
             log.warn("Customer not found with ID: {}", id);
             throw new ResourceNotFoundException("Customer not found with ID: " + id);
+        }
+    }
+
+    @Override
+    public void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
+        log.info("CustomerServiceImpl::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}", oldEmployeeId, newEmployeeId);
+        List<Customer> customers = getCustomersByEmployeeId(oldEmployeeId);
+        for (Customer customer : customers) {
+            reassignCustomerToEmployee(customer.getId(), newEmployeeId);
         }
     }
 }

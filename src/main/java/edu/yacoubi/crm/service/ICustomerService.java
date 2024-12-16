@@ -37,7 +37,9 @@ public interface ICustomerService {
 
     Page<Customer> getCustomersWithPagination(int page, int size);
 
-    void assignCustomerToEmployee(Long customerId, Long employeeId);
+    void reassignCustomerToEmployee(Long customerId, Long employeeId);
 
     List<Customer> getCustomersByEmployeeId(Long employeeId);
+
+    void reassignCustomers(Long oldEmployeeId, Long newEmployeeId);
 }

@@ -66,8 +66,8 @@ class EmployeeServiceImplUnitTest {
         underTest.deleteEmployee(oldEmployeeId, newEmployeeId);
 
         // Then
-        verify(customerService, times(1)).assignCustomerToEmployee(customer1.getId(), newEmployeeId);
-        verify(customerService, times(1)).assignCustomerToEmployee(customer2.getId(), newEmployeeId);
+        verify(customerService, times(1)).reassignCustomerToEmployee(customer1.getId(), newEmployeeId);
+        verify(customerService, times(1)).reassignCustomerToEmployee(customer2.getId(), newEmployeeId);
         verify(inactiveEmployeeService, times(1)).createInactiveEmployee(oldEmployee);
         verify(employeeRepository, times(1)).delete(oldEmployee);
     }

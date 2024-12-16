@@ -163,7 +163,7 @@ class CustomerServiceImplIntegrationTest {
     }
 
     @Test
-    public void itShouldAssignCustomerToEmployee() {
+    public void itShouldReassignCustomerToEmployee() {
         // Given
         Employee employeeA = TestDataUtil.createEmployeeA();
         Employee savedEmployeeA = employeeRepository.save(employeeA);
@@ -174,7 +174,7 @@ class CustomerServiceImplIntegrationTest {
         Employee savedEmployeeB = employeeRepository.save(employeeB);
 
         // When
-        underTest.assignCustomerToEmployee(savedCustomerA.getId(), savedEmployeeB.getId());
+        underTest.reassignCustomerToEmployee(savedCustomerA.getId(), savedEmployeeB.getId());
 
         // Then
         Customer foundCustomer = underTest.getCustomerById(savedCustomerA.getId()).orElseThrow(

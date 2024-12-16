@@ -1,14 +1,26 @@
-DROP TABLE IF EXISTS note;
-DROP TABLE IF EXISTS user_role;
-DROP TABLE IF EXISTS roles;
-DROP TABLE IF EXISTS user_customer;
-DROP TABLE IF EXISTS user_employee;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS customer;
-DROP TABLE IF EXISTS employee;
+drop table IF EXISTS note;
+drop table IF EXISTS user_role;
+drop table IF EXISTS roles;
+drop table IF EXISTS user_customer;
+drop table IF EXISTS user_employee;
+drop table IF EXISTS users;
+drop table IF EXISTS customer;
+drop table IF EXISTS employee;
+drop table IF EXISTS inactive_employee;
+
+--
+
+Create Table inactive_employee (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(100) UNIQUE,
+    department VARCHAR(50),
+    original_employee_id INTEGER
+);
 
 -- Create Employee Table
-CREATE TABLE employee (
+create TABLE employee (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
@@ -17,7 +29,7 @@ CREATE TABLE employee (
 );
 
 -- Create Customer Table
-CREATE TABLE customer (
+create TABLE customer (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
@@ -30,7 +42,7 @@ CREATE TABLE customer (
 );
 
 -- Create Note Table
-CREATE TABLE note (
+create TABLE note (
     id SERIAL PRIMARY KEY,
     interaction_type VARCHAR(50),
     content TEXT,
@@ -39,7 +51,7 @@ CREATE TABLE note (
     FOREIGN KEY (customer_id) REFERENCES customer(id)
 );
 
-CREATE TABLE users (
+create TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
@@ -48,24 +60,24 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE roles (
+create TABLE roles (
     id SERIAL PRIMARY KEY,
     role_name VARCHAR(50) UNIQUE NOT NULL
 );
 
-CREATE TABLE user_role (
+create TABLE user_role (
     user_id BIGINT REFERENCES users(id),
     role_id BIGINT REFERENCES roles(id),
     PRIMARY KEY (user_id, role_id)
 );
 
-CREATE TABLE user_customer (
+create TABLE user_customer (
     user_id BIGINT REFERENCES users(id),
     customer_id BIGINT REFERENCES customer(id),
     PRIMARY KEY (user_id, customer_id)
 );
 
-CREATE TABLE user_employee (
+create TABLE user_employee (
     user_id BIGINT REFERENCES users(id),
     employee_id BIGINT REFERENCES employee(id),
     PRIMARY KEY (user_id, employee_id)

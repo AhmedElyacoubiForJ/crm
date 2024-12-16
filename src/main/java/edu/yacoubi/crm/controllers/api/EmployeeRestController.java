@@ -6,6 +6,7 @@ import edu.yacoubi.crm.dto.employee.EmployeeRequestDTO;
 import edu.yacoubi.crm.dto.employee.EmployeeResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Employee;
+import edu.yacoubi.crm.service.IEmployeeCustomerOrchestratorService;
 import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.util.ValueMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +32,7 @@ public class EmployeeRestController {
     private static final Logger log = LoggerFactory.getLogger(EmployeeRestController.class);
 
     private final IEmployeeService employeeService;
+    private final IEmployeeCustomerOrchestratorService orchestratorService;
 
     @Operation(
             summary = "Get all employees",
@@ -182,7 +184,8 @@ public class EmployeeRestController {
                 newEmployeeId
         );
 
-        employeeService.deleteEmployee(employeeId, newEmployeeId);
+        orchestratorService.deleteEmployeeAndReassignCustomers(employeeId, newEmployeeId);
+        //employeeService.deleteEmployee(employeeId, newEmployeeId);
 
         APIResponse<Void> response = APIResponse.<Void>builder()
                 .status("success")

@@ -172,7 +172,7 @@ class CustomerServiceImplUnitTest {
     }
 
     @Test
-    public void itShouldAssignCustomerToEmployee() {
+    public void itShouldReassignCustomerToEmployee() {
         // Given
         Long customerId = 1L;
         Long employeeId = 2L;
@@ -184,7 +184,7 @@ class CustomerServiceImplUnitTest {
         when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employeeB));
 
         // When
-        underTest.assignCustomerToEmployee(customerId, employeeId);
+        underTest.reassignCustomerToEmployee(customerId, employeeId);
 
         // Then
         verify(customerRepository, times(1)).findById(customerId);
