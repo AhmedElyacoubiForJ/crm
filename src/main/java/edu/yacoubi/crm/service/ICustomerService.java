@@ -21,8 +21,6 @@ public interface ICustomerService {
 
     void ensureCustomerExists(Long id);
 
-    List<Customer> getAllCustomers();
-
     List<Customer> getCustomersByExample(CustomerRequestDTO customerDTO);
 
     Customer updateCustomerByExample(CustomerRequestDTO customerExample, Long id);
@@ -37,9 +35,5 @@ public interface ICustomerService {
 
     Page<Customer> getCustomersWithPagination(int page, int size);
 
-    //void reassignCustomerToEmployee(Long customerId, Long employeeId);
-
     List<Customer> getCustomersByEmployeeId(Long employeeId);
-
-    //void reassignCustomers(Long oldEmployeeId, Long newEmployeeId);
 }

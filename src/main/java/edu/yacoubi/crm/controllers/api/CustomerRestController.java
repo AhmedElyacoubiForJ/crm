@@ -33,29 +33,6 @@ public class CustomerRestController {
     private final ICustomerService customerService;
     private final IEmployeeService employeeService;
 
-//    @Operation(
-//            summary = "Get all customers",
-//            description = "Retrieve a list of all customers in the CRM system."
-//    )
-//    @GetMapping
-//    public ResponseEntity<APIResponse<List<CustomerResponseDTO>>> getAllCustomers() {
-//        log.info("CustomerRestController::getAllCustomers");
-//
-//        List<CustomerResponseDTO> customerResponseDTOList = customerService.getAllCustomers().stream()
-//                .map(ValueMapper::convertToResponseDTO)
-//                .collect(Collectors.toList());
-//
-//        APIResponse<List<CustomerResponseDTO>> response = APIResponse
-//                .<List<CustomerResponseDTO>>builder()
-//                .status("success")
-//                .statusCode(HttpStatus.OK.value())
-//                .data(customerResponseDTOList)
-//                .build();
-//
-//        log.info("CustomerRestController::getAllCustomers response {}", jsonAsString(response));
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
-
     @Operation(
             summary = "Get all customers",
             description = "Retrieve a list of all customers in the CRM system with pagination and optional search."

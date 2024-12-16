@@ -2,12 +2,9 @@ package edu.yacoubi.crm.service.impl;
 
 import edu.yacoubi.crm.dto.employee.EmployeePatchDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
-import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.EmployeeRepository;
-import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
-import edu.yacoubi.crm.service.IInactiveEmployeeService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaUpdate;
@@ -29,11 +26,6 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements IEmployeeService {
 
     private final EmployeeRepository employeeRepository;
-
-    private final IInactiveEmployeeService inactiveEmployeeService;
-
-    private final ICustomerService customerService;
-
     private final EntityManager entityManager;
 
     @Override
@@ -112,23 +104,9 @@ public class EmployeeServiceImpl implements IEmployeeService {
     }
 
     @Override
-    public Optional<List<Employee>> getEmployeesByFirstName(String fNameString) {
-        log.info("EmployeeServiceImpl::getEmployeesByNameLike searchString: {}", fNameString);
-        return employeeRepository.findByFirstNameIgnoreCaseContaining(fNameString);
-    }
-
-    @Override
-    public Optional<List<Employee>> getEmployeesByEmail(String emailString) {
-        log.info("EmployeeServiceImpl::getEmployeesByEmailLike emailString: {}", emailString);
-        return employeeRepository.findByEmailIgnoreCaseContaining(emailString);
-    }
-
-    @Override
-    public Page<Employee> getEmployeesByFirstNameOrDepartment(
-            String searchString,
-            int page,
-            int size) {
+    public Page<Employee> getEmployeesByFirstNameOrDepartment(String searchString, int page, int size) {
         log.info("EmployeeServiceImpl::searchByFirstNameOrDepartment searchString: {}, page: {}, size: {}", searchString, page, size);
+
         Pageable pageable = PageRequest.of(page, size);
 
         return employeeRepository.findByFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase(
@@ -138,53 +116,10 @@ public class EmployeeServiceImpl implements IEmployeeService {
         );
     }
 
-//    @Override
-//    public void deleteEmployee(Long employeeId, Long newEmployeeId) {
-//        log.info("EmployeeServiceImpl::reassignCustomersAndDeleteEmployee employeeId: {}, newEmployeeId: {}", employeeId, newEmployeeId);
-//
-//        Employee oldEmployee = employeeRepository.findById(employeeId).orElseThrow(
-//                () -> {
-//                    log.error("Employee not found with ID: {}", employeeId);
-//                    return new ResourceNotFoundException("Employee not found with ID: " + employeeId);
-//                }
-//        );
-//        Employee newEmployee = employeeRepository.findById(newEmployeeId).orElseThrow(
-//                () -> {
-//                    log.error("Employee not found with ID: {}", newEmployeeId);
-//                    return new IllegalArgumentException("Employee not found with ID: " + newEmployeeId);
-//                }
-//        );
-//
-//        // Kunden neu zuweisen
-//        reassignCustomers(oldEmployee.getId(), newEmployee.getId());
-//
-//        // Archivierung des Mitarbeiters
-//        inactiveEmployeeService.createInactiveEmployee(oldEmployee);
-//
-//        // Löschen des Mitarbeiters
-//        employeeRepository.delete(oldEmployee);
-//
-//        log.info("Employee deleted and archived with ID: {}", employeeId);
-//    }
-
-//    @Override
-//    public void assignCustomerToEmployee(Long customerId, Long employeeId) {
-//        customerService.reassignCustomerToEmployee(customerId, employeeId); // Delegation an CustomerService
-//    }
-
     @Override
     public Optional<List<String>> getAllDepartments() {
         log.info("EmployeeServiceImpl::getAllDepartments");
         return employeeRepository.findAllDepartments();
     }
-
-//    private void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
-//        log.info("Reassigning customer ID: {} to new employee ID: {}", oldEmployeeId, newEmployeeId);
-//
-//        List<Customer> customers = customerService.getCustomersByEmployeeId(oldEmployeeId);
-//        for (Customer customer : customers) {
-//            customerService.reassignCustomerToEmployee(customer.getId(), newEmployeeId);
-//        }
-//    }
 }
 

@@ -22,15 +22,7 @@ public interface IEmployeeService {
 
     void partialUpdateEmployee(Long id, EmployeePatchDTO employeePatchDTO);
 
-    Optional<List<Employee>> getEmployeesByFirstName(String searchString);
-
-    Optional<List<Employee>> getEmployeesByEmail(String searchString);
-
     Page<Employee> getEmployeesByFirstNameOrDepartment(String search, int page, int size);
-
-    //void deleteEmployee(Long employeeId, Long newEmployeeId);
-
-    //void assignCustomerToEmployee(Long customerId, Long employeeId);
 
     Optional<List<String>> getAllDepartments();
 }
