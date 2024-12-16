@@ -168,19 +168,20 @@ public class CustomerServiceImpl implements ICustomerService {
         return customerRepository.findAll(pageable);
     }
 
-    @Override
-    public void reassignCustomerToEmployee(Long customerId, Long employeeId) {
-        Customer customer = customerRepository.findById(customerId).orElseThrow(
-                () -> new ResourceNotFoundException("Customer not found with ID: " + customerId)
-        );
-
-        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
-                () -> new ResourceNotFoundException("Employee not found with ID: " + employeeId)
-        );
-
-        customer.setEmployee(employee);
-        customerRepository.save(customer);
-    }
+//    @Override
+//    @Deprecated(since = "Use reassignCustomerToEmployee from IEmployeeCustomerOrchestratorService")
+//    public void reassignCustomerToEmployee(Long customerId, Long employeeId) {
+//        Customer customer = customerRepository.findById(customerId).orElseThrow(
+//                () -> new ResourceNotFoundException("Customer not found with ID: " + customerId)
+//        );
+//
+//        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+//                () -> new ResourceNotFoundException("Employee not found with ID: " + employeeId)
+//        );
+//
+//        customer.setEmployee(employee);
+//        customerRepository.save(customer);
+//    }
 
     @Override
     public List<Customer> getCustomersByEmployeeId(Long employeeId) {
@@ -196,12 +197,12 @@ public class CustomerServiceImpl implements ICustomerService {
         }
     }
 
-    @Override
-    public void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
-        log.info("CustomerServiceImpl::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}", oldEmployeeId, newEmployeeId);
-        List<Customer> customers = getCustomersByEmployeeId(oldEmployeeId);
-        for (Customer customer : customers) {
-            reassignCustomerToEmployee(customer.getId(), newEmployeeId);
-        }
-    }
+//    @Override
+//    public void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
+//        log.info("CustomerServiceImpl::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}", oldEmployeeId, newEmployeeId);
+//        List<Customer> customers = getCustomersByEmployeeId(oldEmployeeId);
+//        for (Customer customer : customers) {
+//            reassignCustomerToEmployee(customer.getId(), newEmployeeId);
+//        }
+//    }
 }

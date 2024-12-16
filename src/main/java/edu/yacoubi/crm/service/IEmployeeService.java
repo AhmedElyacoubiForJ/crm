@@ -28,9 +28,9 @@ public interface IEmployeeService {
 
     Page<Employee> getEmployeesByFirstNameOrDepartment(String search, int page, int size);
 
-    void deleteEmployee(Long employeeId, Long newEmployeeId);
+    //void deleteEmployee(Long employeeId, Long newEmployeeId);
 
-    void assignCustomerToEmployee(Long customerId, Long employeeId);
+    //void assignCustomerToEmployee(Long customerId, Long employeeId);
 
     Optional<List<String>> getAllDepartments();
 }

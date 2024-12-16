@@ -162,24 +162,24 @@ class CustomerServiceImplIntegrationTest {
         assertTrue(foundCustomers.contains(customerB));
     }
 
-    @Test
-    public void itShouldReassignCustomerToEmployee() {
-        // Given
-        Employee employeeA = TestDataUtil.createEmployeeA();
-        Employee savedEmployeeA = employeeRepository.save(employeeA);
-        Customer customerA = TestDataUtil.createCustomerA(savedEmployeeA);
-        Customer savedCustomerA = underTest.createCustomer(customerA);
-
-        Employee employeeB = TestDataUtil.createEmployeeB();
-        Employee savedEmployeeB = employeeRepository.save(employeeB);
-
-        // When
-        underTest.reassignCustomerToEmployee(savedCustomerA.getId(), savedEmployeeB.getId());
-
-        // Then
-        Customer foundCustomer = underTest.getCustomerById(savedCustomerA.getId()).orElseThrow(
-                () -> new AssertionError("Customer not found!")
-        );
-        assertEquals(savedEmployeeB.getId(), foundCustomer.getEmployee().getId());
-    }
+//    @Test
+//    public void itShouldReassignCustomerToEmployee() {
+//        // Given
+//        Employee employeeA = TestDataUtil.createEmployeeA();
+//        Employee savedEmployeeA = employeeRepository.save(employeeA);
+//        Customer customerA = TestDataUtil.createCustomerA(savedEmployeeA);
+//        Customer savedCustomerA = underTest.createCustomer(customerA);
+//
+//        Employee employeeB = TestDataUtil.createEmployeeB();
+//        Employee savedEmployeeB = employeeRepository.save(employeeB);
+//
+//        // When
+//        underTest.reassignCustomerToEmployee(savedCustomerA.getId(), savedEmployeeB.getId());
+//
+//        // Then
+//        Customer foundCustomer = underTest.getCustomerById(savedCustomerA.getId()).orElseThrow(
+//                () -> new AssertionError("Customer not found!")
+//        );
+//        assertEquals(savedEmployeeB.getId(), foundCustomer.getEmployee().getId());
+//    }
 }

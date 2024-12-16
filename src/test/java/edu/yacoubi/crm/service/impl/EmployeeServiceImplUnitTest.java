@@ -43,32 +43,32 @@ class EmployeeServiceImplUnitTest {
         newEmployee.setId(2L);
     }
 
-    @Test
-    void itShouldDeleteEmployee() {
-        // Given
-        Long oldEmployeeId = 1L;
-        Long newEmployeeId = 2L;
-
-        Customer customer1 = new Customer();
-        customer1.setId(101L);
-        customer1.setEmployee(oldEmployee);
-
-        Customer customer2 = new Customer();
-        customer2.setId(102L);
-        customer2.setEmployee(oldEmployee);
-
-        when(employeeRepository.findById(oldEmployeeId)).thenReturn(Optional.of(oldEmployee));
-        when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.of(newEmployee));
-        when(customerService.getCustomersByEmployeeId(oldEmployeeId))
-                .thenReturn(Arrays.asList(customer1, customer2));
-
-        // When
-        underTest.deleteEmployee(oldEmployeeId, newEmployeeId);
-
-        // Then
-        verify(customerService, times(1)).reassignCustomerToEmployee(customer1.getId(), newEmployeeId);
-        verify(customerService, times(1)).reassignCustomerToEmployee(customer2.getId(), newEmployeeId);
-        verify(inactiveEmployeeService, times(1)).createInactiveEmployee(oldEmployee);
-        verify(employeeRepository, times(1)).delete(oldEmployee);
-    }
+//    @Test
+//    void itShouldDeleteEmployee() {
+//        // Given
+//        Long oldEmployeeId = 1L;
+//        Long newEmployeeId = 2L;
+//
+//        Customer customer1 = new Customer();
+//        customer1.setId(101L);
+//        customer1.setEmployee(oldEmployee);
+//
+//        Customer customer2 = new Customer();
+//        customer2.setId(102L);
+//        customer2.setEmployee(oldEmployee);
+//
+//        when(employeeRepository.findById(oldEmployeeId)).thenReturn(Optional.of(oldEmployee));
+//        when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.of(newEmployee));
+//        when(customerService.getCustomersByEmployeeId(oldEmployeeId))
+//                .thenReturn(Arrays.asList(customer1, customer2));
+//
+//        // When
+//        underTest.deleteEmployee(oldEmployeeId, newEmployeeId);
+//
+//        // Then
+//        verify(customerService, times(1)).reassignCustomerToEmployee(customer1.getId(), newEmployeeId);
+//        verify(customerService, times(1)).reassignCustomerToEmployee(customer2.getId(), newEmployeeId);
+//        verify(inactiveEmployeeService, times(1)).createInactiveEmployee(oldEmployee);
+//        verify(employeeRepository, times(1)).delete(oldEmployee);
+//    }
 }

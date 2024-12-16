@@ -171,25 +171,25 @@ class CustomerServiceImplUnitTest {
         verify(customerRepository, times(1)).findByEmployeeId(employeeId);
     }
 
-    @Test
-    public void itShouldReassignCustomerToEmployee() {
-        // Given
-        Long customerId = 1L;
-        Long employeeId = 2L;
-        Customer customer = TestDataUtil.createCustomerA(null);
-        customer.setId(customerId);
-        Employee employeeB = TestDataUtil.createEmployeeB();
-        employeeB.setId(employeeId);
-        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
-        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employeeB));
-
-        // When
-        underTest.reassignCustomerToEmployee(customerId, employeeId);
-
-        // Then
-        verify(customerRepository, times(1)).findById(customerId);
-        verify(employeeRepository, times(1)).findById(employeeId);
-        verify(customerRepository, times(1)).save(customer);
-        assertEquals(employeeB, customer.getEmployee());
-    }
+//    @Test
+//    public void itShouldReassignCustomerToEmployee() {
+//        // Given
+//        Long customerId = 1L;
+//        Long employeeId = 2L;
+//        Customer customer = TestDataUtil.createCustomerA(null);
+//        customer.setId(customerId);
+//        Employee employeeB = TestDataUtil.createEmployeeB();
+//        employeeB.setId(employeeId);
+//        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
+//        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employeeB));
+//
+//        // When
+//        underTest.reassignCustomerToEmployee(customerId, employeeId);
+//
+//        // Then
+//        verify(customerRepository, times(1)).findById(customerId);
+//        verify(employeeRepository, times(1)).findById(employeeId);
+//        verify(customerRepository, times(1)).save(customer);
+//        assertEquals(employeeB, customer.getEmployee());
+//    }
 }

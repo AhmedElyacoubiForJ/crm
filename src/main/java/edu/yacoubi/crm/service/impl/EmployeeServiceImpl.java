@@ -138,39 +138,39 @@ public class EmployeeServiceImpl implements IEmployeeService {
         );
     }
 
-    @Override
-    public void deleteEmployee(Long employeeId, Long newEmployeeId) {
-        log.info("EmployeeServiceImpl::reassignCustomersAndDeleteEmployee employeeId: {}, newEmployeeId: {}", employeeId, newEmployeeId);
+//    @Override
+//    public void deleteEmployee(Long employeeId, Long newEmployeeId) {
+//        log.info("EmployeeServiceImpl::reassignCustomersAndDeleteEmployee employeeId: {}, newEmployeeId: {}", employeeId, newEmployeeId);
+//
+//        Employee oldEmployee = employeeRepository.findById(employeeId).orElseThrow(
+//                () -> {
+//                    log.error("Employee not found with ID: {}", employeeId);
+//                    return new ResourceNotFoundException("Employee not found with ID: " + employeeId);
+//                }
+//        );
+//        Employee newEmployee = employeeRepository.findById(newEmployeeId).orElseThrow(
+//                () -> {
+//                    log.error("Employee not found with ID: {}", newEmployeeId);
+//                    return new IllegalArgumentException("Employee not found with ID: " + newEmployeeId);
+//                }
+//        );
+//
+//        // Kunden neu zuweisen
+//        reassignCustomers(oldEmployee.getId(), newEmployee.getId());
+//
+//        // Archivierung des Mitarbeiters
+//        inactiveEmployeeService.createInactiveEmployee(oldEmployee);
+//
+//        // Löschen des Mitarbeiters
+//        employeeRepository.delete(oldEmployee);
+//
+//        log.info("Employee deleted and archived with ID: {}", employeeId);
+//    }
 
-        Employee oldEmployee = employeeRepository.findById(employeeId).orElseThrow(
-                () -> {
-                    log.error("Employee not found with ID: {}", employeeId);
-                    return new ResourceNotFoundException("Employee not found with ID: " + employeeId);
-                }
-        );
-        Employee newEmployee = employeeRepository.findById(newEmployeeId).orElseThrow(
-                () -> {
-                    log.error("Employee not found with ID: {}", newEmployeeId);
-                    return new IllegalArgumentException("Employee not found with ID: " + newEmployeeId);
-                }
-        );
-
-        // Kunden neu zuweisen
-        reassignCustomers(oldEmployee.getId(), newEmployee.getId());
-
-        // Archivierung des Mitarbeiters
-        inactiveEmployeeService.createInactiveEmployee(oldEmployee);
-
-        // Löschen des Mitarbeiters
-        employeeRepository.delete(oldEmployee);
-
-        log.info("Employee deleted and archived with ID: {}", employeeId);
-    }
-
-    @Override
-    public void assignCustomerToEmployee(Long customerId, Long employeeId) {
-        customerService.reassignCustomerToEmployee(customerId, employeeId); // Delegation an CustomerService
-    }
+//    @Override
+//    public void assignCustomerToEmployee(Long customerId, Long employeeId) {
+//        customerService.reassignCustomerToEmployee(customerId, employeeId); // Delegation an CustomerService
+//    }
 
     @Override
     public Optional<List<String>> getAllDepartments() {
@@ -178,13 +178,13 @@ public class EmployeeServiceImpl implements IEmployeeService {
         return employeeRepository.findAllDepartments();
     }
 
-    private void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
-        log.info("Reassigning customer ID: {} to new employee ID: {}", oldEmployeeId, newEmployeeId);
-
-        List<Customer> customers = customerService.getCustomersByEmployeeId(oldEmployeeId);
-        for (Customer customer : customers) {
-            customerService.reassignCustomerToEmployee(customer.getId(), newEmployeeId);
-        }
-    }
+//    private void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
+//        log.info("Reassigning customer ID: {} to new employee ID: {}", oldEmployeeId, newEmployeeId);
+//
+//        List<Customer> customers = customerService.getCustomersByEmployeeId(oldEmployeeId);
+//        for (Customer customer : customers) {
+//            customerService.reassignCustomerToEmployee(customer.getId(), newEmployeeId);
+//        }
+//    }
 }
 

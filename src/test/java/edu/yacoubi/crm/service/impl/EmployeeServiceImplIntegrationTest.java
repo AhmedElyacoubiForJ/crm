@@ -50,22 +50,22 @@ class EmployeeServiceIntegrationTest {
         customerB = customerService.createCustomer(TestDataUtil.createCustomerB(oldEmployee));
     }
 
-    @Test
-    void itShouldReassignCustomersAndDeleteEmployee() {
-        // When
-        underTest.deleteEmployee(oldEmployee.getId(), newEmployee.getId());
-
-        // Then
-        // Assert: Überprüfung, dass alle Kunden neu zugewiesen wurden
-        List<Customer> reassignedCustomers = customerService.getCustomersByEmployeeId(newEmployee.getId());
-        assertEquals(2, reassignedCustomers.size());
-        assertEquals(newEmployee, reassignedCustomers.get(0).getEmployee());
-        assertEquals(newEmployee, reassignedCustomers.get(1).getEmployee());
-
-        // Assert: Überprüfung, dass der alte Mitarbeiter gelöscht wurde
-        assertThat(employeeRepository.findById(oldEmployee.getId())).isEmpty();
-        Optional<InactiveEmployee> archivedEmployee = inactiveEmployeeRepository.findByEmail(oldEmployee.getEmail());
-        assertThat(inactiveEmployeeRepository.findByEmail(oldEmployee.getEmail())).isPresent();
-        assertEquals(oldEmployee.getFirstName(), archivedEmployee.get().getFirstName());
-    }
+//    @Test
+//    void itShouldReassignCustomersAndDeleteEmployee() {
+//        // When
+//        underTest.deleteEmployee(oldEmployee.getId(), newEmployee.getId());
+//
+//        // Then
+//        // Assert: Überprüfung, dass alle Kunden neu zugewiesen wurden
+//        List<Customer> reassignedCustomers = customerService.getCustomersByEmployeeId(newEmployee.getId());
+//        assertEquals(2, reassignedCustomers.size());
+//        assertEquals(newEmployee, reassignedCustomers.get(0).getEmployee());
+//        assertEquals(newEmployee, reassignedCustomers.get(1).getEmployee());
+//
+//        // Assert: Überprüfung, dass der alte Mitarbeiter gelöscht wurde
+//        assertThat(employeeRepository.findById(oldEmployee.getId())).isEmpty();
+//        Optional<InactiveEmployee> archivedEmployee = inactiveEmployeeRepository.findByEmail(oldEmployee.getEmail());
+//        assertThat(inactiveEmployeeRepository.findByEmail(oldEmployee.getEmail())).isPresent();
+//        assertEquals(oldEmployee.getFirstName(), archivedEmployee.get().getFirstName());
+//    }
 }
