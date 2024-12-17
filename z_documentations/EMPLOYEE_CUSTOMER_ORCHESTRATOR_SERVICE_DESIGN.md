@@ -42,6 +42,8 @@
 
 ### Interface: IEmployeeCustomerOrchestratorService
 
+<details> <summary>Klicken, um den Code anzuzeigen</summary>
+
 ```java
 package edu.yacoubi.crm.service;
 
@@ -71,8 +73,11 @@ public interface IEmployeeCustomerOrchestratorService {
     void reassignCustomers(Long oldEmployeeId, Long newEmployeeId);
 }
 ```
+</details>
 
 ### Service-Implementierung: EmployeeCustomerOrchestratorServiceImpl
+
+<details> <summary>Klicken, um den Code anzuzeigen</summary>
 
 ```java
 package edu.yacoubi.crm.service.impl;
@@ -90,104 +95,149 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustomerOrchestratorService {
-public static final String EMPLOYEE_NOT_FOUND_WITH_ID = "Employee not found with ID: %d";
-public static final String CUSTOMER_NOT_FOUND_WITH_ID = "Customer not found with ID: %d";
+   public static final String EMPLOYEE_NOT_FOUND_WITH_ID = "Employee not found with ID: %d";
+   public static final String CUSTOMER_NOT_FOUND_WITH_ID = "Customer not found with ID: %d";
 
-    private final EmployeeRepository employeeRepository;
-    private final ICustomerService customerService;
-    private final CustomerRepository customerRepository;
-    private final IInactiveEmployeeService inactiveEmployeeService;
-    private final ValidationService validationService;
+   private final EmployeeRepository employeeRepository;
+   private final ICustomerService customerService;
+   private final CustomerRepository customerRepository;
+   private final IInactiveEmployeeService inactiveEmployeeService;
+   private final ValidationService validationService;
 
-    @Transactional
-    @Override
-    public void deleteEmployeeAndReassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
-        log.info("EmployeeOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers employeeId: {}, newEmployeeId: {}", oldEmployeeId, newEmployeeId);
+   @Transactional
+   @Override
+   public void deleteEmployeeAndReassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
+      Assert.notNull(oldEmployeeId, "Old employee ID must not be null");
+      Assert.notNull(newEmployeeId, "New employee ID must not be null");
 
-        if (oldEmployeeId.equals(newEmployeeId)) {
-            throw new IllegalArgumentException("Old and new employee IDs must be different.");
-        }
+      log.info("EmployeeCustomerOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers employeeId: {}, newEmployeeId: {}",
+              oldEmployeeId,
+              newEmployeeId
+      );
 
-        validationService.validateEmployeeExists(oldEmployeeId);
-        validationService.validateEmployeeExists(newEmployeeId);
+      if (oldEmployeeId.equals(newEmployeeId)) {
+         throw new IllegalArgumentException("Old and new employee IDs must be different.");
+      }
 
-        Employee oldEmployee = employeeRepository.findById(oldEmployeeId).orElseThrow(
-                () -> new ResourceNotFoundException(String.format(EMPLOYEE_NOT_FOUND_WITH_ID, oldEmployeeId))
-        );
-        Employee newEmployee = employeeRepository.findById(newEmployeeId).orElseThrow(
-                () -> new ResourceNotFoundException(String.format(EMPLOYEE_NOT_FOUND_WITH_ID, newEmployeeId))
-        );
+      validationService.validateEmployeeExists(oldEmployeeId);
+      validationService.validateEmployeeExists(newEmployeeId);
 
-        // Kunden neu zuweisen
-        reassignCustomers(oldEmployee.getId(), newEmployee.getId());
+      Employee oldEmployee = employeeRepository.findById(oldEmployeeId).orElseThrow(
+              () -> new ResourceNotFoundException(String.format(EMPLOYEE_NOT_FOUND_WITH_ID, oldEmployeeId))
+      );
+      Employee newEmployee = employeeRepository.findById(newEmployeeId).orElseThrow(
+              () -> new ResourceNotFoundException(String.format(EMPLOYEE_NOT_FOUND_WITH_ID, newEmployeeId))
+      );
 
-        // Archivierung des Mitarbeiters
-        inactiveEmployeeService.createInactiveEmployee(oldEmployee);
+      // Kunden neu zuweisen
+      reassignCustomers(oldEmployee.getId(), newEmployee.getId());
 
-        // Löschen des Mitarbeiters
-        employeeRepository.delete(oldEmployee);
+      // Archivierung des Mitarbeiters
+      inactiveEmployeeService.createInactiveEmployee(oldEmployee);
 
-        log.info("Employee deleted and customers reassigned: oldEmployeeId={}, newEmployeeId={}", oldEmployeeId, newEmployeeId);
-    }
+      // Löschen des Mitarbeiters
+      employeeRepository.delete(oldEmployee);
 
-    @Override
-    public void reassignCustomerToEmployee(Long customerId, Long employeeId) {
-        log.info("EmployeeOrchestratorServiceImpl::reassignCustomerToEmployee customerId: {}, employeeId: {}", customerId, employeeId);
+      log.info("Employee deleted and customers reassigned: oldEmployeeId={}, newEmployeeId={}",
+              oldEmployeeId,
+              newEmployeeId
+      );
+   }
 
-        validationService.validateEmployeeExists(employeeId);
+   @Override
+   public void reassignCustomerToEmployee(Long customerId, Long employeeId) {
+      Assert.notNull(customerId, "Customer ID must not be null");
+      Assert.notNull(employeeId, "Employee ID must not be null");
 
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(CUSTOMER_NOT_FOUND_WITH_ID, customerId)));
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(EMPLOYEE_NOT_FOUND_WITH_ID, employeeId)));
+      log.info("EmployeeOrchestratorServiceImpl::reassignCustomerToEmployee customerId: {}, employeeId: {}",
+              customerId,
+              employeeId
+      );
 
-        customer.setEmployee(employee);
-        customerRepository.save(customer);
+      validationService.validateEmployeeExists(employeeId);
 
-        log.info("Customer reassigned: customerId={}, newEmployeeId={}", customerId, employeeId);
-    }
+      if (customerId.equals(employeeId)) {
+         log.warn("Customer and employee IDs must be different.");
+         return;
+      }
 
-    @Override
-    public void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
-        log.info("EmployeeOrchestratorServiceImpl::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}", oldEmployeeId, newEmployeeId);
+      Customer customer = customerRepository.findById(customerId).orElseThrow(
+              () -> new ResourceNotFoundException(String.format(CUSTOMER_NOT_FOUND_WITH_ID, customerId))
+      );
+      Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+              () -> new ResourceNotFoundException(String.format(EMPLOYEE_NOT_FOUND_WITH_ID, employeeId))
+      );
 
-        if (newEmployeeId.equals(oldEmployeeId)) {
-            log.warn("Old and new employee IDs must be different.");
-            return;
-        }
+      customer.setEmployee(employee);
+      customerRepository.save(customer);
 
-        validationService.validateEmployeeExists(oldEmployeeId);
-        validationService.validateEmployeeExists(newEmployeeId);
+      log.info("Customer reassigned: customerId={}, newEmployeeId={}", customerId, employeeId);
+   }
 
-        List<Customer> customers = customerService.getCustomersByEmployeeId(oldEmployeeId);
+   @Override
+   public void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
+      Assert.notNull(oldEmployeeId, "Old employee ID must not be null");
+      Assert.notNull(newEmployeeId, "New employee ID must not be null");
 
-        if (customers.isEmpty()) {
-            log.warn("No customers found for employee ID: {}", oldEmployeeId);
-            return;
-        }
+      log.info("EmployeeCustomerOrchestratorServiceImpl::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
+              oldEmployeeId,
+              newEmployeeId
+      );
 
-        Employee newEmployee = employeeRepository.findById(newEmployeeId)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(EMPLOYEE_NOT_FOUND_WITH_ID, newEmployeeId)));
+      if (newEmployeeId.equals(oldEmployeeId)) {
+         log.warn("Old and new employee IDs must be different.");
+         return;
+      }
 
-        customers.forEach(customer -> {
-            log.info("Reassigning customer ID: {} to new employee ID: {}", customer.getId(), newEmployeeId);
-            customer.setEmployee(newEmployee);
-        });
+      validationService.validateEmployeeExists(oldEmployeeId);
+      validationService.validateEmployeeExists(newEmployeeId);
 
-        customerRepository.saveAll(customers);
-        log.info("Customers reassigned successfully: oldEmployeeId={}, newEmployeeId={}", oldEmployeeId, newEmployeeId);
-    }
+      List<Customer> customers = customerService.getCustomersByEmployeeId(oldEmployeeId);
+      if (customers.isEmpty()) {
+         log.warn("No customers found for employee ID: {}", oldEmployeeId);
+         return;
+      }
+
+      Employee newEmployee = employeeRepository.findById(newEmployeeId).orElseThrow(
+              () -> new ResourceNotFoundException(String.format(EMPLOYEE_NOT_FOUND_WITH_ID, newEmployeeId))
+      );
+
+      handleCustomerReassignment(customers, newEmployee);
+
+      log.info("Customers reassigned successfully: oldEmployeeId={}, newEmployeeId={}",
+              oldEmployeeId,
+              newEmployeeId
+      );
+   }
+
+   private void handleCustomerReassignment(List<Customer> customers, Employee newEmployee) {
+      List<Customer> reassignedCustomers = customers.stream()
+              .peek(customer -> {
+                 log.info("Reassigning customer ID: {} to new employee ID: {}", customer.getId(), newEmployee.getId());
+                 customer.setEmployee(newEmployee);
+              })
+              .collect(Collectors.toList());
+
+      customerRepository.saveAll(reassignedCustomers);
+      log.info("Customers reassigned successfully");
+   }
 }
+
 ```
+</details>
 
 ## Einführung des ValidationService
+
+<details> <summary>Klicken, um den Code anzuzeigen</summary>
 
 ```java
 package edu.yacoubi.crm.service;
@@ -217,8 +267,11 @@ public class ValidationService {
     }
 }
 ```
+</details>
 
 ## Anpassungen im CustomerServiceImpl
+
+<details> <summary>Klicken, um den Code anzuzeigen</summary>
 
 ```java
 package edu.yacoubi.crm.service.impl;
@@ -250,6 +303,7 @@ public class CustomerServiceImpl implements ICustomerService {
     // Weitere Methoden des CustomerService...
 }
 ```
+</details>
 
 ## Vorteile des Lösungsansatzes:
 

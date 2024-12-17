@@ -13,8 +13,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,9 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
     @Transactional
     @Override
     public void deleteEmployeeAndReassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
+        Assert.notNull(oldEmployeeId, "Old employee ID must not be null");
+        Assert.notNull(newEmployeeId, "New employee ID must not be null");
+
         log.info("EmployeeCustomerOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers employeeId: {}, newEmployeeId: {}",
                 oldEmployeeId,
                 newEmployeeId
@@ -68,6 +73,9 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
 
     @Override
     public void reassignCustomerToEmployee(Long customerId, Long employeeId) {
+        Assert.notNull(customerId, "Customer ID must not be null");
+        Assert.notNull(employeeId, "Employee ID must not be null");
+
         log.info("EmployeeOrchestratorServiceImpl::reassignCustomerToEmployee customerId: {}, employeeId: {}",
                 customerId,
                 employeeId
@@ -95,6 +103,9 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
 
     @Override
     public void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
+        Assert.notNull(oldEmployeeId, "Old employee ID must not be null");
+        Assert.notNull(newEmployeeId, "New employee ID must not be null");
+
         log.info("EmployeeCustomerOrchestratorServiceImpl::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
                 oldEmployeeId,
                 newEmployeeId
@@ -118,15 +129,23 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
                 () -> new ResourceNotFoundException(String.format(EMPLOYEE_NOT_FOUND_WITH_ID, newEmployeeId))
         );
 
-        customers.forEach(customer -> {
-            log.info("Reassigning customer ID: {} to new employee ID: {}", customer.getId(), newEmployeeId);
-            customer.setEmployee(newEmployee);
-        });
+        handleCustomerReassignment(customers, newEmployee);
 
-        customerRepository.saveAll(customers);
         log.info("Customers reassigned successfully: oldEmployeeId={}, newEmployeeId={}",
                 oldEmployeeId,
                 newEmployeeId
         );
+    }
+
+    private void handleCustomerReassignment(List<Customer> customers, Employee newEmployee) {
+        List<Customer> reassignedCustomers = customers.stream()
+                .peek(customer -> {
+                    log.info("Reassigning customer ID: {} to new employee ID: {}", customer.getId(), newEmployee.getId());
+                    customer.setEmployee(newEmployee);
+                })
+                .collect(Collectors.toList());
+
+        customerRepository.saveAll(reassignedCustomers);
+        log.info("Customers reassigned successfully");
     }
 }
