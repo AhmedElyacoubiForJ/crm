@@ -6,8 +6,8 @@ import edu.yacoubi.crm.dto.employee.EmployeeRequestDTO;
 import edu.yacoubi.crm.dto.employee.EmployeeResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Employee;
-import edu.yacoubi.crm.service.IEmployeeCustomerOrchestratorService;
 import edu.yacoubi.crm.service.IEmployeeService;
+import edu.yacoubi.crm.service.IEntityOrchestratorService;
 import edu.yacoubi.crm.util.ValueMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -32,7 +32,7 @@ public class EmployeeRestController {
     private static final Logger log = LoggerFactory.getLogger(EmployeeRestController.class);
 
     private final IEmployeeService employeeService;
-    private final IEmployeeCustomerOrchestratorService orchestratorService;
+    private final IEntityOrchestratorService orchestratorService;
 
     @Operation(
             summary = "Get all employees",

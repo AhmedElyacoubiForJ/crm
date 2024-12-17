@@ -1,6 +1,6 @@
 package edu.yacoubi.crm.service;
 
-public interface IEmployeeCustomerOrchestratorService {
+public interface IEntityOrchestratorService {
     /**
      * Deletes an employee and reassigns their customers to another employee.
      *

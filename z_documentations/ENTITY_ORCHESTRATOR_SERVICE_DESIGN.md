@@ -1,5 +1,5 @@
 
-# EMPLOYEE-CUSTOMER-ORCHESTRATOR SERVICE DESIGN
+# ENTITY-ORCHESTRATOR SERVICE DESIGN
 
 ## Problemstellung
 
@@ -17,8 +17,8 @@
 
 ## Lösungsansatz
 
-> Um die oben genannten Probleme zu lösen, haben wir uns entschieden, einen speziellen Orchestrator-Service (`EmployeeCustomerOrchestratorService`) einzuführen.
-> Der `EmployeeCustomerOrchestratorService` wird verwendet, um komplexe Operationen zu verwalten, die sowohl den `EmployeeService` als auch den `CustomerService` betreffen.
+> Um die oben genannten Probleme zu lösen, haben wir uns entschieden, einen speziellen Orchestrator-Service (`EntityOrchestratorService`) einzuführen.
+> Der `EntityOrchestratorService` wird verwendet, um komplexe Operationen zu verwalten, die sowohl den `EmployeeService` als auch den `CustomerService` betreffen.
 > Er kapselt die Geschäftslogik für Szenarien, die mehrere Services betreffen.
 > Dieser Service ist für alle Use-Cases verantwortlich, die auch mehrere Repositories betreffen, und ermöglicht eine klare Trennung der Verantwortlichkeiten.
 > Dies verbessert die Modularität und Wartbarkeit des Codes erheblich.
@@ -40,14 +40,14 @@
 
 ## Implementierung
 
-### Interface: IEmployeeCustomerOrchestratorService
+### Interface: IEntityOrchestratorService
 
 <details> <summary>Klicken, um den Code anzuzeigen</summary>
 
 ```java
 package edu.yacoubi.crm.service;
 
-public interface IEmployeeCustomerOrchestratorService {
+public interface IEntityOrchestratorService {
     /**
      * Deletes an employee and reassigns their customers to another employee.
      *
@@ -75,7 +75,7 @@ public interface IEmployeeCustomerOrchestratorService {
 ```
 </details>
 
-### Service-Implementierung: EmployeeCustomerOrchestratorServiceImpl
+### Service-Implementierung: EntityOrchestratorServiceImpl
 
 <details> <summary>Klicken, um den Code anzuzeigen</summary>
 
@@ -103,7 +103,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustomerOrchestratorService {
+public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService {
    public static final String EMPLOYEE_NOT_FOUND_WITH_ID = "Employee not found with ID: %d";
    public static final String CUSTOMER_NOT_FOUND_WITH_ID = "Customer not found with ID: %d";
 
@@ -119,7 +119,7 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
       Assert.notNull(oldEmployeeId, "Old employee ID must not be null");
       Assert.notNull(newEmployeeId, "New employee ID must not be null");
 
-      log.info("EmployeeCustomerOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers employeeId: {}, newEmployeeId: {}",
+      log.info("EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers employeeId: {}, newEmployeeId: {}",
               oldEmployeeId,
               newEmployeeId
       );
@@ -158,7 +158,7 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
       Assert.notNull(customerId, "Customer ID must not be null");
       Assert.notNull(employeeId, "Employee ID must not be null");
 
-      log.info("EmployeeOrchestratorServiceImpl::reassignCustomerToEmployee customerId: {}, employeeId: {}",
+      log.info("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: {}, employeeId: {}",
               customerId,
               employeeId
       );
@@ -188,7 +188,7 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
       Assert.notNull(oldEmployeeId, "Old employee ID must not be null");
       Assert.notNull(newEmployeeId, "New employee ID must not be null");
 
-      log.info("EmployeeCustomerOrchestratorServiceImpl::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
+      log.info("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
               oldEmployeeId,
               newEmployeeId
       );
@@ -322,14 +322,14 @@ public class CustomerServiceImpl implements ICustomerService {
 
 > Im Zusammenhang mit dem Löschen eines Mitarbeiters stellt die isolierte Methode `deleteEmployee` im `EmployeeServiceImpl` keinen Mehrwert mehr dar und sollte entfernt werden, um Redundanz und Inkonsistenzen zu vermeiden. Hier sind die Schritte:
 
-1. **Überprüfen der Aufrufe**: Stelle sicher, dass keine anderen Teile des Codes die `deleteEmployee` Methode direkt aufrufen. Falls doch, sollten diese Verweise auf die neue Methode im `EmployeeOrchestratorService` umgeleitet werden.
+1. **Überprüfen der Aufrufe**: Stelle sicher, dass keine anderen Teile des Codes die `deleteEmployee` Methode direkt aufrufen. Falls doch, sollten diese Verweise auf die neue Methode im `EntityOrchestratorService` umgeleitet werden.
 
-2. **Refactoring**: Entferne die Methode `deleteEmployee` aus `EmployeeServiceImpl`, um Redundanz zu vermeiden und sicherzustellen, dass alle Löschoperationen über den `EmployeeOrchestratorService` laufen.
+2. **Refactoring**: Entferne die Methode `deleteEmployee` aus `EmployeeServiceImpl`, um Redundanz zu vermeiden und sicherzustellen, dass alle Löschoperationen über den `EntityOrchestratorService` laufen.
 
-3. **Dokumentation aktualisieren**: Aktualisiere die Dokumentation entsprechend, um klarzustellen, dass die Lösch- und Neuzuweisungslogik jetzt zentral im `EmployeeOrchestratorService` gehandhabt wird.
+3. **Dokumentation aktualisieren**: Aktualisiere die Dokumentation entsprechend, um klarzustellen, dass die Lösch- und Neuzuweisungslogik jetzt zentral im `EntityOrchestratorService` gehandhabt wird.
 
 ## Zusammenfassung
 
-> Der `EmployeeCustomerOrchestratorService` ist ein zentraler Service, der alle Use-Cases koordiniert, die mehrere Repositories oder Services betreffen.
+> Der `EntityOrchestratorService` ist ein zentraler Service, der alle Use-Cases koordiniert, die mehrere Repositories oder Services betreffen.
 > Dies ermöglicht eine klare Trennung der Verantwortlichkeiten und verbessert die Modularität, Wartbarkeit und Testbarkeit des Codes.
 > Die Methode `reassignCustomers` und der Use-Case `deleteEmployee` wurden als Auslöser dieser Designentscheidung identifiziert und implementiert.

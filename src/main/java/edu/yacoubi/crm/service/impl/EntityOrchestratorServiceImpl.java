@@ -5,10 +5,7 @@ import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
-import edu.yacoubi.crm.service.ICustomerService;
-import edu.yacoubi.crm.service.IEmployeeCustomerOrchestratorService;
-import edu.yacoubi.crm.service.IInactiveEmployeeService;
-import edu.yacoubi.crm.service.ValidationService;
+import edu.yacoubi.crm.service.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustomerOrchestratorService {
+public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService {
     public static final String EMPLOYEE_NOT_FOUND_WITH_ID = "Employee not found with ID: %d";
     public static final String CUSTOMER_NOT_FOUND_WITH_ID = "Customer not found with ID: %d";
 
@@ -37,7 +34,7 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
         Assert.notNull(oldEmployeeId, "Old employee ID must not be null");
         Assert.notNull(newEmployeeId, "New employee ID must not be null");
 
-        log.info("EmployeeCustomerOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers employeeId: {}, newEmployeeId: {}",
+        log.info("EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers employeeId: {}, newEmployeeId: {}",
                 oldEmployeeId,
                 newEmployeeId
         );
@@ -76,7 +73,7 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
         Assert.notNull(customerId, "Customer ID must not be null");
         Assert.notNull(employeeId, "Employee ID must not be null");
 
-        log.info("EmployeeOrchestratorServiceImpl::reassignCustomerToEmployee customerId: {}, employeeId: {}",
+        log.info("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: {}, employeeId: {}",
                 customerId,
                 employeeId
         );
@@ -106,7 +103,7 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
         Assert.notNull(oldEmployeeId, "Old employee ID must not be null");
         Assert.notNull(newEmployeeId, "New employee ID must not be null");
 
-        log.info("EmployeeCustomerOrchestratorServiceImpl::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
+        log.info("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
                 oldEmployeeId,
                 newEmployeeId
         );
