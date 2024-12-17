@@ -6,6 +6,7 @@ import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.service.ICustomerService;
+import edu.yacoubi.crm.service.ValidationService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaUpdate;
@@ -26,6 +27,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
     private final CustomerRepository customerRepository;
     private final EntityManager entityManager;
+    private final ValidationService validationService;
 
     @Override
     public Customer createCustomer(Customer customer) {
@@ -106,10 +108,11 @@ public class CustomerServiceImpl implements ICustomerService {
     @Transactional(readOnly = true)
     public Customer getCustomerWithNotes(Long id) {
         log.info("CustomerServiceImpl::getCustomerWithNotes id: {}", id);
-        Customer customer = customerRepository
-                .findById(id)
-                .orElseThrow(() -> new RuntimeException("Kunde nicht gefunden"));
+
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Customer not found with ID: " + id));
         customer.getNotes().size(); // Durch den Zugriff werden die Notes initialisiert
+
         return customer;
     }
 
@@ -158,7 +161,11 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public List<Customer> getCustomersByEmployeeId(Long employeeId) {
-        // TODO Validation
+        log.info("CustomerServiceImpl::getCustomersByEmployeeId employeeId: {}", employeeId);
+
+        validationService.validateEmployeeExists(employeeId);
+
+        log.info("Get customers by employee ID: {}", employeeId);
         return customerRepository.findByEmployeeId(employeeId);
     }
 

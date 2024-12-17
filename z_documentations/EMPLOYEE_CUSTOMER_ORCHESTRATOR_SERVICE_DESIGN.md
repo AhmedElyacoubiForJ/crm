@@ -34,6 +34,10 @@
 3. **Klare Verantwortlichkeiten**:
    - Der Orchestrator-Service übernimmt die Koordination komplexer Geschäftslogik, die mehrere Services betrifft.
 
+### Einführung eines ValidationService
+> Um die Validierungslogik zu zentralisieren und Abhängigkeiten weiter zu reduzieren, haben wir einen `ValidationService` eingeführt.
+> Dieser Service prüft die Existenz von Entitäten und entlastet die einzelnen Services von der Validierungslogik.
+
 ## Implementierung
 
 ### Interface: IEmployeeCustomerOrchestratorService
@@ -81,6 +85,7 @@ import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeCustomerOrchestratorService;
 import edu.yacoubi.crm.service.IInactiveEmployeeService;
+import edu.yacoubi.crm.service.ValidationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -92,13 +97,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustomerOrchestratorService {
-    public static final String EMPLOYEE_NOT_FOUND_WITH_ID = "Employee not found with ID: %d";
-    public static final String CUSTOMER_NOT_FOUND_WITH_ID = "Customer not found with ID: %d";
+public static final String EMPLOYEE_NOT_FOUND_WITH_ID = "Employee not found with ID: %d";
+public static final String CUSTOMER_NOT_FOUND_WITH_ID = "Customer not found with ID: %d";
 
     private final EmployeeRepository employeeRepository;
     private final ICustomerService customerService;
     private final CustomerRepository customerRepository;
     private final IInactiveEmployeeService inactiveEmployeeService;
+    private final ValidationService validationService;
 
     @Transactional
     @Override
@@ -108,6 +114,9 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
         if (oldEmployeeId.equals(newEmployeeId)) {
             throw new IllegalArgumentException("Old and new employee IDs must be different.");
         }
+
+        validationService.validateEmployeeExists(oldEmployeeId);
+        validationService.validateEmployeeExists(newEmployeeId);
 
         Employee oldEmployee = employeeRepository.findById(oldEmployeeId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format(EMPLOYEE_NOT_FOUND_WITH_ID, oldEmployeeId))
@@ -132,6 +141,8 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
     public void reassignCustomerToEmployee(Long customerId, Long employeeId) {
         log.info("EmployeeOrchestratorServiceImpl::reassignCustomerToEmployee customerId: {}, employeeId: {}", customerId, employeeId);
 
+        validationService.validateEmployeeExists(employeeId);
+
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(CUSTOMER_NOT_FOUND_WITH_ID, customerId)));
         Employee employee = employeeRepository.findById(employeeId)
@@ -151,6 +162,9 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
             log.warn("Old and new employee IDs must be different.");
             return;
         }
+
+        validationService.validateEmployeeExists(oldEmployeeId);
+        validationService.validateEmployeeExists(newEmployeeId);
 
         List<Customer> customers = customerService.getCustomersByEmployeeId(oldEmployeeId);
 
@@ -173,11 +187,82 @@ public class EmployeeCustomerOrchestratorServiceImpl implements IEmployeeCustome
 }
 ```
 
-## Vorteile des Ansatzes
+## Einführung des ValidationService
 
-1. **Wiederverwendbarkeit**: Der Orchestrator-Service kann für verschiedene Anwendungsfälle wiederverwendet werden.
-2. **Wartbarkeit**: Änderungen in der Geschäftslogik müssen nur an einer Stelle vorgenommen werden.
-3. **Entkopplung**: Die spezifischen Services (`EmployeeService` und `CustomerService`) bleiben unabhängig und einfach.
+```java
+package edu.yacoubi.crm.service;
+
+import edu.yacoubi.crm.exception.ResourceNotFoundException;
+import edu.yacoubi.crm.repository.EmployeeRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class ValidationService {
+
+    private final EmployeeRepository employeeRepository;
+
+    public void validateEmployeeExists(Long employeeId) {
+        log.info("ValidationService::validateEmployeeExists employeeId: {}", employeeId);
+
+        if (!employeeRepository.existsById(employeeId)) {
+            log.error("ValidationService::validateEmployeeExists employeeId: {} not found", employeeId);
+            throw new ResourceNotFoundException("Employee not found with ID: " + employeeId);
+        }
+
+        log.info("ValidationService::validateEmployeeExists employeeId: {} successfully validated", employeeId);
+    }
+}
+```
+
+## Anpassungen im CustomerServiceImpl
+
+```java
+package edu.yacoubi.crm.service.impl;
+
+import edu.yacoubi.crm.model.Customer;
+import edu.yacoubi.crm.repository.CustomerRepository;
+import edu.yacoubi.crm.service.ICustomerService;
+import edu.yacoubi.crm.service.ValidationService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class CustomerServiceImpl implements ICustomerService {
+
+    private final CustomerRepository customerRepository;
+    private final ValidationService validationService;
+
+    @Override
+    public List<Customer> getCustomersByEmployeeId(Long employeeId) {
+        validationService.validateEmployeeExists(employeeId);
+        return customerRepository.findByEmployeeId(employeeId);
+    }
+
+    // Weitere Methoden des CustomerService...
+}
+```
+
+## Vorteile des Lösungsansatzes:
+
+1. **Klare Verantwortlichkeiten**:
+   - Der Orchestrator-Service kann für verschiedene Anwendungsfälle wiederverwendet werden.
+   - Und übernimmt damit die Koordination komplexer Geschäftslogik, die mehrere Services betrifft.
+2. **Separation of Concerns**:
+   - Jede Service-Implementierung ist nur für Ihre spezifischen Aufgaben verantwortlich und bleibt von anderen Repositories oder Services entkoppelt.
+   - Die spezifischen Services (`EmployeeService` und `CustomerService`) bleiben unabhängig und einfach.
+3. **Wartbarkeit**:
+   - Änderungen in der Geschäftslogik müssen nur an einer Stelle vorgenommen werden.
+4. **Erhöhte Testbarkeit**:
+   - Durch die Entkopplung der Komponenten können einzelne Services einfacher getestet werden. 
 
 ## Refactoring Hinweis
 

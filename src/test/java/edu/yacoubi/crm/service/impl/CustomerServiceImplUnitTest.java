@@ -5,7 +5,7 @@ import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.CustomerRepository;
-import edu.yacoubi.crm.repository.EmployeeRepository;
+import edu.yacoubi.crm.service.ValidationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,9 +22,9 @@ import static org.mockito.Mockito.*;
 class CustomerServiceImplUnitTest {
     @Mock
     private CustomerRepository customerRepository;
-
+    
     @Mock
-    private EmployeeRepository employeeRepository;
+    private ValidationService validationService;
 
     @InjectMocks
     private CustomerServiceImpl underTest;
@@ -160,6 +160,8 @@ class CustomerServiceImplUnitTest {
         employeeA.setId(employeeId);
         customers.forEach(customer -> customer.setEmployee(employeeA));
         when(customerRepository.findByEmployeeId(employeeId)).thenReturn(customers);
+        doNothing().when(validationService).validateEmployeeExists(employeeId);
+
 
         // When
         List<Customer> foundCustomers = underTest.getCustomersByEmployeeId(employeeId);
