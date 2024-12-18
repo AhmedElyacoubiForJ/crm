@@ -5,7 +5,10 @@ import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
-import edu.yacoubi.crm.service.*;
+import edu.yacoubi.crm.service.ICustomerService;
+import edu.yacoubi.crm.service.IEntityOrchestratorService;
+import edu.yacoubi.crm.service.IInactiveEmployeeService;
+import edu.yacoubi.crm.service.ValidationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +43,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
         );
 
         if (oldEmployeeId.equals(newEmployeeId)) {
-            throw new IllegalArgumentException("Old and new employee IDs must be different.");
+            throw new IllegalArgumentException("Old and new employee IDs must be different");
         }
 
         validationService.validateEmployeeExists(oldEmployeeId);
