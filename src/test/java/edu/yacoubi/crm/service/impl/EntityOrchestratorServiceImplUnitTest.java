@@ -292,28 +292,4 @@ class EntityOrchestratorServiceImplUnitTest {
 //
 //        assertThrows(ResourceNotFoundException.class, () -> entityOrchestratorService.reassignCustomers(oldEmployeeId, newEmployeeId));
 //    }
-
-//    private static class TestAppender extends AppenderBase<ILoggingEvent> {
-//        private final List<ILoggingEvent> events = new ArrayList<>();
-//
-//        @Override
-//        protected void append(ILoggingEvent event) {
-//            events.add(event);
-//        }
-//
-//        //        boolean contains(String message, String level) {
-////            return events.stream()
-////                    .anyMatch(event -> event.getMessage().contains(message) && event.getLevel().toString().equals(level));
-////        }
-//        boolean contains(String message, String level) {
-//            return events.stream()
-//                    .anyMatch(event -> event.getFormattedMessage().contains(message) && event.getLevel().toString().equals(level));
-//        }
-//
-//        @Override
-//        public String toString() {
-//            return "TestAppender{" + "events=" + events + '}';
-//        }
-//    }
-
 }
