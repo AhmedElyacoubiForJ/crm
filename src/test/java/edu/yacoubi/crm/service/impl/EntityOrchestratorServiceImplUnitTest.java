@@ -31,13 +31,11 @@ import static org.mockito.Mockito.*;
  * Die Tests verwenden Mockito, um die Abhängigkeiten zu mocken und das Verhalten zu verifizieren.
  */
 class EntityOrchestratorServiceImplUnitTest {
+    private static TestAppender testAppender;
     private String LogInfoStartDeleteEmployeeAndReassignCustommers =
             "EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers oldEmployeeId: %d, newEmployeeId: %d";
     private String LogInfoEndDeleteEmployeeAndReassignCustommers =
             "Employee deleted and customers reassigned: oldEmployeeId= %d, newEmployeeId= %d";
-
-    private static TestAppender testAppender;
-
     @Mock
     private EmployeeRepository employeeRepository;
     @Mock
@@ -255,14 +253,6 @@ class EntityOrchestratorServiceImplUnitTest {
         // Verify interactions
         verify(validationService, times(1)).validateEmployeeExists(oldEmployeeId);
         verify(validationService, times(1)).validateEmployeeExists(newEmployeeId);
-//        // Verify that the info log is triggered
-//        assertTrue(testAppender.contains(
-//                String.format(serviceMethodLogInfoStart, oldEmployeeId, newEmployeeId), "INFO"
-//        ));
-//        // Verify that the info log is triggered
-//        assertTrue(testAppender.contains(
-//                String.format(serviceMethodLogInfoEnd, oldEmployeeId, newEmployeeId), "INFO"
-//        ));
     }
 
     @Test
@@ -358,76 +348,4 @@ class EntityOrchestratorServiceImplUnitTest {
                 String.format(LogInfoEndDeleteEmployeeAndReassignCustommers, oldEmployeeId, newEmployeeId), "INFO"
         ));
     }
-
-//    @Test
-//    void testReassignCustomerToEmployee() {
-//        Long customerId = 1L;
-//        Long employeeId = 2L;
-//
-//        Customer customer = new Customer();
-//        customer.setId(customerId);
-//        Employee employee = new Employee();
-//        employee.setId(employeeId);
-//
-//        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
-//        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
-//        doNothing().when(validationService).validateEmployeeExists(anyLong());
-//
-//        entityOrchestratorService.reassignCustomerToEmployee(customerId, employeeId);
-//
-//        assertEquals(employee, customer.getEmployee());
-//        verify(customerRepository).save(customer);
-//    }
-//
-//    @Test
-//    void testReassignCustomers() {
-//        Long oldEmployeeId = 1L;
-//        Long newEmployeeId = 2L;
-//
-//        Employee newEmployee = new Employee();
-//        newEmployee.setId(newEmployeeId);
-//        Customer customer = new Customer();
-//        customer.setId(1L);
-//
-//        when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.of(newEmployee));
-//        when(customerService.getCustomersByEmployeeId(oldEmployeeId)).thenReturn(Collections.singletonList(customer));
-//        doNothing().when(validationService).validateEmployeeExists(anyLong());
-//
-//        entityOrchestratorService.reassignCustomers(oldEmployeeId, newEmployeeId);
-//
-//        assertEquals(newEmployee, customer.getEmployee());
-//        verify(customerRepository).saveAll(anyList());
-//    }
-//
-//    @Test
-//    void testDeleteEmployeeAndReassignCustomers_ThrowsException() {
-//        Long oldEmployeeId = 1L;
-//        Long newEmployeeId = 2L;
-//
-//        doThrow(new ResourceNotFoundException("Employee not found"))
-//                .when(validationService)
-//                .validateEmployeeExists(anyLong());
-//
-//        assertThrows(ResourceNotFoundException.class, () -> entityOrchestratorService.deleteEmployeeAndReassignCustomers(oldEmployeeId, newEmployeeId));
-//    }
-//
-//    @Test
-//    void testReassignCustomerToEmployee_ThrowsException() {
-//        Long customerId = 1L;
-//        Long employeeId = 2L;
-//
-//        doThrow(new ResourceNotFoundException("Employee not found")).when(validationService).validateEmployeeExists(employeeId);
-//
-//        assertThrows(ResourceNotFoundException.class, () -> entityOrchestratorService.reassignCustomerToEmployee(customerId, employeeId));
-//    }
-//
-//    @Test
-//    void testReassignCustomers_ThrowsException() {
-//        Long oldEmployeeId = 1L;
-//        Long newEmployeeId = 2L;
-//
-//        doThrow(new ResourceNotFoundException("Employee not found")).when(validationService).validateEmployeeExists(anyLong());
-//
-//        assertThrows(ResourceNotFoundException.class, () -> entityOrchestratorService.reassignCustomers(oldEmployeeId, newEmployeeId));
-//    }
 }
