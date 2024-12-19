@@ -43,6 +43,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
         );
 
         if (oldEmployeeId.equals(newEmployeeId)) {
+            log.warn("Old and new employee IDs must be different");
             throw new IllegalArgumentException("Old and new employee IDs must be different");
         }
 
@@ -112,7 +113,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
         );
 
         if (newEmployeeId.equals(oldEmployeeId)) {
-            log.warn("Old and new employee IDs must be different.");
+            log.warn("Old and new employee IDs must be different");
             return;
         }
 

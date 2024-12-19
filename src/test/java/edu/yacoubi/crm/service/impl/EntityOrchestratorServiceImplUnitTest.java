@@ -1,5 +1,7 @@
 package edu.yacoubi.crm.service.impl;
 
+import ch.qos.logback.classic.Logger;
+import edu.yacoubi.crm.TestAppender;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
@@ -13,13 +15,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
 
 import static edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl.EMPLOYEE_NOT_FOUND_WITH_ID;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -30,27 +32,28 @@ import static org.mockito.Mockito.*;
  */
 class EntityOrchestratorServiceImplUnitTest {
 
+    private static TestAppender testAppender;
+
     @Mock
     private EmployeeRepository employeeRepository;
-
     @Mock
     private ICustomerService customerService;
-
     @Mock
     private CustomerRepository customerRepository;
-
     @Mock
     private IInactiveEmployeeService inactiveEmployeeService;
-
     @Mock
     private ValidationService validationService;
-
     @InjectMocks
     private EntityOrchestratorServiceImpl underTest;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        Logger logger = (Logger) LoggerFactory.getLogger(EntityOrchestratorServiceImpl.class);
+        testAppender = new TestAppender();
+        testAppender.start();
+        logger.addAppender(testAppender);
     }
 
     @Test
@@ -96,6 +99,12 @@ class EntityOrchestratorServiceImplUnitTest {
 
         // Then verify the exception message
         assertEquals("Old and new employee IDs must be different", exception.getMessage());
+        // Verify that the info log is triggered
+        assertTrue(testAppender.contains(
+                "EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers employeeId: 1, newEmployeeId: 1", "INFO"
+        ));
+        // Verify that the warning log is triggered
+        assertTrue(testAppender.contains("Old and new employee IDs must be different", "WARN"));
     }
 
     @Test
@@ -283,4 +292,28 @@ class EntityOrchestratorServiceImplUnitTest {
 //
 //        assertThrows(ResourceNotFoundException.class, () -> entityOrchestratorService.reassignCustomers(oldEmployeeId, newEmployeeId));
 //    }
+
+//    private static class TestAppender extends AppenderBase<ILoggingEvent> {
+//        private final List<ILoggingEvent> events = new ArrayList<>();
+//
+//        @Override
+//        protected void append(ILoggingEvent event) {
+//            events.add(event);
+//        }
+//
+//        //        boolean contains(String message, String level) {
+////            return events.stream()
+////                    .anyMatch(event -> event.getMessage().contains(message) && event.getLevel().toString().equals(level));
+////        }
+//        boolean contains(String message, String level) {
+//            return events.stream()
+//                    .anyMatch(event -> event.getFormattedMessage().contains(message) && event.getLevel().toString().equals(level));
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return "TestAppender{" + "events=" + events + '}';
+//        }
+//    }
+
 }
