@@ -98,33 +98,6 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals("Old and new employee IDs must be different", exception.getMessage());
     }
 
-//    @Test
-//    void itShouldValidateEmployeesExist_ByCallingDeleteEmployeeAndReassignCustomers() {
-//        // Given
-//        Long oldEmployeeId = 1L;
-//        Long newEmployeeId = 2L;
-//
-//        Employee oldEmployee = new Employee();
-//        oldEmployee.setId(oldEmployeeId);
-//        Employee newEmployee = new Employee();
-//        newEmployee.setId(newEmployeeId);
-//
-//        // Mock the validateEmployeeExists method
-//        doNothing().when(validationService).validateEmployeeExists(oldEmployeeId);
-//        doNothing().when(validationService).validateEmployeeExists(newEmployeeId);
-//
-//        // Mock the findById method for both employees to avoid further errors
-//        when(employeeRepository.findById(oldEmployeeId)).thenReturn(Optional.of(oldEmployee));
-//        when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.of(newEmployee));
-//
-//        // Call the method to test
-//        entityOrchestratorService.deleteEmployeeAndReassignCustomers(oldEmployeeId, newEmployeeId);
-//
-//        // Verify interactions
-//        verify(validationService, times(2)).validateEmployeeExists(oldEmployeeId);
-//        verify(validationService, times(2)).validateEmployeeExists(newEmployeeId);
-//    }
-
     @Test
     void itShouldValidateEmployeesExist_ByCallingDeleteEmployeeAndReassignCustomers() {
         // Given
@@ -238,71 +211,6 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals(newEmployee, customer1.getEmployee());
         assertEquals(newEmployee, customer2.getEmployee());
     }
-
-//    @Test
-//    void testDeleteEmployeeAndReassignCustomers() {
-//        Long oldEmployeeId = 1L;
-//        Long newEmployeeId = 2L;
-//
-//        Employee oldEmployee = new Employee();
-//        oldEmployee.setId(oldEmployeeId);
-//        Employee newEmployee = new Employee();
-//        newEmployee.setId(newEmployeeId);
-//
-//        Customer customer1 = new Customer();
-//        customer1.setId(101L);
-//        customer1.setEmployee(oldEmployee);
-//
-//        Customer customer2 = new Customer();
-//        customer2.setId(102L);
-//        customer2.setEmployee(oldEmployee);
-//
-//        when(employeeRepository.findById(oldEmployeeId)).thenReturn(Optional.of(oldEmployee));
-//        when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.of(newEmployee));
-//
-//        // Mock the createInactiveEmployee method
-//        when(inactiveEmployeeService.createInactiveEmployee(any(Employee.class)))
-//                .thenReturn(new InactiveEmployee());
-//
-//        // Mock the getCustomersByEmployeeId method
-//        when(customerService.getCustomersByEmployeeId(oldEmployeeId)).thenReturn(Arrays.asList(customer1, customer2));
-//        doNothing().when(validationService).validateEmployeeExists(anyLong());
-//
-//        // Call the method to test
-//        entityOrchestratorService.deleteEmployeeAndReassignCustomers(oldEmployeeId, newEmployeeId);
-//
-//        // Verify interactions
-//        verify(employeeRepository).delete(oldEmployee);
-//        verify(inactiveEmployeeService).createInactiveEmployee(oldEmployee);
-//
-//        // Überprüft, ob die Methode customerRepository.saveAll mit einer Liste von Kunden aufgerufen wird,
-//        // die sowohl customer1 als auch customer2 enthält.
-//        verify(customerRepository).saveAll(argThat(customers -> {
-//            // Initialisiere Booleans, um zu verfolgen, ob customer1 und customer2 in der Liste enthalten sind
-//            boolean containsCustomer1 = false;
-//            boolean containsCustomer2 = false;
-//
-//            // Iteriere durch die übergebene Liste von Kunden
-//            for (Customer customer : customers) {
-//                // Überprüfe, ob der aktuelle Kunde customer1 ist
-//                if (customer.equals(customer1)) {
-//                    containsCustomer1 = true; // Setze containsCustomer1 auf true, wenn customer1 gefunden wurde
-//                } else if (customer.equals(customer2)) {
-//                    containsCustomer2 = true; // Setze containsCustomer2 auf true, wenn customer2 gefunden wurde
-//                }
-//            }
-//
-//            // Die Bedingung, dass beide Kunden in der Liste enthalten sind,
-//            // muss erfüllt sein, damit der Test erfolgreich ist
-//            return containsCustomer1 && containsCustomer2;
-//        }));
-//
-//
-//        // Check if customers are reassigned to the new employee
-//        assertEquals(newEmployee, customer1.getEmployee());
-//        assertEquals(newEmployee, customer2.getEmployee());
-//    }
-
 
 //    @Test
 //    void testReassignCustomerToEmployee() {
