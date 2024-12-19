@@ -32,6 +32,9 @@ import static org.mockito.Mockito.*;
  */
 class EntityOrchestratorServiceImplUnitTest {
 
+    private String serviceMethodLogInfoStart = "EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers oldEmployeeId: %d, newEmployeeId: %d";
+    private String serviceMethodLogInfoEnd = "Employee deleted and customers reassigned: oldEmployeeId= %d, newEmployeeId= %d";
+
     private static TestAppender testAppender;
 
     @Mock
@@ -69,6 +72,14 @@ class EntityOrchestratorServiceImplUnitTest {
 
         // Then verify the exception message
         assertEquals("Old employee ID must not be null", exception.getMessage());
+
+        // Verify that the info logs are not triggered
+        assertFalse(testAppender.contains(
+                String.format(serviceMethodLogInfoStart, oldEmployeeId, newEmployeeId), "INFO"
+        ));
+        assertFalse(testAppender.contains(
+                String.format(serviceMethodLogInfoEnd, oldEmployeeId, newEmployeeId), "INFO"
+        ));
     }
 
     @Test
@@ -84,6 +95,13 @@ class EntityOrchestratorServiceImplUnitTest {
 
         // Then verify the exception message
         assertEquals("New employee ID must not be null", exception.getMessage());
+        // Verify that the info logs are not triggered
+        assertFalse(testAppender.contains(
+                String.format(serviceMethodLogInfoStart, oldEmployeeId, newEmployeeId), "INFO"
+        ));
+        assertFalse(testAppender.contains(
+                String.format(serviceMethodLogInfoEnd, oldEmployeeId, newEmployeeId), "INFO"
+        ));
     }
 
     @Test
@@ -99,9 +117,14 @@ class EntityOrchestratorServiceImplUnitTest {
 
         // Then verify the exception message
         assertEquals("Old and new employee IDs must be different", exception.getMessage());
+
         // Verify that the info log is triggered
         assertTrue(testAppender.contains(
-                "EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers employeeId: 1, newEmployeeId: 1", "INFO"
+                String.format(serviceMethodLogInfoStart, oldEmployeeId, newEmployeeId), "INFO"
+        ));
+        // Verify that the info log is not triggered
+        assertFalse(testAppender.contains(
+                String.format(serviceMethodLogInfoEnd, oldEmployeeId, newEmployeeId), "INFO"
         ));
         // Verify that the warning log is triggered
         assertTrue(testAppender.contains("Old and new employee IDs must be different", "WARN"));
@@ -140,6 +163,14 @@ class EntityOrchestratorServiceImplUnitTest {
         // Verify interactions
         verify(validationService, times(1)).validateEmployeeExists(oldEmployeeId);
         verify(validationService, times(1)).validateEmployeeExists(newEmployeeId);
+//        // Verify that the info log is triggered
+//        assertTrue(testAppender.contains(
+//                String.format(serviceMethodLogInfoStart, oldEmployeeId, newEmployeeId), "INFO"
+//        ));
+//        // Verify that the info log is triggered
+//        assertTrue(testAppender.contains(
+//                String.format(serviceMethodLogInfoEnd, oldEmployeeId, newEmployeeId), "INFO"
+//        ));
     }
 
     @Test
@@ -159,6 +190,14 @@ class EntityOrchestratorServiceImplUnitTest {
 
         // Verify the exception message
         assertEquals(message, exception.getMessage());
+        // Verify that the info log is triggered
+        assertTrue(testAppender.contains(
+                String.format(serviceMethodLogInfoStart, oldEmployeeId, newEmployeeId), "INFO"
+        ));
+        // Verify that the info log is not triggered
+        assertFalse(testAppender.contains(
+                String.format(serviceMethodLogInfoEnd, oldEmployeeId, newEmployeeId), "INFO"
+        ));
     }
 
     @Test
@@ -219,6 +258,13 @@ class EntityOrchestratorServiceImplUnitTest {
         // Check if customers are reassigned to the new employee
         assertEquals(newEmployee, customer1.getEmployee());
         assertEquals(newEmployee, customer2.getEmployee());
+        // Verify that the info logs are triggered
+        assertTrue(testAppender.contains(
+                String.format(serviceMethodLogInfoStart, oldEmployeeId, newEmployeeId), "INFO")
+        );
+        assertTrue(testAppender.contains(
+                String.format(serviceMethodLogInfoEnd, oldEmployeeId, newEmployeeId), "INFO"
+        ));
     }
 
 //    @Test

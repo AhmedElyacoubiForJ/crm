@@ -73,8 +73,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class EntityOrchestratorServiceImplTest {
+
+    private String serviceMethodLogInfoStart = "EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers oldEmployeeId: %d, newEmployeeId: %d";
+    private String serviceMethodLogInfoEnd = "Employee deleted and customers reassigned: oldEmployeeId= %d, newEmployeeId= %d";
 
     @Test
     void itShouldThrowExceptionWhenIdsAreEquals_ByCallingDeleteEmployeeAndReassignCustomers() {
@@ -92,9 +96,12 @@ public class EntityOrchestratorServiceImplTest {
 
         // Verify that the info log is triggered
         assertTrue(testAppender.contains(
-                "EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers employeeId: 1, newEmployeeId: 1", "INFO")
-        );
-        
+                String.format(serviceMethodLogInfoStart, oldEmployeeId, newEmployeeId), "INFO"
+        ));
+        // Verify that the info log is not triggered
+        assertFalse(testAppender.contains(
+                String.format(serviceMethodLogInfoEnd, oldEmployeeId, newEmployeeId), "INFO"
+        ));
         // Verify that the warning log is triggered
         assertTrue(testAppender.contains("Old and new employee IDs must be different", "WARN"));
     }

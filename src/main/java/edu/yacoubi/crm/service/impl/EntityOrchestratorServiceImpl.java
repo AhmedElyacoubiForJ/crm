@@ -37,7 +37,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
         Assert.notNull(oldEmployeeId, "Old employee ID must not be null");
         Assert.notNull(newEmployeeId, "New employee ID must not be null");
 
-        log.info("EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers employeeId: {}, newEmployeeId: {}",
+        log.info("EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
                 oldEmployeeId,
                 newEmployeeId
         );
@@ -66,7 +66,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
         // Löschen des Mitarbeiters
         employeeRepository.delete(oldEmployee);
 
-        log.info("Employee deleted and customers reassigned: oldEmployeeId={}, newEmployeeId={}",
+        log.info("Employee deleted and customers reassigned: oldEmployeeId= {}, newEmployeeId= {}",
                 oldEmployeeId,
                 newEmployeeId
         );
