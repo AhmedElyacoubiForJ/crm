@@ -148,6 +148,154 @@ class EntityOrchestratorServiceImplUnitTest {
         ));
     }
 
+    @Test
+    void itShouldValidateEmployeesExist_ByCallingReassignCustomerToEmployee() {
+        Long customerId = 1L;
+        Long employeeId = 2L;
+
+        Customer customer = new Customer();
+        customer.setId(customerId);
+
+        Employee employee = new Employee();
+        employee.setId(employeeId);
+
+        // Mock the validateEmployeeExists method
+        doNothing().when(validationService).validateEmployeeExists(anyLong());
+        when(customerRepository.findById(customerId)).thenReturn(Optional.ofNullable(customer));
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.ofNullable(employee));
+        when(customerRepository.save(customer)).thenReturn(any(Customer.class));
+
+
+        underTest.reassignCustomerToEmployee(customerId, employeeId);
+
+        verify(validationService,times(1)).validateEmployeeExists(employeeId);
+
+        // Verify that the info logs are not triggered
+        assertTrue(testAppender.contains(
+                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+        ));
+        assertTrue(testAppender.contains(
+                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+        ));
+        verify(customerRepository, times(1)).findById(customerId);
+        verify(employeeRepository, times(1)).findById(employeeId);
+        verify(customerRepository, times(1)).save(customer);
+    }
+
+    @Test
+    void itShouldThrowExceptionInValidateEmployeesExist_ByCallingReassignCustomerToEmployee() {
+        Long customerId = 1L;
+        Long employeeId = 2L;
+
+        Customer customer = new Customer();
+        customer.setId(customerId);
+
+        Employee employee = new Employee();
+        employee.setId(employeeId);
+
+        // Mock the validateEmployeeExists method
+        doThrow(new ResourceNotFoundException("Employee not found with ID: " + employeeId))
+                .when(validationService).validateEmployeeExists(anyLong());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            underTest.reassignCustomerToEmployee(customerId, employeeId);
+        });
+
+        assertEquals("Employee not found with ID: " + employeeId, exception.getMessage());
+        verify(customerRepository, times(0)).findById(customerId);
+        verify(employeeRepository, times(0)).findById(employeeId);
+        // Verify that the info logs are not triggered
+        assertTrue(testAppender.contains(
+                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+        ));
+        assertFalse(testAppender.contains(
+                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+        ));
+    }
+
+    @Test
+    void itShouldThrowExceptionWhenCustomerNotFound_ByCallingReassignCustomerToEmployee() {
+        // Given
+        Long customerId = 999L;
+        Long employeeId = 2L;
+
+        // Mock the validateEmployeeExists method
+        doNothing().when(validationService).validateEmployeeExists(anyLong());
+        when(customerRepository.findById(customerId)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            underTest.reassignCustomerToEmployee(customerId, employeeId);
+        });
+
+        assertEquals("Customer not found with ID: " + customerId, exception.getMessage());
+        verify(customerRepository, times(1)).findById(customerId);
+        verify(employeeRepository, times(0)).findById(employeeId);
+        // Verify that the info logs are not triggered
+        assertTrue(testAppender.contains(
+                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+        ));
+        assertFalse(testAppender.contains(
+                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+        ));
+    }
+
+    @Test
+    void itShouldThrowExceptionWhenEmployeeNotFound_ByCallingReassignCustomerToEmployee() {
+        // Given
+        Long customerId = 1L;
+        Long employeeId = 999L;
+
+        // Mock the validateEmployeeExists method
+        doNothing().when(validationService).validateEmployeeExists(anyLong());
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(new Customer()));
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            underTest.reassignCustomerToEmployee(customerId, employeeId);
+        });
+
+        assertEquals("Employee not found with ID: " + employeeId, exception.getMessage());
+        verify(customerRepository, times(1)).findById(customerId);
+        verify(employeeRepository, times(1)).findById(employeeId);
+        // Verify that the info logs are not triggered
+        assertTrue(testAppender.contains(
+                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+        ));
+        assertFalse(testAppender.contains(
+                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+        ));
+    }
+
+    @Test
+    void itShouldReassignCustomerToEmployee_ByCallingReassignCustomerToEmployee() {
+        // Given
+        Long customerId = 1L;
+        Long employeeId = 2L;
+
+        Customer customer = new Customer();
+        customer.setId(customerId);
+
+        Employee employee = new Employee();
+        employee.setId(employeeId);
+
+        // Mock the validateEmployeeExists method
+        doNothing().when(validationService).validateEmployeeExists(anyLong());
+        when(customerRepository.findById(customerId)).thenReturn(Optional.ofNullable(customer));
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.ofNullable(employee));
+        when(customerRepository.save(customer)).thenReturn(any(Customer.class));
+
+        // When
+        underTest.reassignCustomerToEmployee(customerId, employeeId);
+
+        // Then verify that the info logs are triggered
+        assertTrue(testAppender.contains(
+                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+        ));
+        assertTrue(testAppender.contains(
+                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+        ));
+    }
+
 
     @Test
     void itShouldThrowExceptionWhenOldEmployeeIdIsNull_ByCallingDeleteEmployeeAndReassignCustomers() {
