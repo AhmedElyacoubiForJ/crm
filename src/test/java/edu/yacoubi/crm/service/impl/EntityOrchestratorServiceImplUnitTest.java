@@ -405,6 +405,21 @@ class EntityOrchestratorServiceImplUnitTest {
         assertTrue(testAppender.contains(
                 String.format(LogInfoStartDeleteEmployeeAndReassignCustommers, oldEmployeeId, newEmployeeId), "INFO"
         ));
+        assertTrue(testAppender.contains(
+                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
+        ));
+        assertTrue(testAppender.contains(
+                String.format("Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d", oldEmployeeId, newEmployeeId), "INFO"
+        ));
+        assertTrue(testAppender.contains(
+                String.format("Reassigning customer ID: %d to new employee ID: %d", 101L, newEmployeeId), "INFO"
+        ));
+        assertTrue(testAppender.contains(
+                String.format("Reassigning customer ID: %d to new employee ID: %d", 102L, newEmployeeId), "INFO"
+        ));
+        assertTrue(testAppender.contains(
+                "Customers reassigned successfully", "INFO"
+        ));
         // Verify that the info log is not triggered
         assertTrue(testAppender.contains(
                 String.format(LogInfoEndDeleteEmployeeAndReassignCustommers, oldEmployeeId, newEmployeeId), "INFO"

@@ -137,7 +137,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
 
         handleCustomerReassignment(customers, newEmployee);
 
-        log.info("Customers reassigned successfully: oldEmployeeId={}, newEmployeeId={}",
+        log.info("Customers reassigned successfully: oldEmployeeId= {}, newEmployeeId= {}",
                 oldEmployeeId,
                 newEmployeeId
         );
