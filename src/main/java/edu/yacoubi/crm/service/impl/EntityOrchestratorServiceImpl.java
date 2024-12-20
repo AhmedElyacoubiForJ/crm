@@ -63,7 +63,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
         );
 
         // Kunden neu zuweisen
-        reassignCustomers(oldEmployee.getId(), newEmployee.getId());
+        this.reassignCustomers(oldEmployee.getId(), newEmployee.getId());
 
         // Archivierung des Mitarbeiters
         inactiveEmployeeService.createInactiveEmployee(oldEmployee);

@@ -5,6 +5,7 @@ import edu.yacoubi.crm.TestAppender;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
+import edu.yacoubi.crm.model.InactiveEmployee;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.service.ICustomerService;
@@ -168,7 +169,7 @@ class EntityOrchestratorServiceImplUnitTest {
 
         underTest.reassignCustomerToEmployee(customerId, employeeId);
 
-        verify(validationService,times(1)).validateEmployeeExists(employeeId);
+        verify(validationService, times(1)).validateEmployeeExists(employeeId);
 
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
@@ -370,37 +371,84 @@ class EntityOrchestratorServiceImplUnitTest {
 
     @Test
     void itShouldValidateEmployeesExist_ByCallingDeleteEmployeeAndReassignCustomers() {
-        // Given
         Long oldEmployeeId = 1L;
         Long newEmployeeId = 2L;
 
-        // Erstelle eine anonyme Unterklasse, um reassignCustomers zu überschreiben
-        EntityOrchestratorServiceImpl spyService = new EntityOrchestratorServiceImpl(
-                employeeRepository,
-                customerService,
-                customerRepository,
-                inactiveEmployeeService,
-                validationService
-        ) {
-            @Override
-            public void reassignCustomers(Long oldId, Long newId) {
-                // Überschreiben der Methode ohne Inhalt, um die Ausführung zu verhindern
-            }
-        };
+        Employee oldEmployee = new Employee();
+        oldEmployee.setId(oldEmployeeId);
+        Employee newEmployee = new Employee();
+        newEmployee.setId(newEmployeeId);
+
+        Customer customer1 = new Customer();
+        customer1.setId(101L);
+        Customer customer2 = new Customer();
+        customer2.setId(102L);
+        List<Customer> customers = List.of(customer1, customer2);
 
         // Mock the validateEmployeeExists method
-        doNothing().when(validationService).validateEmployeeExists(anyLong());
+        doNothing().when(validationService).validateEmployeeExists(oldEmployeeId);
+        doNothing().when(validationService).validateEmployeeExists(newEmployeeId);
+        when(employeeRepository.findById(oldEmployeeId)).thenReturn(Optional.ofNullable(oldEmployee));
+        when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.ofNullable(newEmployee));
+        //doNothing().when(underTest).reassignCustomers(oldEmployeeId, newEmployeeId);
+        doNothing().when(validationService).validateEmployeeExists(oldEmployeeId);
+        doNothing().when(validationService).validateEmployeeExists(newEmployeeId);
+        when(customerService.getCustomersByEmployeeId(oldEmployeeId)).thenReturn(customers);
+        when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.ofNullable(newEmployee));
+        when(customerRepository.saveAll(customers)).thenReturn(customers);
+        when(inactiveEmployeeService.createInactiveEmployee(oldEmployee)).thenReturn(new InactiveEmployee());
+        doNothing().when(employeeRepository).delete(oldEmployee);
 
-        // Mock the findById method für die Validierungs- und Repository-Aufrufe
-        when(employeeRepository.findById(oldEmployeeId)).thenReturn(Optional.of(new Employee()));
-        when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.of(new Employee()));
 
-        // Call the method to test
-        spyService.deleteEmployeeAndReassignCustomers(oldEmployeeId, newEmployeeId);
+        underTest.deleteEmployeeAndReassignCustomers(oldEmployeeId, newEmployeeId);
 
-        // Verify interactions
-        verify(validationService, times(1)).validateEmployeeExists(oldEmployeeId);
-        verify(validationService, times(1)).validateEmployeeExists(newEmployeeId);
+        assertTrue(testAppender.contains(
+                String.format(LogInfoStartDeleteEmployeeAndReassignCustommers, oldEmployeeId, newEmployeeId), "INFO"
+        ));
+        // Verify that the info log is not triggered
+        assertTrue(testAppender.contains(
+                String.format(LogInfoEndDeleteEmployeeAndReassignCustommers, oldEmployeeId, newEmployeeId), "INFO"
+        ));
+
+        // Verify method calls
+        verify(validationService, times(2)).validateEmployeeExists(oldEmployeeId);
+        verify(validationService, times(2)).validateEmployeeExists(newEmployeeId);
+        verify(customerService, times(1)).getCustomersByEmployeeId(oldEmployeeId);
+        verify(customerRepository, times(1)).saveAll(customers);
+        verify(inactiveEmployeeService, times(1)).createInactiveEmployee(oldEmployee);
+        verify(employeeRepository, times(1)).delete(oldEmployee);
+
+//        // Given
+//        Long oldEmployeeId = 1L;
+//        Long newEmployeeId = 2L;
+//
+//        // Erstelle eine anonyme Unterklasse, um reassignCustomers zu überschreiben
+//        EntityOrchestratorServiceImpl spyService = new EntityOrchestratorServiceImpl(
+//                employeeRepository,
+//                customerService,
+//                customerRepository,
+//                inactiveEmployeeService,
+//                validationService
+//        ) {
+//            @Override
+//            public void reassignCustomers(Long oldId, Long newId) {
+//                // Überschreiben der Methode ohne Inhalt, um die Ausführung zu verhindern
+//            }
+//        };
+//
+//        // Mock the validateEmployeeExists method
+//        doNothing().when(validationService).validateEmployeeExists(anyLong());
+//
+//        // Mock the findById method für die Validierungs- und Repository-Aufrufe
+//        when(employeeRepository.findById(oldEmployeeId)).thenReturn(Optional.of(new Employee()));
+//        when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.of(new Employee()));
+//
+//        // Call the method to test
+//        spyService.deleteEmployeeAndReassignCustomers(oldEmployeeId, newEmployeeId);
+//
+//        // Verify interactions
+//        verify(validationService, times(1)).validateEmployeeExists(oldEmployeeId);
+//        verify(validationService, times(1)).validateEmployeeExists(newEmployeeId);
     }
 
     @Test
