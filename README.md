@@ -153,6 +153,181 @@ spring.profiles.active=test # or prod
 
 ## [API Testing-Dokumentation](z_documentations/TESTING.md)
 
+## Struktur des Projektes
+
+```plaintext
+src/
+└── main/
+    ├── java/
+    │   └── edu.yacoubi.crm/
+    │       ├── config/
+    │       │   ├── CorsConfig.java
+    │       │   ├── OpenApiConfig.java
+    │       │   └── SwaggerConfig.java
+    │       ├── controllers/
+    │       │   ├── api/
+    │       │   │   ├── CustomerRestController.java
+    │       │   │   ├── EmployeeRestController.java
+    │       │   │   ├── NoteRestController.java
+    │       │   │   └── StatusRestController.java
+    │       │   └── toviews/
+    │       │       ├── CustomerViewController.java
+    │       │       ├── EmployeeViewController.java
+    │       │       ├── HomeController.java
+    │       │       └── NoteController.java
+    │       ├── dto/
+    │       │   ├── customer/
+    │       │   │   ├── CustomerPatchDTO.java
+    │       │   │   ├── CustomerRequestDTO.java
+    │       │   │   └── CustomerResponseDTO.java
+    │       │   ├── employee/
+    │       │   │   ├── EmployeePatchDTO.java
+    │       │   │   ├── EmployeeRequestDTO.java
+    │       │   │   └── EmployeeResponseDTO.java
+    │       │   ├── note/
+    │       │   │   ├── NotePatchDTO.java
+    │       │   │   ├── NoteRequestDTO.java
+    │       │   │   └── NoteResponseDTO.java
+    │       │   ├── APIResponse.java
+    │       │   └── ValidationError.java
+    │       ├── exception/
+    │       │   ├── GlobalExceptionHandler.java
+    │       │   └── ResourceNotFoundException.java
+    │       ├── health/
+    │       │   ├── DatabaseHealtIndicator.java
+    │       │   └── ExternalServcieHealthIndicator.java
+    │       ├── mapper/
+    │       │   └── IMapper.java
+    │       ├── modell/
+    │       │   ├── Customer.java
+    │       │   ├── Employee.java
+    │       │   ├── InactiveEmployee.java
+    │       │   ├── InterationType.java
+    │       │   └── Note.java
+    │       ├── repository/
+    │       │   ├── CustomCustomerRepository.java
+    │       │   ├── CustomCustomerRepositoryImpl.java
+    │       │   ├── CustomerRepository.java
+    │       │   ├── EmployeeRepository.java
+    │       │   ├── InactiveEmployeeRepository.java
+    │       │   └── NoteRepository.java
+    │       ├── scenarios/
+    │       │   └── CRMScenarioRunner.java
+    │       ├── security/
+    │       │   ├── config/
+    │       │   │   └── SecurityConfig.java
+    │       │   ├── dto/
+    │       │   │   └── UserRequestDTO
+    │       │   ├── model/
+    │       │   │   ├── Role.java
+    │       │   │   ├── User.java
+    │       │   │   ├── UserCustomer.java
+    │       │   │   ├── UserCustomerKey.java
+    │       │   │   ├── UserEmployee.java
+    │       │   │   └── UserEmployeeKey.java  
+    │       │   ├── repository/
+    │       │   │   ├── RoleRepository.java
+    │       │   │   ├── UserCutomerRepository.java
+    │       │   │   ├── UserEmployeeRepository.java
+    │       │   │   └── UserRepository.java
+    │       │   └── service/
+    │       │       └── UserService.java
+    │       ├── service/
+    │       │   ├── impl/
+    │       │   │   ├── CustomerServiceImpl.java
+    │       │   │   ├── EmployeeServiceImpl.java
+    │       │   │   ├── EntityOrchestratorServiceImpl.java
+    │       │   │   ├── InactiveEmployeeServiceImpl.java
+    │       │   │   └── NoteServiceImpl.java
+    │       │   ├── ICustomerService.java
+    │       │   ├── IEmployeeService.java
+    │       │   ├── IEntityOrchestratorService.java
+    │       │   ├── IInactiveEmployeeService.java
+    │       │   ├── INoteServcie.java
+    │       │   └── ValidationService.java
+    │       ├── util/
+    │       │   └── ValueMapper.java  
+    │       └── Main.java
+    ├── resources/
+    │   ├── static/
+    │   │   ├── css/
+    │   │   │   └── styles.css
+    │   │   └── favicon.ico
+    │   ├── templates/
+    │   │   ├── customer/
+    │   │   │   ├── customer-form.html
+    │   │   │   └── customer-list.html
+    │   │   ├── employee/
+    │   │   │   ├── employee-form.html
+    │   │   │   └── employee-list.html
+    │   │   ├── note/
+    │   │   │   ├── note-form.html
+    │   │   │   └── note-list.html
+    │   │   └── home.html
+    │   ├── application.properties
+    │   ├── application-prod.properties
+    │   ├── application-test.properties
+    │   ├── banner.txt
+    │   ├── data.sql
+    │   └── schema.sql
+    └── test/
+        └── java/
+            └── edu.yacoubi.crm/
+                ├── controllers.api/
+                │   └── CustomerRestControllerTest.java
+                ├── repository/
+                │   ├── CustomerRepositoryIntegrationTest.java
+                │   ├── CustomerRepositoryUnitTest.java
+                │   ├── EmployeeRepositoryUnitTest.java
+                │   └── NoteRepositoryIntegrationTest.java
+                ├── service.impl/
+                │   ├── CustomerServiceImplIntegrationTest.java
+                │   ├── CustomerServiceImplUnit.java
+                │   ├── EmployeeServiceImplIntegrationTest.java
+                │   ├── EmployeeServiceImplUnitTest.java
+                │   ├── EntityOrchestratorImplUnitTest.java
+                │   ├── EntityOrchestratorImplIntegrationTest.java
+                │   ├── NoteServiceImplIntegrationTest.java
+                │   └── NoteServcieImplUnitTest.java
+                ├── util/
+                │   └── ValueMapperTest.java
+                ├── MainTests.java
+                ├── TestAppender.java
+                └── TestDataUtil.java
+z_documentationy/
+├── ACTUATOR_IN_CRM.md
+├── api_documentation.md
+├── APIResponse_Documentation.md
+├── customerDTO.json
+├── DELETE_EMPLOYEE_AND_REASSIGN_CUSTOMERS_UNIT_TEST.mg
+├── Delete_Employee_Impl.md
+├── DETAILED_DOCUMENTATION.md
+├── ENTITY_ORCHESTRATOR_SERVICE_DESIGN.md
+├── Example_And_CriteriaAPI_DOC.md
+├── Hosting_Plattform.md
+├── LOGGING_BEST_PRACTICES.md
+├── NAMENSAUNDERUNG_DES_ORCHESTRATOR_SERVICES.md
+├── PAGED_MODEL_MIT_HATEOAS.md
+├── TEST_APPENDER_LOG_NACHRICHTEN.md
+├── TESTING.md
+├── Ueberlegungen_Mitarbeiter_Loeschen.md
+├── ValueMapper_unit_testes.md
+└── views_documentation.md
+.gitattributes
+.gitignore
+AUTHENTICATION_ERWEITERUNG.md
+AUTHENTICATION_TABELLEN.md
+Exception_Workflow_Doc.md
+HELP.md
+PROJEKT_STRUKTUR_SECURITY.md
+SCENARIEN_CHECK_LOESUNGSANSATZ.md
+TESTS-md
+UEBERBLICK_DES_LOESUNGSANSATZES.md
+LAZY_LOADING.md
+pom.xml
+README.md
+```
+
 ## TODOs
 - JPA Entities spezifizieren: DONE
 - Repositories: DONE
@@ -167,3 +342,4 @@ spring.profiles.active=test # or prod
 - RestApi Swagger-Documentations: DONE (könnte verbessert werden)
 - RestApi Unit-,IntegrationsTests: TODO
 - Spring MVC views Implementations: DONE (teilweise verbesserung notwendig)
+
