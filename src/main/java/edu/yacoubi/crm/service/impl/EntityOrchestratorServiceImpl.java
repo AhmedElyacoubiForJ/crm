@@ -109,17 +109,20 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
 
     @Override
     public void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
-        Assert.notNull(oldEmployeeId, "Old employee ID must not be null");
-        Assert.notNull(newEmployeeId, "New employee ID must not be null");
-
+        // Log the start of the method call
         log.info("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
                 oldEmployeeId,
                 newEmployeeId
         );
 
+        if (oldEmployeeId == null || newEmployeeId == null || oldEmployeeId < 0 || newEmployeeId < 0) {
+            log.warn("Employee IDs must not be null and must be a positive number");
+            throw new IllegalArgumentException("Employee IDs must not be null and a positive number");
+        }
+
         if (newEmployeeId.equals(oldEmployeeId)) {
             log.warn("Old and new employee IDs must be different");
-            return;
+            throw new IllegalArgumentException("Old and new employee IDs must be different");
         }
 
         validationService.validateEmployeeExists(oldEmployeeId);
@@ -127,8 +130,9 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
 
         List<Customer> customers = customerService.getCustomersByEmployeeId(oldEmployeeId);
         if (customers.isEmpty()) {
-            log.warn("No customers found for employee ID: {}", oldEmployeeId);
-            return;
+            log.warn(String.format("No customers found for oldEmployee ID: %d", oldEmployeeId));
+            throw new IllegalArgumentException(String.format("No customers found for oldEmployee ID: %d", oldEmployeeId));
+            //return;
         }
 
         Employee newEmployee = employeeRepository.findById(newEmployeeId).orElseThrow(
