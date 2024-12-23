@@ -8,9 +8,9 @@ import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.InactiveEmployee;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
+import edu.yacoubi.crm.service.validation.EntityValidator;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IInactiveEmployeeService;
-import edu.yacoubi.crm.service.ValidationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +19,6 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +47,7 @@ class EntityOrchestratorServiceImplUnitTest {
     @Mock
     private IInactiveEmployeeService inactiveEmployeeService;
     @Mock
-    private ValidationService validationService;
+    private EntityValidator entityValidator;
     @InjectMocks
     private EntityOrchestratorServiceImpl underTest;
 
@@ -182,8 +181,8 @@ class EntityOrchestratorServiceImplUnitTest {
         List<Customer> customers = new ArrayList<Customer>();
         customers.add(new Customer());
 
-        doNothing().when(validationService).validateEmployeeExists(oldEmployeeId);
-        doNothing().when(validationService).validateEmployeeExists(newEmployeeId);
+        doNothing().when(entityValidator).validateEmployeeExists(oldEmployeeId);
+        doNothing().when(entityValidator).validateEmployeeExists(newEmployeeId);
         when(customerService.getCustomersByEmployeeId(oldEmployeeId)).thenReturn(customers);
         when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.of(new Employee()));
 
@@ -191,7 +190,7 @@ class EntityOrchestratorServiceImplUnitTest {
         underTest.reassignCustomers(oldEmployeeId, newEmployeeId);
 
         // Then verify that the validationService is called
-        verify(validationService, times(2)).validateEmployeeExists(anyLong());
+        verify(entityValidator, times(2)).validateEmployeeExists(anyLong());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
                 String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
@@ -207,8 +206,8 @@ class EntityOrchestratorServiceImplUnitTest {
         Long oldEmployeeId = 1L;
         Long newEmployeeId = 2L;
 
-        doNothing().when(validationService).validateEmployeeExists(oldEmployeeId);
-        doNothing().when(validationService).validateEmployeeExists(newEmployeeId);
+        doNothing().when(entityValidator).validateEmployeeExists(oldEmployeeId);
+        doNothing().when(entityValidator).validateEmployeeExists(newEmployeeId);
         when(customerService.getCustomersByEmployeeId(oldEmployeeId)).thenReturn(new ArrayList<>());
 
         // When
@@ -275,7 +274,7 @@ class EntityOrchestratorServiceImplUnitTest {
 //        ));
 //        // Verify that the info log is not triggered
 //        assertTrue(testAppender.contains(
-//                String.format(LogInfoEndDeleteEmployeeAndReassignCustommers, oldEmployeeId, newEmployeeId), "INFO"
+//                String.format(LogInfoEndDeleteEmployeeAndReassignCustomers, oldEmployeeId, newEmployeeId), "INFO"
 //        ));
     }
 
@@ -381,7 +380,7 @@ class EntityOrchestratorServiceImplUnitTest {
         employee.setId(employeeId);
 
         // Mock the validateEmployeeExists method
-        doNothing().when(validationService).validateEmployeeExists(anyLong());
+        doNothing().when(entityValidator).validateEmployeeExists(anyLong());
         when(customerRepository.findById(customerId)).thenReturn(Optional.ofNullable(customer));
         when(employeeRepository.findById(employeeId)).thenReturn(Optional.ofNullable(employee));
         when(customerRepository.save(customer)).thenReturn(any(Customer.class));
@@ -389,7 +388,7 @@ class EntityOrchestratorServiceImplUnitTest {
 
         underTest.reassignCustomerToEmployee(customerId, employeeId);
 
-        verify(validationService, times(1)).validateEmployeeExists(employeeId);
+        verify(entityValidator, times(1)).validateEmployeeExists(employeeId);
 
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
@@ -416,7 +415,7 @@ class EntityOrchestratorServiceImplUnitTest {
 
         // Mock the validateEmployeeExists method
         doThrow(new ResourceNotFoundException("Employee not found with ID: " + employeeId))
-                .when(validationService).validateEmployeeExists(anyLong());
+                .when(entityValidator).validateEmployeeExists(anyLong());
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
             underTest.reassignCustomerToEmployee(customerId, employeeId);
@@ -441,7 +440,7 @@ class EntityOrchestratorServiceImplUnitTest {
         Long employeeId = 2L;
 
         // Mock the validateEmployeeExists method
-        doNothing().when(validationService).validateEmployeeExists(anyLong());
+        doNothing().when(entityValidator).validateEmployeeExists(anyLong());
         when(customerRepository.findById(customerId)).thenReturn(Optional.empty());
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
@@ -467,7 +466,7 @@ class EntityOrchestratorServiceImplUnitTest {
         Long employeeId = 999L;
 
         // Mock the validateEmployeeExists method
-        doNothing().when(validationService).validateEmployeeExists(anyLong());
+        doNothing().when(entityValidator).validateEmployeeExists(anyLong());
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(new Customer()));
         when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
 
@@ -500,7 +499,7 @@ class EntityOrchestratorServiceImplUnitTest {
         employee.setId(employeeId);
 
         // Mock the validateEmployeeExists method
-        doNothing().when(validationService).validateEmployeeExists(anyLong());
+        doNothing().when(entityValidator).validateEmployeeExists(anyLong());
         when(customerRepository.findById(customerId)).thenReturn(Optional.ofNullable(customer));
         when(employeeRepository.findById(employeeId)).thenReturn(Optional.ofNullable(employee));
         when(customerRepository.save(customer)).thenReturn(any(Customer.class));
@@ -606,13 +605,13 @@ class EntityOrchestratorServiceImplUnitTest {
         List<Customer> customers = List.of(customer1, customer2);
 
         // Mock the validateEmployeeExists method
-        doNothing().when(validationService).validateEmployeeExists(oldEmployeeId);
-        doNothing().when(validationService).validateEmployeeExists(newEmployeeId);
+        doNothing().when(entityValidator).validateEmployeeExists(oldEmployeeId);
+        doNothing().when(entityValidator).validateEmployeeExists(newEmployeeId);
         when(employeeRepository.findById(oldEmployeeId)).thenReturn(Optional.ofNullable(oldEmployee));
         when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.ofNullable(newEmployee));
         //doNothing().when(underTest).reassignCustomers(oldEmployeeId, newEmployeeId);
-        doNothing().when(validationService).validateEmployeeExists(oldEmployeeId);
-        doNothing().when(validationService).validateEmployeeExists(newEmployeeId);
+        doNothing().when(entityValidator).validateEmployeeExists(oldEmployeeId);
+        doNothing().when(entityValidator).validateEmployeeExists(newEmployeeId);
         when(customerService.getCustomersByEmployeeId(oldEmployeeId)).thenReturn(customers);
         when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.ofNullable(newEmployee));
         when(customerRepository.saveAll(customers)).thenReturn(customers);
@@ -646,8 +645,8 @@ class EntityOrchestratorServiceImplUnitTest {
         ));
 
         // Verify method calls
-        verify(validationService, times(2)).validateEmployeeExists(oldEmployeeId);
-        verify(validationService, times(2)).validateEmployeeExists(newEmployeeId);
+        verify(entityValidator, times(2)).validateEmployeeExists(oldEmployeeId);
+        verify(entityValidator, times(2)).validateEmployeeExists(newEmployeeId);
         verify(customerService, times(1)).getCustomersByEmployeeId(oldEmployeeId);
         verify(customerRepository, times(1)).saveAll(customers);
         verify(inactiveEmployeeService, times(1)).createInactiveEmployee(oldEmployee);
@@ -694,7 +693,7 @@ class EntityOrchestratorServiceImplUnitTest {
         // Mock the validateEmployeeExists method to throw an exception for oldEmployeeId
         String message = String.format(EMPLOYEE_NOT_FOUND_WITH_ID, oldEmployeeId);
         doThrow(new ResourceNotFoundException(message))
-                .when(validationService).validateEmployeeExists(oldEmployeeId);
+                .when(entityValidator).validateEmployeeExists(oldEmployeeId);
 
         // Call the method to test and expect ResourceNotFoundException
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
@@ -732,14 +731,14 @@ class EntityOrchestratorServiceImplUnitTest {
         when(employeeRepository.findById(oldEmployeeId)).thenReturn(Optional.of(oldEmployee));
         when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.of(newEmployee));
         when(customerService.getCustomersByEmployeeId(oldEmployeeId)).thenReturn(customers);
-        doNothing().when(validationService).validateEmployeeExists(anyLong());
+        doNothing().when(entityValidator).validateEmployeeExists(anyLong());
 
         underTest.deleteEmployeeAndReassignCustomers(oldEmployeeId, newEmployeeId);
 
-        verify(validationService, times(4)).validateEmployeeExists(anyLong());
+        verify(entityValidator, times(4)).validateEmployeeExists(anyLong());
         verify(employeeRepository, times(3)).findById(anyLong());
-        verify(validationService, times(2)).validateEmployeeExists(oldEmployeeId);
-        verify(validationService, times(2)).validateEmployeeExists(newEmployeeId);
+        verify(entityValidator, times(2)).validateEmployeeExists(oldEmployeeId);
+        verify(entityValidator, times(2)).validateEmployeeExists(newEmployeeId);
         verify(employeeRepository, times(1)).findById(oldEmployeeId);
         verify(employeeRepository, times(2)).findById(newEmployeeId);
         verify(customerRepository, times(1)).saveAll(anyList());

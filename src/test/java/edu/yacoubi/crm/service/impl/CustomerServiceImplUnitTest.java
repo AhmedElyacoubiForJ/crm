@@ -5,7 +5,7 @@ import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.CustomerRepository;
-import edu.yacoubi.crm.service.ValidationService;
+import edu.yacoubi.crm.service.validation.EntityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,7 +24,7 @@ class CustomerServiceImplUnitTest {
     private CustomerRepository customerRepository;
     
     @Mock
-    private ValidationService validationService;
+    private EntityValidator entityValidator;
 
     @InjectMocks
     private CustomerServiceImpl underTest;
@@ -160,7 +160,7 @@ class CustomerServiceImplUnitTest {
         employeeA.setId(employeeId);
         customers.forEach(customer -> customer.setEmployee(employeeA));
         when(customerRepository.findByEmployeeId(employeeId)).thenReturn(customers);
-        doNothing().when(validationService).validateEmployeeExists(employeeId);
+        doNothing().when(entityValidator).validateEmployeeExists(employeeId);
 
 
         // When
@@ -172,26 +172,4 @@ class CustomerServiceImplUnitTest {
         //assertEquals(customers, foundCustomers); // Wenn Reihenfolge eine Rolle spielt
         verify(customerRepository, times(1)).findByEmployeeId(employeeId);
     }
-
-//    @Test
-//    public void itShouldReassignCustomerToEmployee() {
-//        // Given
-//        Long customerId = 1L;
-//        Long employeeId = 2L;
-//        Customer customer = TestDataUtil.createCustomerA(null);
-//        customer.setId(customerId);
-//        Employee employeeB = TestDataUtil.createEmployeeB();
-//        employeeB.setId(employeeId);
-//        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
-//        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employeeB));
-//
-//        // When
-//        underTest.reassignCustomerToEmployee(customerId, employeeId);
-//
-//        // Then
-//        verify(customerRepository, times(1)).findById(customerId);
-//        verify(employeeRepository, times(1)).findById(employeeId);
-//        verify(customerRepository, times(1)).save(customer);
-//        assertEquals(employeeB, customer.getEmployee());
-//    }
 }

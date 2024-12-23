@@ -5,8 +5,8 @@ import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
+import edu.yacoubi.crm.service.validation.EntityValidator;
 import edu.yacoubi.crm.service.ICustomerService;
-import edu.yacoubi.crm.service.ValidationService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaUpdate;
@@ -27,7 +27,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
     private final CustomerRepository customerRepository;
     private final EntityManager entityManager;
-    private final ValidationService validationService;
+    private final EntityValidator entityValidator;
 
     @Override
     public Customer createCustomer(Customer customer) {
@@ -163,7 +163,7 @@ public class CustomerServiceImpl implements ICustomerService {
     public List<Customer> getCustomersByEmployeeId(Long employeeId) {
         log.info("CustomerServiceImpl::getCustomersByEmployeeId employeeId: {}", employeeId);
 
-        validationService.validateEmployeeExists(employeeId);
+        entityValidator.validateEmployeeExists(employeeId);
 
         log.info("Get customers by employee ID: {}", employeeId);
         return customerRepository.findByEmployeeId(employeeId);

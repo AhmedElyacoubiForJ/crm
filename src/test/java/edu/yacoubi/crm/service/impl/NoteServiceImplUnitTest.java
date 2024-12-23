@@ -1,17 +1,20 @@
 package edu.yacoubi.crm.service.impl;
 
+import ch.qos.logback.classic.Logger;
+import edu.yacoubi.crm.TestAppender;
 import edu.yacoubi.crm.TestDataUtil;
+import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.repository.NoteRepository;
+import edu.yacoubi.crm.service.validation.EntityValidator;
 import edu.yacoubi.crm.service.ICustomerService;
-import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +23,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class NoteServiceImplUnitTest {
-
+    private static TestAppender testAppender;
     @Mock
     private NoteRepository noteRepository;
+
+    @Mock
+    private EntityValidator entityValidator;
 
     @Mock
     private ICustomerService customerService;
@@ -33,6 +39,10 @@ class NoteServiceImplUnitTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        Logger logger = (Logger) LoggerFactory.getLogger(NoteServiceImpl.class);
+        testAppender = new TestAppender();
+        testAppender.start();
+        logger.addAppender(testAppender);
     }
 
     @Test
@@ -78,6 +88,7 @@ class NoteServiceImplUnitTest {
         note.setId(noteId);
         when(noteRepository.existsById(noteId)).thenReturn(true);
         when(noteRepository.save(any(Note.class))).thenReturn(note);
+        doNothing().when(entityValidator).validateNoteExists(anyLong());
 
         // When
         Note updatedNote = underTest.updateNote(noteId, note);
@@ -85,6 +96,10 @@ class NoteServiceImplUnitTest {
         // Then
         assertNotNull(updatedNote);
         verify(noteRepository, times(1)).save(note);
+        assertTrue(testAppender.contains(
+                "NoteServiceImpl::updateNote execution start: id 1, note " + note, "INFO"
+        ));
+        assertTrue(testAppender.contains("NoteServiceImpl::updateNote execution end", "INFO"));
     }
 
     @Test
@@ -98,6 +113,8 @@ class NoteServiceImplUnitTest {
 
         // Then
         verify(noteRepository, times(1)).deleteById(noteId);
+        assertTrue(testAppender.contains(String.format("NoteServiceImpl::deleteNote execution start: id %d", noteId), "INFO"));
+        assertTrue(testAppender.contains("NoteServiceImpl::deleteNote execution end", "INFO"));
     }
 
     @Test
@@ -118,14 +135,21 @@ class NoteServiceImplUnitTest {
     }
 
     @Test
-    public void itShouldThrowWhenDeleteNoteDoesNotExist() {
+    public void itShouldThrowExceptionWhenDeleteNoteByIdIfNoteDoesNotExist() {
         // Given
         Long noteId = 1L;
-        when(noteRepository.existsById(noteId)).thenReturn(false);
+        doThrow(new ResourceNotFoundException("Note not found with ID: " + noteId))
+                .when(entityValidator).validateNoteExists(noteId);
 
-        // When & Then
-        ResourceNotFoundException exception = assertThrows(
-                ResourceNotFoundException.class, () -> underTest.deleteNote(noteId));
+        // When
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            underTest.deleteNote(noteId);
+        });
+
+        verify(entityValidator, times(1)).validateNoteExists(noteId);
+        // Then verify the exception message
         assertEquals("Note not found with ID: " + noteId, exception.getMessage());
+        assertTrue(testAppender.contains(String.format("NoteServiceImpl::deleteNote execution start: id %d", noteId), "INFO"));
+        assertFalse(testAppender.contains("NoteServiceImpl::deleteNote execution end: Resource not found", "ERROR"));
     }
 }

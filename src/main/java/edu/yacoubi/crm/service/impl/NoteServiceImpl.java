@@ -3,14 +3,11 @@ package edu.yacoubi.crm.service.impl;
 import edu.yacoubi.crm.dto.note.NotePatchDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Note;
+import edu.yacoubi.crm.repository.INoteCustomRepository;
 import edu.yacoubi.crm.repository.NoteRepository;
+import edu.yacoubi.crm.service.validation.EntityValidator;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.INoteService;
-import edu.yacoubi.crm.exception.ResourceNotFoundException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaUpdate;
-import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +21,9 @@ import java.util.Optional;
 @Slf4j
 public class NoteServiceImpl implements INoteService{
     private final NoteRepository noteRepository;
+    private final INoteCustomRepository noteCustomRepository;
     private final ICustomerService customerService;
-    private final EntityManager entityManager;
+    private final EntityValidator entityValidator;
 
 
     @Override
@@ -36,35 +34,43 @@ public class NoteServiceImpl implements INoteService{
         Customer customer = customerService.getCustomerById(customerId).get();
         note.setCustomer(customer);
 
+        Note savedNote = noteRepository.save(note);
+
         log.info("NoteServiceImpl::createNoteForCustomer execution end");
-        return noteRepository.save(note);
+        return savedNote;
     }
 
     @Override
     public Optional<Note> getNoteById(Long id) {
-        log.info("NoteServiceImpl::getNoteById id {}", id);
+        log.info("NoteServiceImpl::getNoteById execution start: id {}", id);
 
-        return noteRepository.findById(id);
+        Optional<Note> optionalNote = noteRepository.findById(id);
+
+        log.info("NoteServiceImpl::getNoteById execution end");
+        return optionalNote;
     }
 
     @Override
     public Note updateNote(Long id, Note note) {
         log.info("NoteServiceImpl::updateNote execution start: id {}, note {}", id, note);
 
-        validateNoteId(id);
+        entityValidator.validateNoteExists(id);
+        //validateNoteId(id);
+        Note updatedNote = noteRepository.save(note);
 
         log.info("NoteServiceImpl::updateNote execution end");
-        return noteRepository.save(note);
+        return updatedNote;
     }
 
     @Override
     public void deleteNote(Long id) {
         log.info("NoteServiceImpl::deleteNote execution start: id {}", id);
 
-        validateNoteId(id);
+        entityValidator.validateNoteExists(id);
+
+        noteRepository.deleteById(id);
 
         log.info("NoteServiceImpl::deleteNote execution end");
-        noteRepository.deleteById(id);
     }
 
     @Override
@@ -74,8 +80,10 @@ public class NoteServiceImpl implements INoteService{
         // Da die Ausnahme bereits geworfen wird, wenn der Kunde nicht existiert
         customerService.ensureCustomerExists(customerId);
 
+        List<Note> notesByCustomerId = noteRepository.findAllByCustomerId(customerId);
+
         log.info("NoteServiceImpl::getNotesByCustomerId execution end");
-        return noteRepository.findAllByCustomerId(customerId);
+        return notesByCustomerId;
     }
 
     @Override
@@ -83,31 +91,17 @@ public class NoteServiceImpl implements INoteService{
     public void partialUpdateNote(Long id, NotePatchDTO notePatchDTO) {
         log.info("NoteServiceImpl::partialUpdateNote execution start: id {}, notePatchDTO {}", id, notePatchDTO);
 
-        validateNoteId(id);
+        // Validate parameters first
+//        if (id == null || notePatchDTO == null || id < 0 ) {
+//            log.warn("Note id or NotePatchDTO must not be null and id must be a positive number");
+//            throw new IllegalArgumentException("Note id or NotePatchDTO must not be null and id must be a positive number");
+//        }
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaUpdate<Note> update = cb.createCriteriaUpdate(Note.class);
-        Root<Note> root = update.from(Note.class);
+        entityValidator.validateNoteExists(id);
 
-        if (notePatchDTO.getContent() != null) {
-            update.set(root.get("content"), notePatchDTO.getContent());
-        }
-        if (notePatchDTO.getDate() != null) {
-            update.set(root.get("date"), notePatchDTO.getDate());
-        }
-        if(notePatchDTO.getInteractionType() != null) {
-            update.set(root.get("interactionType"), notePatchDTO.getInteractionType());
-        }
-
-        update.where(cb.equal(root.get("id"), id));
+        // delegate
+        noteCustomRepository.partialUpdateNote(id, notePatchDTO);
 
         log.info("NoteServiceImpl::partialUpdateNote execution end");
-        entityManager.createQuery(update).executeUpdate();
-    }
-
-    private void validateNoteId(Long id) {
-        if (!noteRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Note not found with ID: " + id);
-        }
     }
 }

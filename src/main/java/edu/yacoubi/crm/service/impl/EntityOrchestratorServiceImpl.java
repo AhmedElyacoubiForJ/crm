@@ -5,10 +5,8 @@ import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
-import edu.yacoubi.crm.service.ICustomerService;
-import edu.yacoubi.crm.service.IEntityOrchestratorService;
-import edu.yacoubi.crm.service.IInactiveEmployeeService;
-import edu.yacoubi.crm.service.ValidationService;
+import edu.yacoubi.crm.service.*;
+import edu.yacoubi.crm.service.validation.EntityValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +32,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
     private final ICustomerService customerService;
     private final CustomerRepository customerRepository;
     private final IInactiveEmployeeService inactiveEmployeeService;
-    private final ValidationService validationService;
+    private final EntityValidator entityValidator;
 
     @Transactional
     @Override
@@ -52,8 +50,8 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
             throw new IllegalArgumentException("Old and new employee IDs must be different");
         }
 
-        validationService.validateEmployeeExists(oldEmployeeId);
-        validationService.validateEmployeeExists(newEmployeeId);
+        entityValidator.validateEmployeeExists(oldEmployeeId);
+        entityValidator.validateEmployeeExists(newEmployeeId);
 
         Employee oldEmployee = employeeRepository.findById(oldEmployeeId).orElseThrow(
                 () -> new ResourceNotFoundException(String.format(EMPLOYEE_NOT_FOUND_WITH_ID, oldEmployeeId))
@@ -89,7 +87,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
         }
 
         // Ensure employee exists
-        validationService.validateEmployeeExists(employeeId);
+        entityValidator.validateEmployeeExists(employeeId);
 
         // Fetch customer and employee entities
         Customer customer = customerRepository.findById(customerId).orElseThrow(
@@ -125,8 +123,8 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
             throw new IllegalArgumentException("Old and new employee IDs must be different");
         }
 
-        validationService.validateEmployeeExists(oldEmployeeId);
-        validationService.validateEmployeeExists(newEmployeeId);
+        entityValidator.validateEmployeeExists(oldEmployeeId);
+        entityValidator.validateEmployeeExists(newEmployeeId);
 
         List<Customer> customers = customerService.getCustomersByEmployeeId(oldEmployeeId);
         if (customers.isEmpty()) {
