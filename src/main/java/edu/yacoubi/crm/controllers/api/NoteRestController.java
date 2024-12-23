@@ -7,6 +7,7 @@ import edu.yacoubi.crm.dto.note.NoteResponseDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
+import edu.yacoubi.crm.service.INoteOrchestratorService;
 import edu.yacoubi.crm.service.INoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -25,6 +26,7 @@ import static edu.yacoubi.crm.util.ValueMapper.*;
 public class NoteRestController {
     private final INoteService noteService;
     private final ICustomerService customerService;
+    private final INoteOrchestratorService noteOrchestratorService;
 
     @Operation(
             summary = "Get note by ID",
@@ -61,7 +63,7 @@ public class NoteRestController {
         customerService.getCustomerById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + customerId));
         Note noteRequest = convertToEntity(noteRequestDTO);
-        Note createdNote = noteService.createNoteForCustomer(noteRequest, customerId);
+        Note createdNote = noteOrchestratorService.createNoteForCustomer(noteRequest, customerId);
         NoteResponseDTO noteResponseDTO = convertToResponseDTO(createdNote);
 
         APIResponse<NoteResponseDTO> response = APIResponse.<NoteResponseDTO>builder()

@@ -45,23 +45,23 @@ class NoteServiceImplUnitTest {
         logger.addAppender(testAppender);
     }
 
-    @Test
-    public void itShouldCreateNoteForCustomer() {
-        // Given
-        Long customerId = 1L;
-        Note note = TestDataUtil.createNoteA(null);
-        Customer customer = TestDataUtil.createCustomerA(null);
-        when(customerService.getCustomerById(customerId)).thenReturn(Optional.of(customer));
-        when(noteRepository.save(any(Note.class))).thenReturn(note);
-
-        // When
-        Note savedNote = underTest.createNoteForCustomer(note, customerId);
-
-        // Then
-        assertNotNull(savedNote);
-        assertEquals(customer, savedNote.getCustomer());
-        verify(noteRepository, times(1)).save(note);
-    }
+//    @Test
+//    public void itShouldCreateNoteForCustomer() {
+//        // Given
+//        Long customerId = 1L;
+//        Note note = TestDataUtil.createNoteA(null);
+//        Customer customer = TestDataUtil.createCustomerA(null);
+//        when(customerService.getCustomerById(customerId)).thenReturn(Optional.of(customer));
+//        when(noteRepository.save(any(Note.class))).thenReturn(note);
+//
+//        // When
+//        Note savedNote = underTest.createNoteForCustomer(note, customerId);
+//
+//        // Then
+//        assertNotNull(savedNote);
+//        assertEquals(customer, savedNote.getCustomer());
+//        verify(noteRepository, times(1)).save(note);
+//    }
 
     @Test
     public void itShouldFindNoteById() {

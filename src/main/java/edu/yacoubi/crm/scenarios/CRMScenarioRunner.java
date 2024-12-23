@@ -6,6 +6,7 @@ import edu.yacoubi.crm.model.InteractionType;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
+import edu.yacoubi.crm.service.INoteOrchestratorService;
 import edu.yacoubi.crm.service.INoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -20,6 +21,8 @@ public class CRMScenarioRunner implements CommandLineRunner {
     private final IEmployeeService employeeService;
 
     private final ICustomerService customerService;
+
+    private final INoteOrchestratorService noteOrchestratorService;
 
     private final INoteService noteService;
 
@@ -83,7 +86,7 @@ public class CRMScenarioRunner implements CommandLineRunner {
                 .content("Details zur Interaktion")
                 .date(LocalDate.now()).build();
 
-        noteService.createNoteForCustomer(note, customer.getId());
+        noteOrchestratorService.createNoteForCustomer(note, customer.getId());
 
         System.out.println("Interaktion erfolgreich gespeichert.");
     }
@@ -144,7 +147,7 @@ public class CRMScenarioRunner implements CommandLineRunner {
                 .date(LocalDate.now())
                 .build();
 
-        noteService.createNoteForCustomer(newNote, customer.getId());
+        noteOrchestratorService.createNoteForCustomer(newNote, customer.getId());
 
         Customer customerF = customerService
                 .getCustomerByEmail("c.customerB@gmail.com")
@@ -168,7 +171,7 @@ public class CRMScenarioRunner implements CommandLineRunner {
                 .content("Follow-up Email sent")
                 .date(LocalDate.now())
                 .build();
-        noteService.createNoteForCustomer(newNote, customer.getId());
+        noteOrchestratorService.createNoteForCustomer(newNote, customer.getId());
 
         // Kunden und Notizen laden
         Customer customerF = customerService
@@ -191,7 +194,7 @@ public class CRMScenarioRunner implements CommandLineRunner {
                 .content("Follow-up Email sent")
                 .date(LocalDate.now())
                 .build();
-        noteService.createNoteForCustomer(newNote, customer.getId());
+        noteOrchestratorService.createNoteForCustomer(newNote, customer.getId());
 
         // Kunden und Notizen laden mit Lazy Loading
         Customer customerF = customerService.getCustomerWithNotes(customer.getId());

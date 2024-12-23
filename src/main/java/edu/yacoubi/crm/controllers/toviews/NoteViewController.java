@@ -3,6 +3,7 @@ package edu.yacoubi.crm.controllers.toviews;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
+import edu.yacoubi.crm.service.INoteOrchestratorService;
 import edu.yacoubi.crm.service.INoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,9 @@ public class NoteViewController {
 
     @Autowired
     private INoteService noteService;
+
+    @Autowired
+    private INoteOrchestratorService noteOrchestratorService;
 
     @Autowired
     private ICustomerService customerService;
@@ -40,7 +44,7 @@ public class NoteViewController {
         Customer customer = customerService.getCustomerById(customerId)
                 .orElseThrow(() -> new IllegalArgumentException("Ungültige Kunden-ID: " + customerId));
         note.setCustomer(customer);
-        noteService.createNoteForCustomer(note, customerId);
+        noteOrchestratorService.createNoteForCustomer(note, customerId);
         return "redirect:/customers/" + customerId + "/notes"; // Umleitung zur Notizenliste des Kunden
     }
 

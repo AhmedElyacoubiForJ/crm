@@ -1,13 +1,12 @@
 package edu.yacoubi.crm.service.impl;
 
 import edu.yacoubi.crm.dto.note.NotePatchDTO;
-import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.repository.INoteCustomRepository;
 import edu.yacoubi.crm.repository.NoteRepository;
-import edu.yacoubi.crm.service.validation.EntityValidator;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.INoteService;
+import edu.yacoubi.crm.service.validation.EntityValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,28 +18,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class NoteServiceImpl implements INoteService{
+public class NoteServiceImpl implements INoteService {
     private final NoteRepository noteRepository;
     private final INoteCustomRepository noteCustomRepository;
     private final ICustomerService customerService;
     private final EntityValidator entityValidator;
 
-
     @Override
-    public Note createNoteForCustomer(Note note, Long customerId) {
-        log.info("NoteServiceImpl::createNoteForCustomer execution start: note {}, customerId {}", note, customerId);
-
-        // Da die Ausnahme bereits geworfen wird, wenn der Kunde nicht existiert
-        Customer customer = customerService.getCustomerById(customerId).get();
-        note.setCustomer(customer);
-
-        Note savedNote = noteRepository.save(note);
-
-        log.info("NoteServiceImpl::createNoteForCustomer execution end");
-        return savedNote;
-    }
-
-    @Override public Note createNote(Note note) {
+    public Note createNote(Note note) {
         log.info("NoteServiceImpl::createNote execution start: note {}", note);
 
         if (note.getCustomer() == null) {
