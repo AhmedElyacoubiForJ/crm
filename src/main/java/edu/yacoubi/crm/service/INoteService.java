@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface INoteService {
     Note createNoteForCustomer(Note note, Long customerId);
 
+    Note createNote(Note note);
+
     Optional<Note> getNoteById(Long id);
 
     Note updateNote(Long id, Note note);

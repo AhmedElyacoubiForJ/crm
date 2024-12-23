@@ -40,6 +40,19 @@ public class NoteServiceImpl implements INoteService{
         return savedNote;
     }
 
+    @Override public Note createNote(Note note) {
+        log.info("NoteServiceImpl::createNote execution start: note {}", note);
+
+        if (note.getCustomer() == null) {
+            throw new IllegalArgumentException("Customer must not be null");
+        }
+
+        Note savedNote = noteRepository.save(note);
+
+        log.info("NoteServiceImpl::createNote execution end");
+        return savedNote;
+    }
+
     @Override
     public Optional<Note> getNoteById(Long id) {
         log.info("NoteServiceImpl::getNoteById execution start: id {}", id);
