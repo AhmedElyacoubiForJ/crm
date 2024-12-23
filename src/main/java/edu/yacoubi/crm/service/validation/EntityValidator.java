@@ -1,6 +1,7 @@
 package edu.yacoubi.crm.service.validation;
 
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
+import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.repository.NoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ public class EntityValidator {
 
     private final EmployeeRepository employeeRepository;
     private final NoteRepository noteRepository;
+    private final CustomerRepository customerRepository;
 
     public void validateEmployeeExists(Long employeeId) {
         log.info("EntityValidatorService::validateEmployeeExists employeeId: {}", employeeId);
@@ -35,5 +37,16 @@ public class EntityValidator {
         }
 
         log.info("EntityValidatorService::validateNoteExists id: {} successfully validated", id);
+    }
+
+    public void validateCustomerExists(Long id) {
+        log.info("EntityValidatorService::validateCustomerExists id: {}", id);
+
+        if (!customerRepository.existsById(id)) {
+            log.error("EntityValidatorService::validateCustomerExists id: {} not found", id);
+            throw new ResourceNotFoundException("Customer not found with ID: " + id);
+        }
+
+        log.info("EntityValidatorService::validateCustomerExists id: {} successfully validated", id);
     }
 }
