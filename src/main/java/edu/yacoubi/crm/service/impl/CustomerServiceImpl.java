@@ -4,12 +4,9 @@ import edu.yacoubi.crm.dto.customer.CustomerPatchDTO;
 import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
+import edu.yacoubi.crm.repository.ICustomerCustomRepository;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.validation.EntityValidator;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaUpdate;
-import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
@@ -23,9 +20,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class CustomerServiceImpl implements ICustomerService {
-
     private final CustomerRepository customerRepository;
-    private final EntityManager entityManager;
+    private final ICustomerCustomRepository customerCustomRepository;
     private final EntityValidator entityValidator;
 
     @Override
@@ -158,26 +154,9 @@ public class CustomerServiceImpl implements ICustomerService {
 
         entityValidator.validateCustomerExists(customerId);
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaUpdate<Customer> update = cb.createCriteriaUpdate(Customer.class);
-        Root<Customer> root = update.from(Customer.class);
+        // delegate
+        customerCustomRepository.partialUpdateCustomer(customerId, customerPatchDTO);
 
-        if (customerPatchDTO.getFirstName() != null) {
-            update.set(root.get("firstName"), customerPatchDTO.getFirstName());
-        }
-        if (customerPatchDTO.getLastName() != null) {
-            update.set(root.get("lastName"), customerPatchDTO.getLastName());
-        }
-        if (customerPatchDTO.getEmail() != null) {
-            update.set(root.get("email"), customerPatchDTO.getEmail());
-        }
-        if (customerPatchDTO.getAddress() != null) {
-            update.set(root.get("address"), customerPatchDTO.getAddress());
-        }
-
-        update.where(cb.equal(root.get("id"), customerId));
-
-        entityManager.createQuery(update).executeUpdate();
         log.info("CustomerServiceImpl::partialUpdateCustomer execution end");
     }
 

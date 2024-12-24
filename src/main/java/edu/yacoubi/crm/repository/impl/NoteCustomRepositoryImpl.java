@@ -3,7 +3,6 @@ package edu.yacoubi.crm.repository.impl;
 import edu.yacoubi.crm.dto.note.NotePatchDTO;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.repository.INoteCustomRepository;
-import edu.yacoubi.crm.service.validation.EntityValidator;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaUpdate;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 public class NoteCustomRepositoryImpl implements INoteCustomRepository {
     private final EntityManager entityManager;
-    private final EntityValidator entityValidator;
+    //private final EntityValidator entityValidator;
 
 
     @Override
@@ -26,7 +25,8 @@ public class NoteCustomRepositoryImpl implements INoteCustomRepository {
     public void partialUpdateNote(Long noteId, NotePatchDTO notePatchDTO) {
         log.info("NoteCustomRepositoryImpl::partialUpdateNote execution start: noteId {}, notePatchDTO {}", noteId, notePatchDTO);
 
-        entityValidator.validateNoteExists(noteId);
+        // wird im service validiert
+        //entityValidator.validateNoteExists(noteId);
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaUpdate<Note> update = cb.createCriteriaUpdate(Note.class);
