@@ -1,6 +1,5 @@
 package edu.yacoubi.crm.service.impl;
 
-import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;

@@ -18,35 +18,35 @@ public class EntityValidator {
     private final CustomerRepository customerRepository;
 
     public void validateEmployeeExists(Long employeeId) {
-        log.info("EntityValidatorService::validateEmployeeExists employeeId: {}", employeeId);
+        log.info("EntityValidator::validateEmployeeExists employeeId: {}", employeeId);
 
         if (!employeeRepository.existsById(employeeId)) {
-            log.error("EntityValidatorService::validateEmployeeExists employeeId: {} not found", employeeId);
+            log.error("EntityValidator::validateEmployeeExists employeeId: {} not found", employeeId);
             throw new ResourceNotFoundException("Employee not found with ID: " + employeeId);
         }
 
-        log.info("EntityValidatorService::validateEmployeeExists employeeId: {} successfully validated", employeeId);
+        log.info("EntityValidator::validateEmployeeExists employeeId: {} successfully validated", employeeId);
     }
 
     public void validateNoteExists(Long id) {
-        log.info("EntityValidatorService::validateNoteExists id: {}", id);
+        log.info("EntityValidator::validateNoteExists id: {}", id);
 
         if (!noteRepository.existsById(id)) {
-            log.error("EntityValidatorService::validateNoteExists id: {} not found", id);
+            log.error("EntityValidator::validateNoteExists id: {} not found", id);
             throw new ResourceNotFoundException("Note not found with ID: " + id);
         }
 
-        log.info("EntityValidatorService::validateNoteExists id: {} successfully validated", id);
+        log.info("EntityValidator::validateNoteExists id: {} successfully validated", id);
     }
 
     public void validateCustomerExists(Long id) {
-        log.info("EntityValidatorService::validateCustomerExists id: {}", id);
+        log.info("EntityValidator::validateCustomerExists id: {}", id);
 
         if (!customerRepository.existsById(id)) {
-            log.error("EntityValidatorService::validateCustomerExists id: {} not found", id);
+            log.error("EntityValidator::validateCustomerExists id: {} not found", id);
             throw new ResourceNotFoundException("Customer not found with ID: " + id);
         }
 
-        log.info("EntityValidatorService::validateCustomerExists id: {} successfully validated", id);
+        log.info("EntityValidator::validateCustomerExists id: {} successfully validated", id);
     }
 }

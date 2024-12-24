@@ -4,7 +4,6 @@ import edu.yacoubi.crm.dto.note.NotePatchDTO;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.repository.INoteCustomRepository;
 import edu.yacoubi.crm.repository.NoteRepository;
-import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.INoteService;
 import edu.yacoubi.crm.service.validation.EntityValidator;
 import jakarta.transaction.Transactional;
@@ -21,7 +20,6 @@ import java.util.Optional;
 public class NoteServiceImpl implements INoteService {
     private final NoteRepository noteRepository;
     private final INoteCustomRepository noteCustomRepository;
-    private final ICustomerService customerService;
     private final EntityValidator entityValidator;
 
     @Override
@@ -39,21 +37,22 @@ public class NoteServiceImpl implements INoteService {
     }
 
     @Override
-    public Optional<Note> getNoteById(Long id) {
-        log.info("NoteServiceImpl::getNoteById execution start: id {}", id);
+    public Optional<Note> getNoteById(Long noteId) {
+        log.info("NoteServiceImpl::getNoteById execution start: noteId {}", noteId);
 
-        Optional<Note> optionalNote = noteRepository.findById(id);
+        Optional<Note> optionalNote = noteRepository.findById(noteId);
 
         log.info("NoteServiceImpl::getNoteById execution end");
         return optionalNote;
     }
 
     @Override
-    public Note updateNote(Long id, Note note) {
-        log.info("NoteServiceImpl::updateNote execution start: id {}, note {}", id, note);
+    public Note updateNote(Long noteId, Note note) {
+        log.info("NoteServiceImpl::updateNote execution start: noteId {}, note {}", noteId, note);
 
-        entityValidator.validateNoteExists(id);
-        //validateNoteId(id);
+        entityValidator.validateNoteExists(noteId);
+        note.setId(noteId);
+
         Note updatedNote = noteRepository.save(note);
 
         log.info("NoteServiceImpl::updateNote execution end");
@@ -61,12 +60,12 @@ public class NoteServiceImpl implements INoteService {
     }
 
     @Override
-    public void deleteNote(Long id) {
-        log.info("NoteServiceImpl::deleteNote execution start: id {}", id);
+    public void deleteNote(Long noteId) {
+        log.info("NoteServiceImpl::deleteNote execution start: noteId {}", noteId);
 
-        entityValidator.validateNoteExists(id);
+        entityValidator.validateNoteExists(noteId);
 
-        noteRepository.deleteById(id);
+        noteRepository.deleteById(noteId);
 
         log.info("NoteServiceImpl::deleteNote execution end");
     }
@@ -76,7 +75,7 @@ public class NoteServiceImpl implements INoteService {
         log.info("NoteServiceImpl::getNotesByCustomerId execution start: customerId {}", customerId);
 
         // Da die Ausnahme bereits geworfen wird, wenn der Kunde nicht existiert
-        customerService.ensureCustomerExists(customerId);
+        entityValidator.validateCustomerExists(customerId);
 
         List<Note> notesByCustomerId = noteRepository.findAllByCustomerId(customerId);
 
@@ -86,8 +85,8 @@ public class NoteServiceImpl implements INoteService {
 
     @Override
     @Transactional
-    public void partialUpdateNote(Long id, NotePatchDTO notePatchDTO) {
-        log.info("NoteServiceImpl::partialUpdateNote execution start: id {}, notePatchDTO {}", id, notePatchDTO);
+    public void partialUpdateNote(Long noteId, NotePatchDTO notePatchDTO) {
+        log.info("NoteServiceImpl::partialUpdateNote execution start: noteId {}, notePatchDTO {}", noteId, notePatchDTO);
 
         // Validate parameters first
 //        if (id == null || notePatchDTO == null || id < 0 ) {
@@ -95,10 +94,10 @@ public class NoteServiceImpl implements INoteService {
 //            throw new IllegalArgumentException("Note id or NotePatchDTO must not be null and id must be a positive number");
 //        }
 
-        entityValidator.validateNoteExists(id);
+        entityValidator.validateNoteExists(noteId);
 
         // delegate
-        noteCustomRepository.partialUpdateNote(id, notePatchDTO);
+        noteCustomRepository.partialUpdateNote(noteId, notePatchDTO);
 
         log.info("NoteServiceImpl::partialUpdateNote execution end");
     }

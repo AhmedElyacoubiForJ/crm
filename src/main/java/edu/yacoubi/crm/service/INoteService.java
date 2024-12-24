@@ -9,13 +9,13 @@ import java.util.Optional;
 public interface INoteService {
     Note createNote(Note note);
 
-    Optional<Note> getNoteById(Long id);
+    Optional<Note> getNoteById(Long noteId);
 
-    Note updateNote(Long id, Note note);
+    Note updateNote(Long noteId, Note note);
 
-    void deleteNote(Long id);
+    void deleteNote(Long noteId);
 
     List<Note> getNotesByCustomerId(Long customerId);
 
-    void partialUpdateNote(Long id, NotePatchDTO notePatchDTO);
+    void partialUpdateNote(Long noteId, NotePatchDTO notePatchDTO);
 }

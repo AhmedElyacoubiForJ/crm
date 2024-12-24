@@ -2,6 +2,7 @@ package edu.yacoubi.crm.repository;
 
 import edu.yacoubi.crm.dto.note.NotePatchDTO;
 import edu.yacoubi.crm.model.Note;
+import edu.yacoubi.crm.service.validation.EntityValidator;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaUpdate;
@@ -16,15 +17,15 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 public class NoteCustomRepositoryImpl implements INoteCustomRepository {
     private final EntityManager entityManager;
-    //private final EntityValidatorService entityValidatorService;
+    private final EntityValidator entityValidator;
 
 
     @Override
     @Transactional
-    public void partialUpdateNote(Long id, NotePatchDTO notePatchDTO) {
-        log.info("NoteCustomRepositoryImpl::partialUpdateNote execution start: id {}, notePatchDTO {}", id, notePatchDTO);
+    public void partialUpdateNote(Long noteId, NotePatchDTO notePatchDTO) {
+        log.info("NoteCustomRepositoryImpl::partialUpdateNote execution start: noteId {}, notePatchDTO {}", noteId, notePatchDTO);
 
-        //entityValidatorService.validateNoteExists(id);
+        entityValidator.validateNoteExists(noteId);
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaUpdate<Note> update = cb.createCriteriaUpdate(Note.class);
@@ -36,11 +37,11 @@ public class NoteCustomRepositoryImpl implements INoteCustomRepository {
         if (notePatchDTO.getDate() != null) {
             update.set(root.get("date"), notePatchDTO.getDate());
         }
-        if(notePatchDTO.getInteractionType() != null) {
+        if (notePatchDTO.getInteractionType() != null) {
             update.set(root.get("interactionType"), notePatchDTO.getInteractionType());
         }
 
-        update.where(cb.equal(root.get("id"), id));
+        update.where(cb.equal(root.get("id"), noteId));
 
         entityManager.createQuery(update).executeUpdate();
         log.info("NoteCustomRepositoryImpl::partialUpdateNote execution end");

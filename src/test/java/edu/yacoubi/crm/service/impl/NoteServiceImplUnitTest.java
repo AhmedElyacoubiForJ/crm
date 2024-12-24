@@ -23,18 +23,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class NoteServiceImplUnitTest {
-    private static TestAppender testAppender;
     @Mock
     private NoteRepository noteRepository;
 
     @Mock
     private EntityValidator entityValidator;
 
-    @Mock
-    private ICustomerService customerService;
-
     @InjectMocks
     private NoteServiceImpl underTest;
+
+    private static TestAppender testAppender;
 
     @BeforeEach
     public void setUp() {
@@ -97,7 +95,7 @@ class NoteServiceImplUnitTest {
         assertNotNull(updatedNote);
         verify(noteRepository, times(1)).save(note);
         assertTrue(testAppender.contains(
-                "NoteServiceImpl::updateNote execution start: id 1, note " + note, "INFO"
+                "NoteServiceImpl::updateNote execution start: noteId 1, note " + note, "INFO"
         ));
         assertTrue(testAppender.contains("NoteServiceImpl::updateNote execution end", "INFO"));
     }
@@ -113,7 +111,7 @@ class NoteServiceImplUnitTest {
 
         // Then
         verify(noteRepository, times(1)).deleteById(noteId);
-        assertTrue(testAppender.contains(String.format("NoteServiceImpl::deleteNote execution start: id %d", noteId), "INFO"));
+        assertTrue(testAppender.contains(String.format("NoteServiceImpl::deleteNote execution start: noteId %d", noteId), "INFO"));
         assertTrue(testAppender.contains("NoteServiceImpl::deleteNote execution end", "INFO"));
     }
 
@@ -123,7 +121,7 @@ class NoteServiceImplUnitTest {
         Long customerId = 1L;
         List<Note> notes = List.of(TestDataUtil.createNoteA(null), TestDataUtil.createNoteB(null));
         when(noteRepository.findAllByCustomerId(customerId)).thenReturn(notes);
-        when(customerService.getCustomerById(customerId)).thenReturn(Optional.of(new Customer())); // Mock für existierende ID hinzufügen
+        doNothing().when(entityValidator).validateNoteExists(anyLong()); // Mock für existierende ID
 
         // When
         List<Note> foundNotes = underTest.getNotesByCustomerId(customerId);
@@ -149,7 +147,7 @@ class NoteServiceImplUnitTest {
         verify(entityValidator, times(1)).validateNoteExists(noteId);
         // Then verify the exception message
         assertEquals("Note not found with ID: " + noteId, exception.getMessage());
-        assertTrue(testAppender.contains(String.format("NoteServiceImpl::deleteNote execution start: id %d", noteId), "INFO"));
+        assertTrue(testAppender.contains(String.format("NoteServiceImpl::deleteNote execution start: noteId %d", noteId), "INFO"));
         assertFalse(testAppender.contains("NoteServiceImpl::deleteNote execution end: Resource not found", "ERROR"));
     }
 }
