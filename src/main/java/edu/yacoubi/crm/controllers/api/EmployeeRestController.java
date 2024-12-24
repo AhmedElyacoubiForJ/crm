@@ -131,9 +131,10 @@ public class EmployeeRestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
 
         Employee employeeRequest = convertToEntity(employeeRequestDTO);
-        employeeRequest.setId(id);
+        // wird im service gesetzt
+        //employeeRequest.setId(id);
 
-        Employee updatedEmployee = employeeService.updateEmployee(employeeRequest);
+        Employee updatedEmployee = employeeService.updateEmployee(id, employeeRequest);
         EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(updatedEmployee);
         APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
                 .status("success")

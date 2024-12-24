@@ -21,6 +21,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+// TODO validate method parameters
 public class EmployeeServiceImpl implements IEmployeeService {
     private final EmployeeRepository employeeRepository;
     private final IEmployeeCustomRepository employeeCustomRepository;
@@ -84,15 +85,16 @@ public class EmployeeServiceImpl implements IEmployeeService {
     }
 
     @Override
-    // TODO: add employeeId as parameter
-    public Employee updateEmployee(Employee employee) {
+    public Employee updateEmployee(Long employeeId, Employee employee) {
         log.info("EmployeeServiceImpl::updateEmployee execution start: employee {}", employee);
-        // Validierung einfügen, falls notwendig
-        if (!employeeRepository.existsById(employee.getId())) {
-            log.warn("Employee not found with ID: {}", employee.getId());
-            throw new ResourceNotFoundException("Employee not found with ID: " + employee.getId());
-        }
-        return employeeRepository.save(employee);
+
+        entityValidator.validateEmployeeExists(employeeId);
+        employee.setId(employeeId);
+
+        Employee updatedEmployee = employeeRepository.save(employee);
+
+        log.info("EmployeeServiceImpl::updateEmployee execution end");
+        return updatedEmployee;
     }
 
     @Override

@@ -17,6 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+// TODO validate method parameters
 public class NoteServiceImpl implements INoteService {
     private final NoteRepository noteRepository;
     private final INoteCustomRepository noteCustomRepository;
@@ -39,6 +40,8 @@ public class NoteServiceImpl implements INoteService {
     @Override
     public Optional<Note> getNoteById(Long noteId) {
         log.info("NoteServiceImpl::getNoteById execution start: noteId {}", noteId);
+
+        entityValidator.validateNoteExists(noteId);
 
         Optional<Note> optionalNote = noteRepository.findById(noteId);
 
@@ -87,12 +90,6 @@ public class NoteServiceImpl implements INoteService {
     @Transactional
     public void partialUpdateNote(Long noteId, NotePatchDTO notePatchDTO) {
         log.info("NoteServiceImpl::partialUpdateNote execution start: noteId {}, notePatchDTO {}", noteId, notePatchDTO);
-
-        // Validate parameters first
-//        if (id == null || notePatchDTO == null || id < 0 ) {
-//            log.warn("Note id or NotePatchDTO must not be null and id must be a positive number");
-//            throw new IllegalArgumentException("Note id or NotePatchDTO must not be null and id must be a positive number");
-//        }
 
         entityValidator.validateNoteExists(noteId);
 

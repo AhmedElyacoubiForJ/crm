@@ -19,6 +19,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+// TODO validate method parameters
 public class CustomerServiceImpl implements ICustomerService {
     private final CustomerRepository customerRepository;
     private final ICustomerCustomRepository customerCustomRepository;
@@ -47,11 +48,11 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    // Aktualisieren eines bestehenden Kunden
     public Customer updateCustomer(Long customerId, Customer customer) {
         log.info("CustomerServiceImpl::updateCustomer execution start: customerId {}, customer {}", customerId, customer);
 
         entityValidator.validateCustomerExists(customerId);
+        customer.setId(customerId);
 
         Customer updatedCustomer = customerRepository.save(customer);
 

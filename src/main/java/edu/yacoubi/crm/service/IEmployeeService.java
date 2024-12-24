@@ -16,7 +16,7 @@ public interface IEmployeeService {
 
     Optional<Employee> getEmployeeById(Long employeeId);
 
-    Employee updateEmployee(Employee employee);
+    Employee updateEmployee(Long employeeId, Employee employee);
 
     Optional<Employee> getEmployeeByEmail(String mail);
 
