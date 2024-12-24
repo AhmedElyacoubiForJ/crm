@@ -14,13 +14,13 @@ public interface IEmployeeService {
 
     Page<Employee> getEmployeesWithPagination(int page, int size);
 
-    Optional<Employee> getEmployeeById(Long id);
+    Optional<Employee> getEmployeeById(Long employeeId);
 
     Employee updateEmployee(Employee employee);
 
     Optional<Employee> getEmployeeByEmail(String mail);
 
-    void partialUpdateEmployee(Long id, EmployeePatchDTO employeePatchDTO);
+    void partialUpdateEmployee(Long employeeId, EmployeePatchDTO employeePatchDTO);
 
     Page<Employee> getEmployeesByFirstNameOrDepartment(String search, int page, int size);
 

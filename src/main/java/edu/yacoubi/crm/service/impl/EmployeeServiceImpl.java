@@ -4,11 +4,9 @@ import edu.yacoubi.crm.dto.employee.EmployeePatchDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.EmployeeRepository;
+import edu.yacoubi.crm.repository.IEmployeeCustomRepository;
 import edu.yacoubi.crm.service.IEmployeeService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaUpdate;
-import jakarta.persistence.criteria.Root;
+import edu.yacoubi.crm.service.validation.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,38 +22,71 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class EmployeeServiceImpl implements IEmployeeService {
-
     private final EmployeeRepository employeeRepository;
-    private final EntityManager entityManager;
+    private final IEmployeeCustomRepository employeeCustomRepository;
+    private final EntityValidator entityValidator;
 
     @Override
     public Employee createEmployee(Employee employee) {
-        log.info("EmployeeServiceImpl::createEmployee employee {}", employee);
-        // Hier könnte auch eine Validierungslogik hinzukommen
-        return employeeRepository.save(employee);
+        log.info("EmployeeServiceImpl::createEmployee execution start: employee {}", employee);
+
+        // Validate parameters first
+        if (employee == null) {
+            log.warn("Employee must not be null");
+            throw new IllegalArgumentException("Employee must not be null");
+        }
+
+        // wäre besser die Methode mit EmployeeRequestDTO als parameter
+        employee.setId(null);
+
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        log.info("EmployeeServiceImpl::createEmployee execution end");
+        return savedEmployee;
     }
 
     @Override
     public List<Employee> getAllEmployees() {
-        log.info("EmployeeServiceImpl::getAllEmployees");
-        return employeeRepository.findAll();
+        log.info("EmployeeServiceImpl::getAllEmployees execution start");
+
+        List<Employee> employees = employeeRepository.findAll();
+
+        log.info("EmployeeServiceImpl::getAllEmployees execution end");
+        return employees;
     }
 
     @Override
     public Page<Employee> getEmployeesWithPagination(int page, int size) {
+        log.info("EmployeeServiceImpl::getEmployeesWithPagination execution start: page {}, size {}", page, size);
+
         Pageable pageable = PageRequest.of(page, size);
-        return employeeRepository.findAll(pageable);
+        Page<Employee> employeePage = employeeRepository.findAll(pageable);
+
+        log.info("EmployeeServiceImpl::getEmployeesWithPagination execution end");
+        return employeePage;
     }
 
     @Override
-    public Optional<Employee> getEmployeeById(Long id) {
-        log.info("EmployeeServiceImpl::getEmployeeById id {}", id);
-        return employeeRepository.findById(id);
+    public Optional<Employee> getEmployeeById(Long employeeId) {
+        log.info("EmployeeServiceImpl::getEmployeeById execution start: employeeId {}", employeeId);
+
+        if (employeeId == null) {
+            log.warn("Employee ID must not be null");
+            throw new IllegalArgumentException("Employee ID must not be null");
+        }
+
+        entityValidator.validateEmployeeExists(employeeId);
+
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+
+        log.info("EmployeeServiceImpl::getEmployeeById execution end");
+        return optionalEmployee;
     }
 
     @Override
+    // TODO: add employeeId as parameter
     public Employee updateEmployee(Employee employee) {
-        log.info("EmployeeServiceImpl::updateEmployee employee: {}", employee);
+        log.info("EmployeeServiceImpl::updateEmployee execution start: employee {}", employee);
         // Validierung einfügen, falls notwendig
         if (!employeeRepository.existsById(employee.getId())) {
             log.warn("Employee not found with ID: {}", employee.getId());
@@ -66,60 +97,52 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public Optional<Employee> getEmployeeByEmail(String email) {
-        log.info("EmployeeServiceImpl::getEmployeeByEmail email: {}", email);
-        return employeeRepository.findByEmail(email);
+        log.info("EmployeeServiceImpl::getEmployeeByEmail execution start: email {}", email);
+
+        Optional<Employee> optionalEmployee = employeeRepository.findByEmail(email);
+
+        log.info("EmployeeServiceImpl::getEmployeeByEmail execution end");
+        return optionalEmployee;
     }
 
     @Override
     @Transactional
-    public void partialUpdateEmployee(Long id, EmployeePatchDTO employeePatchDTO) {
-        log.info("EmployeeServiceImpl::partialUpdateEmployee id: {}, employeePatchDTO: {}", id, employeePatchDTO);
+    public void partialUpdateEmployee(Long employeeId, EmployeePatchDTO employeePatchDTO) {
+        log.info("EmployeeServiceImpl::partialUpdateEmployee execution start: employeeId {}, employeePatchDTO {}", employeeId, employeePatchDTO);
 
-        if (!employeeRepository.existsById(id)) {
-            log.warn("Employee not found with ID: {}", id);
-            throw new ResourceNotFoundException("Employee not found with ID: " + id);
-        }
+        entityValidator.validateEmployeeExists(employeeId);
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaUpdate<Employee> update = cb.createCriteriaUpdate(Employee.class);
-        Root<Employee> root = update.from(Employee.class);
-
-        if (employeePatchDTO.getFirstName() != null) {
-            update.set(root.get("firstName"), employeePatchDTO.getFirstName());
-        }
-        if (employeePatchDTO.getLastName() != null) {
-            update.set(root.get("lastName"), employeePatchDTO.getLastName());
-        }
-        if (employeePatchDTO.getEmail() != null) {
-            update.set(root.get("email"), employeePatchDTO.getEmail());
-        }
-        if (employeePatchDTO.getDepartment() != null) {
-            update.set(root.get("department"), employeePatchDTO.getDepartment());
-        }
-
-        update.where(cb.equal(root.get("id"), id));
-
-        log.info("Partial update executed for employee ID: {}", id);
-        entityManager.createQuery(update).executeUpdate();
+        // delegate
+        // to custom repository for more complex queries
+        employeeCustomRepository.partialUpdateEmployee(employeeId, employeePatchDTO);
+        log.info("EmployeeServiceImpl::partialUpdateEmployee execution end");
     }
 
     @Override
     public Page<Employee> getEmployeesByFirstNameOrDepartment(String searchString, int page, int size) {
-        log.info("EmployeeServiceImpl::searchByFirstNameOrDepartment searchString: {}, page: {}, size: {}", searchString, page, size);
+        log.info("EmployeeServiceImpl::searchByFirstNameOrDepartment execution start: searchString {}, page {}, size {}", searchString, page, size);
 
         Pageable pageable = PageRequest.of(page, size);
 
-        return employeeRepository.findByFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase(
-                searchString,
-                searchString,
-                pageable
-        );
+        Page<Employee> employeePage = employeeRepository
+                .findByFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase(
+                        searchString,
+                        searchString,
+                        pageable
+                );
+
+        log.info("EmployeeServiceImpl::searchByFirstNameOrDepartment execution end");
+        return employeePage;
     }
 
     @Override
     public Optional<List<String>> getAllDepartments() {
-        log.info("EmployeeServiceImpl::getAllDepartments");
-        return employeeRepository.findAllDepartments();
+        log.info("EmployeeServiceImpl::getAllDepartments execution start");
+
+        Optional<List<String>> optionalDepartments = employeeRepository.findAllDepartments();
+
+        log.info("EmployeeServiceImpl::getAllDepartments execution end");
+        return optionalDepartments;
     }
 }
 
