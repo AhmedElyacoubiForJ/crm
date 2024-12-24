@@ -1,9 +1,9 @@
-Warum wir diese Refaktoring-Maßnahmen durchgeführt haben:
+Klar, hier ist der ergänzende Satz, den du am Anfang der Dokumentation oder in der Zusammenfassung hinzufügen kannst:
 
 ## Dokumentation: Änderungen und Verbesserungen
 
 ### Grund für das Refactoring:
-> Der Hauptgrund für dieses Refactoring war die Verbesserung der **Separation of Concerns** (Trennung der Zuständigkeiten). Dieser Grundsatz ist ein wichtiges Prinzip in der Softwareentwicklung, das darauf abzielt, den Code modularer, verständlicher und leichter wartbar zu gestalten. Durch die klare Trennung der Verantwortlichkeiten in verschiedene Komponenten können wir sicherstellen, dass jede Klasse und Methode eine spezifische Aufgabe hat. Dies führt zu besser wartbarem und verständlicherem Code, reduziert die Fehleranfälligkeit und erhöht die Wiederverwendbarkeit der Logik.
+> Das Ziel dieses Refactorings war die Verbesserung der **Separation of Concerns** (Trennung der Zuständigkeiten). Dieses Prinzip ist essentiell in der Softwareentwicklung und sorgt dafür, dass der Code modularer, verständlicher und leichter wartbar wird. Eine klare Trennung der Verantwortlichkeiten gewährleistet, dass jede Klasse und Methode eine spezifische Aufgabe hat. Dies führt zu besserem Verständnis, leichterer Wartbarkeit, reduzierter Fehleranfälligkeit und erhöhter Wiederverwendbarkeit. **Diese Refactoring-Maßnahmen gelten entsprechend auch für andere Komponenten im System, um die Separation of Concerns durchgängig zu gewährleisten.**
 
 ### 1. **Orchestrator und Separation of Concerns**
 #### Hinzugefügte Klassen:
@@ -86,48 +86,10 @@ public class NoteServiceImpl implements INoteService {
 
 #### EntityValidator:
 ```java
-@Component
-@RequiredArgsConstructor
-@Slf4j
-public class EntityValidator {
-
-    private final EmployeeRepository employeeRepository;
-    private final NoteRepository noteRepository;
-    private final CustomerRepository customerRepository;
-
-    public void validateEmployeeExists(Long employeeId) {
-        log.info("EntityValidatorService::validateEmployeeExists employeeId: {}", employeeId);
-
-        if (!employeeRepository.existsById(employeeId)) {
-            log.error("EntityValidatorService::validateEmployeeExists employeeId: {} not found", employeeId);
-            throw new ResourceNotFoundException("Employee not found with ID: " + employeeId);
-        }
-
-        log.info("EntityValidatorService::validateEmployeeExists employeeId: {} successfully validated", employeeId);
-    }
-
-    public void validateNoteExists(Long id) {
-        log.info("EntityValidatorService::validateNoteExists id: {}", id);
-
-        if (!noteRepository.existsById(id)) {
-            log.error("EntityValidatorService::validateNoteExists id: {} not found", id);
-            throw new ResourceNotFoundException("Note not found with ID: " + id);
-        }
-
-        log.info("EntityValidatorService::validateNoteExists id: {} successfully validated", id);
-    }
-
-    public void validateCustomerExists(Long id) {
-        log.info("EntityValidatorService::validateCustomerExists id: {}", id);
-
-        if (!customerRepository.existsById(id)) {
-            log.error("EntityValidatorService::validateCustomerExists id: {} not found", id);
-            throw new ResourceNotFoundException("Customer not found with ID: " + id);
-        }
-
-        log.info("EntityValidatorService::validateCustomerExists id: {} successfully validated", id);
-    }
-}
+// Code zur Validierung von Mitarbeitern, Notizen und Kunden
+// validateEmployeeExists
+// validateNoteExists
+// validateCustomerExists
 ```
 
 ### 4. **Unit Tests Anpassungen**
@@ -154,7 +116,16 @@ public void itShouldCreateNoteForCustomer() {
 }
 ```
 
+#### Beispiel eines neuen Unit Tests für den `EntityValidator`:
+```java
+// Unit Tests zur Validierung von Mitarbeitern, Notizen und Kunden
+// itShouldValidateEmployeeExists
+// itShouldThrowWhenEmployeeDoesNotExist
+// itShouldValidateNoteExists
+// itShouldThrowWhenNoteDoesNotExist
+// itShouldValidateCustomerExists
+// itShouldThrowWhenCustomerDoesNotExist
+```
+
 ### Zusammenfassung:
-> Diese Änderungen und Dokumentation bieten einen klaren Überblick über die Implementierung und Verbesserungen hinsichtlich der Separation of Concerns.
-> Wir haben die Architektur und Wartbarkeit des Codes erheblich verbessert, indem wir die Verantwortlichkeiten klar getrennt und die Validierungslogik zentralisiert haben.
-> Dies führt zu modularerem, verständlicherem und leichter wartbarem Code.
+> Diese Änderungen und Dokumentation bieten einen klaren Überblick über die Implementierung und Verbesserungen hinsichtlich der Separation of Concerns. Wir haben die Architektur und Wartbarkeit des Codes erheblich verbessert, indem wir die Verantwortlichkeiten klar getrennt und die Validierungslogik zentralisiert haben. Dies führt zu modularerem, verständlicherem und leichter wartbarem Code.
