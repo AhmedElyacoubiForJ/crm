@@ -1,7 +1,8 @@
-package edu.yacoubi.crm.repository;
+package edu.yacoubi.crm.repository.impl;
 
 import edu.yacoubi.crm.dto.note.NotePatchDTO;
 import edu.yacoubi.crm.model.Note;
+import edu.yacoubi.crm.repository.INoteCustomRepository;
 import edu.yacoubi.crm.service.validation.EntityValidator;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;

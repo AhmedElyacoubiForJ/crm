@@ -5,8 +5,8 @@ import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.repository.CustomerRepository;
-import edu.yacoubi.crm.service.validation.EntityValidator;
 import edu.yacoubi.crm.service.ICustomerService;
+import edu.yacoubi.crm.service.validation.EntityValidator;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaUpdate;
@@ -36,30 +36,32 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public Optional<Customer> getCustomerById(Long id) {
-        log.info("CustomerServiceImpl::getCustomerById id {}", id);
-        ensureCustomerExists(id);
-        return customerRepository.findById(id);
+    public Optional<Customer> getCustomerById(Long customerId) {
+        log.info("CustomerServiceImpl::getCustomerById customerId {}", customerId);
+
+        entityValidator.validateCustomerExists(customerId);
+
+        return customerRepository.findById(customerId);
     }
 
     @Override
     // Aktualisieren eines bestehenden Kunden
-    public Customer updateCustomer(Long id, Customer customer) {
-        log.info("CustomerServiceImpl::updateCustomer id {}, customer {}", id, customer);
-        ensureCustomerExists(id);
+    public Customer updateCustomer(Long customerId, Customer customer) {
+        log.info("CustomerServiceImpl::updateCustomer customerId {}, customer {}", customerId, customer);
+        entityValidator.validateCustomerExists(customerId);
         return customerRepository.save(customer);
     }
 
     @Override
-    public void deleteCustomer(Long id) {
-        log.info("CustomerServiceImpl::deleteCustomer id: {}", id);
-        ensureCustomerExists(id);
-        customerRepository.deleteById(id);
+    public void deleteCustomer(Long customerId) {
+        log.info("CustomerServiceImpl::deleteCustomer customerId {}", customerId);
+        entityValidator.validateCustomerExists(customerId);
+        customerRepository.deleteById(customerId);
     }
 
     @Override
     public Optional<Customer> getCustomerByEmail(String email) {
-        log.info("CustomerServiceImpl::getCustomerByEmail email: {}", email);
+        log.info("CustomerServiceImpl::getCustomerByEmail email {}", email);
         return customerRepository.findByEmail(email);
     }
 
@@ -90,11 +92,11 @@ public class CustomerServiceImpl implements ICustomerService {
     @Override
     @Transactional
     @Deprecated // Example nur für suche, obwohl die Methode funktioniert.
-    public Customer updateCustomerByExample(CustomerRequestDTO customerExample, Long id) {
-        log.info("CustomerServiceImpl::updateCustomerByExample id {}, customerExample {}", id, customerExample);
-        Customer existingCustomer = customerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
-        return customerRepository.updateCustomerByExample(customerExample, id);
+    public Customer updateCustomerByExample(CustomerRequestDTO customerExample, Long customerId) {
+        log.info("CustomerServiceImpl::updateCustomerByExample id {}, customerExample {}", customerId, customerExample);
+        Customer existingCustomer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + customerId));
+        return customerRepository.updateCustomerByExample(customerExample, customerId);
     }
 
     @Override
@@ -106,11 +108,11 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     @Transactional(readOnly = true)
-    public Customer getCustomerWithNotes(Long id) {
-        log.info("CustomerServiceImpl::getCustomerWithNotes id: {}", id);
+    public Customer getCustomerWithNotes(Long customerId) {
+        log.info("CustomerServiceImpl::getCustomerWithNotes customerId {}", customerId);
 
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found with ID: " + id));
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found with ID: " + customerId));
         customer.getNotes().size(); // Durch den Zugriff werden die Notes initialisiert
 
         return customer;
@@ -118,8 +120,8 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     @Transactional
-    public void partialUpdateCustomer(Long id, CustomerPatchDTO customerPatchDTO) {
-        log.info("CustomerServiceImpl::partialUpdateCustomer id {}, customerPatchDTO {}", id, customerPatchDTO);
+    public void partialUpdateCustomer(Long customerId, CustomerPatchDTO customerPatchDTO) {
+        log.info("CustomerServiceImpl::partialUpdateCustomer customerId {}, customerPatchDTO {}", customerId, customerPatchDTO);
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaUpdate<Customer> update = cb.createCriteriaUpdate(Customer.class);
@@ -138,9 +140,9 @@ public class CustomerServiceImpl implements ICustomerService {
             update.set(root.get("address"), customerPatchDTO.getAddress());
         }
 
-        update.where(cb.equal(root.get("id"), id));
+        update.where(cb.equal(root.get("id"), customerId));
 
-        log.info("Partial update executed for customer ID: {}", id);
+        log.info("Partial update executed for customer ID: {}", customerId);
         entityManager.createQuery(update).executeUpdate();
     }
 
@@ -167,14 +169,5 @@ public class CustomerServiceImpl implements ICustomerService {
 
         log.info("Get customers by employee ID: {}", employeeId);
         return customerRepository.findByEmployeeId(employeeId);
-    }
-
-    @Override
-    public void ensureCustomerExists(Long id) {
-        log.info("CustomerServiceImpl::ensureCustomerExists id: {} exists", id);
-        if (!customerRepository.existsById(id)) {
-            log.warn("Customer not found with ID: {}", id);
-            throw new ResourceNotFoundException("Customer not found with ID: " + id);
-        }
     }
 }

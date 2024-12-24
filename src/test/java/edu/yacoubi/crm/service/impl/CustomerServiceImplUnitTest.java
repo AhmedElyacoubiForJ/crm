@@ -54,20 +54,16 @@ class CustomerServiceImplUnitTest {
         Long customerId = 1L;  // Setze eine spezifische ID
         Customer customer = TestDataUtil.createCustomerA(null);
         customer.setId(customerId);  // Setze die ID im Mock-Objekt
-        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer)); // Verwende eine spezifische ID
-        when(customerRepository.existsById(customerId)).thenReturn(true); // Mock für existierende ID hinzufügen
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
+        doNothing().when(entityValidator).validateNoteExists(anyLong());
 
         // When
         Optional<Customer> foundCustomer = underTest.getCustomerById(customerId);
-
-        // Logging for debugging
-        System.out.println("Found Customer: " + foundCustomer);
 
         // Then
         assertTrue(foundCustomer.isPresent());
         assertEquals(customer.getEmail(), foundCustomer.get().getEmail());
         verify(customerRepository, times(1)).findById(customerId);
-        verify(customerRepository, times(1)).existsById(customerId); // Überprüfung der Mock-Interaktionen
     }
 
     @Test
@@ -123,7 +119,9 @@ class CustomerServiceImplUnitTest {
     public void itShouldThrowExceptionWhenCustomerDoesNotExist() {
         // Given
         Long customerId = 1L;
-        when(customerRepository.existsById(customerId)).thenReturn(false);
+        //when(customerRepository.existsById(customerId)).thenReturn(false);
+        doThrow(new ResourceNotFoundException("Customer not found with ID: " + customerId))
+                .when(entityValidator).validateCustomerExists(anyLong());
 
         // When & Then
         ResourceNotFoundException exception = assertThrows(

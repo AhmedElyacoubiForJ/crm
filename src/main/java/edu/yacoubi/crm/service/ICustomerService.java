@@ -11,25 +11,23 @@ import java.util.Optional;
 public interface ICustomerService {
     Customer createCustomer(Customer customer);
 
-    Optional<Customer> getCustomerById(Long id);
+    Optional<Customer> getCustomerById(Long customerId);
 
-    Customer updateCustomer(Long id, Customer customer);
+    Customer updateCustomer(Long customerId, Customer customer);
 
-    void deleteCustomer(Long id);
+    void deleteCustomer(Long customerId);
 
     Optional<Customer> getCustomerByEmail(String email);
 
-    void ensureCustomerExists(Long id);
-
     List<Customer> getCustomersByExample(CustomerRequestDTO customerDTO);
 
-    Customer updateCustomerByExample(CustomerRequestDTO customerExample, Long id);
+    Customer updateCustomerByExample(CustomerRequestDTO customerExample, Long customerId);
 
     Optional<Customer> getCustomerByEmailWithNotesAndEmployeeCustomers(String email);
 
-    Customer getCustomerWithNotes(Long id);
+    Customer getCustomerWithNotes(Long customerId);
 
-    void partialUpdateCustomer(Long id, CustomerPatchDTO customerPatchDTO);
+    void partialUpdateCustomer(Long customerId, CustomerPatchDTO customerPatchDTO);
 
     Page<Customer> getCustomersByFirstNameOrEmail(String search, int page, int size);
 
