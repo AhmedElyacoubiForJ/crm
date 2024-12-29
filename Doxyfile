@@ -73,7 +73,6 @@ PROJECT_ICON           =
 # into which the generated documentation will be written. If a relative path is
 # entered, it will be relative to the location where Doxygen was started. If
 # left blank the current directory will be used.
-
 OUTPUT_DIRECTORY       = z_doxy
 
 # If the CREATE_SUBDIRS tag is set to YES then Doxygen will create up to 4096
