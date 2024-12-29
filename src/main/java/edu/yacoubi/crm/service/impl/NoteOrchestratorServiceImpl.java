@@ -10,23 +10,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class NoteOrchestratorServiceImpl implements INoteOrchestratorService {
-
     private final ICustomerService customerService;
     private final INoteService noteService;
-    private final EntityValidator entityValidator;
 
     @Override
     public Note createNoteForCustomer(Note note, Long customerId) {
         log.info("NoteOrchestrator::createNoteForCustomer execution start: note {}, customerId {}", note, customerId);
 
-        // Validierung des Kunden
-        entityValidator.validateCustomerExists(customerId);
-
-        // Abruf des Kunden ohne Ausnahme
+        // Abruf des Kunden mit get(), da die Validierung im CustomerService stattfindet
         Customer customer = customerService.getCustomerById(customerId).get();
 
         // Setzen des Kunden und Delegation an NoteService

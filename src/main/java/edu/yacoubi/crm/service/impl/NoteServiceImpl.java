@@ -17,7 +17,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-// TODO validate method parameters
 public class NoteServiceImpl implements INoteService {
     private final NoteRepository noteRepository;
     private final INoteCustomRepository noteCustomRepository;
@@ -27,8 +26,8 @@ public class NoteServiceImpl implements INoteService {
     public Note createNote(Note note) {
         log.info("NoteServiceImpl::createNote execution start: note {}", note);
 
-        if (note.getCustomer() == null) {
-            throw new IllegalArgumentException("Customer must not be null");
+        if (note == null || note.getCustomer() == null) {
+            throw new IllegalArgumentException("Note is invalid");
         }
 
         Note savedNote = noteRepository.save(note);
