@@ -1,0 +1,135 @@
+\doxysection{edu.\+yacoubi.\+crm.\+service.\+impl.\+Note\+Service\+Impl Class Reference}
+\hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl}{}\label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl}\index{edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}}
+
+
+Inheritance diagram for edu.\+yacoubi.\+crm.\+service.\+impl.\+Note\+Service\+Impl\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=219pt]{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for edu.\+yacoubi.\+crm.\+service.\+impl.\+Note\+Service\+Impl\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+Note \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_af2692a405e55f2d09f2192760af33d1c}{create\+Note}} (Note note)
+\item 
+Optional$<$ Note $>$ \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a3fe2a3941270bcdb25b5440bffa04ea1}{get\+Note\+By\+Id}} (Long note\+Id)
+\item 
+Note \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_aad6dd9fbe445ab3e58ecd53ab6cb6606}{update\+Note}} (Long note\+Id, Note note)
+\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_abf86d767665b634b6f9a8b54d4988153}{delete\+Note}} (Long note\+Id)
+\item 
+List$<$ Note $>$ \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_aec568bf2ddd9f91b454e985ec9a5fd2e}{get\+Notes\+By\+Customer\+Id}} (Long customer\+Id)
+\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a1bddce8712f29cf2a3804d90df7aa4e8}{partial\+Update\+Note}} (Long note\+Id, Note\+Patch\+DTO note\+Patch\+DTO)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+final Note\+Repository \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a3c7c7103ee8b53ae95c64ba58d94a91c}{note\+Repository}}
+\item 
+final INote\+Custom\+Repository \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a99b2b01274d63bba272bba15b0e89281}{note\+Custom\+Repository}}
+\item 
+final \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator}{Entity\+Validator}} \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a5ca97f657d337ddda3ae67782385e22e}{entity\+Validator}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_af2692a405e55f2d09f2192760af33d1c}\index{edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}!createNote@{createNote}}
+\index{createNote@{createNote}!edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}}
+\doxysubsubsection{\texorpdfstring{createNote()}{createNote()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_af2692a405e55f2d09f2192760af33d1c} 
+Note edu.\+yacoubi.\+crm.\+service.\+impl.\+Note\+Service\+Impl.\+create\+Note (\begin{DoxyParamCaption}\item[{Note}]{note}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service_ae2d5da746c1757d24d24746f50bba811}{edu.\+yacoubi.\+crm.\+service.\+INote\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_abf86d767665b634b6f9a8b54d4988153}\index{edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}!deleteNote@{deleteNote}}
+\index{deleteNote@{deleteNote}!edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}}
+\doxysubsubsection{\texorpdfstring{deleteNote()}{deleteNote()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_abf86d767665b634b6f9a8b54d4988153} 
+void edu.\+yacoubi.\+crm.\+service.\+impl.\+Note\+Service\+Impl.\+delete\+Note (\begin{DoxyParamCaption}\item[{Long}]{note\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service_a0647c81c0424826a9873f81373717b23}{edu.\+yacoubi.\+crm.\+service.\+INote\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a3fe2a3941270bcdb25b5440bffa04ea1}\index{edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}!getNoteById@{getNoteById}}
+\index{getNoteById@{getNoteById}!edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}}
+\doxysubsubsection{\texorpdfstring{getNoteById()}{getNoteById()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a3fe2a3941270bcdb25b5440bffa04ea1} 
+Optional$<$ Note $>$ edu.\+yacoubi.\+crm.\+service.\+impl.\+Note\+Service\+Impl.\+get\+Note\+By\+Id (\begin{DoxyParamCaption}\item[{Long}]{note\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service_a8d8c30094424745a8bb62b38370577b0}{edu.\+yacoubi.\+crm.\+service.\+INote\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_aec568bf2ddd9f91b454e985ec9a5fd2e}\index{edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}!getNotesByCustomerId@{getNotesByCustomerId}}
+\index{getNotesByCustomerId@{getNotesByCustomerId}!edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}}
+\doxysubsubsection{\texorpdfstring{getNotesByCustomerId()}{getNotesByCustomerId()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_aec568bf2ddd9f91b454e985ec9a5fd2e} 
+List$<$ Note $>$ edu.\+yacoubi.\+crm.\+service.\+impl.\+Note\+Service\+Impl.\+get\+Notes\+By\+Customer\+Id (\begin{DoxyParamCaption}\item[{Long}]{customer\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service_a1314f5c7f2c48c50044ccad10e6530ee}{edu.\+yacoubi.\+crm.\+service.\+INote\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a1bddce8712f29cf2a3804d90df7aa4e8}\index{edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}!partialUpdateNote@{partialUpdateNote}}
+\index{partialUpdateNote@{partialUpdateNote}!edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}}
+\doxysubsubsection{\texorpdfstring{partialUpdateNote()}{partialUpdateNote()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a1bddce8712f29cf2a3804d90df7aa4e8} 
+void edu.\+yacoubi.\+crm.\+service.\+impl.\+Note\+Service\+Impl.\+partial\+Update\+Note (\begin{DoxyParamCaption}\item[{Long}]{note\+Id}{, }\item[{Note\+Patch\+DTO}]{note\+Patch\+DTO}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service_ae8193f257f7ace8c54e8c1d32b026b8e}{edu.\+yacoubi.\+crm.\+service.\+INote\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_aad6dd9fbe445ab3e58ecd53ab6cb6606}\index{edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}!updateNote@{updateNote}}
+\index{updateNote@{updateNote}!edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}}
+\doxysubsubsection{\texorpdfstring{updateNote()}{updateNote()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_aad6dd9fbe445ab3e58ecd53ab6cb6606} 
+Note edu.\+yacoubi.\+crm.\+service.\+impl.\+Note\+Service\+Impl.\+update\+Note (\begin{DoxyParamCaption}\item[{Long}]{note\+Id}{, }\item[{Note}]{note}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service_a3a6a2cd27fcab8d2a63d64e7586e3a76}{edu.\+yacoubi.\+crm.\+service.\+INote\+Service}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a5ca97f657d337ddda3ae67782385e22e}\index{edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}!entityValidator@{entityValidator}}
+\index{entityValidator@{entityValidator}!edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}}
+\doxysubsubsection{\texorpdfstring{entityValidator}{entityValidator}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a5ca97f657d337ddda3ae67782385e22e} 
+final \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator}{Entity\+Validator}} edu.\+yacoubi.\+crm.\+service.\+impl.\+Note\+Service\+Impl.\+entity\+Validator\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a99b2b01274d63bba272bba15b0e89281}\index{edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}!noteCustomRepository@{noteCustomRepository}}
+\index{noteCustomRepository@{noteCustomRepository}!edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}}
+\doxysubsubsection{\texorpdfstring{noteCustomRepository}{noteCustomRepository}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a99b2b01274d63bba272bba15b0e89281} 
+final INote\+Custom\+Repository edu.\+yacoubi.\+crm.\+service.\+impl.\+Note\+Service\+Impl.\+note\+Custom\+Repository\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a3c7c7103ee8b53ae95c64ba58d94a91c}\index{edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}!noteRepository@{noteRepository}}
+\index{noteRepository@{noteRepository}!edu.yacoubi.crm.service.impl.NoteServiceImpl@{edu.yacoubi.crm.service.impl.NoteServiceImpl}}
+\doxysubsubsection{\texorpdfstring{noteRepository}{noteRepository}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_note_service_impl_a3c7c7103ee8b53ae95c64ba58d94a91c} 
+final Note\+Repository edu.\+yacoubi.\+crm.\+service.\+impl.\+Note\+Service\+Impl.\+note\+Repository\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/edu/yacoubi/crm/service/impl/\mbox{\hyperlink{_note_service_impl_8java}{Note\+Service\+Impl.\+java}}\end{DoxyCompactItemize}

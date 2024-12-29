@@ -1,0 +1,374 @@
+\doxysection{edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl Class Reference}
+\hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl}{}\label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+
+
+Inheritance diagram for edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+Customer \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ae2a9888bfb8f4b5f3f8aa6b84d105151}{create\+Customer}} (Customer customer)
+\item 
+Optional$<$ Customer $>$ \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a34d4b2fb3b530b5225d8c42f114d6817}{get\+Customer\+By\+Id}} (Long customer\+Id)
+\item 
+Customer \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_abbf6402bee7224dc99ec9bcc9c77f7ae}{update\+Customer}} (Long customer\+Id, Customer customer)
+\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a24ca19050908d13da6dda4e5d04de114}{delete\+Customer}} (Long customer\+Id)
+\item 
+Optional$<$ Customer $>$ \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ac3ac71cecce4a7d635f34ca33b6e9365}{get\+Customer\+By\+Email}} (String email)
+\item 
+List$<$ Customer $>$ \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ace0a8b5989bcea95d84cf08b650bbb88}{get\+Customers\+By\+Example}} (Customer\+Request\+DTO customer\+DTO)
+\item 
+Customer \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_af40a93d73ebf257621c73254baa9f03e}{update\+Customer\+By\+Example}} (Customer\+Request\+DTO customer\+Example, Long customer\+Id)
+\item 
+Optional$<$ Customer $>$ \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a4ed4d0959946b11a1423cb8a49d6c952}{get\+Customer\+By\+Email\+With\+Notes\+And\+Employee\+Customers}} (String email)
+\item 
+Customer \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_aaac8dc40cb15427d2b1500f4163905e2}{get\+Customer\+With\+Notes}} (Long customer\+Id)
+\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ad0b5d00f1295ec380408419ec4a8ed1f}{partial\+Update\+Customer}} (Long customer\+Id, Customer\+Patch\+DTO customer\+Patch\+DTO)
+\item 
+Page$<$ Customer $>$ \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a92955debdf2496cd42102326802f1e8d}{get\+Customers\+By\+First\+Name\+Or\+Email}} (String search, int page, int size)
+\item 
+Page$<$ Customer $>$ \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_aa5d9ce523bf84d1694a15cb7e835e1c5}{get\+Customers\+With\+Pagination}} (int page, int size)
+\item 
+List$<$ Customer $>$ \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a72b7d0ee71c631e60c4633d8661bc268}{get\+Customers\+By\+Employee\+Id}} (Long employee\+Id)
+\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ade3b48f65ed55e8a599279b08024d4a7}{update\+Customers}} (List$<$ Customer $>$ customers)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+final Customer\+Repository \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a69d0f672c5fd63dac7b97b1e2abc0ef7}{customer\+Repository}}
+\item 
+final ICustomer\+Custom\+Repository \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a7d9866133b2c35b4eaa4d986da09f2b8}{customer\+Custom\+Repository}}
+\item 
+final \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator}{Entity\+Validator}} \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a153a11d5b1eead290c5c3e34d134eed7}{entity\+Validator}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ae2a9888bfb8f4b5f3f8aa6b84d105151}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!createCustomer@{createCustomer}}
+\index{createCustomer@{createCustomer}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{createCustomer()}{createCustomer()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ae2a9888bfb8f4b5f3f8aa6b84d105151} 
+Customer edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+create\+Customer (\begin{DoxyParamCaption}\item[{Customer}]{customer}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Creates a new customer.
+
+
+\begin{DoxyParams}{Parameters}
+{\em customer} & the customer to be created. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the created customer. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_a8a2ca4bb251e13192b0d9c0886975702}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a24ca19050908d13da6dda4e5d04de114}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!deleteCustomer@{deleteCustomer}}
+\index{deleteCustomer@{deleteCustomer}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{deleteCustomer()}{deleteCustomer()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a24ca19050908d13da6dda4e5d04de114} 
+void edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+delete\+Customer (\begin{DoxyParamCaption}\item[{Long}]{customer\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Deletes a customer by their ID.
+
+
+\begin{DoxyParams}{Parameters}
+{\em customer\+Id} & the ID of the customer to be deleted. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_a7a60b2f5c45cc94bf9992bad3cf0669b}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ac3ac71cecce4a7d635f34ca33b6e9365}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!getCustomerByEmail@{getCustomerByEmail}}
+\index{getCustomerByEmail@{getCustomerByEmail}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{getCustomerByEmail()}{getCustomerByEmail()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ac3ac71cecce4a7d635f34ca33b6e9365} 
+Optional$<$ Customer $>$ edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+get\+Customer\+By\+Email (\begin{DoxyParamCaption}\item[{String}]{email}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Retrieves a customer by their email.
+
+
+\begin{DoxyParams}{Parameters}
+{\em email} & the email of the customer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+an Optional containing the found customer, or empty if not found. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_a5823a425a37e85615e9e365eaead56f9}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a4ed4d0959946b11a1423cb8a49d6c952}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!getCustomerByEmailWithNotesAndEmployeeCustomers@{getCustomerByEmailWithNotesAndEmployeeCustomers}}
+\index{getCustomerByEmailWithNotesAndEmployeeCustomers@{getCustomerByEmailWithNotesAndEmployeeCustomers}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{getCustomerByEmailWithNotesAndEmployeeCustomers()}{getCustomerByEmailWithNotesAndEmployeeCustomers()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a4ed4d0959946b11a1423cb8a49d6c952} 
+Optional$<$ Customer $>$ edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+get\+Customer\+By\+Email\+With\+Notes\+And\+Employee\+Customers (\begin{DoxyParamCaption}\item[{String}]{email}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Retrieves a customer by their email, including notes and employee customers.
+
+
+\begin{DoxyParams}{Parameters}
+{\em email} & the email of the customer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+an Optional containing the found customer, or empty if not found. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_a00df77a4dcf0fcdd9460d6f63fca868b}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a34d4b2fb3b530b5225d8c42f114d6817}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!getCustomerById@{getCustomerById}}
+\index{getCustomerById@{getCustomerById}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{getCustomerById()}{getCustomerById()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a34d4b2fb3b530b5225d8c42f114d6817} 
+Optional$<$ Customer $>$ edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+get\+Customer\+By\+Id (\begin{DoxyParamCaption}\item[{Long}]{customer\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Retrieves a customer by their ID.
+
+
+\begin{DoxyParams}{Parameters}
+{\em customer\+Id} & the ID of the customer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+an Optional containing the found customer, or empty if not found. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_a9faa3e7d24ce44d1a4472da82f8569ed}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a72b7d0ee71c631e60c4633d8661bc268}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!getCustomersByEmployeeId@{getCustomersByEmployeeId}}
+\index{getCustomersByEmployeeId@{getCustomersByEmployeeId}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{getCustomersByEmployeeId()}{getCustomersByEmployeeId()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a72b7d0ee71c631e60c4633d8661bc268} 
+List$<$ Customer $>$ edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+get\+Customers\+By\+Employee\+Id (\begin{DoxyParamCaption}\item[{Long}]{employee\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Retrieves customers by their employee ID.
+
+
+\begin{DoxyParams}{Parameters}
+{\em employee\+Id} & the ID of the employee. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a list of customers assigned to the employee. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_a081d1f996e85b8625d077a7a98240494}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ace0a8b5989bcea95d84cf08b650bbb88}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!getCustomersByExample@{getCustomersByExample}}
+\index{getCustomersByExample@{getCustomersByExample}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{getCustomersByExample()}{getCustomersByExample()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ace0a8b5989bcea95d84cf08b650bbb88} 
+List$<$ Customer $>$ edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+get\+Customers\+By\+Example (\begin{DoxyParamCaption}\item[{Customer\+Request\+DTO}]{customer\+DTO}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Retrieves customers based on an example customer DTO.
+
+
+\begin{DoxyParams}{Parameters}
+{\em customer\+DTO} & the example customer DTO. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a list of customers matching the example. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_aed3e98acd7d8ddaf4c343bb425b912cf}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a92955debdf2496cd42102326802f1e8d}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!getCustomersByFirstNameOrEmail@{getCustomersByFirstNameOrEmail}}
+\index{getCustomersByFirstNameOrEmail@{getCustomersByFirstNameOrEmail}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{getCustomersByFirstNameOrEmail()}{getCustomersByFirstNameOrEmail()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a92955debdf2496cd42102326802f1e8d} 
+Page$<$ Customer $>$ edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+get\+Customers\+By\+First\+Name\+Or\+Email (\begin{DoxyParamCaption}\item[{String}]{search}{, }\item[{int}]{page}{, }\item[{int}]{size}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Retrieves customers by either their first name or email, in a paginated format.
+
+
+\begin{DoxyParams}{Parameters}
+{\em search} & the search string for the first name or email. \\
+\hline
+{\em page} & the page number to retrieve. \\
+\hline
+{\em size} & the number of customers per page. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a page of customers matching the search criteria. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_a1165f3fe58157130e879cadcfdc090da}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_aa5d9ce523bf84d1694a15cb7e835e1c5}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!getCustomersWithPagination@{getCustomersWithPagination}}
+\index{getCustomersWithPagination@{getCustomersWithPagination}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{getCustomersWithPagination()}{getCustomersWithPagination()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_aa5d9ce523bf84d1694a15cb7e835e1c5} 
+Page$<$ Customer $>$ edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+get\+Customers\+With\+Pagination (\begin{DoxyParamCaption}\item[{int}]{page}{, }\item[{int}]{size}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Retrieves customers in a paginated format.
+
+
+\begin{DoxyParams}{Parameters}
+{\em page} & the page number to retrieve. \\
+\hline
+{\em size} & the number of customers per page. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a page of customers. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_a5cce7c8c8fa0c36e2df68ec00ed321e0}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_aaac8dc40cb15427d2b1500f4163905e2}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!getCustomerWithNotes@{getCustomerWithNotes}}
+\index{getCustomerWithNotes@{getCustomerWithNotes}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{getCustomerWithNotes()}{getCustomerWithNotes()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_aaac8dc40cb15427d2b1500f4163905e2} 
+Customer edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+get\+Customer\+With\+Notes (\begin{DoxyParamCaption}\item[{Long}]{customer\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Retrieves a customer along with their notes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em customer\+Id} & the ID of the customer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the customer with their notes. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_a94381b44da3103bd277a112fd3cfe38d}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ad0b5d00f1295ec380408419ec4a8ed1f}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!partialUpdateCustomer@{partialUpdateCustomer}}
+\index{partialUpdateCustomer@{partialUpdateCustomer}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{partialUpdateCustomer()}{partialUpdateCustomer()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ad0b5d00f1295ec380408419ec4a8ed1f} 
+void edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+partial\+Update\+Customer (\begin{DoxyParamCaption}\item[{Long}]{customer\+Id}{, }\item[{Customer\+Patch\+DTO}]{customer\+Patch\+DTO}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Partially updates an existing customer based on a patch DTO.
+
+
+\begin{DoxyParams}{Parameters}
+{\em customer\+Id} & the ID of the customer to be partially updated. \\
+\hline
+{\em customer\+Patch\+DTO} & the partial update information. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_a58483af80c50d576c2c51f4a54afa601}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_abbf6402bee7224dc99ec9bcc9c77f7ae}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!updateCustomer@{updateCustomer}}
+\index{updateCustomer@{updateCustomer}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{updateCustomer()}{updateCustomer()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_abbf6402bee7224dc99ec9bcc9c77f7ae} 
+Customer edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+update\+Customer (\begin{DoxyParamCaption}\item[{Long}]{customer\+Id}{, }\item[{Customer}]{customer}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Updates an existing customer.
+
+
+\begin{DoxyParams}{Parameters}
+{\em customer\+Id} & the ID of the customer to be updated. \\
+\hline
+{\em customer} & the updated customer information. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the updated customer. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_a1abae81f26e5e6935614e8b7b071d170}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_af40a93d73ebf257621c73254baa9f03e}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!updateCustomerByExample@{updateCustomerByExample}}
+\index{updateCustomerByExample@{updateCustomerByExample}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{updateCustomerByExample()}{updateCustomerByExample()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_af40a93d73ebf257621c73254baa9f03e} 
+Customer edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+update\+Customer\+By\+Example (\begin{DoxyParamCaption}\item[{Customer\+Request\+DTO}]{customer\+Example}{, }\item[{Long}]{customer\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Updates an existing customer based on an example customer DTO.
+
+
+\begin{DoxyParams}{Parameters}
+{\em customer\+Example} & the example customer DTO. \\
+\hline
+{\em customer\+Id} & the ID of the customer to be updated. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the updated customer. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_a0e89b59e833366425c8375ecb167b2dc}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ade3b48f65ed55e8a599279b08024d4a7}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!updateCustomers@{updateCustomers}}
+\index{updateCustomers@{updateCustomers}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{updateCustomers()}{updateCustomers()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_ade3b48f65ed55e8a599279b08024d4a7} 
+void edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+update\+Customers (\begin{DoxyParamCaption}\item[{List$<$ Customer $>$}]{customers}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Updates a list of customers.
+
+
+\begin{DoxyParams}{Parameters}
+{\em customers} & the list of customers to be updated. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service_af0ccd82a3313692e215035c33a2ac138}{edu.\+yacoubi.\+crm.\+service.\+ICustomer\+Service}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a7d9866133b2c35b4eaa4d986da09f2b8}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!customerCustomRepository@{customerCustomRepository}}
+\index{customerCustomRepository@{customerCustomRepository}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{customerCustomRepository}{customerCustomRepository}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a7d9866133b2c35b4eaa4d986da09f2b8} 
+final ICustomer\+Custom\+Repository edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+customer\+Custom\+Repository\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a69d0f672c5fd63dac7b97b1e2abc0ef7}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!customerRepository@{customerRepository}}
+\index{customerRepository@{customerRepository}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{customerRepository}{customerRepository}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a69d0f672c5fd63dac7b97b1e2abc0ef7} 
+final Customer\+Repository edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+customer\+Repository\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a153a11d5b1eead290c5c3e34d134eed7}\index{edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}!entityValidator@{entityValidator}}
+\index{entityValidator@{entityValidator}!edu.yacoubi.crm.service.impl.CustomerServiceImpl@{edu.yacoubi.crm.service.impl.CustomerServiceImpl}}
+\doxysubsubsection{\texorpdfstring{entityValidator}{entityValidator}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_customer_service_impl_a153a11d5b1eead290c5c3e34d134eed7} 
+final \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator}{Entity\+Validator}} edu.\+yacoubi.\+crm.\+service.\+impl.\+Customer\+Service\+Impl.\+entity\+Validator\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/edu/yacoubi/crm/service/impl/\mbox{\hyperlink{_customer_service_impl_8java}{Customer\+Service\+Impl.\+java}}\end{DoxyCompactItemize}

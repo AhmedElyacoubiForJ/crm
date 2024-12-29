@@ -1,0 +1,198 @@
+\doxysection{edu.\+yacoubi.\+crm.\+service.\+impl.\+Entity\+Orchestrator\+Service\+Impl Class Reference}
+\hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl}{}\label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl}\index{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}}
+
+
+Service implementation for orchestrating entities.  
+
+
+
+
+Inheritance diagram for edu.\+yacoubi.\+crm.\+service.\+impl.\+Entity\+Orchestrator\+Service\+Impl\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=238pt]{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for edu.\+yacoubi.\+crm.\+service.\+impl.\+Entity\+Orchestrator\+Service\+Impl\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a95739a96f999006743333217a2fe7382}{delete\+Employee\+And\+Reassign\+Customers}} (Long old\+Employee\+Id, Long new\+Employee\+Id)
+\begin{DoxyCompactList}\small\item\em Deletes an employee and reassigns their customers to another employee. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_ad97cd03584880533acaff2e4692125fe}{reassign\+Customer\+To\+Employee}} (Long customer\+Id, Long employee\+Id)
+\begin{DoxyCompactList}\small\item\em Reassigns a customer to a different employee. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a73d219d938e2577703edd5115dadba46}{reassign\+Customers}} (Long old\+Employee\+Id, Long new\+Employee\+Id)
+\begin{DoxyCompactList}\small\item\em Reassigns customers from an old employee to a new employee. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_acffff236b331bb412af59d1ca4c04068}{handle\+Customer\+Reassignment}} (List$<$ Customer $>$ customers, Employee new\+Employee)
+\begin{DoxyCompactList}\small\item\em Handles the reassignment of customers to a new employee. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1util_1_1_entity_action}{Entity\+Action}} \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a4a846ac997a400b7c77dad82c45ead80}{create\+Delete\+Employee\+Action}} ()
+\begin{DoxyCompactList}\small\item\em Creates an action to delete an employee. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a95acddc9f6f8c0da9e0c72bdb39693b3}{process\+Entity\+Action}} (Long id, \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1util_1_1_entity_action}{Entity\+Action}} action)
+\begin{DoxyCompactList}\small\item\em Executes an action on an entity identified by a Long ID. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+final \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_employee_service}{IEmployee\+Service}} \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a30556e71be60076d18ef145106b0b9c8}{employee\+Service}}
+\item 
+final \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service}{ICustomer\+Service}} \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a081f7c3a68e2a9f7e59e8aae97377453}{customer\+Service}}
+\item 
+final \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_inactive_employee_service}{IInactive\+Employee\+Service}} \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a7d4479f886926d3913cb8ee016d9bafe}{inactive\+Employee\+Service}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Service implementation for orchestrating entities. 
+
+This service handles operations related to employees and customers. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a4a846ac997a400b7c77dad82c45ead80}\index{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}!createDeleteEmployeeAction@{createDeleteEmployeeAction}}
+\index{createDeleteEmployeeAction@{createDeleteEmployeeAction}!edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}}
+\doxysubsubsection{\texorpdfstring{createDeleteEmployeeAction()}{createDeleteEmployeeAction()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a4a846ac997a400b7c77dad82c45ead80} 
+\mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1util_1_1_entity_action}{Entity\+Action}} edu.\+yacoubi.\+crm.\+service.\+impl.\+Entity\+Orchestrator\+Service\+Impl.\+create\+Delete\+Employee\+Action (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Creates an action to delete an employee. 
+
+\begin{DoxyReturn}{Returns}
+the action to delete an employee. 
+\end{DoxyReturn}
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a95739a96f999006743333217a2fe7382}\index{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}!deleteEmployeeAndReassignCustomers@{deleteEmployeeAndReassignCustomers}}
+\index{deleteEmployeeAndReassignCustomers@{deleteEmployeeAndReassignCustomers}!edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}}
+\doxysubsubsection{\texorpdfstring{deleteEmployeeAndReassignCustomers()}{deleteEmployeeAndReassignCustomers()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a95739a96f999006743333217a2fe7382} 
+void edu.\+yacoubi.\+crm.\+service.\+impl.\+Entity\+Orchestrator\+Service\+Impl.\+delete\+Employee\+And\+Reassign\+Customers (\begin{DoxyParamCaption}\item[{Long}]{old\+Employee\+Id}{, }\item[{Long}]{new\+Employee\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Deletes an employee and reassigns their customers to another employee. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em old\+Employee\+Id} & ID of the employee to be deleted. \\
+\hline
+{\em new\+Employee\+Id} & ID of the employee to whom the customers will be reassigned. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_entity_orchestrator_service_a3f159b116573548c3ac59b495d8cf269}{edu.\+yacoubi.\+crm.\+service.\+IEntity\+Orchestrator\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_acffff236b331bb412af59d1ca4c04068}\index{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}!handleCustomerReassignment@{handleCustomerReassignment}}
+\index{handleCustomerReassignment@{handleCustomerReassignment}!edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}}
+\doxysubsubsection{\texorpdfstring{handleCustomerReassignment()}{handleCustomerReassignment()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_acffff236b331bb412af59d1ca4c04068} 
+void edu.\+yacoubi.\+crm.\+service.\+impl.\+Entity\+Orchestrator\+Service\+Impl.\+handle\+Customer\+Reassignment (\begin{DoxyParamCaption}\item[{List$<$ Customer $>$}]{customers}{, }\item[{Employee}]{new\+Employee}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Handles the reassignment of customers to a new employee. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em customers} & the list of customers to be reassigned. \\
+\hline
+{\em new\+Employee} & the new employee to whom the customers will be assigned. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a95acddc9f6f8c0da9e0c72bdb39693b3}\index{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}!processEntityAction@{processEntityAction}}
+\index{processEntityAction@{processEntityAction}!edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}}
+\doxysubsubsection{\texorpdfstring{processEntityAction()}{processEntityAction()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a95acddc9f6f8c0da9e0c72bdb39693b3} 
+void edu.\+yacoubi.\+crm.\+service.\+impl.\+Entity\+Orchestrator\+Service\+Impl.\+process\+Entity\+Action (\begin{DoxyParamCaption}\item[{Long}]{id}{, }\item[{\mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1util_1_1_entity_action}{Entity\+Action}}}]{action}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Executes an action on an entity identified by a Long ID. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & the ID of the entity on which the action is to be performed. \\
+\hline
+{\em action} & the action to be executed. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a73d219d938e2577703edd5115dadba46}\index{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}!reassignCustomers@{reassignCustomers}}
+\index{reassignCustomers@{reassignCustomers}!edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}}
+\doxysubsubsection{\texorpdfstring{reassignCustomers()}{reassignCustomers()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a73d219d938e2577703edd5115dadba46} 
+void edu.\+yacoubi.\+crm.\+service.\+impl.\+Entity\+Orchestrator\+Service\+Impl.\+reassign\+Customers (\begin{DoxyParamCaption}\item[{Long}]{old\+Employee\+Id}{, }\item[{Long}]{new\+Employee\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Reassigns customers from an old employee to a new employee. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em old\+Employee\+Id} & ID of the old employee. \\
+\hline
+{\em new\+Employee\+Id} & ID of the new employee. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_entity_orchestrator_service_ac1cfa53d6db8bcbe160a019df20e1148}{edu.\+yacoubi.\+crm.\+service.\+IEntity\+Orchestrator\+Service}}.
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_ad97cd03584880533acaff2e4692125fe}\index{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}!reassignCustomerToEmployee@{reassignCustomerToEmployee}}
+\index{reassignCustomerToEmployee@{reassignCustomerToEmployee}!edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}}
+\doxysubsubsection{\texorpdfstring{reassignCustomerToEmployee()}{reassignCustomerToEmployee()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_ad97cd03584880533acaff2e4692125fe} 
+void edu.\+yacoubi.\+crm.\+service.\+impl.\+Entity\+Orchestrator\+Service\+Impl.\+reassign\+Customer\+To\+Employee (\begin{DoxyParamCaption}\item[{Long}]{customer\+Id}{, }\item[{Long}]{employee\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Reassigns a customer to a different employee. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em customer\+Id} & ID of the customer to be reassigned. \\
+\hline
+{\em employee\+Id} & ID of the employee to whom the customer will be assigned. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_entity_orchestrator_service_a0006f1cdc3d8e8e45d8e0a3296a749eb}{edu.\+yacoubi.\+crm.\+service.\+IEntity\+Orchestrator\+Service}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a081f7c3a68e2a9f7e59e8aae97377453}\index{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}!customerService@{customerService}}
+\index{customerService@{customerService}!edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}}
+\doxysubsubsection{\texorpdfstring{customerService}{customerService}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a081f7c3a68e2a9f7e59e8aae97377453} 
+final \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service}{ICustomer\+Service}} edu.\+yacoubi.\+crm.\+service.\+impl.\+Entity\+Orchestrator\+Service\+Impl.\+customer\+Service\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a30556e71be60076d18ef145106b0b9c8}\index{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}!employeeService@{employeeService}}
+\index{employeeService@{employeeService}!edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}}
+\doxysubsubsection{\texorpdfstring{employeeService}{employeeService}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a30556e71be60076d18ef145106b0b9c8} 
+final \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_employee_service}{IEmployee\+Service}} edu.\+yacoubi.\+crm.\+service.\+impl.\+Entity\+Orchestrator\+Service\+Impl.\+employee\+Service\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a7d4479f886926d3913cb8ee016d9bafe}\index{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}!inactiveEmployeeService@{inactiveEmployeeService}}
+\index{inactiveEmployeeService@{inactiveEmployeeService}!edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl@{edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl}}
+\doxysubsubsection{\texorpdfstring{inactiveEmployeeService}{inactiveEmployeeService}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl_a7d4479f886926d3913cb8ee016d9bafe} 
+final \mbox{\hyperlink{interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_inactive_employee_service}{IInactive\+Employee\+Service}} edu.\+yacoubi.\+crm.\+service.\+impl.\+Entity\+Orchestrator\+Service\+Impl.\+inactive\+Employee\+Service\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/edu/yacoubi/crm/service/impl/\mbox{\hyperlink{_entity_orchestrator_service_impl_8java}{Entity\+Orchestrator\+Service\+Impl.\+java}}\end{DoxyCompactItemize}

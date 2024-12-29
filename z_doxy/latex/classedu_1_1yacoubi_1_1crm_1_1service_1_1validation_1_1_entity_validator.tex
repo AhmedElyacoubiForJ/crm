@@ -1,0 +1,93 @@
+\doxysection{edu.\+yacoubi.\+crm.\+service.\+validation.\+Entity\+Validator Class Reference}
+\hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator}{}\label{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator}\index{edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}}
+
+
+Collaboration diagram for edu.\+yacoubi.\+crm.\+service.\+validation.\+Entity\+Validator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=242pt]{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_a636d2c09c8f56dd4f2c728ce227a4660}{validate\+Employee\+Exists}} (Long employee\+Id)
+\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_ac0f1b7e1d5690ba4f05a549f95796e68}{validate\+Note\+Exists}} (Long id)
+\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_ad41d133e48fc54ffb3c72d999f548ca6}{validate\+Customer\+Exists}} (Long id)
+\item 
+void \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_aaa15baf258a8d6dda2f0675f72948970}{validate\+Inactive\+Employee\+Exists}} (Long original\+Employee\+Id)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+final Employee\+Repository \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_aec487e28a67c6092a5fe51514d3febfe}{employee\+Repository}}
+\item 
+final Note\+Repository \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_a19b8bdc31e81548c7eef454b51db5ce2}{note\+Repository}}
+\item 
+final Customer\+Repository \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_aa7fc065942083cd79cfb297f93d4c29c}{customer\+Repository}}
+\item 
+final Inactive\+Employee\+Repository \mbox{\hyperlink{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_ace7499ac3e2e2ed1811e3406d27a6954}{inactive\+Employee\+Repository}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_ad41d133e48fc54ffb3c72d999f548ca6}\index{edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}!validateCustomerExists@{validateCustomerExists}}
+\index{validateCustomerExists@{validateCustomerExists}!edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}}
+\doxysubsubsection{\texorpdfstring{validateCustomerExists()}{validateCustomerExists()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_ad41d133e48fc54ffb3c72d999f548ca6} 
+void edu.\+yacoubi.\+crm.\+service.\+validation.\+Entity\+Validator.\+validate\+Customer\+Exists (\begin{DoxyParamCaption}\item[{Long}]{id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_a636d2c09c8f56dd4f2c728ce227a4660}\index{edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}!validateEmployeeExists@{validateEmployeeExists}}
+\index{validateEmployeeExists@{validateEmployeeExists}!edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}}
+\doxysubsubsection{\texorpdfstring{validateEmployeeExists()}{validateEmployeeExists()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_a636d2c09c8f56dd4f2c728ce227a4660} 
+void edu.\+yacoubi.\+crm.\+service.\+validation.\+Entity\+Validator.\+validate\+Employee\+Exists (\begin{DoxyParamCaption}\item[{Long}]{employee\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_aaa15baf258a8d6dda2f0675f72948970}\index{edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}!validateInactiveEmployeeExists@{validateInactiveEmployeeExists}}
+\index{validateInactiveEmployeeExists@{validateInactiveEmployeeExists}!edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}}
+\doxysubsubsection{\texorpdfstring{validateInactiveEmployeeExists()}{validateInactiveEmployeeExists()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_aaa15baf258a8d6dda2f0675f72948970} 
+void edu.\+yacoubi.\+crm.\+service.\+validation.\+Entity\+Validator.\+validate\+Inactive\+Employee\+Exists (\begin{DoxyParamCaption}\item[{Long}]{original\+Employee\+Id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_ac0f1b7e1d5690ba4f05a549f95796e68}\index{edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}!validateNoteExists@{validateNoteExists}}
+\index{validateNoteExists@{validateNoteExists}!edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}}
+\doxysubsubsection{\texorpdfstring{validateNoteExists()}{validateNoteExists()}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_ac0f1b7e1d5690ba4f05a549f95796e68} 
+void edu.\+yacoubi.\+crm.\+service.\+validation.\+Entity\+Validator.\+validate\+Note\+Exists (\begin{DoxyParamCaption}\item[{Long}]{id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_aa7fc065942083cd79cfb297f93d4c29c}\index{edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}!customerRepository@{customerRepository}}
+\index{customerRepository@{customerRepository}!edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}}
+\doxysubsubsection{\texorpdfstring{customerRepository}{customerRepository}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_aa7fc065942083cd79cfb297f93d4c29c} 
+final Customer\+Repository edu.\+yacoubi.\+crm.\+service.\+validation.\+Entity\+Validator.\+customer\+Repository\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_aec487e28a67c6092a5fe51514d3febfe}\index{edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}!employeeRepository@{employeeRepository}}
+\index{employeeRepository@{employeeRepository}!edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}}
+\doxysubsubsection{\texorpdfstring{employeeRepository}{employeeRepository}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_aec487e28a67c6092a5fe51514d3febfe} 
+final Employee\+Repository edu.\+yacoubi.\+crm.\+service.\+validation.\+Entity\+Validator.\+employee\+Repository\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_ace7499ac3e2e2ed1811e3406d27a6954}\index{edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}!inactiveEmployeeRepository@{inactiveEmployeeRepository}}
+\index{inactiveEmployeeRepository@{inactiveEmployeeRepository}!edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}}
+\doxysubsubsection{\texorpdfstring{inactiveEmployeeRepository}{inactiveEmployeeRepository}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_ace7499ac3e2e2ed1811e3406d27a6954} 
+final Inactive\+Employee\+Repository edu.\+yacoubi.\+crm.\+service.\+validation.\+Entity\+Validator.\+inactive\+Employee\+Repository\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_a19b8bdc31e81548c7eef454b51db5ce2}\index{edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}!noteRepository@{noteRepository}}
+\index{noteRepository@{noteRepository}!edu.yacoubi.crm.service.validation.EntityValidator@{edu.yacoubi.crm.service.validation.EntityValidator}}
+\doxysubsubsection{\texorpdfstring{noteRepository}{noteRepository}}
+{\footnotesize\ttfamily \label{classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator_a19b8bdc31e81548c7eef454b51db5ce2} 
+final Note\+Repository edu.\+yacoubi.\+crm.\+service.\+validation.\+Entity\+Validator.\+note\+Repository\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/edu/yacoubi/crm/service/validation/\mbox{\hyperlink{_entity_validator_8java}{Entity\+Validator.\+java}}\end{DoxyCompactItemize}

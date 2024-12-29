@@ -1,0 +1,22 @@
+var NAVTREEINDEX1 =
+{
+"interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service.html#a8d8c30094424745a8bb62b38370577b0":[0,0,0,0,0,0,8,2],
+"interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service.html#a8d8c30094424745a8bb62b38370577b0":[1,0,0,0,0,0,8,2],
+"interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service.html#ae2d5da746c1757d24d24746f50bba811":[0,0,0,0,0,0,8,0],
+"interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service.html#ae2d5da746c1757d24d24746f50bba811":[1,0,0,0,0,0,8,0],
+"interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service.html#ae8193f257f7ace8c54e8c1d32b026b8e":[0,0,0,0,0,0,8,4],
+"interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service.html#ae8193f257f7ace8c54e8c1d32b026b8e":[1,0,0,0,0,0,8,4],
+"interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1util_1_1_entity_action.html":[0,0,0,0,0,0,1,0],
+"interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1util_1_1_entity_action.html":[1,0,0,0,0,0,1,0],
+"interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1util_1_1_entity_action.html#a0b6c168e4444da66ded7e077100f064e":[0,0,0,0,0,0,1,0,0],
+"interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1util_1_1_entity_action.html#a0b6c168e4444da66ded7e077100f064e":[1,0,0,0,0,0,1,0,0],
+"namespaceedu_1_1yacoubi_1_1crm_1_1service.html":[0,0,0,0,0,0],
+"namespaceedu_1_1yacoubi_1_1crm_1_1service_1_1impl.html":[0,0,0,0,0,0,0],
+"namespaceedu_1_1yacoubi_1_1crm_1_1service_1_1util.html":[0,0,0,0,0,0,1],
+"namespaceedu_1_1yacoubi_1_1crm_1_1service_1_1validation.html":[0,0,0,0,0,0,2],
+"namespaces.html":[0,0],
+"pages.html":[],
+"":[0,0,0],
+"":[0,0,0,0],
+"":[0,0,0,0,0]
+};
