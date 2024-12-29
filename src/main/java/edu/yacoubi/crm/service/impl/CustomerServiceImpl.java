@@ -195,4 +195,26 @@ public class CustomerServiceImpl implements ICustomerService {
         log.info("CustomerServiceImpl::getCustomersByEmployeeId execution end");
         return customers;
     }
+
+    @Override
+    public void updateCustomers(List<Customer> customers) {
+        log.info("CustomerServiceImpl::updateCustomers execution start");
+
+        if (customers == null || customers.isEmpty()) {
+            log.warn("No customers provided for update");
+            throw new IllegalArgumentException("Customer list must not be null or empty");
+        }
+
+        // Überprüfen, ob alle Kunden ein zugewiesenes Employee-Objekt haben
+        boolean allCustomersHaveEmployee = customers.stream()
+                .allMatch(customer -> customer.getEmployee() != null);
+
+        if (!allCustomersHaveEmployee) {
+            log.warn("One or more customers do not have a assigned employee");
+            throw new IllegalArgumentException("All customers must have an assigned employee");
+        }
+
+        customerRepository.saveAll(customers);
+        log.info("CustomerServiceImpl::updateCustomers execution end");
+    }
 }

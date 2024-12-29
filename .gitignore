@@ -8,6 +8,7 @@ PROJEKT_STRUKTUR_SECURITY.md
 UEBERBLICK_DES_LOESUNGANSATZES.md
 SCENARIEN_CHECK_LOESUNGSANSATZ.md
 z_documentations/
+z_docs/
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

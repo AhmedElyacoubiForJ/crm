@@ -34,4 +34,7 @@ public interface CustomerRepository extends
     );
 
     List<Customer> findByEmployeeId(Long employeeId);
+
+    //@Query("SELECT COUNT(c) > 0 FROM Customer c WHERE c.employee.id = :employeeId")
+    //boolean hasCustomers(@Param("employeeId") Long employeeId);
 }

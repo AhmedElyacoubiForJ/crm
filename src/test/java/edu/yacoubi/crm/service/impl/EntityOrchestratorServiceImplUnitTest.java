@@ -8,6 +8,7 @@ import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.InactiveEmployee;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
+import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.service.validation.EntityValidator;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IInactiveEmployeeService;
@@ -40,6 +41,8 @@ class EntityOrchestratorServiceImplUnitTest {
             "Employee deleted and customers reassigned: oldEmployeeId= %d, newEmployeeId= %d";
     @Mock
     private EmployeeRepository employeeRepository;
+    @Mock
+    private IEmployeeService employeeService;
     @Mock
     private ICustomerService customerService;
     @Mock
@@ -293,10 +296,10 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals("Customer or Employee IDs must not be null and a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId), "INFO"
         ));
     }
 
@@ -315,10 +318,10 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals("Customer or Employee IDs must not be null and a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId), "INFO"
         ));
     }
 
@@ -338,10 +341,10 @@ class EntityOrchestratorServiceImplUnitTest {
 
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId), "INFO"
         ));
     }
 
@@ -361,10 +364,10 @@ class EntityOrchestratorServiceImplUnitTest {
 
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId), "INFO"
         ));
     }
 
@@ -392,10 +395,10 @@ class EntityOrchestratorServiceImplUnitTest {
 
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
         ));
         assertTrue(testAppender.contains(
-                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId), "INFO"
         ));
         verify(customerRepository, times(1)).findById(customerId);
         verify(employeeRepository, times(1)).findById(employeeId);
@@ -426,10 +429,10 @@ class EntityOrchestratorServiceImplUnitTest {
         verify(employeeRepository, times(0)).findById(employeeId);
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId), "INFO"
         ));
     }
 
@@ -452,10 +455,10 @@ class EntityOrchestratorServiceImplUnitTest {
         verify(employeeRepository, times(0)).findById(employeeId);
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId), "INFO"
         ));
     }
 
@@ -479,10 +482,10 @@ class EntityOrchestratorServiceImplUnitTest {
         verify(employeeRepository, times(1)).findById(employeeId);
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId), "INFO"
         ));
     }
 
@@ -509,10 +512,10 @@ class EntityOrchestratorServiceImplUnitTest {
 
         // Then verify that the info logs are triggered
         assertTrue(testAppender.contains(
-                String.format(LogInfoStartReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
         ));
         assertTrue(testAppender.contains(
-                String.format(LogInfoEndReassignCustomerToEmployee, customerId, employeeId), "INFO"
+                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId), "INFO"
         ));
     }
 
@@ -729,18 +732,18 @@ class EntityOrchestratorServiceImplUnitTest {
         List<Customer> customers = List.of(customer1, customer2);
 
         when(employeeRepository.findById(oldEmployeeId)).thenReturn(Optional.of(oldEmployee));
-        when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.of(newEmployee));
+        //when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.of(newEmployee));
         when(customerService.getCustomersByEmployeeId(oldEmployeeId)).thenReturn(customers);
         doNothing().when(entityValidator).validateEmployeeExists(anyLong());
 
         underTest.deleteEmployeeAndReassignCustomers(oldEmployeeId, newEmployeeId);
 
         verify(entityValidator, times(4)).validateEmployeeExists(anyLong());
-        verify(employeeRepository, times(3)).findById(anyLong());
+        verify(employeeRepository, times(2)).findById(anyLong());
         verify(entityValidator, times(2)).validateEmployeeExists(oldEmployeeId);
         verify(entityValidator, times(2)).validateEmployeeExists(newEmployeeId);
         verify(employeeRepository, times(1)).findById(oldEmployeeId);
-        verify(employeeRepository, times(2)).findById(newEmployeeId);
+        verify(employeeRepository, times(1)).findById(newEmployeeId);
         verify(customerRepository, times(1)).saveAll(anyList());
         verify(inactiveEmployeeService, times(1)).createInactiveEmployee(oldEmployee);
         verify(employeeRepository, times(1)).delete(oldEmployee);

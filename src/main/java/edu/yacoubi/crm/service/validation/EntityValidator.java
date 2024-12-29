@@ -3,6 +3,7 @@ package edu.yacoubi.crm.service.validation;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
+import edu.yacoubi.crm.repository.InactiveEmployeeRepository;
 import edu.yacoubi.crm.repository.NoteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ public class EntityValidator {
     private final EmployeeRepository employeeRepository;
     private final NoteRepository noteRepository;
     private final CustomerRepository customerRepository;
+    private final InactiveEmployeeRepository inactiveEmployeeRepository;
 
     public void validateEmployeeExists(Long employeeId) {
         log.info("EntityValidator::validateEmployeeExists employeeId: {}", employeeId);
@@ -48,5 +50,16 @@ public class EntityValidator {
         }
 
         log.info("EntityValidator::validateCustomerExists id: {} successfully validated", id);
+    }
+
+    public void validateInactiveEmployeeExists(Long originalEmployeeId) {
+        log.info("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: {}", originalEmployeeId);
+
+        if (!inactiveEmployeeRepository.existsByOriginalEmployeeId(originalEmployeeId)) {
+            log.error("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: {} not found", originalEmployeeId);
+            throw new ResourceNotFoundException("Inactive employee not found with ID: " + originalEmployeeId);
+        }
+
+        log.info("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: {} successfully validated", originalEmployeeId);
     }
 }

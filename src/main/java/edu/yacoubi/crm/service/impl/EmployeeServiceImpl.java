@@ -146,5 +146,29 @@ public class EmployeeServiceImpl implements IEmployeeService {
         log.info("EmployeeServiceImpl::getAllDepartments execution end");
         return optionalDepartments;
     }
+
+    @Override
+    public void deleteEmployee(Long employeeId) {
+        log.info("EmployeeServiceImpl::deleteEmployee employeeId: {}", employeeId);
+
+        entityValidator.validateEmployeeExists(employeeId);
+
+        // Überprüfung, ob dem Mitarbeiter Kunden zugewiesen sind
+        if (employeeRepository.hasCustomers(employeeId)) {
+            log.warn("Cannot delete employee, customers are still assigned. employeeId: {}", employeeId);
+            throw new IllegalArgumentException("Cannot delete employee, customers are still assigned.");
+        }
+
+        // Überprüfung, ob der Mitarbeiter archiviert ist
+        try {
+            entityValidator.validateInactiveEmployeeExists(employeeId);
+        } catch (ResourceNotFoundException exception) {
+            log.warn("Cannot delete not archived employee. EmployeeId: {}", employeeId);
+            throw new IllegalArgumentException("Cannot delete not archived employee.");
+        }
+
+        employeeRepository.deleteById(employeeId);
+        log.info("EmployeeServiceImpl::deleteEmployee execution end");
+    }
 }
 
