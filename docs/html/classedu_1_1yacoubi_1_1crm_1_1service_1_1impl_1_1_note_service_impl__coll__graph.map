@@ -1,7 +1,0 @@
-<map id="edu.yacoubi.crm.service.impl.NoteServiceImpl" name="edu.yacoubi.crm.service.impl.NoteServiceImpl">
-<area shape="rect" id="Node000001" title=" " alt="" coords="106,299,290,512"/>
-<area shape="rect" id="Node000002" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service.html" title=" " alt="" coords="5,24,174,216"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,229,160,298,155,300,129,231"/>
-<area shape="rect" id="Node000003" href="$classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator.html" title=" " alt="" coords="198,5,414,235"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="265,235,247,284,242,282,260,233"/>
-</map>

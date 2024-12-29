@@ -343,10 +343,9 @@ README.md
 - RestApi Unit-,IntegrationsTests: TODO
 - Spring MVC views Implementations: DONE (teilweise verbesserung notwendig)
 
-
 # Projekt-Dokumentation
 
 Willkommen zur Projektdokumentation. Klicken Sie auf den untenstehenden Link, um die vollständige Dokumentation zu sehen.
 
-[Zur Dokumentation](z_doxy/html/index.html)
+[Zur Dokumentation](https://AhmedElyacoubiForJ.github.io)
 
