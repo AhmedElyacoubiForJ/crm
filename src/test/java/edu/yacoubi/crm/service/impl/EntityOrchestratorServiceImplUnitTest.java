@@ -71,7 +71,7 @@ class EntityOrchestratorServiceImplUnitTest {
         });
 
         // Then verify the exception message
-        assertEquals("Employee IDs must not be null and a positive number", exception.getMessage());
+        assertEquals("Employee IDs must not be null and must be a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
                 String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
@@ -93,7 +93,7 @@ class EntityOrchestratorServiceImplUnitTest {
         });
 
         // Then verify the exception message
-        assertEquals("Employee IDs must not be null and a positive number", exception.getMessage());
+        assertEquals("Employee IDs must not be null and must be a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
                 String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
@@ -115,7 +115,7 @@ class EntityOrchestratorServiceImplUnitTest {
         });
 
         // Then verify the exception message
-        assertEquals("Employee IDs must not be null and a positive number", exception.getMessage());
+        assertEquals("Employee IDs must not be null and must be a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
                 String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
@@ -137,7 +137,7 @@ class EntityOrchestratorServiceImplUnitTest {
         });
 
         // Then verify the exception message
-        assertEquals("Employee IDs must not be null and a positive number", exception.getMessage());
+        assertEquals("Employee IDs must not be null and must be a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
                 String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
@@ -289,7 +289,7 @@ class EntityOrchestratorServiceImplUnitTest {
         });
 
         // Then verify the exception message
-        assertEquals("Customer or Employee IDs must not be null and a positive number", exception.getMessage());
+        assertEquals("Customer or Employee IDs must not be null and must be a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
                 String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
@@ -311,7 +311,7 @@ class EntityOrchestratorServiceImplUnitTest {
         });
 
         // Then verify the exception message
-        assertEquals("Customer or Employee IDs must not be null and a positive number", exception.getMessage());
+        assertEquals("Customer or Employee IDs must not be null and must be a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
                 String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
@@ -333,7 +333,7 @@ class EntityOrchestratorServiceImplUnitTest {
         });
 
         // Then verify the exception message
-        assertEquals("Customer or Employee IDs must not be null and a positive number", exception.getMessage());
+        assertEquals("Customer or Employee IDs must not be null and must be a positive number", exception.getMessage());
 
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
@@ -356,7 +356,7 @@ class EntityOrchestratorServiceImplUnitTest {
         });
 
         // Then verify the exception message
-        assertEquals("Customer or Employee IDs must not be null and a positive number", exception.getMessage());
+        assertEquals("Customer or Employee IDs must not be null and must be a positive number", exception.getMessage());
 
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
