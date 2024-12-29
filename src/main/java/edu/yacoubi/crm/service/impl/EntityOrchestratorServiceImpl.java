@@ -30,7 +30,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
 
         if (oldEmployeeId == null || newEmployeeId == null || oldEmployeeId < 0 || newEmployeeId < 0) {
             log.warn("Employee IDs must not be null and must be a positive number");
-            throw new IllegalArgumentException("Employee IDs must not be null and a positive number");
+            throw new IllegalArgumentException("Employee IDs must not be null and must be a positive number");
         }
 
         if (oldEmployeeId.equals(newEmployeeId)) {
