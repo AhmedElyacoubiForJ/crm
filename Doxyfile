@@ -540,7 +540,7 @@ EXTRACT_ALL            = YES
 # be included in the documentation.
 # The default value is: NO.
 
-EXTRACT_PRIVATE        = NO
+EXTRACT_PRIVATE        = YES
 
 # If the EXTRACT_PRIV_VIRTUAL tag is set to YES, documented private virtual
 # methods of a class will be included in the documentation.
@@ -983,7 +983,7 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = "src/main/java/edu/yacoubi/crm/service"
+INPUT                  = src/main/java/edu/yacoubi/crm/service
 
 # This tag can be used to specify the character encoding of the source files
 # that Doxygen parses. Internally Doxygen uses the UTF-8 encoding. Doxygen uses
@@ -1079,7 +1079,7 @@ FILE_PATTERNS          = *.c \
 # be searched for input files as well.
 # The default value is: NO.
 
-RECURSIVE              = NO
+RECURSIVE              = YES
 
 # The EXCLUDE tag can be used to specify files and/or directories that should be
 # excluded from the INPUT source files. This way you can easily exclude a
@@ -2598,6 +2598,7 @@ HIDE_UNDOC_RELATIONS   = YES
 # Bell Labs. The other options in this section have no effect if this option is
 # set to NO
 # The default value is: NO.
+# Wenn HAVE_DOT auf YES gesetzt ist, geht Doxygen davon aus, dass das Tool 'dot' im Pfad verfügbar ist.
 
 HAVE_DOT               = YES
 
@@ -2661,6 +2662,7 @@ DOT_FONTPATH           =
 # \hideinheritancegraph.
 # Possible values are: NO, YES, TEXT, GRAPH and BUILTIN.
 # The default value is: YES.
+# Aktiviert die Generierung von Klassendiagrammen.
 
 CLASS_GRAPH            = YES
 
@@ -2673,6 +2675,8 @@ CLASS_GRAPH            = YES
 # accomplished by means of the command \hidecollaborationgraph.
 # The default value is: YES.
 # This tag requires that the tag HAVE_DOT is set to YES.
+# Aktiviert die Generierung von Kollaborationsdiagrammen.
+
 
 COLLABORATION_GRAPH    = YES
 
@@ -2692,8 +2696,9 @@ GROUP_GRAPHS           = YES
 # Language.
 # The default value is: NO.
 # This tag requires that the tag HAVE_DOT is set to YES.
+# Aktiviert den UML-Stil für Diagramme.
 
-UML_LOOK               = NO
+UML_LOOK               = YES
 
 # If the UML_LOOK tag is enabled, the fields and methods are shown inside the
 # class node. If there are many fields or methods and many nodes the graph may
@@ -2746,6 +2751,7 @@ TEMPLATE_RELATIONS     = NO
 # include graph can be accomplished by means of the command \hideincludegraph.
 # The default value is: YES.
 # This tag requires that the tag HAVE_DOT is set to YES.
+# Aktiviert die Generierung von Abhängigkeitsgraphen.
 
 INCLUDE_GRAPH          = YES
 
@@ -2758,6 +2764,7 @@ INCLUDE_GRAPH          = YES
 # \hideincludedbygraph.
 # The default value is: YES.
 # This tag requires that the tag HAVE_DOT is set to YES.
+# Aktiviert die Generierung von Abhängigkeitsgraphen.
 
 INCLUDED_BY_GRAPH      = YES
 
@@ -2955,3 +2962,6 @@ MSCGEN_TOOL            =
 # command).
 
 MSCFILE_DIRS           =
+
+# Aktiviert die Generierung von Klassendiagrammen.
+CLASS_DIAGRAMS = YES
