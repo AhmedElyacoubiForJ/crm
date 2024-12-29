@@ -10,7 +10,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -25,12 +24,14 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
     @Transactional
     @Override
     public void deleteEmployeeAndReassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
-        Assert.notNull(oldEmployeeId, "Old employee ID must not be null");
-        Assert.notNull(newEmployeeId, "New employee ID must not be null");
-
         log.info("EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
                 oldEmployeeId, newEmployeeId
         );
+
+        if (oldEmployeeId == null || newEmployeeId == null || oldEmployeeId < 0 || newEmployeeId < 0) {
+            log.warn("Employee IDs must not be null and must be a positive number");
+            throw new IllegalArgumentException("Employee IDs must not be null and a positive number");
+        }
 
         if (oldEmployeeId.equals(newEmployeeId)) {
             log.warn("Old and new employee IDs must be different");
