@@ -1,6 +1,7 @@
 package edu.yacoubi.crm.repository;
 
 import edu.yacoubi.crm.TestDataUtil;
+import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
@@ -107,5 +107,53 @@ class EmployeeRepositoryUnitTest {
         assertEquals(2, allDepartments.get().size());
         assertTrue(allDepartments.get().contains("Sales"));
         assertTrue(allDepartments.get().contains("Marketing"));
+    }
+
+    @Test
+    public void testHasCustomers() {
+        // Given
+        Employee employeeWithCustomers = Employee.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .email("john.doe@example.com")
+                .department("Sales")
+                .build();
+
+        Employee savedEmployeeWithCustomers = underTest.save(employeeWithCustomers);
+
+        Customer customer1 = Customer.builder()
+                .firstName("Jane")
+                .lastName("Smith")
+                .email("jane.smith@example.com")
+                .build();
+
+        Customer customer2 = Customer.builder()
+                .firstName("Bob")
+                .lastName("Johnson")
+                .email("bob.johnson@example.com")
+                .build();
+
+        savedEmployeeWithCustomers.addCustomer(customer1);
+        savedEmployeeWithCustomers.addCustomer(customer2);
+
+        // Save the employee with customers
+        Employee savedEmployee = underTest.save(savedEmployeeWithCustomers);
+
+        Employee employeeWithoutCustomers = Employee.builder()
+                .firstName("Alice")
+                .lastName("Brown")
+                .email("alice.brown@example.com")
+                .department("Marketing")
+                .build();
+
+        underTest.save(employeeWithoutCustomers);
+
+        // When
+        boolean resultWithCustomers = underTest.hasCustomers(savedEmployeeWithCustomers.getId());
+        boolean resultWithoutCustomers = underTest.hasCustomers(employeeWithoutCustomers.getId());
+
+        // Then
+        assertTrue(true, String.valueOf(resultWithCustomers));
+        assertFalse(false, String.valueOf(resultWithoutCustomers));
     }
 }

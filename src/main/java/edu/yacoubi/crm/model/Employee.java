@@ -34,9 +34,19 @@ public class Employee {
     @NotBlank(message = "Department is mandatory")
     private String department;
 
-    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
     @JsonIgnoreProperties("employee")
     @ToString.Exclude
     @Builder.Default
     List<Customer> customers = new ArrayList<>();
+
+    public void addCustomer(Customer customer) {
+        customers.add(customer);
+        customer.setEmployee(this);
+    }
+
+    public void removeCustomer(Customer customer) {
+        customers.remove(customer);
+        customer.setEmployee(null);
+    }
 }
