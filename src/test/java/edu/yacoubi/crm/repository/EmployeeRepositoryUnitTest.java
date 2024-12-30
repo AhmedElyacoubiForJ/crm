@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -119,7 +120,8 @@ class EmployeeRepositoryUnitTest {
                 .department("Sales")
                 .build();
 
-        Employee savedEmployeeWithCustomers = underTest.save(employeeWithCustomers);
+        Employee savedEmployeeWithCustomers = underTest
+                .save(employeeWithCustomers);
 
         Customer customer1 = Customer.builder()
                 .firstName("Jane")
@@ -137,7 +139,8 @@ class EmployeeRepositoryUnitTest {
         savedEmployeeWithCustomers.addCustomer(customer2);
 
         // Save the employee with customers
-        Employee savedEmployee = underTest.save(savedEmployeeWithCustomers);
+        Employee savedEmployeeWithSavedCustomers = underTest
+                .save(savedEmployeeWithCustomers);
 
         Employee employeeWithoutCustomers = Employee.builder()
                 .firstName("Alice")
@@ -149,11 +152,73 @@ class EmployeeRepositoryUnitTest {
         underTest.save(employeeWithoutCustomers);
 
         // When
-        boolean resultWithCustomers = underTest.hasCustomers(savedEmployeeWithCustomers.getId());
-        boolean resultWithoutCustomers = underTest.hasCustomers(employeeWithoutCustomers.getId());
+        boolean resultWithCustomers = underTest
+                .hasCustomers(savedEmployeeWithSavedCustomers.getId());
+        boolean resultWithoutCustomers = underTest
+                .hasCustomers(employeeWithoutCustomers.getId());
 
         // Then
         assertTrue(true, String.valueOf(resultWithCustomers));
         assertFalse(false, String.valueOf(resultWithoutCustomers));
     }
+
+    @Test
+    void itShouldReturnTrueWhenEmployeeHasCustomers() {
+        // Given
+        Employee employeeWithCustomers = TestDataUtil.createEmployeeA();
+        Employee savedEmployeeWithCustomers = underTest.save(employeeWithCustomers);
+
+        // Initialize customers with the saved employee
+        Customer customerA = TestDataUtil.createCustomerA(savedEmployeeWithCustomers);
+        Customer customerB = TestDataUtil.createCustomerA(savedEmployeeWithCustomers);
+
+        savedEmployeeWithCustomers.addCustomer(customerA);
+        savedEmployeeWithCustomers.addCustomer(customerB);
+
+        // Save the employee with customers
+        Employee savedEmployeeWithSavedCustomers = underTest.save(savedEmployeeWithCustomers);
+        // LAZY und trotzdem customers wurden geladen.
+        // Grund ist, in einem @DataJpaTest-Kontext
+        // sind Tests standardmäßig in eine Transaktion eingebunden.
+        savedEmployeeWithSavedCustomers.getCustomers()
+                .forEach(
+                        customer -> System.out.println(customer)
+                );
+        // When
+        boolean resultWithCustomers = underTest.hasCustomers(savedEmployeeWithSavedCustomers.getId());
+
+        // Then
+        assertTrue(true, String.valueOf(resultWithCustomers));
+    }
+
+    @Test
+    void itShouldReturnFalseWhenEmployeeHasNoCustomers() {
+        // Given
+        Employee employeeWithoutCustomers = TestDataUtil.createEmployeeA();
+        underTest.save(employeeWithoutCustomers);
+
+        // When
+        boolean resultWithoutCustomers = underTest.hasCustomers(employeeWithoutCustomers.getId());
+
+        // Then
+        assertFalse(false, String.valueOf(resultWithoutCustomers));
+    }
 }
+
+/**
+ * Die Tatsache, dass die Kunden trotz `FetchType.LAZY` geladen werden, liegt, wie ich richtig bemerkt habe,
+ * daran, dass in einem `@DataJpaTest`-Kontext Tests standardmäßig in eine Transaktion eingebunden sind.
+ *
+ * ### Zusammenfassung der wesentlichen Punkte:
+ *
+ * 1. **Transaktionskontext in `@DataJpaTest`**: Die Tests sind standardmäßig in eine Transaktion eingebunden, was bedeutet,
+ *      dass Lazy-Loading-Proxies innerhalb dieser Transaktion auf die tatsächlichen Daten zugreifen können.
+ * 2. **Lazy-Loading im Service-Kontext**: Um Lazy-Loading wirklich zu testen, ist es sinnvoll,
+ *      dies im Service-Kontext zu tun, wo der Transaktionskontext deutlicher getrennt ist.
+ *
+ * ### Nächste Schritte:
+ * - **Service-Kontext-Tests**: Jetzt, da die Repository-Tests funktionieren,
+ *      kann man Lazy-Loading im Service-Kontext testen, um sicherzustellen,
+ *      dass die Kunden nur bei Bedarf geladen werden.
+ *
+ */

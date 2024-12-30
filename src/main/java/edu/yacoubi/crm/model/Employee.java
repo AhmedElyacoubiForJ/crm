@@ -1,4 +1,5 @@
 package edu.yacoubi.crm.model;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -34,17 +35,24 @@ public class Employee {
     @NotBlank(message = "Department is mandatory")
     private String department;
 
-    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
+    // OneToMany relationship with Customer, EAGER fetch type to load customers immediately
+    // CascadeType.ALL ensures changes to Employee are propagated to associated Customers
+    // orphanRemoval = true ensures orphans are removed when they are no longer referenced by Employee
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("employee")
     @ToString.Exclude
     @Builder.Default
     List<Customer> customers = new ArrayList<>();
 
+    // Adds a customer to the employee's customer list
+    // and sets the employee reference in the customer
     public void addCustomer(Customer customer) {
         customers.add(customer);
         customer.setEmployee(this);
     }
 
+    // Removes a customer from the employee's customer list
+    // and nullifies the employee reference in the customer
     public void removeCustomer(Customer customer) {
         customers.remove(customer);
         customer.setEmployee(null);
