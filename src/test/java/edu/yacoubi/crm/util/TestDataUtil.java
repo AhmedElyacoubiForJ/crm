@@ -1,4 +1,4 @@
-package edu.yacoubi.crm;
+package edu.yacoubi.crm.util;
 
 import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.dto.employee.EmployeeRequestDTO;

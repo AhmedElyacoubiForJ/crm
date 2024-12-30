@@ -1,6 +1,6 @@
 package edu.yacoubi.crm.service.impl;
 
-import edu.yacoubi.crm.TestDataUtil;
+import edu.yacoubi.crm.util.TestDataUtil;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;

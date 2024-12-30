@@ -1,7 +1,5 @@
-package edu.yacoubi.crm;
+package edu.yacoubi.crm.util;
 
-import edu.yacoubi.crm.util.Transformer;
-import edu.yacoubi.crm.util.TransformerUtil;
 import lombok.Builder;
 import lombok.Data;
 import org.junit.jupiter.api.Test;

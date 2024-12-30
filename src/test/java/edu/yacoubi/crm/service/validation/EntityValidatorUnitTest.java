@@ -1,7 +1,7 @@
 package edu.yacoubi.crm.service.validation;
 
 import ch.qos.logback.classic.Logger;
-import edu.yacoubi.crm.TestAppender;
+import edu.yacoubi.crm.util.TestAppender;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;

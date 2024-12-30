@@ -1,6 +1,5 @@
 package edu.yacoubi.crm.util;
 
-import edu.yacoubi.crm.TestDataUtil;
 import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.dto.customer.CustomerResponseDTO;
 import edu.yacoubi.crm.dto.employee.EmployeeRequestDTO;
@@ -10,8 +9,6 @@ import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
 
 import static edu.yacoubi.crm.util.EntityTransformer.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;

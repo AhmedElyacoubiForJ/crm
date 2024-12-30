@@ -11,7 +11,7 @@ import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
 import org.junit.jupiter.api.Test;
 
-import static edu.yacoubi.crm.TestDataUtil.*;
+import static edu.yacoubi.crm.util.TestDataUtil.*;
 import static edu.yacoubi.crm.util.ValueMapper.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;

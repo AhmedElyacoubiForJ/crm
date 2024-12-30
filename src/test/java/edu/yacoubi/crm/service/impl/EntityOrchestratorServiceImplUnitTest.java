@@ -1,11 +1,7 @@
 package edu.yacoubi.crm.service.impl;
 
 import ch.qos.logback.classic.Logger;
-import edu.yacoubi.crm.TestAppender;
-import edu.yacoubi.crm.exception.ResourceNotFoundException;
-import edu.yacoubi.crm.model.Customer;
-import edu.yacoubi.crm.model.Employee;
-import edu.yacoubi.crm.model.InactiveEmployee;
+import edu.yacoubi.crm.util.TestAppender;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.service.ICustomerService;
@@ -20,11 +16,8 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 /**

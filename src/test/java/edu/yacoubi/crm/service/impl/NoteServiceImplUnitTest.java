@@ -1,14 +1,12 @@
 package edu.yacoubi.crm.service.impl;
 
 import ch.qos.logback.classic.Logger;
-import edu.yacoubi.crm.TestAppender;
-import edu.yacoubi.crm.TestDataUtil;
+import edu.yacoubi.crm.util.TestAppender;
+import edu.yacoubi.crm.util.TestDataUtil;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
-import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.repository.NoteRepository;
 import edu.yacoubi.crm.service.validation.EntityValidator;
-import edu.yacoubi.crm.service.ICustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
