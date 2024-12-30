@@ -170,5 +170,19 @@ public class EmployeeServiceImpl implements IEmployeeService {
         employeeRepository.deleteById(employeeId);
         log.info("EmployeeServiceImpl::deleteEmployee execution end");
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean hasCustomers(Long employeeId) {
+        log.info("EmployeeServiceImpl::hasCustomers execution start: employeeId {}", employeeId);
+        // Validate that the employee exists
+        entityValidator.validateEmployeeExists(employeeId);
+
+        // Use the query defined in the EmployeeRepository
+        boolean hasCustomers = employeeRepository.hasCustomers(employeeId);
+
+        log.info("EmployeeServiceImpl::hasCustomers execution end");
+        return hasCustomers;
+    }
 }
 

@@ -93,4 +93,6 @@ public interface IEmployeeService {
      * @param employeeId the ID of the employee to be deleted.
      */
     void deleteEmployee(Long employeeId);
+
+    boolean hasCustomers(Long employeeId);
 }

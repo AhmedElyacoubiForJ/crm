@@ -38,7 +38,12 @@ public class Employee {
     // OneToMany relationship with Customer, EAGER fetch type to load customers immediately
     // CascadeType.ALL ensures changes to Employee are propagated to associated Customers
     // orphanRemoval = true ensures orphans are removed when they are no longer referenced by Employee
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "employee",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
     @JsonIgnoreProperties("employee")
     @ToString.Exclude
     @Builder.Default

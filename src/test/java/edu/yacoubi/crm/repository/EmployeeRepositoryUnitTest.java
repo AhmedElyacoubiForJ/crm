@@ -135,7 +135,7 @@ class EmployeeRepositoryUnitTest {
         boolean resultWithCustomers = underTest.hasCustomers(savedEmployeeWithSavedCustomers.getId());
 
         // Then
-        assertTrue(true, String.valueOf(resultWithCustomers));
+        assertTrue(resultWithCustomers, "Employee with customers should return true");
     }
 
     @Test
@@ -148,7 +148,7 @@ class EmployeeRepositoryUnitTest {
         boolean resultWithoutCustomers = underTest.hasCustomers(employeeWithoutCustomers.getId());
 
         // Then
-        assertFalse(false, String.valueOf(resultWithoutCustomers));
+        assertFalse(resultWithoutCustomers, "Employee without customers should return false");
     }
 }
 
