@@ -31,7 +31,7 @@ public class EntityTransformer {
                     .id(note.getId())
                     .content(note.getContent())
                     .date(note.getDate())
-                    .interactionType(note.getInteractionType())
+                    .interactionType(note.getInteractionType()) // Enum to String
                     .customerId(note.getCustomer().getId())
                     .build();
 
