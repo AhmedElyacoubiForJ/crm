@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -111,58 +110,6 @@ class EmployeeRepositoryUnitTest {
     }
 
     @Test
-    public void testHasCustomers() {
-        // Given
-        Employee employeeWithCustomers = Employee.builder()
-                .firstName("John")
-                .lastName("Doe")
-                .email("john.doe@example.com")
-                .department("Sales")
-                .build();
-
-        Employee savedEmployeeWithCustomers = underTest
-                .save(employeeWithCustomers);
-
-        Customer customer1 = Customer.builder()
-                .firstName("Jane")
-                .lastName("Smith")
-                .email("jane.smith@example.com")
-                .build();
-
-        Customer customer2 = Customer.builder()
-                .firstName("Bob")
-                .lastName("Johnson")
-                .email("bob.johnson@example.com")
-                .build();
-
-        savedEmployeeWithCustomers.addCustomer(customer1);
-        savedEmployeeWithCustomers.addCustomer(customer2);
-
-        // Save the employee with customers
-        Employee savedEmployeeWithSavedCustomers = underTest
-                .save(savedEmployeeWithCustomers);
-
-        Employee employeeWithoutCustomers = Employee.builder()
-                .firstName("Alice")
-                .lastName("Brown")
-                .email("alice.brown@example.com")
-                .department("Marketing")
-                .build();
-
-        underTest.save(employeeWithoutCustomers);
-
-        // When
-        boolean resultWithCustomers = underTest
-                .hasCustomers(savedEmployeeWithSavedCustomers.getId());
-        boolean resultWithoutCustomers = underTest
-                .hasCustomers(employeeWithoutCustomers.getId());
-
-        // Then
-        assertTrue(true, String.valueOf(resultWithCustomers));
-        assertFalse(false, String.valueOf(resultWithoutCustomers));
-    }
-
-    @Test
     void itShouldReturnTrueWhenEmployeeHasCustomers() {
         // Given
         Employee employeeWithCustomers = TestDataUtil.createEmployeeA();
@@ -208,17 +155,16 @@ class EmployeeRepositoryUnitTest {
 /**
  * Die Tatsache, dass die Kunden trotz `FetchType.LAZY` geladen werden, liegt, wie ich richtig bemerkt habe,
  * daran, dass in einem `@DataJpaTest`-Kontext Tests standardmäßig in eine Transaktion eingebunden sind.
- *
+ * <p>
  * ### Zusammenfassung der wesentlichen Punkte:
- *
+ * <p>
  * 1. **Transaktionskontext in `@DataJpaTest`**: Die Tests sind standardmäßig in eine Transaktion eingebunden, was bedeutet,
- *      dass Lazy-Loading-Proxies innerhalb dieser Transaktion auf die tatsächlichen Daten zugreifen können.
+ * dass Lazy-Loading-Proxies innerhalb dieser Transaktion auf die tatsächlichen Daten zugreifen können.
  * 2. **Lazy-Loading im Service-Kontext**: Um Lazy-Loading wirklich zu testen, ist es sinnvoll,
- *      dies im Service-Kontext zu tun, wo der Transaktionskontext deutlicher getrennt ist.
- *
+ * dies im Service-Kontext zu tun, wo der Transaktionskontext deutlicher getrennt ist.
+ * <p>
  * ### Nächste Schritte:
  * - **Service-Kontext-Tests**: Jetzt, da die Repository-Tests funktionieren,
- *      kann man Lazy-Loading im Service-Kontext testen, um sicherzustellen,
- *      dass die Kunden nur bei Bedarf geladen werden.
- *
+ * kann man Lazy-Loading im Service-Kontext testen, um sicherzustellen,
+ * dass die Kunden nur bei Bedarf geladen werden.
  */
