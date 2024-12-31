@@ -8,6 +8,8 @@ import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.service.IEntityOrchestratorService;
+import edu.yacoubi.crm.util.EntityTransformer;
+import edu.yacoubi.crm.util.TransformerUtil;
 import edu.yacoubi.crm.util.ValueMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -58,7 +60,15 @@ public class EmployeeRestController {
             employeesPage = employeeService.getEmployeesWithPagination(page, size);
         }
 
-        Page<EmployeeResponseDTO> employeeResponseDTOPage = employeesPage.map(ValueMapper::convertToResponseDTO);
+        // Transformation der Employee-Objekte in EmployeeResponseDTO-Objekte
+        Page<EmployeeResponseDTO> employeeResponseDTOPage = employeesPage.map(
+                employee -> TransformerUtil.transform(EntityTransformer.employeeToEmployeeResponseDto, employee)
+        );
+
+        // Verwende den Transformer direkt im map-Aufruf
+        // Page<EmployeeResponseDTO> employeeResponseDTOPage = employeesPage.map(
+        //      employee -> EntityTransformer.employeeToEmployeeResponseDto.transform(employee)
+        // );
 
         APIResponse<Page<EmployeeResponseDTO>> response = APIResponse
                 .<Page<EmployeeResponseDTO>>builder()
@@ -80,10 +90,18 @@ public class EmployeeRestController {
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> getEmployeeById(@PathVariable Long id) {
         log.info("EmployeeRestController::getEmployeeById request id {}", id);
 
-        Employee existingEmployee = employeeService.getEmployeeById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
+        // exception werden im service behandelt und im globaler handler abgegangen
+        Employee existingEmployee = employeeService.getEmployeeById(id).get();
 
-        EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(existingEmployee);
+        //EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(existingEmployee);
+        EmployeeResponseDTO employeeResponseDTO = TransformerUtil.transform(
+                EntityTransformer.employeeToEmployeeResponseDto,
+                existingEmployee
+        );
+
+        // zweite variante
+        //EmployeeResponseDTO employeeResponseDTO = EntityTransformer.employeeToEmployeeResponseDto.transform(existingEmployee);
+
         APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
                 .status("success")
                 .statusCode(HttpStatus.OK.value())
@@ -103,10 +121,25 @@ public class EmployeeRestController {
             @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
         log.info("EmployeeRestController::createEmployee request {}", jsonAsString(employeeRequestDTO));
 
-        Employee employee = convertToEntity(employeeRequestDTO);
-        Employee savedEmployee = employeeService.createEmployee(employee);
+        //Employee employeeRequest = convertToEntity(employeeRequestDTO);
+        Employee employeeRequest = TransformerUtil
+                .transform(
+                        EntityTransformer.employeeRequestDtoToEmployee,
+                        employeeRequestDTO
+                );
+        // zweite variante
+        //Employee employeeRequest = EntityTransformer.employeeRequestDtoToEmployee.transform(employeeRequestDTO);
+        Employee savedEmployee = employeeService.createEmployee(employeeRequest);
 
-        EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(savedEmployee);
+        // erste variante
+        EmployeeResponseDTO employeeResponseDTO = TransformerUtil.transform(
+                EntityTransformer.employeeToEmployeeResponseDto,
+                savedEmployee
+        );
+        // zweite variante
+        //EmployeeResponseDTO employeeResponseDTO = EntityTransformer.employeeToEmployeeResponseDto.transform(savedEmployee);
+
+        //EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(savedEmployee);
         APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
                 .status("success")
                 .statusCode(HttpStatus.CREATED.value())
