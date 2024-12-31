@@ -58,7 +58,9 @@ Dieses Projekt ist eine Implementierung eines **Customer Relationship Management
 4. **GUI-Entwicklung mit Spring MVC**:
     - Erstellung grundlegender Views zur Verwaltung von Kunden und Notizen.
     - Bereitstellung erster funktionaler Oberflächen für Testzwecke.
+   <!--
     - Weitere Informationen zur Erstellung der Views findest du [hier](z_documentations/views_documentation.md).
+   -->
 
 5. **RESTful APIs**:
     - Implementierung von REST-APIs, um den Zugriff von externen Clients zu ermöglichen.
@@ -150,8 +152,6 @@ spring.profiles.active=test # or prod
    - Gehe zu Run > Edit Configurations.
    - Wähle deine Spring Boot Konfiguration aus.
    - Füge im Feld Active profiles test hinzu.
-
-## [API Testing-Dokumentation](z_documentations/TESTING.md)
 
 ## Struktur des Projektes
 <details>
