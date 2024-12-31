@@ -13,7 +13,7 @@ public class DateFormattingTest {
     public void testDateToStringTransformation() {
         // Given
         // an implementation transformer to format a date
-        Transformer<LocalDate, String> dateToString =
+        ITransformer<LocalDate, String> dateToString =
                 date -> date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDate today = LocalDate.of(2024, 12, 29);
         String expected = "29-12-2024";

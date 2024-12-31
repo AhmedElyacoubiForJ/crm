@@ -10,7 +10,7 @@ public class TemperatureConversionTest {
     public void testCelsiusToFahrenheitTransformation() {
         // Given
         // an implementation transformer to convert Celsius to Fahrenheit
-        Transformer<Double, Double> celsiusToFahrenheit = celsius -> (celsius * 9/5) + 32;
+        ITransformer<Double, Double> celsiusToFahrenheit = celsius -> (celsius * 9/5) + 32;
         Double celsius = 25.0;
         Double erwartet = (celsius * 9/5) + 32;
 

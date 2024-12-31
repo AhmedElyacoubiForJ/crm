@@ -14,7 +14,7 @@ import static edu.yacoubi.crm.util.EntityTransformer.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class EntityTransformerTest {
+public class EntityITransformerTest {
 
     @Test
     public void testNoteToNoteResponseDTOTransformation() {

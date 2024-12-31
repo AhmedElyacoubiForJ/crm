@@ -17,7 +17,7 @@ package edu.yacoubi.crm.util;
  * @param <R> der Rückgabetyp der transformierten Entität
  */
 @FunctionalInterface
-public interface Transformer<T, R> {
+public interface ITransformer<T, R> {
     /**
      * Transformiert eine Instanz der Eingabetyp {@code T} in eine Instanz des Rückgabetyps {@code R}.
      *

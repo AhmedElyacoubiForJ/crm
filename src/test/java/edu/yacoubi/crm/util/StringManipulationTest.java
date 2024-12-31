@@ -10,7 +10,7 @@ public class StringManipulationTest {
     public void testReverseStringTransformation() {
         // Given
         // an implementation transformer to reverse a string
-        Transformer<String, String> reverseString = str -> new StringBuilder(str).reverse().toString();
+        ITransformer<String, String> reverseString = str -> new StringBuilder(str).reverse().toString();
         String original = "FunctionalInterface";
         String expected = "ecafretnIlanoitcnuF";
 

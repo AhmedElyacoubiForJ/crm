@@ -4,7 +4,7 @@ package edu.yacoubi.crm.util;
  * Utility-Klasse für allgemeine Transformationsmethoden.
  *
  * <p>Diese Klasse stellt eine universelle Methode zur Verfügung, um beliebige Transformationen
- * mithilfe des {@link Transformer} Functional Interface durchzuführen. Sie ermöglicht es,
+ * mithilfe des {@link ITransformer} Functional Interface durchzuführen. Sie ermöglicht es,
  * eingehende Entitäten in verschiedene Zieltypen zu transformieren, ohne die Logik
  * der Transformationsmethode zu ändern.</p>
  *
@@ -23,9 +23,9 @@ public class TransformerUtil {
     }
 
     /**
-     * Universelle Transformationsmethode, die den übergebenen {@link Transformer} auf die Entität anwendet.
+     * Universelle Transformationsmethode, die den übergebenen {@link ITransformer} auf die Entität anwendet.
      *
-     * <p>Diese Methode nimmt eine Entität und einen {@link Transformer} entgegen und gibt die transformierte
+     * <p>Diese Methode nimmt eine Entität und einen {@link ITransformer} entgegen und gibt die transformierte
      * Entität zurück. Sie ist nützlich für allgemeine Transformationen zwischen verschiedenen Typen.</p>
      *
      * <p>Beispiel:</p>
@@ -34,17 +34,17 @@ public class TransformerUtil {
      * NoteDTO noteDto = TransformerUtil.transform(noteToDtoTransformer, noteInstance);
      * }</pre>
      *
-     * @param transformer Functional Interface zur Transformation
+     * @param ITransformer Functional Interface zur Transformation
      * @param entity die zu transformierende Entität
      * @param <T> Eingabetyp
      * @param <R> Rückgabetyp
      * @return transformierte Entität
      * @throws NullPointerException wenn der Transformer oder die Entität null ist
      */
-    public static <T, R> R transform(Transformer<T, R> transformer, T entity) {
-        if (transformer == null || entity == null) {
+    public static <T, R> R transform(ITransformer<T, R> ITransformer, T entity) {
+        if (ITransformer == null || entity == null) {
             throw new IllegalArgumentException("Transformer and entity must not be null");
         }
-        return transformer.transform(entity);
+        return ITransformer.transform(entity);
     }
 }

@@ -17,7 +17,7 @@ import edu.yacoubi.crm.model.Note;
  *
  * <p>Diese Klasse stellt verschiedene Transformer bereit, die verwendet werden können,
  * um Entitäten in DTOs und umgekehrt zu transformieren. Jeder Transformer ist als
- * {@link Transformer} implementiert und kann auf die entsprechenden Eingabe- und
+ * {@link ITransformer} implementiert und kann auf die entsprechenden Eingabe- und
  * Ausgabe-Typen angewendet werden.</p>
  */
 public class EntityTransformer {
@@ -26,7 +26,7 @@ public class EntityTransformer {
     /**
      * Transformer zur Umwandlung einer Note in ein NoteResponseDTO.
      */
-    public static final Transformer<Note, NoteResponseDTO> noteToNoteResponseDto =
+    public static final ITransformer<Note, NoteResponseDTO> noteToNoteResponseDto =
             note -> NoteResponseDTO.builder()
                     .id(note.getId())
                     .content(note.getContent())
@@ -38,7 +38,7 @@ public class EntityTransformer {
     /**
      * Transformer zur Umwandlung eines NoteResponseDTO in eine Note.
      */
-    public static final Transformer<NoteResponseDTO, Note> noteResponseDtoToNote =
+    public static final ITransformer<NoteResponseDTO, Note> noteResponseDtoToNote =
             noteResponseDTO -> Note.builder()
                     .id(noteResponseDTO.getId())
                     .content(noteResponseDTO.getContent())
@@ -51,7 +51,7 @@ public class EntityTransformer {
     /**
      * Transformer zur Umwandlung eines Employee in ein EmployeeResponseDTO.
      */
-    public static final Transformer<Employee, EmployeeResponseDTO> employeeToEmployeeResponseDto =
+    public static final ITransformer<Employee, EmployeeResponseDTO> employeeToEmployeeResponseDto =
             employee -> EmployeeResponseDTO.builder()
                     .id(employee.getId())
                     .firstName(employee.getFirstName())
@@ -63,7 +63,7 @@ public class EntityTransformer {
     /**
      * Transformer zur Umwandlung eines EmployeeRequestDTO in einen Employee.
      */
-    public static final Transformer<EmployeeRequestDTO, Employee> employeeRequestDtoToEmployee =
+    public static final ITransformer<EmployeeRequestDTO, Employee> employeeRequestDtoToEmployee =
             employeeRequestDTO -> Employee.builder()
                     .firstName(employeeRequestDTO.getFirstName())
                     .lastName(employeeRequestDTO.getLastName())
@@ -75,7 +75,7 @@ public class EntityTransformer {
     /**
      * Transformer zur Umwandlung eines CustomerRequestDTO in einen Customer.
      */
-    public static final Transformer<CustomerRequestDTO, Customer> customerRequestDtoToCustomer =
+    public static final ITransformer<CustomerRequestDTO, Customer> customerRequestDtoToCustomer =
             customerRequestDTO -> Customer.builder()
                     .firstName(customerRequestDTO.getFirstName())
                     .lastName(customerRequestDTO.getLastName())
@@ -88,7 +88,7 @@ public class EntityTransformer {
     /**
      * Transformer zur Umwandlung einen Customer in ein CustomerResponseDTO.
      */
-    public static final Transformer<Customer, CustomerResponseDTO> customerToCustomerResponseDto =
+    public static final ITransformer<Customer, CustomerResponseDTO> customerToCustomerResponseDto =
             customer -> CustomerResponseDTO.builder()
                     .id(customer.getId())
                     .firstName(customer.getFirstName())

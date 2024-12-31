@@ -18,7 +18,7 @@ public class ObjectTransformationTest {
                 .age(25)
                 .build();
 
-        Transformer<Person, PersonDTO> personToPersonDTO = p -> {
+        ITransformer<Person, PersonDTO> personToPersonDTO = p -> {
             String ageCategory = person.getAge() > 18 ? "Adult" : "Minor";
             return PersonDTO.builder()
                     .fullName(person.getName())
