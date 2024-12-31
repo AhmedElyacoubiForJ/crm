@@ -154,6 +154,8 @@ spring.profiles.active=test # or prod
 ## [API Testing-Dokumentation](z_documentations/TESTING.md)
 
 ## Struktur des Projektes
+<details>
+<summary style="color: blue"><strong>Klicke hier, um die Struktur anzuzeigen</strong></summary>
 
 ```plaintext
 src/
@@ -161,9 +163,7 @@ src/
     ├── java/
     │   └── edu.yacoubi.crm/
     │       ├── config/
-    │       │   ├── CorsConfig.java
-    │       │   ├── OpenApiConfig.java
-    │       │   └── SwaggerConfig.java
+    │       │   └── CorsConfig.java
     │       ├── controllers/
     │       │   ├── api/
     │       │   │   ├── CustomerRestController.java
@@ -196,8 +196,6 @@ src/
     │       ├── health/
     │       │   ├── DatabaseHealtIndicator.java
     │       │   └── ExternalServcieHealthIndicator.java
-    │       ├── mapper/
-    │       │   └── IMapper.java
     │       ├── modell/
     │       │   ├── Customer.java
     │       │   ├── Employee.java
@@ -205,11 +203,18 @@ src/
     │       │   ├── InterationType.java
     │       │   └── Note.java
     │       ├── repository/
+    │       │   ├── impl/
+    │       │   │   ├── CustomerCustomRepositoryImpl.java
+    │       │   │   ├── EmployeeCustomRepositoryImpl.java
+    │       │   │   └── NoteCustomRepositoryImpl.java
     │       │   ├── CustomCustomerRepository.java
     │       │   ├── CustomCustomerRepositoryImpl.java
     │       │   ├── CustomerRepository.java
     │       │   ├── EmployeeRepository.java
+    │       │   ├── ICustomerCustomRepository.java
+    │       │   ├── IEmployeeCustomRepository.java
     │       │   ├── InactiveEmployeeRepository.java
+    │       │   ├── ONoteCustomRepository.java
     │       │   └── NoteRepository.java
     │       ├── scenarios/
     │       │   └── CRMScenarioRunner.java
@@ -238,14 +243,22 @@ src/
     │       │   │   ├── EmployeeServiceImpl.java
     │       │   │   ├── EntityOrchestratorServiceImpl.java
     │       │   │   ├── InactiveEmployeeServiceImpl.java
+    │       │   │   ├── NoteOrchestratorServiceImpl.java
     │       │   │   └── NoteServiceImpl.java
+    │       │   ├── util/
+    │       │   │   └── EntityAction.java
+    │       │   ├── validation/
+    │       │   │   └── EntityValidator.java
     │       │   ├── ICustomerService.java
     │       │   ├── IEmployeeService.java
     │       │   ├── IEntityOrchestratorService.java
     │       │   ├── IInactiveEmployeeService.java
-    │       │   ├── INoteServcie.java
-    │       │   └── ValidationService.java
+    │       │   ├── INoteOrchestratorService.jav
+    │       │   └── INoteServcie.java
     │       ├── util/
+    │       │   ├── EntityTransformer.java
+    │       │   ├── Transformer.java
+    │       │   ├── TransformerUtil.java
     │       │   └── ValueMapper.java  
     │       └── Main.java
     ├── resources/
@@ -280,6 +293,9 @@ src/
                 │   ├── CustomerRepositoryUnitTest.java
                 │   ├── EmployeeRepositoryUnitTest.java
                 │   └── NoteRepositoryIntegrationTest.java
+                ├── impl/
+                │   ├── NoteCustomRepositoryImplIntegrationTest.java
+                │   └── NoteCustomRepositoryImplUnitTest.java
                 ├── service.impl/
                 │   ├── CustomerServiceImplIntegrationTest.java
                 │   ├── CustomerServiceImplUnit.java
@@ -288,45 +304,26 @@ src/
                 │   ├── EntityOrchestratorImplUnitTest.java
                 │   ├── EntityOrchestratorImplIntegrationTest.java
                 │   ├── NoteServiceImplIntegrationTest.java
-                │   └── NoteServcieImplUnitTest.java
+                │   └── NoteServcieImplUnitTest.java 
+                ├── service.validation/
+                │   ├── EntityValidatorIntegrationTest.java
+                │   └── EntityValidatorUnitTest.java
                 ├── util/
+                │   ├── DateFormattingTest.java
+                │   ├── EntityTransformerTest.java
+                │   ├── ObjectTransformationTest.java
+                │   ├── StringManipulationTest.java
+                │   ├── TemperatureConvertionTest.java
+                │   ├── TestAppender.java
+                │   ├── TestDataUtil.java
                 │   └── ValueMapperTest.java
-                ├── MainTests.java
-                ├── TestAppender.java
-                └── TestDataUtil.java
-z_documentationy/
-├── ACTUATOR_IN_CRM.md
-├── api_documentation.md
-├── APIResponse_Documentation.md
-├── customerDTO.json
-├── DELETE_EMPLOYEE_AND_REASSIGN_CUSTOMERS_UNIT_TEST.mg
-├── Delete_Employee_Impl.md
-├── DETAILED_DOCUMENTATION.md
-├── ENTITY_ORCHESTRATOR_SERVICE_DESIGN.md
-├── Example_And_CriteriaAPI_DOC.md
-├── Hosting_Plattform.md
-├── LOGGING_BEST_PRACTICES.md
-├── NAMENSAUNDERUNG_DES_ORCHESTRATOR_SERVICES.md
-├── PAGED_MODEL_MIT_HATEOAS.md
-├── TEST_APPENDER_LOG_NACHRICHTEN.md
-├── TESTING.md
-├── Ueberlegungen_Mitarbeiter_Loeschen.md
-├── ValueMapper_unit_testes.md
-└── views_documentation.md
+                └── MainTests.java
 .gitattributes
 .gitignore
-AUTHENTICATION_ERWEITERUNG.md
-AUTHENTICATION_TABELLEN.md
-Exception_Workflow_Doc.md
-HELP.md
-PROJEKT_STRUKTUR_SECURITY.md
-SCENARIEN_CHECK_LOESUNGSANSATZ.md
-TESTS-md
-UEBERBLICK_DES_LOESUNGSANSATZES.md
-LAZY_LOADING.md
 pom.xml
 README.md
 ```
+</details>
 
 ## TODOs
 - JPA Entities spezifizieren: DONE
