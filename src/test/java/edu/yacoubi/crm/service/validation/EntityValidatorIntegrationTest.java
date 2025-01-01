@@ -1,6 +1,7 @@
 package edu.yacoubi.crm.service.validation;
 
 import ch.qos.logback.classic.Logger;
+import edu.yacoubi.crm.repository.InactiveEmployeeRepository;
 import edu.yacoubi.crm.util.TestAppender;
 import edu.yacoubi.crm.util.TestDataUtil;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
@@ -28,6 +29,8 @@ class EntityValidatorIntegrationTest {
     private CustomerRepository customerRepository;
     @Autowired
     private NoteRepository noteRepository;
+    @Autowired
+    private InactiveEmployeeRepository inactiveEmployeeRepository;
 
     @Autowired
     private EntityValidator underTest;
@@ -72,20 +75,20 @@ class EntityValidatorIntegrationTest {
     public void itShouldThrowWhenEmployeeDoesNotExist() {
         // Given
         Long employeeId = 999L;
+        String errorMessage = "Employee not found with ID: " + employeeId;
 
         // When & Then
         ResourceNotFoundException exception = assertThrows(
                 ResourceNotFoundException.class, () -> underTest.validateEmployeeExists(employeeId)
         );
 
-        assertEquals("Employee not found with ID: " + employeeId, exception.getMessage());
-
+        assertEquals(errorMessage, exception.getMessage());
         assertTrue(testAppender.contains(
                 String.format("EntityValidator::validateEmployeeExists employeeId: %d", employeeId),
                 "INFO"
         ));
         assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateEmployeeExists employeeId: %d not found", employeeId),
+                String.format("EntityValidator::validateEmployeeExists error: %s", errorMessage),
                 "ERROR"
         ));
         assertFalse(testAppender.contains(
@@ -122,21 +125,21 @@ class EntityValidatorIntegrationTest {
     public void itShouldThrowWhenNoteDoesNotExist() {
         // Given
         Long noteId = 999L;
+        String errorMessage = "Note not found with ID: " + noteId;
 
         // When & Then
         ResourceNotFoundException exception = assertThrows(
                 ResourceNotFoundException.class, () -> underTest.validateNoteExists(noteId)
         );
 
-        assertEquals("Note not found with ID: " + noteId, exception.getMessage());
-
+        assertEquals(errorMessage, exception.getMessage());
         assertTrue(testAppender.contains(
                 String.format("EntityValidator::validateNoteExists id: %d", noteId),
                 "INFO"
         ));
         assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateNoteExists id: %d not found", noteId),
-                "ERROR"
+                String.format("EntityValidator::validateNoteExists id: %d", noteId),
+                "INFO"
         ));
         assertFalse(testAppender.contains(
                 String.format("EntityValidator::validateNoteExists id: %d successfully validated", noteId),
@@ -172,24 +175,50 @@ class EntityValidatorIntegrationTest {
     public void itShouldThrowWhenCustomerDoesNotExist() {
         // Given
         Long customerId = 999L;
+        String errorMessage = "Customer not found with ID: " + customerId;
 
         // When & Then
         ResourceNotFoundException exception = assertThrows(
                 ResourceNotFoundException.class, () -> underTest.validateCustomerExists(customerId)
         );
 
-        assertEquals("Customer not found with ID: " + customerId, exception.getMessage());
-
+        assertEquals(errorMessage, exception.getMessage());
         assertTrue(testAppender.contains(
                 String.format("EntityValidator::validateCustomerExists id: %d", customerId),
                 "INFO"
         ));
         assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateCustomerExists id: %d not found", customerId),
+                String.format("EntityValidator::validateCustomerExists error: %s", errorMessage),
                 "ERROR"
         ));
         assertFalse(testAppender.contains(
                 String.format("EntityValidator::validateCustomerExists id: %d successfully validated", customerId),
+                "INFO"
+        ));
+    }
+
+    @Test
+    public void itShouldThrowWhenInactiveEmployeeDoesNotExit() {
+        // Given
+        Long originalEmployeeId = 999L;
+        String errorMessage = "Inactive employee not found with ID: " + originalEmployeeId;
+
+        // When & Then
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class, () -> underTest.validateInactiveEmployeeExists(originalEmployeeId)
+        );
+
+        assertEquals(errorMessage, exception.getMessage());
+        assertTrue(testAppender.contains(
+                String.format("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d", originalEmployeeId),
+                "INFO"
+        ));
+        assertTrue(testAppender.contains(
+                String.format("EntityValidator::validateInactiveEmployeeExists error: %s", errorMessage),
+                "ERROR"
+        ));
+        assertFalse(testAppender.contains(
+                String.format("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated", originalEmployeeId),
                 "INFO"
         ));
     }

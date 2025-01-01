@@ -4,6 +4,7 @@ import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.dto.customer.CustomerResponseDTO;
 import edu.yacoubi.crm.dto.employee.EmployeeRequestDTO;
 import edu.yacoubi.crm.dto.employee.EmployeeResponseDTO;
+import edu.yacoubi.crm.dto.note.NoteRequestDTO;
 import edu.yacoubi.crm.dto.note.NoteResponseDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
@@ -38,6 +39,30 @@ public class EntityITransformerTest {
         assertEquals(noteA.getContent(), noteDTOViaUtil.getContent());
         assertEquals(noteA.getInteractionType(), noteDTOViaUtil.getInteractionType());
         assertEquals(noteA.getCustomer().getId(), noteDTOViaUtil.getCustomerId());
+    }
+
+    @Test
+    public void testNoteRequestDTOToNoteTransformation() {
+        // Given
+        Customer customerA = TestDataUtil.createCustomerA(null);
+        customerA.setId(2L);
+        NoteRequestDTO noteRequestDTOA = TestDataUtil.createNoteRequestDTOA(customerA);
+
+        // When
+        Note note = noteRequestDtoToNote.transform(noteRequestDTOA);
+        Note noteViaUtil = TransformerUtil.transform(noteRequestDtoToNote, noteRequestDTOA);
+
+        // Then
+        assertEquals(noteRequestDTOA.getContent(), note.getContent());
+        assertEquals(noteRequestDTOA.getDate(), note.getDate());
+        assertEquals(noteRequestDTOA.getInteractionType(), note.getInteractionType());
+        assertEquals(noteRequestDTOA.getCustomerId(), note.getCustomer().getId());
+
+        // Then
+        assertEquals(noteRequestDTOA.getContent(), noteViaUtil.getContent());
+        assertEquals(noteRequestDTOA.getDate(), noteViaUtil.getDate());
+        assertEquals(noteRequestDTOA.getInteractionType(), noteViaUtil.getInteractionType());
+        assertEquals(noteRequestDTOA.getCustomerId(), noteViaUtil.getCustomer().getId());
     }
 
     @Test
