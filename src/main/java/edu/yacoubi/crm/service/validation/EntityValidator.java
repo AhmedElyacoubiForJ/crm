@@ -23,8 +23,9 @@ public class EntityValidator {
         log.info("EntityValidator::validateEmployeeExists employeeId: {}", employeeId);
 
         if (!employeeRepository.existsById(employeeId)) {
-            log.error("EntityValidator::validateEmployeeExists employeeId: {} not found", employeeId);
-            throw new ResourceNotFoundException("Employee not found with ID: " + employeeId);
+            String errorMessage = "Employee not found with ID: " + employeeId;
+            log.error("EntityValidator::validateEmployeeExists error: {}", errorMessage);
+            throw new ResourceNotFoundException(errorMessage);
         }
 
         log.info("EntityValidator::validateEmployeeExists employeeId: {} successfully validated", employeeId);
@@ -34,8 +35,9 @@ public class EntityValidator {
         log.info("EntityValidator::validateNoteExists id: {}", id);
 
         if (!noteRepository.existsById(id)) {
-            log.error("EntityValidator::validateNoteExists id: {} not found", id);
-            throw new ResourceNotFoundException("Note not found with ID: " + id);
+            String errorMessage = "Note not found with ID: " + id;
+            log.error("EntityValidator::validateNoteExists error: {}", errorMessage);
+            throw new ResourceNotFoundException(errorMessage);
         }
 
         log.info("EntityValidator::validateNoteExists id: {} successfully validated", id);
@@ -45,8 +47,9 @@ public class EntityValidator {
         log.info("EntityValidator::validateCustomerExists id: {}", id);
 
         if (!customerRepository.existsById(id)) {
-            log.error("EntityValidator::validateCustomerExists id: {} not found", id);
-            throw new ResourceNotFoundException("Customer not found with ID: " + id);
+            String errorMessage = "Customer not found with ID: " + id;
+            log.error("EntityValidator::validateCustomerExists error: {}", errorMessage);
+            throw new ResourceNotFoundException(errorMessage);
         }
 
         log.info("EntityValidator::validateCustomerExists id: {} successfully validated", id);
@@ -56,8 +59,9 @@ public class EntityValidator {
         log.info("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: {}", originalEmployeeId);
 
         if (!inactiveEmployeeRepository.existsByOriginalEmployeeId(originalEmployeeId)) {
-            log.error("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: {} not found", originalEmployeeId);
-            throw new ResourceNotFoundException("Inactive employee not found with ID: " + originalEmployeeId);
+            String errorMessage = "Inactive employee not found with ID: " + originalEmployeeId;
+            log.error("EntityValidator::validateInactiveEmployeeExists error: {}", errorMessage);
+            throw new ResourceNotFoundException(errorMessage);
         }
 
         log.info("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: {} successfully validated", originalEmployeeId);
