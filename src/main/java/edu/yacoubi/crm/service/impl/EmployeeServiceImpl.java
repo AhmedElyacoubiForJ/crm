@@ -27,7 +27,13 @@ public class EmployeeServiceImpl implements IEmployeeService {
     private final IEmployeeCustomRepository employeeCustomRepository;
     private final EntityValidator entityValidator;
 
+    /**
+     * Erstellt einen neuen Mitarbeiter.
+     * Diese Methode ist als transaktional markiert, um sicherzustellen, dass die Operationen atomar sind,
+     * und um bei Rollbacks Datenkonsistenz zu gewährleisten.
+     */
     @Override
+    @Transactional
     public Employee createEmployee(Employee employee) {
         log.info("EmployeeServiceImpl::createEmployee execution start: employee {}", employee);
 
@@ -37,15 +43,20 @@ public class EmployeeServiceImpl implements IEmployeeService {
             throw new IllegalArgumentException("Employee must not be null");
         }
 
-        // wäre besser die Methode mit EmployeeRequestDTO als parameter
+        // Setze die ID auf null, um sicherzustellen, dass ein neuer Datensatz erstellt wird
         employee.setId(null);
 
+        // Speichere den Mitarbeiter in der Datenbank
         Employee savedEmployee = employeeRepository.save(employee);
 
         log.info("EmployeeServiceImpl::createEmployee execution end");
         return savedEmployee;
     }
 
+    /**
+     * Ruft alle Mitarbeiter ab.
+     * Diese Methode benötigt keine Transaktion, da sie nur Leseoperationen durchführt.
+     */
     @Override
     public List<Employee> getAllEmployees() {
         log.info("EmployeeServiceImpl::getAllEmployees execution start");
@@ -56,6 +67,10 @@ public class EmployeeServiceImpl implements IEmployeeService {
         return employees;
     }
 
+    /**
+     * Ruft Mitarbeiter mit Paginierung ab.
+     * Diese Methode benötigt ebenfalls keine Transaktion, da sie nur Leseoperationen durchführt.
+     */
     @Override
     public Page<Employee> getEmployeesWithPagination(int page, int size) {
         log.info("EmployeeServiceImpl::getEmployeesWithPagination execution start: page {}, size {}", page, size);
@@ -67,7 +82,13 @@ public class EmployeeServiceImpl implements IEmployeeService {
         return employeePage;
     }
 
+    /**
+     * Ruft einen Mitarbeiter nach ID ab.
+     * Diese Methode ist als read-only transaktional markiert,
+     * um Datenkonsistenz bei gleichzeitiger Erhöhung der Performance zu gewährleisten.
+     */
     @Override
+    @Transactional(readOnly = true)
     public Optional<Employee> getEmployeeById(Long employeeId) {
         log.info("EmployeeServiceImpl::getEmployeeById execution start: employeeId {}", employeeId);
 
@@ -84,7 +105,13 @@ public class EmployeeServiceImpl implements IEmployeeService {
         return optionalEmployee;
     }
 
+    /**
+     * Aktualisiert einen bestehenden Mitarbeiter.
+     * Diese Methode ist als transaktional markiert, um sicherzustellen,
+     * dass die Operation atomar ist und um Datenkonsistenz zu gewährleisten.
+     */
     @Override
+    @Transactional
     public Employee updateEmployee(Long employeeId, Employee employee) {
         log.info("EmployeeServiceImpl::updateEmployee execution start: employee {}", employee);
 
@@ -97,6 +124,10 @@ public class EmployeeServiceImpl implements IEmployeeService {
         return updatedEmployee;
     }
 
+    /**
+     * Ruft einen Mitarbeiter nach E-Mail ab.
+     * Diese Methode benötigt keine Transaktion, da sie nur Leseoperationen durchführt.
+     */
     @Override
     public Optional<Employee> getEmployeeByEmail(String email) {
         log.info("EmployeeServiceImpl::getEmployeeByEmail execution start: email {}", email);
@@ -107,6 +138,11 @@ public class EmployeeServiceImpl implements IEmployeeService {
         return optionalEmployee;
     }
 
+    /**
+     * Führt eine teilweise Aktualisierung eines Mitarbeiters durch.
+     * Diese Methode ist als transaktional markiert, da komplexe Schreiboperationen durchgeführt werden,
+     * die atomar erfolgen sollten.
+     */
     @Override
     @Transactional
     public void partialUpdateEmployee(Long employeeId, EmployeePatchDTO employeePatchDTO) {
@@ -114,12 +150,15 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
         entityValidator.validateEmployeeExists(employeeId);
 
-        // delegate
-        // to custom repository for more complex queries
+        // delegate to custom repository for more complex queries
         employeeCustomRepository.partialUpdateEmployee(employeeId, employeePatchDTO);
         log.info("EmployeeServiceImpl::partialUpdateEmployee execution end");
     }
 
+    /**
+     * Sucht Mitarbeiter nach Vorname oder Abteilung.
+     * Diese Methode benötigt keine Transaktion, da sie nur Leseoperationen durchführt.
+     */
     @Override
     public Page<Employee> getEmployeesByFirstNameOrDepartment(String searchString, int page, int size) {
         log.info("EmployeeServiceImpl::searchByFirstNameOrDepartment execution start: searchString {}, page {}, size {}", searchString, page, size);
@@ -137,6 +176,10 @@ public class EmployeeServiceImpl implements IEmployeeService {
         return employeePage;
     }
 
+    /**
+     * Ruft alle Abteilungen ab.
+     * Diese Methode benötigt keine Transaktion, da sie nur Leseoperationen durchführt.
+     */
     @Override
     public Optional<List<String>> getAllDepartments() {
         log.info("EmployeeServiceImpl::getAllDepartments execution start");
@@ -147,13 +190,19 @@ public class EmployeeServiceImpl implements IEmployeeService {
         return optionalDepartments;
     }
 
+    /**
+     * Löscht einen Mitarbeiter.
+     * Diese Methode ist als transaktional markiert, um sicherzustellen,
+     * dass die Validierungen und die Löschoperation atomar erfolgen.
+     */
     @Override
+    @Transactional
     public void deleteEmployee(Long employeeId) {
         log.info("EmployeeServiceImpl::deleteEmployee employeeId: {}", employeeId);
 
         entityValidator.validateEmployeeExists(employeeId);
 
-        // Überprüfung, ob dem Mitarbeiter Kunden zugewiesen sind
+        // Überprüfung, ob der Mitarbeiter Kunden zugewiesen sind
         if (employeeRepository.hasCustomers(employeeId)) {
             log.warn("Cannot delete employee, customers are still assigned. employeeId: {}", employeeId);
             throw new IllegalArgumentException("Cannot delete employee, customers are still assigned.");
@@ -171,6 +220,11 @@ public class EmployeeServiceImpl implements IEmployeeService {
         log.info("EmployeeServiceImpl::deleteEmployee execution end");
     }
 
+    /**
+     * Überprüft, ob einem Mitarbeiter Kunden zugewiesen sind.
+     * Diese Methode ist als read-only transaktional markiert,
+     * um Datenkonsistenz bei gleichzeitiger Erhöhung der Performance zu gewährleisten.
+     */
     @Override
     @Transactional(readOnly = true)
     public boolean hasCustomers(Long employeeId) {
