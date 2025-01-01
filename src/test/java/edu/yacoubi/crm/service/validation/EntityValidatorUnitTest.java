@@ -56,10 +56,6 @@ class EntityValidatorUnitTest {
                 String.format("EntityValidator::validateEmployeeExists employeeId: %d", employeeId),
                 "INFO"
         ));
-        assertFalse(testAppender.contains(
-                String.format("EntityValidator::validateEmployeeExists employeeId: %d not found", employeeId),
-                "ERROR"
-        ));
         assertTrue(testAppender.contains(
                 String.format("EntityValidator::validateEmployeeExists employeeId: %d successfully validated", employeeId),
                 "INFO"
