@@ -4,13 +4,11 @@ import edu.yacoubi.crm.dto.APIResponse;
 import edu.yacoubi.crm.dto.employee.EmployeePatchDTO;
 import edu.yacoubi.crm.dto.employee.EmployeeRequestDTO;
 import edu.yacoubi.crm.dto.employee.EmployeeResponseDTO;
-import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.service.IEntityOrchestratorService;
 import edu.yacoubi.crm.util.EntityTransformer;
 import edu.yacoubi.crm.util.TransformerUtil;
-import edu.yacoubi.crm.util.ValueMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-import static edu.yacoubi.crm.util.ValueMapper.*;
+import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -47,7 +44,12 @@ public class EmployeeRestController {
             @RequestParam(value = "search", required = false) String search) {
 
         log.info("EmployeeRestController::getAllEmployees starting to fetch employees...");
-        log.debug("EmployeeRestController::getAllEmployees request received - page: {}, size: {}, search: {}", page, size, search);
+        log.debug(
+                "EmployeeRestController::getAllEmployees request received - page: {}, size: {}, search: {}",
+                page,
+                size,
+                search
+        );
 
         Page<Employee> employeesPage;
         if (search != null && !search.isEmpty()) {
@@ -56,16 +58,19 @@ public class EmployeeRestController {
             employeesPage = employeeService.getEmployeesByFirstNameOrDepartment(search, page, size);
         } else {
             log.info("Retrieving employees with pagination");
-            log.debug("Retrieving employees with pagination - page: {}, size: {}, search: {}", page, size, search);
+            log.debug(
+                    "Retrieving employees with pagination - page: {}, size: {}, search: {}",
+                    page,
+                    size,
+                    search
+            );
             employeesPage = employeeService.getEmployeesWithPagination(page, size);
         }
 
-        // Transformation der Employee-Objekte in EmployeeResponseDTO-Objekte
         Page<EmployeeResponseDTO> employeeResponseDTOPage = employeesPage.map(
                 employee -> TransformerUtil.transform(EntityTransformer.employeeToEmployeeResponseDto, employee)
         );
 
-        // Verwende den Transformer direkt im map-Aufruf
         // Page<EmployeeResponseDTO> employeeResponseDTOPage = employeesPage.map(
         //      employee -> EntityTransformer.employeeToEmployeeResponseDto.transform(employee)
         // );
@@ -90,17 +95,17 @@ public class EmployeeRestController {
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> getEmployeeById(@PathVariable Long id) {
         log.info("EmployeeRestController::getEmployeeById request id {}", id);
 
-        // exception werden im service behandelt und im globaler handler abgegangen
+        // exception werden im service behandelt und im globaler handler abgefangen
         Employee existingEmployee = employeeService.getEmployeeById(id).get();
 
-        //EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(existingEmployee);
         EmployeeResponseDTO employeeResponseDTO = TransformerUtil.transform(
                 EntityTransformer.employeeToEmployeeResponseDto,
                 existingEmployee
         );
 
-        // zweite variante
-        //EmployeeResponseDTO employeeResponseDTO = EntityTransformer.employeeToEmployeeResponseDto.transform(existingEmployee);
+        // 2. variante
+        // EmployeeResponseDTO employeeResponseDTO =
+        // EntityTransformer.employeeToEmployeeResponseDto.transform(existingEmployee);
 
         APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
                 .status("success")
@@ -121,25 +126,18 @@ public class EmployeeRestController {
             @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
         log.info("EmployeeRestController::createEmployee request {}", jsonAsString(employeeRequestDTO));
 
-        //Employee employeeRequest = convertToEntity(employeeRequestDTO);
-        Employee employeeRequest = TransformerUtil
-                .transform(
-                        EntityTransformer.employeeRequestDtoToEmployee,
-                        employeeRequestDTO
-                );
-        // zweite variante
-        //Employee employeeRequest = EntityTransformer.employeeRequestDtoToEmployee.transform(employeeRequestDTO);
+        Employee employeeRequest = TransformerUtil.transform(
+                EntityTransformer.employeeRequestDtoToEmployee,
+                employeeRequestDTO
+        );
+
         Employee savedEmployee = employeeService.createEmployee(employeeRequest);
 
-        // erste variante
         EmployeeResponseDTO employeeResponseDTO = TransformerUtil.transform(
                 EntityTransformer.employeeToEmployeeResponseDto,
                 savedEmployee
         );
-        // zweite variante
-        //EmployeeResponseDTO employeeResponseDTO = EntityTransformer.employeeToEmployeeResponseDto.transform(savedEmployee);
 
-        //EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(savedEmployee);
         APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
                 .status("success")
                 .statusCode(HttpStatus.CREATED.value())
@@ -158,17 +156,27 @@ public class EmployeeRestController {
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> updateEmployee(
             @PathVariable Long id,
             @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
-        log.info("EmployeeRestController::updateEmployee request id {}, employee {}", id, jsonAsString(employeeRequestDTO));
+        log.info(
+                "EmployeeRestController::updateEmployee request id {}, employee {}",
+                id, jsonAsString(employeeRequestDTO)
+        );
 
-        Employee existingEmployee = employeeService.getEmployeeById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
+        // transform to entity
+        Employee employeeRequest = TransformerUtil.transform(
+                EntityTransformer.employeeRequestDtoToEmployee,
+                employeeRequestDTO
+        );
 
-        Employee employeeRequest = convertToEntity(employeeRequestDTO);
-        // wird im service gesetzt
-        //employeeRequest.setId(id);
-
+        // update
         Employee updatedEmployee = employeeService.updateEmployee(id, employeeRequest);
-        EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(updatedEmployee);
+
+        // transform to response DOT
+        EmployeeResponseDTO employeeResponseDTO = TransformerUtil.transform(
+                EntityTransformer.employeeToEmployeeResponseDto,
+                updatedEmployee
+        );
+
+        // build the response
         APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
                 .status("success")
                 .statusCode(HttpStatus.OK.value())
@@ -187,13 +195,25 @@ public class EmployeeRestController {
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> patchEmployee(
             @PathVariable Long id,
             @Valid @RequestBody EmployeePatchDTO employeePatchDTO) {
-        log.info("EmployeeRestController::patchEmployee request id {}, employee {}", id, jsonAsString(employeePatchDTO));
+        log.info(
+                "EmployeeRestController::patchEmployee request id {}, employee {}",
+                id,
+                jsonAsString(employeePatchDTO)
+        );
 
+        // partial update
         employeeService.partialUpdateEmployee(id, employeePatchDTO);
-        Employee updatedEmployee = employeeService.getEmployeeById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
 
-        EmployeeResponseDTO employeeResponseDTO = convertToResponseDTO(updatedEmployee);
+        // get the updated employee
+        Employee updatedEmployee = employeeService.getEmployeeById(id).get();
+
+        // transform to response DTO
+        EmployeeResponseDTO employeeResponseDTO = TransformerUtil.transform(
+                EntityTransformer.employeeToEmployeeResponseDto,
+                updatedEmployee
+        );
+
+        // build the response
         APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
                 .status("success")
                 .statusCode(HttpStatus.OK.value())
@@ -219,7 +239,6 @@ public class EmployeeRestController {
         );
 
         orchestratorService.deleteEmployeeAndReassignCustomers(employeeId, newEmployeeId);
-        //employeeService.deleteEmployee(employeeId, newEmployeeId);
 
         APIResponse<Void> response = APIResponse.<Void>builder()
                 .status("success")
@@ -239,13 +258,13 @@ public class EmployeeRestController {
     public ResponseEntity<APIResponse<List<String>>> getAllDepartments() {
         log.info("EmployeeRestController::getAllDepartments request");
 
-        Optional<List<String>> allDepartments = employeeService.getAllDepartments();
+        List<String> allDepartments = employeeService.getAllDepartments().get();
 
         APIResponse<List<String>> response = APIResponse
                 .<List<String>>builder()
                 .status("success")
                 .statusCode(HttpStatus.OK.value())
-                .data(allDepartments.get())
+                .data(allDepartments)
                 .build();
 
         log.info("EmployeeRestController::getAllDepartments response {}", jsonAsString(response));
