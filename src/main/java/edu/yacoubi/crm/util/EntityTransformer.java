@@ -7,6 +7,7 @@ import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.dto.customer.CustomerResponseDTO;
 import edu.yacoubi.crm.dto.employee.EmployeeRequestDTO;
 import edu.yacoubi.crm.dto.employee.EmployeeResponseDTO;
+import edu.yacoubi.crm.dto.note.NoteRequestDTO;
 import edu.yacoubi.crm.dto.note.NoteResponseDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
@@ -33,6 +34,17 @@ public class EntityTransformer {
                     .date(note.getDate())
                     .interactionType(note.getInteractionType()) // Enum to String
                     .customerId(note.getCustomer().getId())
+                    .build();
+
+    /**
+     * Transformer zur Umwandlung eines NoteRequestDTO in eine Note.
+     */
+    public static final ITransformer<NoteRequestDTO, Note> noteRequestDtoToNote =
+            noteRequestDTO -> Note.builder()
+                    .content(noteRequestDTO.getContent())
+                    .date(noteRequestDTO.getDate())
+                    .interactionType(noteRequestDTO.getInteractionType())
+                    .customer(Customer.builder().id(noteRequestDTO.getCustomerId()).build())
                     .build();
 
     /**
