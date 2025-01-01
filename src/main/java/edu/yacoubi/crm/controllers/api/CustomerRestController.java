@@ -10,6 +10,8 @@ import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
+import edu.yacoubi.crm.util.EntityTransformer;
+import edu.yacoubi.crm.util.TransformerUtil;
 import edu.yacoubi.crm.util.ValueMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -55,7 +57,10 @@ public class CustomerRestController {
             customersPage = customerService.getCustomersWithPagination(page, size);
         }
 
-        Page<CustomerResponseDTO> customerResponseDTOPage = customersPage.map(ValueMapper::convertToResponseDTO);
+        Page<CustomerResponseDTO> customerResponseDTOPage = customersPage.map(
+                customer -> TransformerUtil.transform(EntityTransformer.customerToCustomerResponseDto, customer)
+        );
+
         APIResponse<Page<CustomerResponseDTO>> response = APIResponse.<Page<CustomerResponseDTO>>builder()
                 .status("success")
                 .statusCode(HttpStatus.OK.value())
@@ -75,9 +80,12 @@ public class CustomerRestController {
     public ResponseEntity<APIResponse<CustomerResponseDTO>> getCustomerById(@PathVariable Long id) {
         log.info("CustomerRestController::getCustomerById request id {}", id);
 
-        Customer existingCustomer = customerService.getCustomerById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
-        CustomerResponseDTO customerResponseDTO = convertToResponseDTO(existingCustomer);
+        Customer existingCustomer = customerService.getCustomerById(id).get();
+
+        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
+                EntityTransformer.customerToCustomerResponseDto,
+                existingCustomer
+        );
 
         APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
                 .status("success")
@@ -99,8 +107,7 @@ public class CustomerRestController {
             @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
         log.info("CustomerRestController::createCustomer request employeeId {}, customer dto {}", employeeId, jsonAsString(customerRequestDTO));
 
-        Employee existingEmployee = employeeService.getEmployeeById(employeeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + employeeId));
+        Employee existingEmployee = employeeService.getEmployeeById(employeeId).get();
 
         // Setze lastInteractionDate auf das aktuelle Datum, wenn es vor oder nach dem aktuellen Datum liegt
         if (customerRequestDTO.getLastInteractionDate().isAfter(LocalDate.now()) ||
@@ -108,11 +115,20 @@ public class CustomerRestController {
             customerRequestDTO.setLastInteractionDate(LocalDate.now());
         }
 
-        Customer customerRequest = convertToEntity(customerRequestDTO);
+        //Customer customerRequest = convertToEntity(customerRequestDTO);
+        Customer customerRequest = TransformerUtil.transform(
+                EntityTransformer.customerRequestDtoToCustomer,
+                customerRequestDTO
+        );
+
         customerRequest.setEmployee(existingEmployee);
 
         Customer savedCustomer = customerService.createCustomer(customerRequest);
-        CustomerResponseDTO customerResponseDTO = convertToResponseDTO(savedCustomer);
+
+        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
+                EntityTransformer.customerToCustomerResponseDto,
+                savedCustomer
+        );
 
         APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
                 .status("success")
@@ -134,8 +150,7 @@ public class CustomerRestController {
             @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
         log.info("CustomerRestController::updateCustomer request id {}, customer dto {}", id, jsonAsString(customerRequestDTO));
 
-        Customer existingCustomer = customerService.getCustomerById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
+        Customer existingCustomer = customerService.getCustomerById(id).get();
 
         // Laden der bestehenden Notizen, um sicherzustellen, dass sie referenziert werden
         List<Note> existingNotes = existingCustomer.getNotes();
@@ -147,7 +162,10 @@ public class CustomerRestController {
         customerRequest.setNotes(existingNotes); // Setzen der bestehenden Notizen
 
         Customer updatedCustomer = customerService.updateCustomer(id, customerRequest);
-        CustomerResponseDTO customerResponseDTO = convertToResponseDTO(updatedCustomer);
+        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
+                EntityTransformer.customerToCustomerResponseDto,
+                updatedCustomer
+        );
 
         APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
                 .status("success")
@@ -171,7 +189,12 @@ public class CustomerRestController {
         log.info("CustomerRestController::updateCustomerByExample request id {}, customer dto {}", id, jsonAsString(customerRequestDTO));
 
         Customer updatedCustomer = customerService.updateCustomerByExample(customerRequestDTO, id);
-        CustomerResponseDTO customerResponseDTO = convertToResponseDTO(updatedCustomer);
+
+        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
+                EntityTransformer.customerToCustomerResponseDto,
+                updatedCustomer
+        );
+
         APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
                 .status("success")
                 .statusCode(HttpStatus.OK.value())
@@ -194,10 +217,13 @@ public class CustomerRestController {
 
         customerService.partialUpdateCustomer(id, customerPatchDTO);
 
-        Customer updatedCustomer = customerService.getCustomerById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
+        Customer updatedCustomer = customerService.getCustomerById(id).get();
 
-        CustomerResponseDTO customerResponseDTO = convertToResponseDTO(updatedCustomer);
+        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
+                EntityTransformer.customerToCustomerResponseDto,
+                updatedCustomer
+        );
+
         APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
                 .status("success")
                 .statusCode(HttpStatus.OK.value())
@@ -216,10 +242,6 @@ public class CustomerRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<APIResponse<Void>> deleteCustomer(@PathVariable Long id) {
         log.info("CustomerRestController::deleteCustomer request id {}", id);
-
-        // Check if the customer exists, throw exception if not found
-        customerService.getCustomerById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + id));
 
         // Delete the customer
         customerService.deleteCustomer(id);
