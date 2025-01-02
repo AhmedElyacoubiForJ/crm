@@ -4,11 +4,12 @@ import edu.yacoubi.crm.dto.APIResponse;
 import edu.yacoubi.crm.dto.note.NotePatchDTO;
 import edu.yacoubi.crm.dto.note.NoteRequestDTO;
 import edu.yacoubi.crm.dto.note.NoteResponseDTO;
-import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.INoteOrchestratorService;
 import edu.yacoubi.crm.service.INoteService;
+import edu.yacoubi.crm.util.EntityTransformer;
+import edu.yacoubi.crm.util.TransformerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static edu.yacoubi.crm.util.ValueMapper.*;
+import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
 
 @RestController
 @RequestMapping("/api/notes")
@@ -36,9 +37,12 @@ public class NoteRestController {
     public ResponseEntity<APIResponse<NoteResponseDTO>> getNoteById(@PathVariable Long id) {
         log.info("NoteRestController::getNoteById request id {}", id);
 
-        Note existingNote = noteService.getNoteById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Note not found with ID: " + id));
-        NoteResponseDTO noteResponseDTO = convertToResponseDTO(existingNote);
+        Note existingNote = noteService.getNoteById(id).get();
+
+        NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
+                EntityTransformer.noteToNoteResponseDto,
+                existingNote
+        );
 
         APIResponse<NoteResponseDTO> response = APIResponse.<NoteResponseDTO>builder()
                 .status("success")
@@ -60,11 +64,17 @@ public class NoteRestController {
             @RequestParam Long customerId) {
         log.info("NoteRestController::createNote request id {}, note {}", customerId, noteRequestDTO);
 
-        customerService.getCustomerById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID: " + customerId));
-        Note noteRequest = convertToEntity(noteRequestDTO);
+        Note noteRequest = TransformerUtil.transform(
+                EntityTransformer.noteRequestDtoToNote,
+                noteRequestDTO
+        );
+
         Note createdNote = noteOrchestratorService.createNoteForCustomer(noteRequest, customerId);
-        NoteResponseDTO noteResponseDTO = convertToResponseDTO(createdNote);
+
+        NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
+                EntityTransformer.noteToNoteResponseDto,
+                createdNote
+        );
 
         APIResponse<NoteResponseDTO> response = APIResponse.<NoteResponseDTO>builder()
                 .status("success")
@@ -86,15 +96,19 @@ public class NoteRestController {
             @Valid @RequestBody NoteRequestDTO noteRequestDTO) {
         log.info("NoteRestController::updateNote request id {}, note {}", id, noteRequestDTO);
 
-        Note existingNote = noteService.getNoteById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Note not found with ID: " + id));
+        Note existingNote = noteService.getNoteById(id).get();
 
-        Note noteRequest = convertToEntity(noteRequestDTO);
+        Note noteRequest = TransformerUtil.transform(EntityTransformer.noteRequestDtoToNote, noteRequestDTO);
+
         noteRequest.setId(id);
         noteRequest.setCustomer(existingNote.getCustomer());
 
         Note updatedNote = noteService.updateNote(id, noteRequest);
-        NoteResponseDTO noteResponseDTO = convertToResponseDTO(updatedNote);
+
+        NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
+                EntityTransformer.noteToNoteResponseDto,
+                updatedNote
+        );
 
         APIResponse<NoteResponseDTO> response = APIResponse.<NoteResponseDTO>builder()
                 .status("success")
@@ -118,10 +132,12 @@ public class NoteRestController {
 
         noteService.partialUpdateNote(id, notePatchDTO);
 
-        Note updatedNote = noteService.getNoteById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Note not found with ID: " + id)
+        Note updatedNote = noteService.getNoteById(id).get();
+
+        NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
+                EntityTransformer.noteToNoteResponseDto,
+                updatedNote
         );
-        NoteResponseDTO noteResponseDTO = convertToResponseDTO(updatedNote);
 
         APIResponse<NoteResponseDTO> response = APIResponse.<NoteResponseDTO>builder()
                 .status("success")
