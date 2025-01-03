@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
@@ -258,7 +259,8 @@ public class EmployeeRestController {
     public ResponseEntity<APIResponse<List<String>>> getAllDepartments() {
         log.info("EmployeeRestController::getAllDepartments request");
 
-        List<String> allDepartments = employeeService.getAllDepartments().get();
+        List<String> allDepartments = employeeService.getAllDepartments()
+                .orElse(Collections.emptyList());
 
         APIResponse<List<String>> response = APIResponse
                 .<List<String>>builder()

@@ -144,24 +144,27 @@ public class CustomerRestController {
             summary = "Full update of customer",
             description = "Full update of an existing customer by their unique ID."
     )
-    @PutMapping("/{id}")
+    @PutMapping("/{customerId}")
     public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomer(
-            @PathVariable Long id,
+            @PathVariable Long customerId,
             @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
-        log.info("CustomerRestController::updateCustomer request id {}, customer dto {}", id, jsonAsString(customerRequestDTO));
+        log.info("CustomerRestController::updateCustomer request customerId {}, customer dto {}", customerId, jsonAsString(customerRequestDTO));
 
-        Customer existingCustomer = customerService.getCustomerById(id).get();
+        Customer existingCustomer = customerService.getCustomerById(customerId).get();
 
         // Laden der bestehenden Notizen, um sicherzustellen, dass sie referenziert werden
         List<Note> existingNotes = existingCustomer.getNotes();
 
         // Mapping des DTO auf das Entität-Objekt, ohne die bestehende Notizen zu überschreiben
-        Customer customerRequest = convertToEntity(customerRequestDTO);
-        customerRequest.setId(id);
+        Customer customerRequest = TransformerUtil.transform(
+                EntityTransformer.customerRequestDtoToCustomer, customerRequestDTO
+        );
+
+        customerRequest.setId(customerId);
         customerRequest.setEmployee(existingCustomer.getEmployee());
         customerRequest.setNotes(existingNotes); // Setzen der bestehenden Notizen
 
-        Customer updatedCustomer = customerService.updateCustomer(id, customerRequest);
+        Customer updatedCustomer = customerService.updateCustomer(customerId, customerRequest);
         CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
                 EntityTransformer.customerToCustomerResponseDto,
                 updatedCustomer
