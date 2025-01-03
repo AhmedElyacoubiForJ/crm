@@ -1,12 +1,12 @@
 package edu.yacoubi.crm.service.impl;
 
-import edu.yacoubi.crm.util.TestDataUtil;
 import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
+import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
-import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.repository.CustomerRepository;
-import edu.yacoubi.crm.exception.ResourceNotFoundException;
+import edu.yacoubi.crm.repository.EmployeeRepository;
+import edu.yacoubi.crm.util.TestDataUtil;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -161,25 +161,4 @@ class CustomerServiceImplIntegrationTest {
         assertTrue(foundCustomers.contains(customerA));
         assertTrue(foundCustomers.contains(customerB));
     }
-
-//    @Test
-//    public void itShouldReassignCustomerToEmployee() {
-//        // Given
-//        Employee employeeA = TestDataUtil.createEmployeeA();
-//        Employee savedEmployeeA = employeeRepository.save(employeeA);
-//        Customer customerA = TestDataUtil.createCustomerA(savedEmployeeA);
-//        Customer savedCustomerA = underTest.createCustomer(customerA);
-//
-//        Employee employeeB = TestDataUtil.createEmployeeB();
-//        Employee savedEmployeeB = employeeRepository.save(employeeB);
-//
-//        // When
-//        underTest.reassignCustomerToEmployee(savedCustomerA.getId(), savedEmployeeB.getId());
-//
-//        // Then
-//        Customer foundCustomer = underTest.getCustomerById(savedCustomerA.getId()).orElseThrow(
-//                () -> new AssertionError("Customer not found!")
-//        );
-//        assertEquals(savedEmployeeB.getId(), foundCustomer.getEmployee().getId());
-//    }
 }

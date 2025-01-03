@@ -1,13 +1,10 @@
 package edu.yacoubi.crm.service.impl;
 
 import ch.qos.logback.classic.Logger;
-import edu.yacoubi.crm.util.TestAppender;
-import edu.yacoubi.crm.repository.CustomerRepository;
-import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.service.IInactiveEmployeeService;
-import edu.yacoubi.crm.service.validation.EntityValidator;
+import edu.yacoubi.crm.util.TestAppender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 /**
  * Dieser Code enthält Unit-Tests für die Hauptmethoden meines EntityOrchestratorServiceImpl.
@@ -29,17 +26,11 @@ class EntityOrchestratorServiceImplUnitTest {
     private static TestAppender testAppender;
 
     @Mock
-    private EmployeeRepository employeeRepository;
-    @Mock
     private IEmployeeService employeeService;
     @Mock
     private ICustomerService customerService;
     @Mock
-    private CustomerRepository customerRepository;
-    @Mock
     private IInactiveEmployeeService inactiveEmployeeService;
-    @Mock
-    private EntityValidator entityValidator;
     @InjectMocks
     private EntityOrchestratorServiceImpl underTest;
 
@@ -67,10 +58,12 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals("Employee IDs must not be null and must be a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId),
+                "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format("Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d", oldEmployeeId, newEmployeeId), "INFO"
+                String.format("Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d", oldEmployeeId, newEmployeeId),
+                "INFO"
         ));
     }
 
@@ -89,10 +82,12 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals("Employee IDs must not be null and must be a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId),
+                "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format("Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d", oldEmployeeId, newEmployeeId), "INFO"
+                String.format("Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d", oldEmployeeId, newEmployeeId),
+                "INFO"
         ));
     }
 
@@ -111,10 +106,12 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals("Employee IDs must not be null and must be a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId),
+                "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format("Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d", oldEmployeeId, newEmployeeId), "INFO"
+                String.format("Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d", oldEmployeeId, newEmployeeId),
+                "INFO"
         ));
     }
 
@@ -133,10 +130,12 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals("Employee IDs must not be null and must be a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId),
+                "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format("Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d", oldEmployeeId, newEmployeeId), "INFO"
+                String.format("Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d", oldEmployeeId, newEmployeeId),
+                "INFO"
         ));
     }
 
@@ -155,7 +154,8 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals("Old and new employee IDs must be different", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId),
+                "INFO"
         ));
         assertTrue(testAppender.contains(
                 String.format("Old and new employee IDs must be different"), "WARN"
@@ -165,42 +165,14 @@ class EntityOrchestratorServiceImplUnitTest {
         ));
     }
 
-    /*@Test
-    void itShouldValidateEmployeesExist_ByCallingReassignCustomers() {
-        // Given
-        Long oldEmployeeId = 1L;
-        Long newEmployeeId = 2L;
-        List<Customer> customers = new ArrayList<Customer>();
-        customers.add(new Customer());
-
-        doNothing().when(entityValidator).validateEmployeeExists(oldEmployeeId);
-        doNothing().when(entityValidator).validateEmployeeExists(newEmployeeId);
-        when(customerService.getCustomersByEmployeeId(oldEmployeeId)).thenReturn(customers);
-        when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.of(new Employee()));
-
-        // When
-        underTest.reassignCustomers(oldEmployeeId, newEmployeeId);
-
-        // Then verify that the validationService is called
-        verify(entityValidator, times(2)).validateEmployeeExists(anyLong());
-        // Verify that the info logs are not triggered
-        assertTrue(testAppender.contains(
-                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
-        ));
-        assertTrue(testAppender.contains(
-                String.format("Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d", oldEmployeeId, newEmployeeId), "INFO"
-        ));
-    }*/
-
     @Test
     void itShouldThrowExceptionWhenCustomersNotFoundByOldEmployeeIs_ByCallingReassignCustomers() {
         // Given
         Long oldEmployeeId = 1L;
         Long newEmployeeId = 2L;
 
-        doNothing().when(entityValidator).validateEmployeeExists(oldEmployeeId);
-        doNothing().when(entityValidator).validateEmployeeExists(newEmployeeId);
-        when(customerService.getCustomersByEmployeeId(oldEmployeeId)).thenReturn(new ArrayList<>());
+        when(customerService.getCustomersByEmployeeId(oldEmployeeId))
+                .thenReturn(new ArrayList<>());
 
         // When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -211,7 +183,8 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals(String.format("No customers found for oldEmployee ID: %d", oldEmployeeId), exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId),
+                "INFO"
         ));
         assertTrue(testAppender.contains(
                 String.format("No customers found for oldEmployee ID: %d", oldEmployeeId), "WARN"
@@ -221,54 +194,8 @@ class EntityOrchestratorServiceImplUnitTest {
         ));
     }
 
-    @Test
-    void itShouldReassignCustomersFromOldEmployeeToNewEmployee_ByCallingReassignCustomers() {
-        // Given
-//        Long oldEmployeeId = 1L;
-//        Long newEmployeeId = 2L;
-//
-//        Employee oldEmployee = new Employee();
-//        oldEmployee.setId(oldEmployeeId);
-//        Employee newEmployee = new Employee();
-//        newEmployee.setId(newEmployeeId);
-//
-//        Customer customer1 = new Customer();
-//        customer1.setId(101L);
-//        Customer customer2 = new Customer();
-//        customer2.setId(102L);
-//        List<Customer> customers = List.of(customer1, customer2);
-//
-//        doNothing().when(validationService).validateEmployeeExists(oldEmployeeId);
-//        doNothing().when(validationService).validateEmployeeExists(newEmployeeId);
-//        when(customerService.getCustomersByEmployeeId(oldEmployeeId)).thenReturn(customers);
-//        when(employeeRepository.findById(newEmployeeId)).thenReturn(Optional.of(new Employee()));
-//
-//        // When
-//        underTest.reassignCustomers(oldEmployeeId, newEmployeeId);
-//
-//        // Then verify that the validationService is called
-//        verify(validationService, times(2)).validateEmployeeExists(anyLong());
-//        // Verify that the info logs are triggered
-//        assertTrue(testAppender.contains(
-//                String.format("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
-//        ));
-//        assertTrue(testAppender.contains(
-//                String.format("Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d", oldEmployeeId, newEmployeeId), "INFO"
-//        ));
-//        assertTrue(testAppender.contains(
-//                String.format("Reassigning customer ID: %d to new employee ID: %d", 101L, newEmployeeId), "INFO"
-//        ));
-//        assertTrue(testAppender.contains(
-//                String.format("Reassigning customer ID: %d to new employee ID: %d", 102L, newEmployeeId), "INFO"
-//        ));
-//        assertTrue(testAppender.contains(
-//                "Customers reassigned successfully", "INFO"
-//        ));
-//        // Verify that the info log is not triggered
-//        assertTrue(testAppender.contains(
-//                String.format(LogInfoEndDeleteEmployeeAndReassignCustomers, oldEmployeeId, newEmployeeId), "INFO"
-//        ));
-    }
+    //@Test
+    //void itShouldReassignCustomersFromOldEmployeeToNewEmployee_ByCallingReassignCustomers() {}
 
     @Test
     void itShouldThrowExceptionWhenCustomerIdIsNull_ByCallingReassignCustomerToEmployee() {
@@ -285,10 +212,12 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals("Customer or Employee IDs must not be null and must be a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId),
+                "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId), "INFO"
+                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId),
+                "INFO"
         ));
     }
 
@@ -307,10 +236,12 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals("Customer or Employee IDs must not be null and must be a positive number", exception.getMessage());
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId),
+                "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId), "INFO"
+                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId),
+                "INFO"
         ));
     }
 
@@ -327,13 +258,14 @@ class EntityOrchestratorServiceImplUnitTest {
 
         // Then verify the exception message
         assertEquals("Customer or Employee IDs must not be null and must be a positive number", exception.getMessage());
-
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId),
+                "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId), "INFO"
+                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId),
+                "INFO"
         ));
     }
 
@@ -350,13 +282,14 @@ class EntityOrchestratorServiceImplUnitTest {
 
         // Then verify the exception message
         assertEquals("Customer or Employee IDs must not be null and must be a positive number", exception.getMessage());
-
         // Verify that the info logs are not triggered
         assertTrue(testAppender.contains(
-                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId), "INFO"
+                String.format("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d", customerId, employeeId),
+                "INFO"
         ));
         assertFalse(testAppender.contains(
-                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId), "INFO"
+                String.format("Customer reassigned: customerId= %d, newEmployeeId= %d", customerId, employeeId),
+                "INFO"
         ));
     }
 
@@ -527,6 +460,7 @@ class EntityOrchestratorServiceImplUnitTest {
         assertTrue(testAppender.contains(
                 String.format("EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId), "INFO"
         ));
+
         assertFalse(testAppender.contains(
                 String.format("Employee deleted and customers reassigned: oldEmployeeId= %d, newEmployeeId= %d", oldEmployeeId, newEmployeeId), "INFO"
         ));

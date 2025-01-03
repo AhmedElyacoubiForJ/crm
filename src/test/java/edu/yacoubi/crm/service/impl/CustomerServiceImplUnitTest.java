@@ -1,11 +1,11 @@
 package edu.yacoubi.crm.service.impl;
 
-import edu.yacoubi.crm.util.TestDataUtil;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.service.validation.EntityValidator;
+import edu.yacoubi.crm.util.TestDataUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 class CustomerServiceImplUnitTest {
     @Mock
     private CustomerRepository customerRepository;
-    
+
     @Mock
     private EntityValidator entityValidator;
 

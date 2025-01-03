@@ -23,7 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService {
-    private final String errorMessageEmployeeIds = "Employee IDs must not be null and must be a positive number";
     private final IEmployeeService employeeService;
     private final ICustomerService customerService;
     private final IInactiveEmployeeService inactiveEmployeeService;
@@ -40,8 +39,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
                 oldEmployeeId, newEmployeeId
         );
 
-        // parameter validation is superfluous, it will be validated in reassignCustomers
-        // otherwise we have double validation
+        // parameter validation in this.reassignCustomers, otherwise we have double validation
 
         this.reassignCustomers(oldEmployeeId, newEmployeeId);
 
@@ -90,13 +88,15 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
         );
 
         if (oldEmployeeId == null || newEmployeeId == null || oldEmployeeId < 0 || newEmployeeId < 0) {
-            log.warn(errorMessageEmployeeIds);
-            throw new IllegalArgumentException(errorMessageEmployeeIds);
+            String errorMessage = "Employee IDs must not be null and must be a positive number";
+            log.warn("EntityOrchestratorServiceImpl::reassignCustomers parameter warn: {}" , errorMessage);
+            throw new IllegalArgumentException(errorMessage);
         }
 
         if (newEmployeeId.equals(oldEmployeeId)) {
-            log.warn("Old and new employee IDs must be different");
-            throw new IllegalArgumentException("Old and new employee IDs must be different");
+            String errorMessage = "Old and new employee IDs must be different";
+            log.warn(errorMessage);
+            throw new IllegalArgumentException(errorMessage);
         }
 
         List<Customer> customers = customerService.getCustomersByEmployeeId(oldEmployeeId);
