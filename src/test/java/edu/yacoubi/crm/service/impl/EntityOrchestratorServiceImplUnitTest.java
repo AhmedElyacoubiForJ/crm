@@ -31,6 +31,7 @@ class EntityOrchestratorServiceImplUnitTest {
     private ICustomerService customerService;
     @Mock
     private IInactiveEmployeeService inactiveEmployeeService;
+
     @InjectMocks
     private EntityOrchestratorServiceImpl underTest;
 

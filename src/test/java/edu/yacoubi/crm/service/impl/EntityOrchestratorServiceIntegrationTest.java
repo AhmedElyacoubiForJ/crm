@@ -1,9 +1,8 @@
 package edu.yacoubi.crm.service.impl;
 
-import edu.yacoubi.crm.repository.CustomerRepository;
-import edu.yacoubi.crm.repository.EmployeeRepository;
-import edu.yacoubi.crm.service.validation.EntityValidator;
-import edu.yacoubi.crm.service.IEntityOrchestratorService;
+import edu.yacoubi.crm.service.ICustomerService;
+import edu.yacoubi.crm.service.IEmployeeService;
+import edu.yacoubi.crm.service.IInactiveEmployeeService;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,18 +19,15 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 class EntityOrchestratorServiceImplIntegrationTest {
+    @Autowired
+    private IEmployeeService employeeService;
+    @Autowired
+    private ICustomerService customerService;
+    @Autowired
+    private IInactiveEmployeeService inactiveEmployeeService;
 
     @Autowired
-    private IEntityOrchestratorService entityOrchestratorService;
-
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private EntityValidator validationService;
+    private EntityOrchestratorServiceImpl underTest;
 
     /**
      * Prüft, ob ein Mitarbeiter gelöscht und seine Kunden korrekt zugewiesen werden.
