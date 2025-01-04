@@ -102,8 +102,9 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
         List<Customer> customers = customerService.getCustomersByEmployeeId(oldEmployeeId);
 
         if (customers.isEmpty()) {
-            log.warn("No customers found for oldEmployee ID: {}", oldEmployeeId);
-            throw new IllegalArgumentException("No customers found for oldEmployee ID: " + oldEmployeeId);
+            String errorMessage = "No customers found for oldEmployee ID: " + oldEmployeeId;
+            log.warn("EntityOrchestratorServiceImpl::reassignCustomers warn: {}", errorMessage);
+            throw new IllegalArgumentException(errorMessage);
         }
 
         Employee newEmployee = employeeService.getEmployeeById(newEmployeeId).get();
@@ -122,7 +123,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
      */
     private void handleCustomerReassignment(List<Customer> customers, Employee newEmployee) {
         customers.forEach(customer -> {
-            log.info("Reassigning customer ID: {} to new employee ID: {}", customer.getId(), newEmployee.getId());
+            log.info("Reassigning customer ID: {} to new employee ID: {}", customer.getId() ,newEmployee.getId());
             customer.setEmployee(newEmployee);
         });
 

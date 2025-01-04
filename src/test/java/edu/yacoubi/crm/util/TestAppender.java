@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestAppender extends AppenderBase<ILoggingEvent> {
-    private final List<ILoggingEvent> events = new ArrayList<>();
+    public final List<ILoggingEvent> events = new ArrayList<>();
 
     @Override
     protected void append(ILoggingEvent event) {
