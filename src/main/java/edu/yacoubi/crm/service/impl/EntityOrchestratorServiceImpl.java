@@ -43,7 +43,8 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
 
         this.reassignCustomers(oldEmployeeId, newEmployeeId);
 
-        processEntityAction(oldEmployeeId, createDeleteEmployeeAction());
+        EntityAction deleteEmployeeAction = createDeleteEmployeeAction();
+        processEntityAction(oldEmployeeId, deleteEmployeeAction);
 
         log.info("Employee deleted and customers reassigned: oldEmployeeId= {}, newEmployeeId= {}",
                 oldEmployeeId, newEmployeeId
