@@ -297,7 +297,7 @@ class EntityOrchestratorServiceImplUnitTest {
                 .thenReturn(new ArrayList<>());
 
         // When
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        final ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
             underTest.reassignCustomers(oldEmployeeId, newEmployeeId);
         });
 
@@ -386,7 +386,7 @@ class EntityOrchestratorServiceImplUnitTest {
                 .thenReturn(Collections.emptyList());
 
         // When
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        final ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
             underTest.reassignCustomers(oldEmployeeId, newEmployeeId);
         });
 

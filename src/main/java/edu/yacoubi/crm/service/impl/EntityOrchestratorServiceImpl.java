@@ -1,5 +1,6 @@
 package edu.yacoubi.crm.service.impl;
 
+import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.service.ICustomerService;
@@ -105,7 +106,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
         if (customers.isEmpty()) {
             String errorMessage = "No customers found for oldEmployee ID: " + oldEmployeeId;
             log.warn("EntityOrchestratorServiceImpl::reassignCustomers warn: {}", errorMessage);
-            throw new IllegalArgumentException(errorMessage);
+            throw new ResourceNotFoundException(errorMessage);
         }
 
         Employee newEmployee = employeeService.getEmployeeById(newEmployeeId).get();
