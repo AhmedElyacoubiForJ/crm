@@ -522,7 +522,6 @@ class EntityOrchestratorServiceImplUnitTest {
     }
 
     // tests for reassignCustomerToEmployee(Long customerId, Long employeeId)
-    // TODO Hier weiter machen (REACTOR)
     @Test
     void itShouldThrowExceptionWhenCustomerIdIsNullByCallingReassignCustomerToEmployee() {
         // Given
@@ -723,9 +722,10 @@ class EntityOrchestratorServiceImplUnitTest {
     @Test
     void itShouldThrowExceptionWhenEmployeeDoesNotExistByCallingReassignCustomerToEmployee() {
         // Given
-        final Long oldEmployeeId = 1L;
-        final Long newEmployeeId = 999L; // set to a non-existing employee id to test the precondition
-        final String errorMessage = "Employee not found with ID: " + newEmployeeId;
+        final Long customerId = 2L;
+        final Long employeeId = 999L; // set to a non-existing employee id to test the precondition
+        final String errorMessage = "Employee not found with ID: " + employeeId;
+
         when(customerService.getCustomerById(anyLong()))
                 .thenReturn(Optional.of(new Customer()));
         doThrow(new ResourceNotFoundException(errorMessage))
@@ -733,7 +733,7 @@ class EntityOrchestratorServiceImplUnitTest {
 
         // When
         final ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            underTest.reassignCustomerToEmployee(oldEmployeeId, newEmployeeId);
+            underTest.reassignCustomerToEmployee(customerId, employeeId);
         });
 
         // Then
@@ -746,14 +746,14 @@ class EntityOrchestratorServiceImplUnitTest {
         // Verify logger message
         assertTrue(
                 testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, oldEmployeeId, newEmployeeId),
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
                         "INFO"
                 ),
                 LOG_INFO_MSG_ENTRY_POINT
         );
         assertFalse(
                 testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, oldEmployeeId, newEmployeeId),
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
                         "INFO"
                 ),
                 LOG_INFO_MSG_EXIT_POINT

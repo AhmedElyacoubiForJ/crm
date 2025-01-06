@@ -533,85 +533,290 @@ class EntityOrchestratorServiceImplIntegrationTest {
         );
     }
 
-
     // tests for reassignCustomerToEmployee(Long customerId, Long employeeId)
+    @Test
+    void itShouldThrowExceptionWhenCustomerIdIsNullByCallingReassignCustomerToEmployee() {
+        // Given
+        final Long customerId = null; // set to null to test the precondition
+        final Long employeeId = 1L;
+        final String errorMessage = "Customer or Employee IDs must not be null and must be a positive number";
+
+        // When
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            underTest.reassignCustomerToEmployee(customerId, employeeId);
+        });
+
+        // Then
+        // Verify exception message
+        assertEquals(
+                errorMessage,
+                exception.getMessage(),
+                String.format(ERROR_INFO_MSG, errorMessage)
+        );
+        // Verify logger message
+        assertTrue(
+                testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
+                        "INFO"
+                ),
+                LOG_INFO_MSG_ENTRY_POINT
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage),
+                        "WARN"
+                ));
+        assertFalse(
+                testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
+                        "INFO"
+                ),
+                LOG_INFO_MSG_EXIT_POINT
+        );
+    }
+
+    @Test
+    void itShouldThrowExceptionWhenEmployeeIdIsNullByCallingReassignCustomerToEmployee() {
+        // Given
+        final Long customerId = 1L;
+        final Long employeeId = null; // set to null to test the precondition
+        final String errorMessage = "Customer or Employee IDs must not be null and must be a positive number";
+
+        // When
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            underTest.reassignCustomerToEmployee(customerId, employeeId);
+        });
+
+        // Then
+        // Verify the exception message
+        assertEquals(
+                errorMessage,
+                exception.getMessage(),
+                String.format(ERROR_INFO_MSG, errorMessage)
+        );
+        // Verify the logger message
+        assertTrue(
+                testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
+                        "INFO"
+                ),
+                LOG_INFO_MSG_ENTRY_POINT
+        );
+        assertTrue(testAppender.contains(
+                String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage),
+                "WARN"
+        ));
+        assertFalse(
+                testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
+                        "INFO"
+                ),
+                LOG_INFO_MSG_EXIT_POINT
+        );
+    }
+
+    @Test
+    void itShouldThrowExceptionWhenCustomerIdIsNegativeNumberByCallingReassignCustomerToEmployee() {
+        // Given
+        final Long customerId = -1L;
+        final Long employeeId = 1L;
+        final String errorMessage = "Customer or Employee IDs must not be null and must be a positive number";
+
+        // When
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            underTest.reassignCustomerToEmployee(customerId, employeeId);
+        });
+
+        // Then
+        // Verify the exception message
+        assertEquals(
+                errorMessage,
+                exception.getMessage(),
+                String.format(ERROR_INFO_MSG, errorMessage)
+        );
+        // Verify the logger message
+        assertTrue(
+                testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
+                        "INFO"
+                ),
+                LOG_INFO_MSG_ENTRY_POINT
+        );
+        assertTrue(testAppender.contains(
+                String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage),
+                "WARN"
+        ));
+        assertFalse(testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
+                        "INFO"
+                ),
+                LOG_INFO_MSG_EXIT_POINT
+        );
+    }
+
+    @Test
+    void itShouldThrowExceptionWhenEmployeeIdIsNegativeNumberByCallingReassignCustomerToEmployee() {
+        // Given
+        final Long customerId = 1L;
+        final Long employeeId = -1L;
+        final String errorMessage = "Customer or Employee IDs must not be null and must be a positive number";
+
+        // When
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            underTest.reassignCustomerToEmployee(customerId, employeeId);
+        });
+
+        // Then
+        // Verify the exception message
+        assertEquals(
+                errorMessage,
+                exception.getMessage(),
+                String.format(ERROR_INFO_MSG, errorMessage)
+        );
+        // Verify the logger message
+        assertTrue(
+                testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
+                        "INFO"
+                ),
+                LOG_INFO_MSG_ENTRY_POINT
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage),
+                        "WARN"
+                ));
+        assertFalse(
+                testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
+                        "INFO"
+                ));
+    }
+
+    @Test
+    void itShouldThrowExceptionWhenCustomerDoesNotExistByCallingReassignCustomerToEmployee() {
+        // Given
+        final Long customerId = 999L; // does not exist in the database
+        final Long employeeId = 1L;
+        final String errorMessage = "Customer not found with ID: " + customerId;
+
+        // When
+        final ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            underTest.reassignCustomerToEmployee(customerId, employeeId);
+        });
+
+        // Then
+        // Verify the exception message
+        assertEquals(
+                errorMessage,
+                exception.getMessage(),
+                String.format(ERROR_INFO_MSG, errorMessage)
+        );
+        // Verify logger message
+        assertTrue(
+                testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
+                        "INFO"
+                ),
+                LOG_INFO_MSG_ENTRY_POINT
+        );
+        assertFalse(
+                testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
+                        "INFO"
+                ),
+                LOG_INFO_MSG_EXIT_POINT
+        );
+    }
+
+    @Test
+    void itShouldThrowExceptionWhenEmployeeDoesNotExistByCallingReassignCustomerToEmployee() {
+        // Given
+        final Customer existingCustomer = customerService.createCustomer(
+                TestDataUtil.createCustomerB(employeeService.createEmployee(TestDataUtil.createEmployeeA()))
+        );
+        final Long customerId = existingCustomer.getId();
+        final Long employeeId = 999L; // set to a non-existing employee id to test the precondition
+        final String errorMessage = "Employee not found with ID: " + employeeId;
+
+        // When
+        final ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            underTest.reassignCustomerToEmployee(customerId, employeeId);
+        });
+
+        // Then
+        // Verify customer exists as precondition
+        assertTrue(customerService.getCustomerById(customerId).isPresent(), "Customer must be present");
+
+        // Verify the exception message
+        assertEquals(
+                errorMessage,
+                exception.getMessage(),
+                String.format(ERROR_INFO_MSG, errorMessage)
+        );
+        // Verify logger message
+        assertTrue(
+                testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
+                        "INFO"
+                ),
+                LOG_INFO_MSG_ENTRY_POINT
+        );
+        assertFalse(
+                testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
+                        "INFO"
+                ),
+                LOG_INFO_MSG_EXIT_POINT
+        );
+    }
+
+    @Test
+    void itShouldAssignCustomerToEmployeeByCallingReassignCustomerToEmployee() {
+        // Given
+        Employee employeeB = employeeService.createEmployee(TestDataUtil.createEmployeeB());
+        final Long customerId = customerService.createCustomer(TestDataUtil.createCustomerB(employeeB))
+                .getId();
+        final Long employeeId = employeeService.createEmployee(TestDataUtil.createEmployeeC()).getId();
+
+        // When
+        underTest.reassignCustomerToEmployee(customerId, employeeId);
+
+        // Then
+        // Verify customer exists as precondition
+        assertTrue(customerService.getCustomerById(customerId).isPresent(), "Customer must be present");
+        // Verify employee exists as precondition
+        assertTrue(employeeService.getEmployeeById(employeeId).isPresent(), "Employee must be present");
+
+        // Verify customer is assigned to the new employee
+        assertEquals(
+                employeeId,
+                customerService.getCustomerById(customerId).get().getEmployee().getId(),
+                "Customer should be assigned to the new employee"
+        );
+        // Verify customer is not assigned more to the old employee
+        assertNotEquals(
+                employeeB.getId(),
+                customerService.getCustomerById(customerId).get().getEmployee().getId(),
+                "Customer should not be assigned to the old employee"
+        );
+
+        // Verify logger message
+        assertTrue(
+                testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
+                        "INFO"
+                ),
+                LOG_INFO_MSG_ENTRY_POINT
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
+                        "INFO"
+                ),
+                LOG_INFO_MSG_EXIT_POINT
+        );
+    }
+
     // tests for deleteEmployeeAndReassignCustomers(Long oldEmployeeId, Long newEmployeeId)
-
-
-    /**
-     * Prüft, ob ein Mitarbeiter gelöscht und seine Kunden korrekt zugewiesen werden.
-     */
-//    @Test
-//    void testDeleteEmployeeAndReassignCustomers() {
-//        Employee oldEmployee = new Employee();
-//        oldEmployee.setFirstName("Old Employee");
-//        oldEmployee = employeeRepository.save(oldEmployee);
-//
-//        Employee newEmployee = new Employee();
-//        newEmployee.setFirstName("New Employee");
-//        newEmployee = employeeRepository.save(newEmployee);
-//
-//        Customer customer = new Customer();
-//        customer.setFirstName("Test Customer");
-//        customer.setEmployee(oldEmployee);
-//        customer = customerRepository.save(customer);
-//
-//        entityOrchestratorService.deleteEmployeeAndReassignCustomers(oldEmployee.getId(), newEmployee.getId());
-//
-//        Customer updatedCustomer = customerRepository.findById(customer.getId()).orElse(null);
-//        assertNotNull(updatedCustomer);
-//        assertEquals(newEmployee.getId(), updatedCustomer.getEmployee().getId());
-//        assertFalse(employeeRepository.existsById(oldEmployee.getId()));
-//    }
-//
-//    /**
-//     * Prüft, ob ein Kunde korrekt einem Mitarbeiter zugewiesen wird.
-//     */
-//    @Test
-//    void testReassignCustomerToEmployee() {
-//        Employee employee = new Employee();
-//        employee.setFirstName("Test Employee");
-//        employee = employeeRepository.save(employee);
-//
-//        Customer customer = new Customer();
-//        customer.setFirstName("Test Customer");
-//        customer = customerRepository.save(customer);
-//
-//        entityOrchestratorService.reassignCustomerToEmployee(customer.getId(), employee.getId());
-//
-//        Customer updatedCustomer = customerRepository.findById(customer.getId()).orElse(null);
-//        assertNotNull(updatedCustomer);
-//        assertEquals(employee.getId(), updatedCustomer.getEmployee().getId());
-//    }
-//
-//    /**
-//     * Prüft, ob alle Kunden eines Mitarbeiters korrekt einem neuen Mitarbeiter zugewiesen werden.
-//     */
-//    @Test
-//    void testReassignCustomers() {
-//        Employee oldEmployee = new Employee();
-//        oldEmployee.setFirstName("Old Employee");
-//        oldEmployee = employeeRepository.save(oldEmployee);
-//
-//        Employee newEmployee = new Employee();
-//        newEmployee.setFirstName("New Employee");
-//        newEmployee = employeeRepository.save(newEmployee);
-//
-//        Customer customer1 = new Customer();
-//        customer1.setFirstName("Customer 1");
-//        customer1.setEmployee(oldEmployee);
-//
-//        Customer customer2 = new Customer();
-//        customer2.setFirstName("Customer 2");
-//        customer2.setEmployee(oldEmployee);
-//
-//        customerRepository.saveAll(List.of(customer1, customer2));
-//
-//        entityOrchestratorService.reassignCustomers(oldEmployee.getId(), newEmployee.getId());
-//
-//        List<Customer> customers = customerRepository.findAll();
-//        for (Customer customer : customers) {
-//            assertEquals(newEmployee.getId(), customer.getEmployee().getId());
-//        }
-//    }
 }
