@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Logger;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
+import edu.yacoubi.crm.repository.InactiveEmployeeRepository;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.service.IInactiveEmployeeService;
@@ -67,6 +68,8 @@ class EntityOrchestratorServiceImplIntegrationTest {
     private ICustomerService customerService;
     @Autowired
     private IInactiveEmployeeService inactiveEmployeeService;
+    @Autowired
+    private InactiveEmployeeRepository inactiveEmployeeRepository;
 
     @Autowired
     private EntityOrchestratorServiceImpl underTest;
@@ -89,9 +92,9 @@ class EntityOrchestratorServiceImplIntegrationTest {
         final Long newEmployeeId = 1L;
 
         // When
-        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            underTest.reassignCustomers(oldEmployeeId, newEmployeeId);
-        });
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> underTest.reassignCustomers(oldEmployeeId, newEmployeeId)
+        );
 
         // Then
         // Verify the exception message
@@ -819,4 +822,57 @@ class EntityOrchestratorServiceImplIntegrationTest {
     }
 
     // tests for deleteEmployeeAndReassignCustomers(Long oldEmployeeId, Long newEmployeeId)
+    @Test
+    void itShouldReassignCustomersAndArchiveEmployeeByCallingDeleteEmployeeAndReassignCustomers() {
+        // Given
+        final Employee oldEmployee = employeeService.createEmployee(TestDataUtil.createEmployeeA());
+        final Long oldEmployeeId = oldEmployee.getId();
+
+        final Customer customerA = customerService.createCustomer(TestDataUtil.createCustomerA(oldEmployee));
+        final Long customerAId = customerA.getId();
+        final Customer customerB = customerService.createCustomer(TestDataUtil.createCustomerB(oldEmployee));
+        final Long customerBId = customerB.getId();
+        final Customer customerC = customerService.createCustomer(TestDataUtil.createCustomerC(oldEmployee));
+        final Long customerCId = customerC.getId();
+
+        final Employee newEmployee = employeeService.createEmployee(TestDataUtil.createEmployeeB());
+        final Long newEmployeeId = newEmployee.getId();
+
+        // When
+        underTest.deleteEmployeeAndReassignCustomers(oldEmployeeId, newEmployeeId);
+
+        // Then
+        // Verify customers are assigned to the new employee
+        assertAll(
+                "Customers should be reassigned to the new employee",
+                () -> assertEquals(newEmployeeId, customerService.getCustomerById(customerAId).get().getEmployee().getId(), "Customer A should be assigned to the new employee"),
+                () -> assertEquals(newEmployeeId, customerService.getCustomerById(customerBId).get().getEmployee().getId(), "Customer B should be assigned to the new employee"),
+                () -> assertEquals(newEmployeeId, customerService.getCustomerById(customerCId).get().getEmployee().getId(), "Customer C should be assigned to the new employee")
+        );
+
+        // Verify old employee is archived
+        assertThrows(
+                ResourceNotFoundException.class,
+                () -> employeeService.getEmployeeById(oldEmployeeId)
+        );
+        assertTrue(inactiveEmployeeRepository.existsByOriginalEmployeeId(oldEmployeeId), "Employee should be archived");
+
+        // Verify logger entry message
+        assertTrue(
+                testAppender.contains(
+                        String.format("EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers oldEmployeeId: %d, newEmployeeId: %d", oldEmployeeId, newEmployeeId),
+                        "INFO"
+                ),
+                "Should indicate the entry point for delete employee and reassign customers"
+        );
+        // Verify logger exit message
+        assertTrue(
+                testAppender.contains(
+                        String.format("Employee deleted and customers reassigned: oldEmployeeId= %d, newEmployeeId= %d", oldEmployeeId, newEmployeeId),
+                        "INFO"
+                ),
+                "Should indicate the exit point for delete employee and reassign customers"
+        );
+    }
+
 }
