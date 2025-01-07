@@ -47,7 +47,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_customer_service_impl_8java.html",
-"interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service.html#a3a6a2cd27fcab8d2a63d64e7586e3a76"
+"interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_orchestrator_service.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

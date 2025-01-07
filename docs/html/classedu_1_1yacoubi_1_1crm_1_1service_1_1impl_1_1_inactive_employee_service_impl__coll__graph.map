@@ -1,5 +1,7 @@
 <map id="edu.yacoubi.crm.service.impl.InactiveEmployeeServiceImpl" name="edu.yacoubi.crm.service.impl.InactiveEmployeeServiceImpl">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,160,195,267"/>
-<area shape="rect" id="Node000002" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_inactive_employee_service.html" title=" " alt="" coords="10,5,191,112"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,127,103,160,98,160,98,127"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="116,320,320,469"/>
+<area shape="rect" id="Node000002" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_inactive_employee_service.html" title=" " alt="" coords="5,67,201,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,207,188,319,183,321,134,209"/>
+<area shape="rect" id="Node000003" href="$classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator.html" title=" " alt="" coords="225,5,440,256"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="281,257,260,305,255,303,276,255"/>
 </map>

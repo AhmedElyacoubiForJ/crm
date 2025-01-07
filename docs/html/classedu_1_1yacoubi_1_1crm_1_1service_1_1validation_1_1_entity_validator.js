@@ -1,5 +1,6 @@
 var classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator =
 [
+    [ "hasCustomers", "classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator.html#a951eb75618bd127b4907c6c60a203ed5", null ],
     [ "validateCustomerExists", "classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator.html#ad41d133e48fc54ffb3c72d999f548ca6", null ],
     [ "validateEmployeeExists", "classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator.html#a636d2c09c8f56dd4f2c728ce227a4660", null ],
     [ "validateInactiveEmployeeExists", "classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator.html#aaa15baf258a8d6dda2f0675f72948970", null ],
