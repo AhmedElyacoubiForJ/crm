@@ -4,6 +4,7 @@ import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.InactiveEmployee;
 import edu.yacoubi.crm.repository.InactiveEmployeeRepository;
 import edu.yacoubi.crm.service.IInactiveEmployeeService;
+import edu.yacoubi.crm.service.validation.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class InactiveEmployeeServiceImpl implements IInactiveEmployeeService {
 
     private final InactiveEmployeeRepository inactiveEmployeeRepository;
+    private final EntityValidator entityValidator;
 
     @Override
     public InactiveEmployee createInactiveEmployee(Employee employee) {
@@ -34,5 +36,11 @@ public class InactiveEmployeeServiceImpl implements IInactiveEmployeeService {
     @Override
     public Optional<InactiveEmployee> getInactiveEmployeeById(Long id) {
         return inactiveEmployeeRepository.findById(id);
+    }
+
+    @Override
+    public boolean existsByOriginalEmployeeId(Long originalEmployeeId) {
+        return inactiveEmployeeRepository
+                .existsByOriginalEmployeeId(originalEmployeeId);
     }
 }

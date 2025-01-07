@@ -4,7 +4,6 @@ import ch.qos.logback.classic.Logger;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
-import edu.yacoubi.crm.repository.InactiveEmployeeRepository;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.service.IInactiveEmployeeService;
@@ -68,8 +67,6 @@ class EntityOrchestratorServiceImplIntegrationTest {
     private ICustomerService customerService;
     @Autowired
     private IInactiveEmployeeService inactiveEmployeeService;
-    @Autowired
-    private InactiveEmployeeRepository inactiveEmployeeRepository;
 
     @Autowired
     private EntityOrchestratorServiceImpl underTest;
@@ -855,7 +852,7 @@ class EntityOrchestratorServiceImplIntegrationTest {
                 ResourceNotFoundException.class,
                 () -> employeeService.getEmployeeById(oldEmployeeId)
         );
-        assertTrue(inactiveEmployeeRepository.existsByOriginalEmployeeId(oldEmployeeId), "Employee should be archived");
+        assertTrue(inactiveEmployeeService.existsByOriginalEmployeeId(oldEmployeeId), "Employee should be archived");
 
         // Verify logger entry message
         assertTrue(

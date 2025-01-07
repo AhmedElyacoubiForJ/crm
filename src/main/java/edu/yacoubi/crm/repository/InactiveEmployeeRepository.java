@@ -21,8 +21,8 @@ public interface InactiveEmployeeRepository extends JpaRepository<InactiveEmploy
     /**
      * Checks if an inactive employee exists by their original employee ID.
      *
-     * @param employeeId the ID of the original employee.
+     * @param originalEmployeeId the ID of the original employee.
      * @return true if an inactive employee exists with the given original employee ID, false otherwise.
      */
-    boolean existsByOriginalEmployeeId(Long employeeId);
+    boolean existsByOriginalEmployeeId(Long originalEmployeeId);
 }
