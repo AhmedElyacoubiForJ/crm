@@ -74,7 +74,6 @@ public class EntityValidator {
         boolean hasCustomers = employeeRepository.hasCustomers(employeeId);
 
         log.info("EntityValidator::hasCustomers employeeId: {} hasCustomers: {}", employeeId, hasCustomers);
-
         return hasCustomers;
     }
 }

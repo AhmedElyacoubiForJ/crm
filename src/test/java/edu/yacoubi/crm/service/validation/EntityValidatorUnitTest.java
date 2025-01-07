@@ -1,12 +1,12 @@
 package edu.yacoubi.crm.service.validation;
 
 import ch.qos.logback.classic.Logger;
-import edu.yacoubi.crm.repository.InactiveEmployeeRepository;
-import edu.yacoubi.crm.util.TestAppender;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
+import edu.yacoubi.crm.repository.InactiveEmployeeRepository;
 import edu.yacoubi.crm.repository.NoteRepository;
+import edu.yacoubi.crm.util.TestAppender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -41,7 +41,7 @@ class EntityValidatorUnitTest {
     }
 
     @Test
-    public void itShouldValidateEmployeeExists() {
+    void itShouldValidateEmployeeExists() {
         // Given
         Long employeeId = 1L;
         when(employeeRepository.existsById(employeeId)).thenReturn(true);
@@ -63,7 +63,7 @@ class EntityValidatorUnitTest {
     }
 
     @Test
-    public void itShouldThrowWhenEmployeeDoesNotExit() {
+    void itShouldThrowWhenEmployeeDoesNotExit() {
         // Given
         Long employeeId = 1L;
         String errorMessage = "Employee not found with ID: " + employeeId;
@@ -92,7 +92,7 @@ class EntityValidatorUnitTest {
     }
 
     @Test
-    public void itShouldValidateNoteExists() {
+    void itShouldValidateNoteExists() {
         // Given
         Long noteId = 1L;
         when(noteRepository.existsById(noteId)).thenReturn(true);
@@ -118,7 +118,7 @@ class EntityValidatorUnitTest {
     }
 
     @Test
-    public void itShouldThrowWhenNoteDoesNotExit() {
+    void itShouldThrowWhenNoteDoesNotExit() {
         // Given
         Long noteId = 1L;
         String errorMessage = "Note not found with ID: " + noteId;
@@ -148,7 +148,7 @@ class EntityValidatorUnitTest {
     }
 
     @Test
-    public void itShouldValidateCustomerExists() {
+    void itShouldValidateCustomerExists() {
         // Given
         Long customerId = 1L;
         when(customerRepository.existsById(customerId)).thenReturn(true);
@@ -174,7 +174,7 @@ class EntityValidatorUnitTest {
     }
 
     @Test
-    public void itShouldThrowWhenCustomerDoesNotExit() {
+    void itShouldThrowWhenCustomerDoesNotExit() {
         // Given
         Long customerId = 1L;
         String errorMessage = "Customer not found with ID: " + customerId;
@@ -204,7 +204,34 @@ class EntityValidatorUnitTest {
     }
 
     @Test
-    public void itShouldThrowWhenInactiveEmployeeDoesNotExit() {
+    void itShouldValidateInactiveEmployeeExits() {
+        // Given
+        final Long originalEmployeeId = 1L;
+        when(inactiveEmployeeRepository.existsByOriginalEmployeeId(originalEmployeeId)).thenReturn(true);
+
+        // Then
+        underTest.validateInactiveEmployeeExists(originalEmployeeId);
+
+        // Then
+        // Verify repo. call
+        verify(inactiveEmployeeRepository, times(1)).existsByOriginalEmployeeId(originalEmployeeId);
+
+        // verify logs
+        assertTrue(
+                testAppender.contains(
+                        String.format("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d", originalEmployeeId),
+                        "INFO"
+                ),
+                "Should indicate the entry point for inactiveEmployee exists");
+        assertTrue(testAppender.contains(
+                        String.format("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated", originalEmployeeId),
+                        "INFO"
+                ),
+                "Should indicate the exit point for inactiveEmployee successfully validated");
+    }
+
+    @Test
+    void itShouldThrowWhenInactiveEmployeeDoesNotExit() {
         // Given
         Long originalEmployeeId = 1L;
         String errorMessage = "Inactive employee not found with ID: " + originalEmployeeId;
@@ -227,5 +254,63 @@ class EntityValidatorUnitTest {
                 String.format("EntityValidator::validateInactiveEmployeeExists error: %s", errorMessage),
                 "ERROR"
         ));
+    }
+
+    @Test
+    void itShouldReturnFalseWhenInactiveEmployeeHasNoCustomers() {
+        // Given
+        final Long employeeId = 1L;
+        final boolean hasCustomers = false;
+        when(employeeRepository.hasCustomers(employeeId)).thenReturn(hasCustomers);
+
+        // When
+        final boolean result = underTest.hasCustomers(employeeId);
+
+        // Then
+        verify(employeeRepository, times(1)).hasCustomers(employeeId);
+        assertFalse(result);
+        assertTrue(
+                testAppender.contains(
+                        String.format("EntityValidator::hasCustomers employeeId: %d", employeeId),
+                        "INFO"
+                ),
+                "Should indicate the entry point for hasCustomers"
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format("EntityValidator::hasCustomers employeeId: %d hasCustomers: %s", employeeId, hasCustomers),
+                        "INFO"
+                ),
+                "Should indicate the exit point for hasCustomers"
+        );
+    }
+
+    @Test
+    void itShouldReturnTrueWhenInactiveEmployeeHasCustomers() {
+        // Given
+        final Long employeeId = 1L;
+        final boolean hasCustomers = true;
+        when(employeeRepository.hasCustomers(employeeId)).thenReturn(hasCustomers);
+
+        // When
+        final boolean result = underTest.hasCustomers(employeeId);
+
+        // Then
+        verify(employeeRepository, times(1)).hasCustomers(employeeId);
+        assertTrue(result);
+        assertTrue(
+                testAppender.contains(
+                        String.format("EntityValidator::hasCustomers employeeId: %d", employeeId),
+                        "INFO"
+                ),
+                "Should indicate the entry point for hasCustomers"
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format("EntityValidator::hasCustomers employeeId: %d hasCustomers: %s", employeeId, hasCustomers),
+                        "INFO"
+                ),
+                "Should indicate the exit point for hasCustomers"
+        );
     }
 }
