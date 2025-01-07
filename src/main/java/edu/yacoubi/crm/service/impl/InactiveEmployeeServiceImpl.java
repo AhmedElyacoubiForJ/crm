@@ -21,7 +21,19 @@ public class InactiveEmployeeServiceImpl implements IInactiveEmployeeService {
 
     @Override
     public InactiveEmployee createInactiveEmployee(Employee employee) {
+        // Parameter-Validierung
+        if (employee == null) {
+            throw new IllegalArgumentException("Employee is null.");
+        }
 
+        // Feld-Validierung des Employees
+        validateBasicEmployeeFields(employee);
+
+        if (entityValidator.hasCustomers(employee.getId())) {
+            throw new IllegalArgumentException("Employee has assigned customers.");
+        }
+
+        // Erstellen und Speichern des InactiveEmployee
         InactiveEmployee inactiveEmployee = InactiveEmployee.builder()
                 .firstName(employee.getFirstName())
                 .lastName(employee.getLastName())
@@ -40,7 +52,18 @@ public class InactiveEmployeeServiceImpl implements IInactiveEmployeeService {
 
     @Override
     public boolean existsByOriginalEmployeeId(Long originalEmployeeId) {
-        return inactiveEmployeeRepository
-                .existsByOriginalEmployeeId(originalEmployeeId);
+        return inactiveEmployeeRepository.existsByOriginalEmployeeId(originalEmployeeId);
+    }
+
+    // Methode zur Basis-Validierung von Employee-Feldern
+    private void validateBasicEmployeeFields(Employee employee) {
+        log.info("validateBasicEmployeeFields employeeId: {}", employee.getId());
+
+        if (employee.getFirstName() == null || employee.getFirstName().isEmpty() ||
+                employee.getLastName() == null || employee.getLastName().isEmpty() ||
+                employee.getEmail() == null || employee.getEmail().isEmpty() ||
+                employee.getDepartment() == null || employee.getDepartment().isEmpty()) {
+            throw new IllegalArgumentException("Employee has incomplete information.");
+        }
     }
 }

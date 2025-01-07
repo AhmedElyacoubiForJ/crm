@@ -83,4 +83,18 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
      */
     @Query("SELECT CASE WHEN COUNT(e) > 0 THEN TRUE ELSE FALSE END FROM Employee e JOIN e.customers c WHERE e.id = :employeeId")
     boolean hasCustomers(@Param("employeeId") Long employeeId);
+
+    /**
+     * Finds an employee by their ID and fetches their customers eagerly.
+     * This query performs a left join fetch operation to ensure that the customers list is loaded along with the employee.
+     *
+     * The `LEFT JOIN FETCH` ensures that all Employee records are fetched, and any related Customer records are also fetched.
+     * If an Employee has no related Customer, the Employee record is still fetched, but the Customer list will be empty.
+     * This is useful for eager loading associated entities without additional queries.
+     *
+     * @param employeeId the ID of the employee.
+     * @return an Optional containing the found employee with their customers, or empty if not found.
+     */
+    @Query("SELECT e FROM Employee e LEFT JOIN FETCH e.customers WHERE e.id = :employeeId")
+    Optional<Employee> findByIdWithCustomers(@Param("employeeId") Long employeeId);
 }

@@ -66,4 +66,15 @@ public class EntityValidator {
 
         log.info("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: {} successfully validated", originalEmployeeId);
     }
+
+    // Methode zur Überprüfung, ob ein Employee Kunden hat
+    public boolean hasCustomers(Long employeeId) {
+        log.info("EntityValidator::hasCustomers employeeId: {}", employeeId);
+
+        boolean hasCustomers = employeeRepository.hasCustomers(employeeId);
+
+        log.info("EntityValidator::hasCustomers employeeId: {} hasCustomers: {}", employeeId, hasCustomers);
+
+        return hasCustomers;
+    }
 }
