@@ -1,0 +1,9 @@
+<map id="src/main/java/edu/yacoubi/crm/dto/employee/EmployeePatchDTO.java" name="src/main/java/edu/yacoubi/crm/dto/employee/EmployeePatchDTO.java">
+<area shape="rect" id="Node000001" title=" " alt="" coords="162,5,387,64"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,112,197,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,67,153,106,150,102,222,62"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="221,120,328,147"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="277,64,277,104,272,104,272,64"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="352,120,447,147"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="313,62,373,108,370,113,310,67"/>
+</map>

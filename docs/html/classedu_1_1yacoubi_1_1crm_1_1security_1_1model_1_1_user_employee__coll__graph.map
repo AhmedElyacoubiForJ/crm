@@ -1,0 +1,11 @@
+<map id="edu.yacoubi.crm.security.model.UserEmployee" name="edu.yacoubi.crm.security.model.UserEmployee">
+<area shape="rect" id="Node000001" title=" " alt="" coords="243,385,441,471"/>
+<area shape="rect" id="Node000002" href="$classedu_1_1yacoubi_1_1crm_1_1security_1_1model_1_1_user_employee_key.html" title=" " alt="" coords="5,169,204,276"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,274,218,319,282,373,278,377,215,323,162,278"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="66,5,144,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,90,107,169,102,169,102,90"/>
+<area shape="rect" id="Node000004" href="$classedu_1_1yacoubi_1_1crm_1_1security_1_1model_1_1_user.html" title=" " alt="" coords="229,135,455,311"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="345,311,345,368,339,368,339,311"/>
+<area shape="rect" id="Node000005" href="$classedu_1_1yacoubi_1_1crm_1_1model_1_1_employee.html" title=" " alt="" coords="480,124,687,321"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="481,313,405,377,402,373,478,309"/>
+</map>

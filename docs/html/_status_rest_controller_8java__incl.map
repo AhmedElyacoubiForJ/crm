@@ -1,0 +1,15 @@
+<map id="src/main/java/edu/yacoubi/crm/controllers/api/StatusRestController.java" name="src/main/java/edu/yacoubi/crm/controllers/api/StatusRestController.java">
+<area shape="rect" id="Node000001" title=" " alt="" coords="566,5,768,64"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,112,175,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="566,53,191,114,190,109,565,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="199,112,368,155"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="567,64,381,110,380,105,565,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="392,112,655,155"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="626,67,568,105,566,101,623,62"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="680,112,943,155"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="712,62,769,101,766,105,709,67"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="968,112,1231,155"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="770,56,993,106,991,111,769,61"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="1256,120,1351,147"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="769,41,988,65,1117,84,1244,109,1255,112,1254,118,1243,115,1116,89,988,70,768,46"/>
+</map>

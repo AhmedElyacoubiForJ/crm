@@ -1,0 +1,9 @@
+<map id="src/main/java/edu/yacoubi/crm/dto/ValidationError.java" name="src/main/java/edu/yacoubi/crm/dto/ValidationError.java">
+<area shape="rect" id="Node000001" title=" " alt="" coords="161,5,347,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,96,183,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,51,134,91,132,86,212,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="206,96,302,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="257,49,257,80,251,80,251,49"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="326,96,505,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="297,46,378,86,375,91,294,51"/>
+</map>

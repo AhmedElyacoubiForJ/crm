@@ -1,7 +1,30 @@
 <map id="edu.yacoubi.crm.service.impl.NoteServiceImpl" name="edu.yacoubi.crm.service.impl.NoteServiceImpl">
-<area shape="rect" id="Node000001" title=" " alt="" coords="106,320,290,533"/>
-<area shape="rect" id="Node000002" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service.html" title=" " alt="" coords="5,35,174,227"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,240,162,319,157,321,127,242"/>
-<area shape="rect" id="Node000003" href="$classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator.html" title=" " alt="" coords="198,5,414,256"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="263,257,245,305,240,304,258,255"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="908,743,1093,935"/>
+<area shape="rect" id="Node000002" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service.html" title=" " alt="" coords="460,487,629,679"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="643,676,713,718,783,754,909,805,907,810,781,759,711,723,640,681"/>
+<area shape="rect" id="Node000003" href="$interfaceedu_1_1yacoubi_1_1crm_1_1repository_1_1_note_repository.html" title=" " alt="" coords="956,239,1127,324"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1041,324,1011,726,1006,726,1036,324"/>
+<area shape="rect" id="Node000006" href="$classedu_1_1yacoubi_1_1crm_1_1service_1_1validation_1_1_entity_validator.html" title=" " alt="" coords="652,489,868,676"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="1014,325,962,392,898,464,882,481,878,477,894,461,958,389,1010,322"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="1038,5,1176,91"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1094,106,1056,239,1051,238,1089,104"/>
+<area shape="rect" id="Node000005" href="$interfaceedu_1_1yacoubi_1_1crm_1_1repository_1_1_i_note_custom_repository.html" title=" " alt="" coords="1162,540,1332,625"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1209,627,1106,733,1102,729,1205,623"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="849,674,901,729,897,732,845,678"/>
+<area shape="rect" id="Node000007" href="$interfaceedu_1_1yacoubi_1_1crm_1_1repository_1_1_employee_repository.html" title=" " alt="" coords="56,140,291,423"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="293,371,366,420,403,444,443,460,495,470,539,470,583,471,637,484,636,489,583,476,539,475,495,475,442,465,401,448,363,425,290,376"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="5,5,174,91"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="112,104,125,139,120,141,107,106"/>
+<area shape="rect" id="Node000009" href="$interfaceedu_1_1yacoubi_1_1crm_1_1repository_1_1_customer_repository.html" title=" " alt="" coords="376,172,614,391"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="540,389,563,427,592,461,612,473,639,484,637,489,610,478,588,465,559,430,535,392"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="198,5,366,91"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="332,100,397,170,393,174,328,104"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="390,5,555,91"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="480,105,487,172,482,173,475,106"/>
+<area shape="rect" id="Node000012" href="$interfaceedu_1_1yacoubi_1_1crm_1_1repository_1_1_custom_customer_repository.html" title=" " alt="" coords="579,5,774,91"/>
+<area shape="poly" id="edge12_Node000009_Node000012" title=" " alt="" coords="637,104,582,174,578,171,633,101"/>
+<area shape="rect" id="Node000013" href="$interfaceedu_1_1yacoubi_1_1crm_1_1repository_1_1_inactive_employee_repository.html" title=" " alt="" coords="680,228,876,335"/>
+<area shape="poly" id="edge13_Node000006_Node000013" title=" " alt="" coords="751,335,729,396,724,429,725,462,727,472,721,473,720,463,718,429,724,395,746,334"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="798,5,1013,91"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="878,105,809,229,804,227,873,103"/>
 </map>
