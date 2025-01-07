@@ -5,12 +5,9 @@ import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.INoteOrchestratorService;
 import edu.yacoubi.crm.service.INoteService;
-import edu.yacoubi.crm.service.validation.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
