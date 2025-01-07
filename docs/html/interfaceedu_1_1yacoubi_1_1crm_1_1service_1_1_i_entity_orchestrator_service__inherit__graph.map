@@ -1,0 +1,5 @@
+<map id="edu.yacoubi.crm.service.IEntityOrchestratorService" name="edu.yacoubi.crm.service.IEntityOrchestratorService">
+<area shape="rect" id="Node000001" title="Service interface for orchestrating entities." alt="" coords="6,5,216,149"/>
+<area shape="rect" id="Node000002" href="$classedu_1_1yacoubi_1_1crm_1_1service_1_1impl_1_1_entity_orchestrator_service_impl.html" title="Service implementation for orchestrating entities." alt="" coords="5,197,216,448"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,164,114,197,108,197,108,164"/>
+</map>

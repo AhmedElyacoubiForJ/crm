@@ -1,0 +1,15 @@
+<map id="src/main/java/edu/yacoubi/crm/service/ICustomerService.java" name="src/main/java/edu/yacoubi/crm/service/ICustomerService.java">
+<area shape="rect" id="Node000001" title=" " alt="" coords="578,5,808,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,96,207,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="577,46,223,98,222,93,577,41"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="231,96,432,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="609,51,431,94,430,89,607,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="456,104,673,131"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="664,51,597,97,594,93,661,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="698,104,946,131"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="724,46,793,93,790,97,721,51"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="970,104,1061,131"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="782,46,959,93,967,96,966,101,957,99,780,51"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="1086,104,1204,131"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="809,43,936,65,1073,93,1088,97,1087,102,1072,99,935,71,808,48"/>
+</map>
