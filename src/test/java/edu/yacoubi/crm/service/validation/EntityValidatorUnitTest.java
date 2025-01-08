@@ -222,12 +222,14 @@ class EntityValidatorUnitTest {
                         String.format("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d", originalEmployeeId),
                         "INFO"
                 ),
-                "Should indicate the entry point for inactiveEmployee exists");
+                "Should indicate the entry point for inactiveEmployee exists"
+        );
         assertTrue(testAppender.contains(
                         String.format("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated", originalEmployeeId),
                         "INFO"
                 ),
-                "Should indicate the exit point for inactiveEmployee successfully validated");
+                "Should indicate the exit point for inactiveEmployee successfully validated"
+        );
     }
 
     @Test
@@ -257,7 +259,7 @@ class EntityValidatorUnitTest {
     }
 
     @Test
-    void itShouldReturnFalseWhenInactiveEmployeeHasNoCustomers() {
+    void itShouldReturnFalseWhenEmployeeHasNoCustomers() {
         // Given
         final Long employeeId = 1L;
         final boolean hasCustomers = false;
@@ -286,7 +288,7 @@ class EntityValidatorUnitTest {
     }
 
     @Test
-    void itShouldReturnTrueWhenInactiveEmployeeHasCustomers() {
+    void itShouldReturnTrueWhenEmployeeHasCustomers() {
         // Given
         final Long employeeId = 1L;
         final boolean hasCustomers = true;

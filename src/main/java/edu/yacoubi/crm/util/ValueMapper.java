@@ -13,6 +13,10 @@ import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
 
+/**
+ * @deprecated Use {@link TransformerUtil} instead.
+ */
+@Deprecated
 public class ValueMapper {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();

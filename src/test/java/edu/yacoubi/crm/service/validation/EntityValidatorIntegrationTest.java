@@ -1,16 +1,17 @@
 package edu.yacoubi.crm.service.validation;
 
 import ch.qos.logback.classic.Logger;
-import edu.yacoubi.crm.repository.InactiveEmployeeRepository;
-import edu.yacoubi.crm.util.TestAppender;
-import edu.yacoubi.crm.util.TestDataUtil;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
+import edu.yacoubi.crm.model.InactiveEmployee;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
+import edu.yacoubi.crm.repository.InactiveEmployeeRepository;
 import edu.yacoubi.crm.repository.NoteRepository;
+import edu.yacoubi.crm.util.TestAppender;
+import edu.yacoubi.crm.util.TestDataUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,7 @@ class EntityValidatorIntegrationTest {
     }
 
     @Test
-    public void itShouldValidateEmployeeExists() {
+    void itShouldValidateEmployeeExists() {
         // Given
         Employee savedEmployee = employeeRepository.save(employeeA);
 
@@ -68,7 +69,7 @@ class EntityValidatorIntegrationTest {
     }
 
     @Test
-    public void itShouldThrowWhenEmployeeDoesNotExist() {
+    void itShouldThrowWhenEmployeeDoesNotExist() {
         // Given
         Long employeeId = 999L;
         String errorMessage = "Employee not found with ID: " + employeeId;
@@ -94,7 +95,7 @@ class EntityValidatorIntegrationTest {
     }
 
     @Test
-    public void itShouldValidateNoteExists() {
+    void itShouldValidateNoteExists() {
         // Given
         Note savedNote = noteRepository
                 .save(TestDataUtil.createNoteA(customerRepository.save(TestDataUtil.createCustomerB(employeeRepository.save(employeeA)))));
@@ -118,7 +119,7 @@ class EntityValidatorIntegrationTest {
     }
 
     @Test
-    public void itShouldThrowWhenNoteDoesNotExist() {
+    void itShouldThrowWhenNoteDoesNotExist() {
         // Given
         Long noteId = 999L;
         String errorMessage = "Note not found with ID: " + noteId;
@@ -144,7 +145,7 @@ class EntityValidatorIntegrationTest {
     }
 
     @Test
-    public void itShouldValidateCustomerExists() {
+    void itShouldValidateCustomerExists() {
         // Given
         Customer savedCustomer = customerRepository
                 .save(TestDataUtil.createCustomerA(employeeRepository.save(employeeA)));
@@ -168,7 +169,7 @@ class EntityValidatorIntegrationTest {
     }
 
     @Test
-    public void itShouldThrowWhenCustomerDoesNotExist() {
+    void itShouldThrowWhenCustomerDoesNotExist() {
         // Given
         Long customerId = 999L;
         String errorMessage = "Customer not found with ID: " + customerId;
@@ -194,7 +195,40 @@ class EntityValidatorIntegrationTest {
     }
 
     @Test
-    public void itShouldThrowWhenInactiveEmployeeDoesNotExit() {
+    void itShouldValidateInactiveEmployeeExits() {
+        // Given
+        final InactiveEmployee inactiveEmployee = InactiveEmployee.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .email("johndoe@example.com")
+                .department("IT")
+                .originalEmployeeId(101L)
+                .build();
+        final InactiveEmployee existingInactiveEmployee = inactiveEmployeeRepository.save(inactiveEmployee);
+        final Long originalEmployeeId = existingInactiveEmployee.getOriginalEmployeeId();
+
+        // When
+        underTest.validateInactiveEmployeeExists(originalEmployeeId);
+
+        // Then
+        // verify logs
+        assertTrue(
+                testAppender.contains(
+                        String.format("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d", originalEmployeeId),
+                        "INFO"
+                ),
+                "Should indicate the entry point for inactiveEmployee exists"
+        );
+        assertTrue(testAppender.contains(
+                        String.format("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated", originalEmployeeId),
+                        "INFO"
+                ),
+                "Should indicate the exit point for inactiveEmployee successfully validated"
+        );
+    }
+
+    @Test
+    void itShouldThrowWhenInactiveEmployeeDoesNotExit() {
         // Given
         Long originalEmployeeId = 999L;
         String errorMessage = "Inactive employee not found with ID: " + originalEmployeeId;
@@ -214,8 +248,76 @@ class EntityValidatorIntegrationTest {
                 "ERROR"
         ));
         assertFalse(testAppender.contains(
-                String.format("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated", originalEmployeeId),
+                String.format(
+                        "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
+                        originalEmployeeId
+                ),
                 "INFO"
         ));
+    }
+
+    @Test
+    void itShouldReturnFalseWhenEmployeeHasNoCustomers() {
+        // Given
+        Employee employeeWithoutCustomers = employeeRepository.save(TestDataUtil.createEmployeeA());
+
+        // When
+        boolean hasCustomers = underTest.hasCustomers(employeeWithoutCustomers.getId());
+
+        // Then
+        assertFalse(hasCustomers);
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::hasCustomers employeeId: %d",
+                                employeeWithoutCustomers.getId()
+                        ),
+                        "INFO"
+                ),
+                "Should indicate the entry point for hasCustomers"
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::hasCustomers employeeId: %d hasCustomers: %s", employeeWithoutCustomers.getId(), hasCustomers)
+                        ,
+                        "INFO"
+                ),
+                "Should indicate the exit point for hasCustomers"
+        );
+    }
+
+    @Test
+    void itShouldReturnTrueWhenEmployeeHasCustomers() {
+        // Given
+        final Employee employee = TestDataUtil.createEmployeeA();
+        final Employee existingEmployee = employeeRepository.save(employee);
+        final Customer customerB = TestDataUtil.createCustomerB(existingEmployee);
+        existingEmployee.getCustomers().add(customerB);
+        Employee existingEmployeeWithCustomers = employeeRepository.save(existingEmployee);
+
+        // When
+        boolean hasCustomers = underTest.hasCustomers(existingEmployeeWithCustomers.getId());
+
+        // Then
+        assertTrue(hasCustomers);
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::hasCustomers employeeId: %d", existingEmployeeWithCustomers.getId())
+                        ,
+                        "INFO"
+                ),
+                "Should indicate the entry point for hasCustomers"
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::hasCustomers employeeId: %d hasCustomers: %s", existingEmployeeWithCustomers.getId(), hasCustomers)
+                        ,
+                        "INFO"
+                ),
+                "Should indicate the exit point for hasCustomers"
+        );
     }
 }
