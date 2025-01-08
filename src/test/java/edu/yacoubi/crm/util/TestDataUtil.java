@@ -3,10 +3,7 @@ package edu.yacoubi.crm.util;
 import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.dto.employee.EmployeeRequestDTO;
 import edu.yacoubi.crm.dto.note.NoteRequestDTO;
-import edu.yacoubi.crm.model.Customer;
-import edu.yacoubi.crm.model.Employee;
-import edu.yacoubi.crm.model.InteractionType;
-import edu.yacoubi.crm.model.Note;
+import edu.yacoubi.crm.model.*;
 
 import java.time.LocalDate;
 
@@ -30,6 +27,16 @@ public final class TestDataUtil {
                 .email("bruce.wayne@example.com")
                 .department("Sales")
                 .build();
+    }
+
+    public static InactiveEmployee createInactiveEmployeeA(Long originalEmployeeId) {
+        return InactiveEmployee.builder()
+               .firstName("Jon")
+               .lastName("Wayne")
+               .email("jon.wayne@example.com")
+               .department("Sales")
+               .originalEmployeeId(originalEmployeeId)
+               .build();
     }
 
     public static EmployeeRequestDTO createEmployeeRequestDTOA() {

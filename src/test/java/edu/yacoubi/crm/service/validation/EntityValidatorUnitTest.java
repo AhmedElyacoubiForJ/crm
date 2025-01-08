@@ -26,6 +26,7 @@ class EntityValidatorUnitTest {
     private NoteRepository noteRepository;
     @Mock
     private InactiveEmployeeRepository inactiveEmployeeRepository;
+
     @InjectMocks
     private EntityValidator underTest;
 
@@ -34,7 +35,7 @@ class EntityValidatorUnitTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        Logger logger = (Logger) LoggerFactory.getLogger(EntityValidator.class);
+        final Logger logger = (Logger) LoggerFactory.getLogger(EntityValidator.class);
         testAppender = new TestAppender();
         testAppender.start();
         logger.addAppender(testAppender);
@@ -43,7 +44,7 @@ class EntityValidatorUnitTest {
     @Test
     void itShouldValidateEmployeeExists() {
         // Given
-        Long employeeId = 1L;
+        final Long employeeId = 1L;
         when(employeeRepository.existsById(employeeId)).thenReturn(true);
 
         // When
@@ -51,22 +52,33 @@ class EntityValidatorUnitTest {
 
         // Then
         verify(employeeRepository, times(1)).existsById(employeeId);
-
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateEmployeeExists employeeId: %d", employeeId),
-                "INFO"
-        ));
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateEmployeeExists employeeId: %d successfully validated", employeeId),
-                "INFO"
-        ));
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateEmployeeExists employeeId: %d",
+                                employeeId
+                        ),
+                        "INFO"
+                ),
+                "should indicate the validation entry point employee exists"
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateEmployeeExists employeeId: %d successfully validated",
+                                employeeId
+                        ),
+                        "INFO"
+                ),
+                "should indicate the validation exit point employee exists"
+        );
     }
 
     @Test
     void itShouldThrowWhenEmployeeDoesNotExit() {
         // Given
-        Long employeeId = 1L;
-        String errorMessage = "Employee not found with ID: " + employeeId;
+        final Long employeeId = 1L;
+        final String errorMessage = "Employee not found with ID: " + employeeId;
         when(employeeRepository.existsById(employeeId)).thenReturn(false);
 
         // When
@@ -77,18 +89,36 @@ class EntityValidatorUnitTest {
         // Then
         verify(employeeRepository, times(1)).existsById(employeeId);
         assertEquals(errorMessage, exception.getMessage());
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateEmployeeExists employeeId: %d", employeeId),
-                "INFO"
-        ));
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateEmployeeExists error: %s", errorMessage),
-                "ERROR"
-        ));
-        assertFalse(testAppender.contains(
-                String.format("EntityValidator::validateEmployeeExists employeeId: %d successfully validated", employeeId),
-                "INFO"
-        ));
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateEmployeeExists employeeId: %d",
+                                employeeId
+                        ),
+                        "INFO"
+                ),
+                "should indicate the validation entry point employee exists"
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateEmployeeExists error: %s",
+                                errorMessage
+                        ),
+                        "ERROR"
+                ),
+                "should indicate error employee does not exist"
+        );
+        assertFalse(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateEmployeeExists employeeId: %d successfully validated",
+                                employeeId
+                        ),
+                        "INFO"
+                ),
+                "should indicate the validation exit point employee exists"
+        );
     }
 
     @Test
@@ -102,26 +132,33 @@ class EntityValidatorUnitTest {
 
         // Then
         verify(noteRepository, times(1)).existsById(noteId);
-
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateNoteExists id: %d", noteId),
-                "INFO"
-        ));
-        assertFalse(testAppender.contains(
-                String.format("EntityValidator::validateNoteExists id: %d not found", noteId),
-                "ERROR"
-        ));
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateNoteExists id: %d successfully validated", noteId),
-                "INFO"
-        ));
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateNoteExists id: %d",
+                                noteId
+                        ),
+                        "INFO"
+                ),
+                "should indicate the validation entry point note exists"
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateNoteExists id: %d successfully validated",
+                                noteId
+                        ),
+                        "INFO"
+                ),
+                "should indicate the validation exit point note exists"
+        );
     }
 
     @Test
     void itShouldThrowWhenNoteDoesNotExit() {
         // Given
-        Long noteId = 1L;
-        String errorMessage = "Note not found with ID: " + noteId;
+        final Long noteId = 1L;
+        final String errorMessage = "Note not found with ID: " + noteId;
         when(noteRepository.existsById(noteId)).thenReturn(false);
 
         // When
@@ -131,26 +168,43 @@ class EntityValidatorUnitTest {
 
         // Then
         verify(noteRepository, times(1)).existsById(noteId);
-
         assertEquals(errorMessage, exception.getMessage());
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateNoteExists id: %d", noteId),
-                "INFO"
-        ));
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateNoteExists error: %s", errorMessage),
-                "ERROR"
-        ));
-        assertFalse(testAppender.contains(
-                String.format("EntityValidator::validateNoteExists id: %d successfully validated", noteId),
-                "INFO"
-        ));
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateNoteExists id: %d",
+                                noteId
+                        ),
+                        "INFO"
+                ),
+                "should indicate the validation entry point note exists"
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateNoteExists error: %s",
+                                errorMessage
+                        ),
+                        "ERROR"
+                ),
+                "should indicate error note does not exist"
+        );
+        assertFalse(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateNoteExists id: %d successfully validated",
+                                noteId
+                        ),
+                        "INFO"
+                ),
+                "should indicate the validation exit point note exists"
+        );
     }
 
     @Test
     void itShouldValidateCustomerExists() {
         // Given
-        Long customerId = 1L;
+        final Long customerId = 1L;
         when(customerRepository.existsById(customerId)).thenReturn(true);
 
         // When
@@ -158,26 +212,33 @@ class EntityValidatorUnitTest {
 
         // Then
         verify(customerRepository, times(1)).existsById(customerId);
-
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateCustomerExists id: %d", customerId),
-                "INFO"
-        ));
-        assertFalse(testAppender.contains(
-                String.format("EntityValidator::validateCustomerExists id: %d not found", customerId),
-                "ERROR"
-        ));
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateCustomerExists id: %d successfully validated", customerId),
-                "INFO"
-        ));
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateCustomerExists id: %d",
+                                customerId
+                        ),
+                        "INFO"
+                ),
+                "should indicate the validation entry point for customer exists"
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateCustomerExists id: %d successfully validated",
+                                customerId
+                        ),
+                        "INFO"
+                ),
+                "should indicate the validation exit point for customer exists"
+        );
     }
 
     @Test
     void itShouldThrowWhenCustomerDoesNotExit() {
         // Given
-        Long customerId = 1L;
-        String errorMessage = "Customer not found with ID: " + customerId;
+        final Long customerId = 1L;
+        final String errorMessage = "Customer not found with ID: " + customerId;
         when(customerRepository.existsById(customerId)).thenReturn(false);
 
         // When
@@ -187,20 +248,37 @@ class EntityValidatorUnitTest {
 
         // Then
         verify(customerRepository, times(1)).existsById(customerId);
-
         assertEquals(errorMessage, exception.getMessage());
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateCustomerExists id: %d", customerId),
-                "INFO"
-        ));
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateCustomerExists error: %s", errorMessage),
-                "ERROR"
-        ));
-        assertFalse(testAppender.contains(
-                String.format("EntityValidator::validateCustomerExists id: %d successfully validated", customerId),
-                "INFO"
-        ));
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateCustomerExists id: %d",
+                                customerId
+                        ),
+                        "INFO"
+                ),
+                "should indicate the validation entry point for customer exists"
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateCustomerExists error: %s",
+                                errorMessage
+                        ),
+                        "ERROR"
+                ),
+                "should indicate error customer does not exist"
+        );
+        assertFalse(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateCustomerExists id: %d successfully validated",
+                                customerId
+                        ),
+                        "INFO"
+                ),
+                "should indicate the validation exit point for customer exists"
+        );
     }
 
     @Test
@@ -213,30 +291,33 @@ class EntityValidatorUnitTest {
         underTest.validateInactiveEmployeeExists(originalEmployeeId);
 
         // Then
-        // Verify repo. call
         verify(inactiveEmployeeRepository, times(1)).existsByOriginalEmployeeId(originalEmployeeId);
-
-        // verify logs
         assertTrue(
                 testAppender.contains(
-                        String.format("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d", originalEmployeeId),
+                        String.format(
+                                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d",
+                                originalEmployeeId
+                        ),
                         "INFO"
                 ),
-                "Should indicate the entry point for inactiveEmployee exists"
+                "Should indicate the validation entry point for inactiveEmployee exists"
         );
         assertTrue(testAppender.contains(
-                        String.format("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated", originalEmployeeId),
+                        String.format(
+                                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
+                                originalEmployeeId
+                        ),
                         "INFO"
                 ),
-                "Should indicate the exit point for inactiveEmployee successfully validated"
+                "Should indicate the validation exit point for inactiveEmployee exists"
         );
     }
 
     @Test
     void itShouldThrowWhenInactiveEmployeeDoesNotExit() {
         // Given
-        Long originalEmployeeId = 1L;
-        String errorMessage = "Inactive employee not found with ID: " + originalEmployeeId;
+        final Long originalEmployeeId = 1L;
+        final String errorMessage = "Inactive employee not found with ID: " + originalEmployeeId;
         when(inactiveEmployeeRepository.existsByOriginalEmployeeId(originalEmployeeId)).thenReturn(false);
 
         // When
@@ -246,16 +327,34 @@ class EntityValidatorUnitTest {
 
         // Then
         verify(inactiveEmployeeRepository, times(1)).existsByOriginalEmployeeId(originalEmployeeId);
-
         assertEquals(errorMessage, exception.getMessage());
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d", originalEmployeeId),
-                "INFO"
-        ));
-        assertTrue(testAppender.contains(
-                String.format("EntityValidator::validateInactiveEmployeeExists error: %s", errorMessage),
-                "ERROR"
-        ));
+        assertTrue(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d",
+                                originalEmployeeId
+                        ),
+                        "INFO"
+                ),
+                "Should indicate the validation entry point for inactiveEmployee exists"
+        );
+        assertTrue(
+                testAppender.contains(
+                        String.format("EntityValidator::validateInactiveEmployeeExists error: %s", errorMessage),
+                        "ERROR"
+                ),
+                "Should indicate error inactive employee does not exist"
+        );
+        assertFalse(
+                testAppender.contains(
+                        String.format(
+                                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
+                                originalEmployeeId
+                        ),
+                        "INFO"
+                ),
+                "Should indicate the validation exit point for inactiveEmployee exists"
+        );
     }
 
     @Test
@@ -273,17 +372,24 @@ class EntityValidatorUnitTest {
         assertFalse(result);
         assertTrue(
                 testAppender.contains(
-                        String.format("EntityValidator::hasCustomers employeeId: %d", employeeId),
+                        String.format(
+                                "EntityValidator::hasCustomers employeeId: %d",
+                                employeeId
+                        ),
                         "INFO"
                 ),
-                "Should indicate the entry point for hasCustomers"
+                "Should indicate the validation entry point for hasCustomers"
         );
         assertTrue(
                 testAppender.contains(
-                        String.format("EntityValidator::hasCustomers employeeId: %d hasCustomers: %s", employeeId, hasCustomers),
+                        String.format(
+                                "EntityValidator::hasCustomers employeeId: %d hasCustomers: %s",
+                                employeeId,
+                                hasCustomers
+                        ),
                         "INFO"
                 ),
-                "Should indicate the exit point for hasCustomers"
+                "Should indicate the validation exit point for hasCustomers"
         );
     }
 
@@ -302,17 +408,24 @@ class EntityValidatorUnitTest {
         assertTrue(result);
         assertTrue(
                 testAppender.contains(
-                        String.format("EntityValidator::hasCustomers employeeId: %d", employeeId),
+                        String.format(
+                                "EntityValidator::hasCustomers employeeId: %d",
+                                employeeId
+                        ),
                         "INFO"
                 ),
-                "Should indicate the entry point for hasCustomers"
+                "Should indicate the validation entry point for hasCustomers"
         );
         assertTrue(
                 testAppender.contains(
-                        String.format("EntityValidator::hasCustomers employeeId: %d hasCustomers: %s", employeeId, hasCustomers),
+                        String.format(
+                                "EntityValidator::hasCustomers employeeId: %d hasCustomers: %s",
+                                employeeId,
+                                hasCustomers
+                        ),
                         "INFO"
                 ),
-                "Should indicate the exit point for hasCustomers"
+                "Should indicate the validation exit point for hasCustomers"
         );
     }
 }

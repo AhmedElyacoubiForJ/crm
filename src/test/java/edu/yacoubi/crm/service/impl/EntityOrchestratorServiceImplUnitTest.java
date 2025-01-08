@@ -780,16 +780,16 @@ class EntityOrchestratorServiceImplUnitTest {
         // Verify logger message
         assertTrue(
                 testAppender.contains(
-                String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
-                "INFO"
-        ),
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
+                        "INFO"
+                ),
                 LOG_INFO_MSG_ENTRY_POINT
         );
         assertTrue(
                 testAppender.contains(
-                String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
-                "INFO"
-        ),
+                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
+                        "INFO"
+                ),
                 LOG_INFO_MSG_EXIT_POINT
         );
     }
