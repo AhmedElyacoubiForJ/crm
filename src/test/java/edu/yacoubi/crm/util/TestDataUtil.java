@@ -30,13 +30,13 @@ public final class TestDataUtil {
     }
 
     public static InactiveEmployee createInactiveEmployeeA(Long originalEmployeeId) {
-        return InactiveEmployee.builder()
-               .firstName("Jon")
-               .lastName("Wayne")
-               .email("jon.wayne@example.com")
-               .department("Sales")
-               .originalEmployeeId(originalEmployeeId)
-               .build();
+        Employee employeeA = createEmployeeA();
+        employeeA.setId(originalEmployeeId);
+
+        return TransformerUtil.transform(
+                EntityTransformer.employeeToInactiveEmployee,
+                employeeA
+        );
     }
 
     public static EmployeeRequestDTO createEmployeeRequestDTOA() {
@@ -124,11 +124,11 @@ public final class TestDataUtil {
 
     public static NoteRequestDTO createNoteRequestDTOA(Customer customer) {
         return NoteRequestDTO.builder()
-               .content("First interaction")
-               .date(LocalDate.now())
-               .interactionType(InteractionType.EMAIL)
-               .customerId(customer.getId())
-               .build();
+                .content("First interaction")
+                .date(LocalDate.now())
+                .interactionType(InteractionType.EMAIL)
+                .customerId(customer.getId())
+                .build();
     }
 
     public static Note createNoteB(Customer customer) {

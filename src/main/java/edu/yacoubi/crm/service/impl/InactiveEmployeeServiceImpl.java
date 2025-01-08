@@ -5,6 +5,8 @@ import edu.yacoubi.crm.model.InactiveEmployee;
 import edu.yacoubi.crm.repository.InactiveEmployeeRepository;
 import edu.yacoubi.crm.service.IInactiveEmployeeService;
 import edu.yacoubi.crm.service.validation.EntityValidator;
+import edu.yacoubi.crm.util.EntityTransformer;
+import edu.yacoubi.crm.util.TransformerUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,14 +35,8 @@ public class InactiveEmployeeServiceImpl implements IInactiveEmployeeService {
             throw new IllegalArgumentException("Employee has assigned customers.");
         }
 
-        // Erstellen und Speichern des InactiveEmployee
-        InactiveEmployee inactiveEmployee = InactiveEmployee.builder()
-                .firstName(employee.getFirstName())
-                .lastName(employee.getLastName())
-                .email(employee.getEmail())
-                .department(employee.getDepartment())
-                .originalEmployeeId(employee.getId())
-                .build();
+        InactiveEmployee inactiveEmployee = TransformerUtil
+                .transform(EntityTransformer.employeeToInactiveEmployee, employee);
 
         return inactiveEmployeeRepository.save(inactiveEmployee);
     }

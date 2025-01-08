@@ -11,6 +11,7 @@ import edu.yacoubi.crm.dto.note.NoteRequestDTO;
 import edu.yacoubi.crm.dto.note.NoteResponseDTO;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
+import edu.yacoubi.crm.model.InactiveEmployee;
 import edu.yacoubi.crm.model.Note;
 
 /**
@@ -110,6 +111,18 @@ public class EntityTransformer {
                     .address(customer.getAddress())
                     .lastInteractionDate(customer.getLastInteractionDate())
                     .employeeId(customer.getEmployee().getId())
+                    .build();
+
+    /**
+     * Transformer zur Umwandlung einen Employee in ein InactiveEmployee.
+     */
+    public static final ITransformer<Employee, InactiveEmployee> employeeToInactiveEmployee =
+            employee -> InactiveEmployee.builder()
+                    .firstName(employee.getFirstName())
+                    .lastName(employee.getLastName())
+                    .email(employee.getEmail())
+                    .department(employee.getDepartment())
+                    .originalEmployeeId(employee.getId())
                     .build();
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
