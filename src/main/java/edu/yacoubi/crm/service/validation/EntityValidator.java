@@ -68,12 +68,12 @@ public class EntityValidator {
     }
 
     // Methode zur Überprüfung, ob ein Employee Kunden hat
-    public boolean hasCustomers(Long employeeId) {
-        log.info("EntityValidator::hasCustomers employeeId: {}", employeeId);
+    public boolean validateEmployeeHasCustomers(Long employeeId) {
+        log.info("EntityValidator::validateEmployeeHasCustomers employeeId: {}", employeeId);
 
         boolean hasCustomers = employeeRepository.hasCustomers(employeeId);
 
-        log.info("EntityValidator::hasCustomers employeeId: {} hasCustomers: {}", employeeId, hasCustomers);
+        log.info("EntityValidator::validateEmployeeHasCustomers employeeId: {} hasCustomers: {}", employeeId, hasCustomers);
         return hasCustomers;
     }
 }

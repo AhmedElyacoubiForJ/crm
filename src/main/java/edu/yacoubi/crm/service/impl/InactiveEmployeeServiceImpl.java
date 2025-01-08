@@ -29,7 +29,7 @@ public class InactiveEmployeeServiceImpl implements IInactiveEmployeeService {
         // Feld-Validierung des Employees
         validateBasicEmployeeFields(employee);
 
-        if (entityValidator.hasCustomers(employee.getId())) {
+        if (entityValidator.validateEmployeeHasCustomers(employee.getId())) {
             throw new IllegalArgumentException("Employee has assigned customers.");
         }
 

@@ -365,7 +365,7 @@ class EntityValidatorUnitTest {
         when(employeeRepository.hasCustomers(employeeId)).thenReturn(hasCustomers);
 
         // When
-        final boolean result = underTest.hasCustomers(employeeId);
+        final boolean result = underTest.validateEmployeeHasCustomers(employeeId);
 
         // Then
         verify(employeeRepository, times(1)).hasCustomers(employeeId);
@@ -373,7 +373,7 @@ class EntityValidatorUnitTest {
         assertTrue(
                 testAppender.contains(
                         String.format(
-                                "EntityValidator::hasCustomers employeeId: %d",
+                                "EntityValidator::validateEmployeeHasCustomers employeeId: %d",
                                 employeeId
                         ),
                         "INFO"
@@ -383,7 +383,7 @@ class EntityValidatorUnitTest {
         assertTrue(
                 testAppender.contains(
                         String.format(
-                                "EntityValidator::hasCustomers employeeId: %d hasCustomers: %s",
+                                "EntityValidator::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
                                 employeeId,
                                 hasCustomers
                         ),
@@ -394,14 +394,14 @@ class EntityValidatorUnitTest {
     }
 
     @Test
-    void itShouldReturnTrueWhenEmployeeHasCustomers() {
+    void itShouldReturnTrueWhenEmployeeValidateEmployeeHasCustomers() {
         // Given
         final Long employeeId = 1L;
         final boolean hasCustomers = true;
         when(employeeRepository.hasCustomers(employeeId)).thenReturn(hasCustomers);
 
         // When
-        final boolean result = underTest.hasCustomers(employeeId);
+        final boolean result = underTest.validateEmployeeHasCustomers(employeeId);
 
         // Then
         verify(employeeRepository, times(1)).hasCustomers(employeeId);
@@ -409,7 +409,7 @@ class EntityValidatorUnitTest {
         assertTrue(
                 testAppender.contains(
                         String.format(
-                                "EntityValidator::hasCustomers employeeId: %d",
+                                "EntityValidator::validateEmployeeHasCustomers employeeId: %d",
                                 employeeId
                         ),
                         "INFO"
@@ -419,7 +419,7 @@ class EntityValidatorUnitTest {
         assertTrue(
                 testAppender.contains(
                         String.format(
-                                "EntityValidator::hasCustomers employeeId: %d hasCustomers: %s",
+                                "EntityValidator::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
                                 employeeId,
                                 hasCustomers
                         ),

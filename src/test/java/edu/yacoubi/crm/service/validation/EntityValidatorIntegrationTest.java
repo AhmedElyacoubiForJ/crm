@@ -368,14 +368,14 @@ class EntityValidatorIntegrationTest {
         final Long employeeId = existingEmployeeWithoutCustomers.getId();
 
         // When
-        final boolean hasCustomers = underTest.hasCustomers(employeeId);
+        final boolean hasCustomers = underTest.validateEmployeeHasCustomers(employeeId);
 
         // Then
         assertFalse(hasCustomers);
         assertTrue(
                 testAppender.contains(
                         String.format(
-                                "EntityValidator::hasCustomers employeeId: %d",
+                                "EntityValidator::validateEmployeeHasCustomers employeeId: %d",
                                 employeeId
                         ),
                         "INFO"
@@ -385,7 +385,7 @@ class EntityValidatorIntegrationTest {
         assertTrue(
                 testAppender.contains(
                         String.format(
-                                "EntityValidator::hasCustomers employeeId: %d hasCustomers: %s",
+                                "EntityValidator::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
                                 employeeId,
                                 hasCustomers
                         ),
@@ -406,13 +406,13 @@ class EntityValidatorIntegrationTest {
         employeeRepository.save(existingEmployee);
 
         // When
-        final boolean hasCustomers = underTest.hasCustomers(employeeId);
+        final boolean hasCustomers = underTest.validateEmployeeHasCustomers(employeeId);
 
         // Then
         assertTrue(
                 testAppender.contains(
                         String.format(
-                                "EntityValidator::hasCustomers employeeId: %d",
+                                "EntityValidator::validateEmployeeHasCustomers employeeId: %d",
                                 employeeId
                         ),
                         "INFO"
@@ -422,7 +422,7 @@ class EntityValidatorIntegrationTest {
         assertTrue(
                 testAppender.contains(
                         String.format(
-                                "EntityValidator::hasCustomers employeeId: %d hasCustomers: %s",
+                                "EntityValidator::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
                                 employeeId,
                                 hasCustomers
                         ),
