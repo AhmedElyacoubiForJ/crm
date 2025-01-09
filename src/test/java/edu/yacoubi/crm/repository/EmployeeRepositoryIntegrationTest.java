@@ -1,8 +1,10 @@
 package edu.yacoubi.crm.repository;
 
-import edu.yacoubi.crm.util.TestDataUtil;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
+import edu.yacoubi.crm.util.TestDataUtil;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,129 +12,236 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Integrationstests für das EmployeeRepository.
+ * <p>
+ * Diese Tests überprüfen die Funktionalität der benutzerdefinierten Abfragen
+ * und stellen sicher, dass die Interaktionen mit der Datenbank wie erwartet
+ * funktionieren. Diese Tests verwenden JPA und Hibernate, um die Datenbankzugriffe
+ * zu simulieren und zu überprüfen.
+ * <p>
+ * Fachbegriffe und Konzepte:
+ * - Persistence Context: Ein von JPA/Hibernate verwalteter Kontext, der alle
+ * verwalteten Entitäten nachverfolgt. Dieser Kontext sorgt dafür, dass Änderungen
+ * an Entitäten automatisch synchronisiert werden.
+ * - Auto-generierte IDs: Beim Speichern von Entitäten generiert die Datenbank
+ * automatisch eindeutige IDs, die den Entitäten zugewiesen werden. Diese IDs
+ * werden sofort im Persistence Context aktualisiert und in den entsprechenden
+ * Objekten reflektiert.
+ * - `@DataJpaTest`: Eine Annotation, die speziell für JPA-Tests vorgesehen ist.
+ * Sie konfiguriert eine In-Memory-Datenbank und initialisiert die Repository-Komponenten.
+ * - `@DirtiesContext`: Eine Annotation, die dafür sorgt, dass der Anwendungskontext
+ * nach jedem Testmethodenlauf bereinigt wird, um Seiteneffekte zwischen den Tests
+ * zu vermeiden.
+ * <p>
+ * Die Tests in dieser Klasse decken folgende Szenarien ab:
+ * - Suche nach Mitarbeitern nach Vorname (Case-Insensitive) oder Abteilung
+ * (Case-Insensitive).
+ * - Sicherstellung, dass die richtigen Ergebnisse zurückgegeben werden, wenn
+ * verschiedene Suchparameter verwendet werden.
+ * <p>
+ * Beispiel für einen Testfall:
+ * - itShouldReturnEmployeesByFirstNameContainsIgnoreCaseOrDepartmentContainsIgnoreCase:
+ * Testet, ob Mitarbeiter gefunden werden, deren Vorname oder Abteilung den angegebenen
+ * Suchstring (unabhängig von Groß- und Kleinschreibung) enthält.
+ */
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class EmployeeRepositoryUnitTest {
+class EmployeeRepositoryIntegrationTest {
 
     @Autowired
     private EmployeeRepository underTest;
 
+    /**
+     * Testet, ob Mitarbeiter gefunden werden, deren Vorname oder Abteilung
+     * den angegebenen Suchstring (unabhängig von Groß- und Kleinschreibung) enthält.
+     */
     @Test
-    public void itShouldReturnEmployeesByFirstNameIgnoreCaseContainingSearchString() {
+    void itShouldReturnEmployeesByFirstNameIgnoreCaseContainsSearchString() {
         // Given
-        Employee employeeA = TestDataUtil.createEmployeeA();
-        employeeA.setFirstName("John");
-        Employee employeeB = TestDataUtil.createEmployeeB();
-        employeeB.setFirstName("Jane");
-        underTest.saveAll(List.of(employeeA, employeeB));
+        final String searchStr = "j";
+        final int expectedCounter = 2;
+        final NamedEmployeeObject nEmployeeObjA = new NamedEmployeeObject(
+                "employeeA", TestDataUtil.createEmployeeA()
+        );
+        final NamedEmployeeObject nEmployeeObjB = new NamedEmployeeObject(
+                "employeeB", TestDataUtil.createEmployeeB()
+        );
+        nEmployeeObjA.getEmployeeObject().setFirstName("John");
+        nEmployeeObjB.getEmployeeObject().setFirstName("Jane");
+        underTest.saveAll(
+                List.of(nEmployeeObjA.getEmployeeObject(), nEmployeeObjB.getEmployeeObject())
+        );
 
         // When
-        List<Employee> byNameContainingIgnoreCase =
-                underTest.findByFirstNameIgnoreCaseContaining("j").get();
+        final List<Employee> byFNameContainsIgnoreCase = underTest
+                .findByFirstNameIgnoreCaseContaining(searchStr)
+                .orElse(new ArrayList<>());
 
         // Then
-        assertEquals(2, byNameContainingIgnoreCase.size());
-        assertTrue(byNameContainingIgnoreCase.contains(employeeA));
-        assertTrue(byNameContainingIgnoreCase.contains(employeeB));
+        assertEquals(expectedCounter, byFNameContainsIgnoreCase.size(),
+                "Expected to find " + expectedCounter + " employees with first name containing " + searchStr);
+        assertTrue(byFNameContainsIgnoreCase.contains(nEmployeeObjA.getEmployeeObject()),
+                "Expected to find " + nEmployeeObjA.getName() + " in the result set");
+        assertTrue(byFNameContainsIgnoreCase.contains(nEmployeeObjB.getEmployeeObject()),
+                "Expected to find " + nEmployeeObjB.getName() + " in the result set");
     }
 
     @Test
-    public void itShouldReturnEmployeesByEmailIgnoreCaseContainingSearchString() {
+    void itShouldReturnEmployeesByEmailIgnoreCaseContainsSearchString() {
         // Given
-        Employee employeeA = TestDataUtil.createEmployeeA();
-        employeeA.setEmail("john.doe@example.com");
-        Employee employeeB = TestDataUtil.createEmployeeB();
-        employeeB.setEmail("jahne.doe@example.com");
-        underTest.saveAll(List.of(employeeA, employeeB));
+        final String searchStr = "HN";
+        final int expectedCounter = 2;
+        final NamedEmployeeObject nEmployeeObjA = new NamedEmployeeObject(
+                "employeeA", TestDataUtil.createEmployeeA()
+        );
+        final NamedEmployeeObject nEmployeeObjB = new NamedEmployeeObject(
+                "employeeB", TestDataUtil.createEmployeeB()
+        );
+        nEmployeeObjA.getEmployeeObject().setEmail("john.doe@example.com");
+        nEmployeeObjB.getEmployeeObject().setEmail("jahne.doe@example.com");
+        underTest.saveAll(
+                List.of(nEmployeeObjA.getEmployeeObject(), nEmployeeObjB.getEmployeeObject())
+        );
 
         // When
-        List<Employee> byEmailContainingIgnoreCase =
-                underTest.findByEmailIgnoreCaseContaining("HN").get();
+        final List<Employee> byEmailContainsIgnoreCase = underTest
+                .findByEmailIgnoreCaseContaining(searchStr)
+                .orElse(new ArrayList<>());
 
         // Then
-        assertEquals(2, byEmailContainingIgnoreCase.size());
-        assertTrue(byEmailContainingIgnoreCase.contains(employeeA));
-        assertTrue(byEmailContainingIgnoreCase.contains(employeeB));
+        assertEquals(expectedCounter, byEmailContainsIgnoreCase.size(),
+                "Expected to find " + expectedCounter + " employees with email containing " + searchStr);
+        assertTrue(byEmailContainsIgnoreCase.contains(nEmployeeObjA.getEmployeeObject()),
+                "Expected to find " + nEmployeeObjA.getName() + " in the result set");
+        assertTrue(byEmailContainsIgnoreCase.contains(nEmployeeObjB.getEmployeeObject()),
+                "Expected to find " + nEmployeeObjB.getName() + " in the result set");
     }
 
     @Test
-    public void itShouldReturnEmployeesByFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase() {
+    void itShouldReturnEmployeesByFirstNameContainsIgnoreCaseOrDepartmentContainsIgnoreCase() {
         // Given
-        Employee employeeA = TestDataUtil.createEmployeeA();
-        employeeA.setFirstName("John");
+        final String fNameSearchStr = "oh";
+        final String departmentSearchStr = "Sales";
+        final NamedEmployeeObject nEmployeeObjA = new NamedEmployeeObject(
+                "employeeA", TestDataUtil.createEmployeeA()
+        );
+        nEmployeeObjA.getEmployeeObject().setFirstName("John");
+        nEmployeeObjA.getEmployeeObject().setDepartment("Sales");
+        final NamedEmployeeObject nEmployeeObjB = new NamedEmployeeObject(
+                "employeeB", TestDataUtil.createEmployeeB()
+        );
+        nEmployeeObjB.getEmployeeObject().setFirstName("Jane");
+        nEmployeeObjB.getEmployeeObject().setDepartment("Marketing");
+        underTest.saveAll(
+                List.of(nEmployeeObjA.getEmployeeObject(), nEmployeeObjB.getEmployeeObject())
+        );
+        final Pageable pageable = PageRequest.of(0, 10);
+
+
+        // When
+        Page<Employee> byFNameContainsOrDepartmentContainsAllIgnoreCase = underTest
+                .findByFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase(
+                        fNameSearchStr, departmentSearchStr, pageable
+                );
+
+        // Then
+        long totalElements = byFNameContainsOrDepartmentContainsAllIgnoreCase.getTotalElements();
+        int totalPages = byFNameContainsOrDepartmentContainsAllIgnoreCase.getTotalPages();
+        int size = byFNameContainsOrDepartmentContainsAllIgnoreCase.getContent().size();
+        List<Employee> content = byFNameContainsOrDepartmentContainsAllIgnoreCase.getContent();
+        assertEquals(1, totalElements);
+        assertEquals(1, totalPages);
+        assertEquals(1, size);
+        assertTrue(content.contains(nEmployeeObjA.getEmployeeObject()),
+                "Expected to find " + nEmployeeObjA.getName() + " in the result set");
+        assertFalse(content.contains(nEmployeeObjB.getEmployeeObject()),
+                "Expected not to find " + nEmployeeObjB.getName() + " in the result set");
+    }
+
+    @Test
+    void itShouldReturnAllDepartments() {
+        // Given
+        final Employee employeeA = TestDataUtil.createEmployeeA();
         employeeA.setDepartment("Sales");
-        Employee employeeB = TestDataUtil.createEmployeeB();
-        employeeB.setFirstName("Jane");
-        employeeB.setDepartment("Marketing");
-
-        underTest.saveAll(List.of(employeeA, employeeB));
-
-        Pageable pageable = PageRequest.of(0, 10);
-
-        // When
-        Page<Employee> byFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase =
-                underTest.findByFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase("oh", "sales", pageable);
-
-
-        // Then
-        assertEquals(1, byFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase.getTotalElements());
-        assertEquals(1, byFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase.getTotalPages());
-        assertEquals(1, byFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase.getContent().size());
-        assertTrue(byFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase.getContent().contains(employeeA));
-    }
-
-    @Test
-    public void itShouldReturnAllDepartments() {
-        // Given
-        Employee employeeA = TestDataUtil.createEmployeeA();
-        employeeA.setDepartment("Sales");
-        Employee employeeB = TestDataUtil.createEmployeeB();
+        final Employee employeeB = TestDataUtil.createEmployeeB();
         employeeB.setDepartment("Marketing");
         underTest.saveAll(List.of(employeeA, employeeB));
 
         // When
-        Optional<List<String>> allDepartments = underTest.findAllDepartments();
+        final Optional<List<String>> allDepartments = underTest.findAllDepartments();
 
         // Then
-        assertTrue(allDepartments.isPresent());
-        assertEquals(2, allDepartments.get().size());
-        assertTrue(allDepartments.get().contains("Sales"));
-        assertTrue(allDepartments.get().contains("Marketing"));
+        assertTrue(allDepartments.isPresent(),
+                "Expected to find departments in the result set"
+        );
+        assertEquals(2, allDepartments.get().size(),
+                "Expected to find two departments in the result set"
+        );
+        assertTrue(allDepartments.get().contains("Sales"),
+                "Expected to find 'Sales' in the result set");
+        assertTrue(allDepartments.get().contains("Marketing"),
+                "Expected to find 'Marketing' in the result set"
+        );
     }
 
+    /**
+     * Die Tatsache, dass die Kunden trotz `FetchType.LAZY` geladen werden, liegt, wie ich richtig bemerkt habe,
+     * daran, dass in einem `@DataJpaTest`-Kontext Tests standardmäßig in eine Transaktion eingebunden sind.
+     * <p>
+     * ### Zusammenfassung der wesentlichen Punkte:
+     * <p>
+     * 1. **Transaktionskontext in `@DataJpaTest`**: Die Tests sind standardmäßig in eine Transaktion eingebunden,
+     * was bedeutet, dass Lazy-Loading-Proxies innerhalb dieser Transaktion auf die tatsächlichen Daten zugreifen können.
+     * 2. **Lazy-Loading im Service-Kontext**: Um Lazy-Loading wirklich zu testen, ist es sinnvoll,
+     * dies im Service-Kontext zu tun, wo der Transaktionskontext deutlicher getrennt ist.
+     * <p>
+     * ### Nächste Schritte:
+     * - **Service-Kontext-Tests**: Jetzt, da die Repository-Tests funktionieren,
+     * kann man Lazy-Loading im Service-Kontext testen, um sicherzustellen,
+     * dass die Kunden nur bei Bedarf geladen werden.
+     */
     @Test
     void itShouldReturnTrueWhenEmployeeHasCustomers() {
         // Given
-        Employee employeeWithCustomers = TestDataUtil.createEmployeeA();
-        Employee savedEmployeeWithCustomers = underTest.save(employeeWithCustomers);
+        final Employee employeeA = TestDataUtil.createEmployeeA();
+        final Employee existingEmployee = underTest.save(employeeA);
 
         // Initialize customers with the saved employee
-        Customer customerA = TestDataUtil.createCustomerA(savedEmployeeWithCustomers);
-        Customer customerB = TestDataUtil.createCustomerA(savedEmployeeWithCustomers);
+        final Customer customerA = TestDataUtil.createCustomerA(existingEmployee);
+        final Customer customerB = TestDataUtil.createCustomerA(existingEmployee);
 
-        savedEmployeeWithCustomers.addCustomer(customerA);
-        savedEmployeeWithCustomers.addCustomer(customerB);
+        existingEmployee.addCustomer(customerA);
+        existingEmployee.addCustomer(customerB);
 
         // Save the employee with customers
-        Employee savedEmployeeWithSavedCustomers = underTest.save(savedEmployeeWithCustomers);
+        final Employee existingEmployeeWithCustomers = underTest.save(existingEmployee);
         // LAZY und trotzdem customers wurden geladen.
         // Grund ist, in einem @DataJpaTest-Kontext
         // sind Tests standardmäßig in eine Transaktion eingebunden.
-        savedEmployeeWithSavedCustomers.getCustomers()
-                .forEach(
-                        customer -> System.out.println(customer)
-                );
+        existingEmployeeWithCustomers
+                .getCustomers()
+                .forEach(customer -> System.out.println(customer));
+        // werden nicht geladen
+        underTest.findAll().forEach(employee -> System.out.println(employee));
+//        underTest.findAll().forEach(employee -> employee.getCustomers()
+//                .forEach(customer -> System.out.println(customer)));
+
+
         // When
-        boolean resultWithCustomers = underTest.hasCustomers(savedEmployeeWithSavedCustomers.getId());
+        boolean resultWithCustomers = underTest.hasCustomers(existingEmployeeWithCustomers.getId());
 
         // Then
         assertTrue(resultWithCustomers, "Employee with customers should return true");
@@ -141,30 +250,39 @@ class EmployeeRepositoryUnitTest {
     @Test
     void itShouldReturnFalseWhenEmployeeHasNoCustomers() {
         // Given
-        Employee employeeWithoutCustomers = TestDataUtil.createEmployeeA();
+        final Employee employeeWithoutCustomers = TestDataUtil.createEmployeeA();
         underTest.save(employeeWithoutCustomers);
 
         // When
-        boolean resultWithoutCustomers = underTest.hasCustomers(employeeWithoutCustomers.getId());
+        final boolean resultWithoutCustomers = underTest.hasCustomers(employeeWithoutCustomers.getId());
 
         // Then
         assertFalse(resultWithoutCustomers, "Employee without customers should return false");
     }
-}
 
-/**
- * Die Tatsache, dass die Kunden trotz `FetchType.LAZY` geladen werden, liegt, wie ich richtig bemerkt habe,
- * daran, dass in einem `@DataJpaTest`-Kontext Tests standardmäßig in eine Transaktion eingebunden sind.
- * <p>
- * ### Zusammenfassung der wesentlichen Punkte:
- * <p>
- * 1. **Transaktionskontext in `@DataJpaTest`**: Die Tests sind standardmäßig in eine Transaktion eingebunden, was bedeutet,
- * dass Lazy-Loading-Proxies innerhalb dieser Transaktion auf die tatsächlichen Daten zugreifen können.
- * 2. **Lazy-Loading im Service-Kontext**: Um Lazy-Loading wirklich zu testen, ist es sinnvoll,
- * dies im Service-Kontext zu tun, wo der Transaktionskontext deutlicher getrennt ist.
- * <p>
- * ### Nächste Schritte:
- * - **Service-Kontext-Tests**: Jetzt, da die Repository-Tests funktionieren,
- * kann man Lazy-Loading im Service-Kontext testen, um sicherzustellen,
- * dass die Kunden nur bei Bedarf geladen werden.
- */
+    // TODO: Implement test this query
+    //@Query("SELECT e FROM Employee e LEFT JOIN FETCH e.customers WHERE e.id = :employeeId")
+    //Optional<Employee> findByIdWithCustomers(@Param("employeeId") Long employeeId);
+
+    // BasisKlasse NamedObject
+    @AllArgsConstructor
+    @Getter
+    class NamedObject<T> {
+        private final String name;
+        private final T object;
+        // Zugänglich nur für diese Klasse und ihre Unterklassen
+        private T getObject() {
+            return object;
+        }
+    }
+    // Spezialisierte Version für Employee
+    class NamedEmployeeObject extends NamedObject<Employee> {
+        public NamedEmployeeObject(final String name, final Employee object) {
+            super(name, object);
+        }
+
+        public Employee getEmployeeObject() {
+            return super.getObject();
+        }
+    }
+}
