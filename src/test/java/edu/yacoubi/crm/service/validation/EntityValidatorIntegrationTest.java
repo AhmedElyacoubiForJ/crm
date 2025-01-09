@@ -4,7 +4,6 @@ import ch.qos.logback.classic.Logger;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
-import edu.yacoubi.crm.model.InactiveEmployee;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.EmployeeRepository;
@@ -290,7 +289,7 @@ class EntityValidatorIntegrationTest {
     void itShouldValidateInactiveEmployeeExits() {
         // Given
         final Long originalEmployeeId = 101L;
-        final InactiveEmployee existingInactiveEmployee = inactiveEmployeeRepository.save(
+        inactiveEmployeeRepository.save(
                 TestDataUtil.createInactiveEmployeeA(originalEmployeeId)
         );
 
