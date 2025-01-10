@@ -1,7 +1,0 @@
-<map id="edu.yacoubi.crm.controllers.api.CustomerRestController" name="edu.yacoubi.crm.controllers.api.CustomerRestController">
-<area shape="rect" id="Node000001" title=" " alt="" coords="127,464,323,677"/>
-<area shape="rect" id="Node000002" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service.html" title=" " alt="" coords="5,5,215,400"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,399,189,447,184,448,169,400"/>
-<area shape="rect" id="Node000003" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_employee_service.html" title=" " alt="" coords="240,45,442,360"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="318,361,296,441,292,449,287,447,290,439,313,359"/>
-</map>

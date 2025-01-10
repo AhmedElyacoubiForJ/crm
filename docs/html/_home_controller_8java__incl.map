@@ -1,9 +1,0 @@
-<map id="src/main/java/edu/yacoubi/crm/controllers/toviews/HomeController.java" name="src/main/java/edu/yacoubi/crm/controllers/toviews/HomeController.java">
-<area shape="rect" id="Node000001" title=" " alt="" coords="247,5,420,64"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,112,214,155"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="268,67,173,108,171,103,266,62"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="237,120,430,147"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="336,64,336,104,331,104,331,64"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="454,112,717,155"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="409,62,518,104,516,109,407,67"/>
-</map>

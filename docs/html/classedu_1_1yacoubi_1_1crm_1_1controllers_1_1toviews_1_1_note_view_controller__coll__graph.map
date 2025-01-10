@@ -1,9 +1,0 @@
-<map id="edu.yacoubi.crm.controllers.toviews.NoteViewController" name="edu.yacoubi.crm.controllers.toviews.NoteViewController">
-<area shape="rect" id="Node000001" title=" " alt="" coords="173,464,396,592"/>
-<area shape="rect" id="Node000002" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service.html" title=" " alt="" coords="5,107,174,299"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,297,163,368,204,439,212,450,208,453,200,441,158,371,124,300"/>
-<area shape="rect" id="Node000003" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_orchestrator_service.html" title=" " alt="" coords="198,160,370,245"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="287,245,287,447,282,447,282,245"/>
-<area shape="rect" id="Node000004" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service.html" title=" " alt="" coords="394,5,604,400"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="465,401,441,442,412,471,408,467,437,438,461,399"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl" name="edu.yacoubi.crm.service.impl.EntityOrchestratorServiceImpl">
-<area shape="rect" id="Node000001" title="Service implementation for orchestrating entities." alt="" coords="5,197,216,448"/>
-<area shape="rect" id="Node000002" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_entity_orchestrator_service.html" title="Service interface for orchestrating entities." alt="" coords="6,5,216,149"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,164,114,197,108,197,108,164"/>
-</map>

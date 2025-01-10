@@ -1,9 +1,0 @@
-<map id="src/main/java/edu/yacoubi/crm/repository/InactiveEmployeeRepository.java" name="src/main/java/edu/yacoubi/crm/repository/InactiveEmployeeRepository.java">
-<area shape="rect" id="Node000001" title=" " alt="" coords="254,5,470,64"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,112,212,155"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="287,67,178,109,176,104,286,62"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="235,112,488,155"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="364,64,364,97,359,97,359,64"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="512,120,630,147"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="425,62,531,111,529,115,423,67"/>
-</map>
