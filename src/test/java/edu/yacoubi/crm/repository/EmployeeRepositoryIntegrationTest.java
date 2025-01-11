@@ -3,6 +3,7 @@ package edu.yacoubi.crm.repository;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.util.TestDataUtil;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.junit.jupiter.api.Test;
@@ -12,11 +13,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -236,9 +236,6 @@ class EmployeeRepositoryIntegrationTest {
                 .forEach(customer -> System.out.println(customer));
         // werden nicht geladen
         underTest.findAll().forEach(employee -> System.out.println(employee));
-//        underTest.findAll().forEach(employee -> employee.getCustomers()
-//                .forEach(customer -> System.out.println(customer)));
-
 
         // When
         boolean resultWithCustomers = underTest.hasCustomers(existingEmployeeWithCustomers.getId());
@@ -260,9 +257,35 @@ class EmployeeRepositoryIntegrationTest {
         assertFalse(resultWithoutCustomers, "Employee without customers should return false");
     }
 
-    // TODO: Implement test this query
-    //@Query("SELECT e FROM Employee e LEFT JOIN FETCH e.customers WHERE e.id = :employeeId")
-    //Optional<Employee> findByIdWithCustomers(@Param("employeeId") Long employeeId);
+    @Test
+    void itShouldReturnTrueWhenEmployeeHasCustomersUsingFindByIdWithCustomers() {
+        // Given
+        final Employee employeeA = TestDataUtil.createEmployeeA();
+        final Employee existingEmployee = underTest.save(employeeA);
+
+        // Initialize customers with the saved employee
+        final Customer customerA = TestDataUtil.createCustomerA(existingEmployee);
+        final Customer customerB = TestDataUtil.createCustomerA(existingEmployee);
+
+        existingEmployee.addCustomer(customerA);
+        existingEmployee.addCustomer(customerB);
+
+        // Save the employee with customers and flush to synchronize the persistence context
+        final Employee existingEmployeeWithCustomers = underTest.saveAndFlush(existingEmployee);
+
+        // When
+        Optional<Employee> employeeWithCustomersOptional =
+                underTest.findByIdWithCustomers(existingEmployeeWithCustomers.getId());
+
+        // Then
+        assertTrue(employeeWithCustomersOptional.isPresent());
+        Employee employeeWithCustomers = employeeWithCustomersOptional.get();
+        assertNotNull(employeeWithCustomers.getCustomers());
+        assertEquals(2, employeeWithCustomers.getCustomers().size());
+
+        System.out.println("Employee with customers: " + employeeWithCustomers);
+        employeeWithCustomers.getCustomers().forEach(customer -> System.out.println("Customer: " + customer));
+    }
 
     // BasisKlasse NamedObject
     @AllArgsConstructor
@@ -270,11 +293,13 @@ class EmployeeRepositoryIntegrationTest {
     class NamedObject<T> {
         private final String name;
         private final T object;
+
         // Zugänglich nur für diese Klasse und ihre Unterklassen
         private T getObject() {
             return object;
         }
     }
+
     // Spezialisierte Version für Employee
     class NamedEmployeeObject extends NamedObject<Employee> {
         public NamedEmployeeObject(final String name, final Employee object) {

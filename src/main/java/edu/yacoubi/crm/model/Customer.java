@@ -40,7 +40,7 @@ public class Customer {
 
     private LocalDate lastInteractionDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false)
     @JsonIgnoreProperties("customers")
     private Employee employee;
@@ -64,4 +64,18 @@ public class Customer {
         notes.remove(note);
         note.setCustomer(null);
     }
+
+    /*@Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", lastInteractionDate=" + lastInteractionDate +
+                ", employeeId=" + (employee != null ? employee.getId() : null) +
+                '}';
+    }*/
 }

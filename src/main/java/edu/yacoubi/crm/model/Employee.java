@@ -16,25 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotBlank(message = "First name is mandatory")
-    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
-    private String firstName;
-
-    @NotBlank(message = "Last name is mandatory")
-    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
-    private String lastName;
-
-    @NotBlank(message = "Email is mandatory")
-    @Email(message = "Email should be valid")
-    private String email;
-
-    @NotBlank(message = "Department is mandatory")
-    private String department;
-
     // OneToMany relationship with Customer, EAGER fetch type to load customers immediately
     // CascadeType.ALL ensures changes to Employee are propagated to associated Customers
     // orphanRemoval = true ensures orphans are removed when they are no longer referenced by Employee
@@ -48,6 +29,20 @@ public class Employee {
     @ToString.Exclude
     @Builder.Default
     List<Customer> customers = new ArrayList<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotBlank(message = "First name is mandatory")
+    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
+    private String firstName;
+    @NotBlank(message = "Last name is mandatory")
+    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
+    private String lastName;
+    @NotBlank(message = "Email is mandatory")
+    @Email(message = "Email should be valid")
+    private String email;
+    @NotBlank(message = "Department is mandatory")
+    private String department;
 
     // Adds a customer to the employee's customer list
     // and sets the employee reference in the customer
@@ -62,4 +57,16 @@ public class Employee {
         customers.remove(customer);
         customer.setEmployee(null);
     }
+
+    /*@Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", department='" + department + '\'' +
+                ", customers=" + customers.stream().map(Customer::getId).collect(Collectors.toList()) +
+                '}';
+    }*/
 }

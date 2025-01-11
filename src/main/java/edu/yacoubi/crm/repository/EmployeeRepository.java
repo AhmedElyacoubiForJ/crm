@@ -87,7 +87,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     /**
      * Finds an employee by their ID and fetches their customers eagerly.
      * This query performs a left join fetch operation to ensure that the customers list is loaded along with the employee.
-     *
+     * <p>
      * The `LEFT JOIN FETCH` ensures that all Employee records are fetched, and any related Customer records are also fetched.
      * If an Employee has no related Customer, the Employee record is still fetched, but the Customer list will be empty.
      * This is useful for eager loading associated entities without additional queries.
