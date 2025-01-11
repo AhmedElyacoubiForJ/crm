@@ -33,34 +33,29 @@ import static org.mockito.Mockito.*;
  * Die Tests verwenden Mockito, um die Abhängigkeiten zu mocken und das Verhalten zu verifizieren.
  */
 class EntityOrchestratorServiceImplUnitTest {
-    // exception msg
-    // cause the service method
-    private static final String ERROR_MSG_INVALID_IDS =
+    // Error messages
+    private static final String ERROR_INVALID_IDS_MSG =
             "Employee IDs must not be null and must be a positive number";
-    private static final String ERROR_MSG_SAME_IDS =
+    private static final String ERROR_SAME_IDS_MSG =
             "Old and new employee IDs must be different";
     private static final String ERROR_MSG_NO_CUSTOMERS =
             "No customers found for oldEmployee ID: %d";
-    // cause the 3.th argument for assertEquals
-    private static final String ERROR_INFO_MSG =
-            "Error message should be %s: ";
 
-    // logger msg's
-    private static final String LOG_MSG_REASSIGN_CUSTOMERS_ENTRY_POINT =
+    // Logger infos
+    private static final String INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT =
             "EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d";
-    private static final String LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT =
-            "EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d";
-    private static final String LOG_MSG_REASSIGN_CUSTOMERS_EXIT_POINT =
+    private static final String INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT =
             "Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d";
-    private static final String LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT =
+
+    private static final String INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT =
+            "EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d";
+    private static final String INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT =
             "Customer reassigned: customerId= %d, newEmployeeId= %d";
-    private static final String LOG_WARN_MSG =
-            "Warn message should be %s: ";
-    // assert msg
-    private static final String LOG_INFO_MSG_ENTRY_POINT =
-            "Should indicate the entry point for reassigning customers";
-    private static final String LOG_INFO_MSG_EXIT_POINT =
-            "Should indicate the exit point for reassigning customers";
+
+    // Assert supplied failure message
+    private static final String WARN_SUPPLIED_MSG = "Warn message should be: %s";
+    private static final String ERROR_SUPPLIED_MSG = "Error message should be: %s";
+    private static final String INFO_SUPPLIED_MSG = "Info message should be: %s";
 
     private static TestAppender testAppender;
 
@@ -87,7 +82,6 @@ class EntityOrchestratorServiceImplUnitTest {
     void tearDown() {
     }
 
-    // tests for reassignCustomers(Long oldEmployeeId, Long newEmployeeId)
     @Test
     void itShouldThrowExceptionWhenOldEmployeeIdIsNullByCallingReassignCustomers() {
         // Given
@@ -103,27 +97,24 @@ class EntityOrchestratorServiceImplUnitTest {
         // Verify the exception message
         assertEquals(
                 // Erwarteter Wert
-                ERROR_MSG_INVALID_IDS,
+                ERROR_INVALID_IDS_MSG,
                 // Tatsächlicher Wert
                 exception.getMessage(),
                 // Nachricht bei Fehlschlag
-                String.format(ERROR_INFO_MSG, ERROR_MSG_INVALID_IDS)
+                String.format(ERROR_SUPPLIED_MSG, ERROR_INVALID_IDS_MSG)
         );
+
         // Verify logger entry message
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
         // Verify logger exit message
+        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_EXIT_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
     }
 
@@ -142,26 +133,23 @@ class EntityOrchestratorServiceImplUnitTest {
         // Verify the exception message
         assertEquals(
                 // Erwartete Wert
-                ERROR_MSG_INVALID_IDS,
+                ERROR_INVALID_IDS_MSG,
                 // Tatsächlicher Wert
                 exception.getMessage(),
                 // Nachricht bei Fehlschlag
-                String.format(ERROR_INFO_MSG, ERROR_MSG_INVALID_IDS)
+                String.format(ERROR_SUPPLIED_MSG, ERROR_INVALID_IDS_MSG)
         );
         // Verify logger entry message
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
         // Verify logger exit message
-        assertFalse(testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_EXIT_POINT
+        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
+        assertFalse(
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
     }
 
@@ -180,26 +168,24 @@ class EntityOrchestratorServiceImplUnitTest {
         // verify the exception message
         assertEquals(
                 // Erwartete Wert
-                ERROR_MSG_INVALID_IDS,
+                ERROR_INVALID_IDS_MSG,
                 // Tatsächlicher Wert
                 exception.getMessage(),
                 // Nachricht bei Fehlschlag
-                String.format(ERROR_INFO_MSG, ERROR_MSG_INVALID_IDS)
+                String.format(ERROR_SUPPLIED_MSG, ERROR_INVALID_IDS_MSG)
         );
         // Then
         // Verify logger entry message
-        assertTrue(testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
+        assertTrue(
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
         // Verify logger exit message
-        assertFalse(testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_EXIT_POINT
+        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
+        assertFalse(
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
     }
 
@@ -218,27 +204,23 @@ class EntityOrchestratorServiceImplUnitTest {
         // Verify the exception message
         assertEquals(
                 // Erwartete Wert
-                ERROR_MSG_INVALID_IDS,
+                ERROR_INVALID_IDS_MSG,
                 // Tatsächlicher Wert
                 exception.getMessage(),
                 // Nachricht bei Fehlschlag
-                String.format(ERROR_INFO_MSG, ERROR_MSG_INVALID_IDS)
+                String.format(ERROR_SUPPLIED_MSG, ERROR_INVALID_IDS_MSG)
         );
         // Verify logger entry
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
         // Verify logger exit message
+        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_EXIT_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
     }
 
@@ -257,33 +239,27 @@ class EntityOrchestratorServiceImplUnitTest {
         // Verify the exception message
         assertEquals(
                 // Erwartete Wert
-                ERROR_MSG_SAME_IDS,
+                ERROR_SAME_IDS_MSG,
                 // Tatsächlicher Wert
                 exception.getMessage(),
                 // Nachricht bei Fehlschlag
-                String.format(ERROR_INFO_MSG, ERROR_MSG_SAME_IDS)
+                String.format(ERROR_SUPPLIED_MSG, ERROR_SAME_IDS_MSG)
         );
         // Verify logger entry message
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
         assertTrue(
-                testAppender.contains(
-                        String.format(ERROR_MSG_SAME_IDS),
-                        "WARN"
-                ),
-                String.format(LOG_WARN_MSG, ERROR_MSG_SAME_IDS)
+                testAppender.contains(ERROR_SAME_IDS_MSG, "WARN"),
+                String.format(WARN_SUPPLIED_MSG, ERROR_SAME_IDS_MSG)
         );
         // Verify logger exit message
+        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId), "INFO"
-                ),
-                LOG_INFO_MSG_EXIT_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
     }
 
@@ -302,36 +278,31 @@ class EntityOrchestratorServiceImplUnitTest {
         });
 
         // Then
-        // Verify the exception message
+        // Verify
+        // The exception msg
+        final String expectedErrorMsg = String.format(ERROR_MSG_NO_CUSTOMERS, oldEmployeeId);
         assertEquals(
-                String.format(ERROR_MSG_NO_CUSTOMERS, oldEmployeeId),
+                expectedErrorMsg,
                 exception.getMessage(),
-                String.format(ERROR_INFO_MSG, String.format(ERROR_MSG_NO_CUSTOMERS, oldEmployeeId))
+                String.format(ERROR_SUPPLIED_MSG, expectedErrorMsg)
         );
-        // Verify logger entry message
+        // Logger error msg
         assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
+                testAppender.contains(expectedErrorMsg, "WARN"),
+                String.format(WARN_SUPPLIED_MSG, expectedErrorMsg)
         );
+        // Verify
+        // Logger info entry message
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(
-                        String.format(ERROR_MSG_NO_CUSTOMERS, oldEmployeeId),
-                        "WARN"),
-                String.format(
-                        LOG_WARN_MSG,
-                        String.format(ERROR_MSG_NO_CUSTOMERS, oldEmployeeId)
-                )
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
-        // Verify logger exit message
+        // Logger info exit message
+        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_EXIT_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
     }
 
@@ -351,27 +322,24 @@ class EntityOrchestratorServiceImplUnitTest {
         });
 
         // Then
-        // Verify exception message
+        // Verify
+        // Error exception msg
         assertEquals(
                 errorMessage,
                 exception.getMessage(),
-                String.format(ERROR_INFO_MSG, errorMessage)
+                String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
-        // Verify logger entry message
+        // Logger info entry msg
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
-        // Verify logger exist message
+        // Logger info exist msg
+        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_EXIT_POINT
+                testAppender.contains(String.format(expectedLogMsg), "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
     }
 
@@ -390,35 +358,32 @@ class EntityOrchestratorServiceImplUnitTest {
             underTest.reassignCustomers(oldEmployeeId, newEmployeeId);
         });
 
-        // Then
-        // Verify the exception message
+        // Then / Verify
+        // Exception error msg
         assertEquals(
                 errorMessage,
                 exception.getMessage(),
-                String.format(ERROR_INFO_MSG, errorMessage)
+                String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
-        // Verify logger entry message
-        assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
-        );
+        // Logger error msg
         assertTrue(
                 testAppender.contains(
                         String.format("EntityOrchestratorServiceImpl::reassignCustomers warn: %s", errorMessage),
                         "WARN"
                 ),
-                String.format(LOG_WARN_MSG, errorMessage)
+                String.format(WARN_SUPPLIED_MSG, errorMessage)
         );
-        // Verify logger exit message
+        // Logger info entry msg
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
+        assertTrue(
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+        );
+        // Logger exit msg
+        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_EXIT_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
     }
 
@@ -439,28 +404,24 @@ class EntityOrchestratorServiceImplUnitTest {
             underTest.reassignCustomers(oldEmployeeId, newEmployeeId);
         });
 
-        // Then
-        // Verify the exception message
+        // Then / Verify
+        // Error exception msg
         assertEquals(
                 errorMessage,
                 exception.getMessage(),
-                String.format(ERROR_INFO_MSG, errorMessage)
+                String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
-        // Verify logger entry message
+        // Logger info entry msg
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
-        // Verify logger exist message
+        // Logger exit msg
+        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_EXIT_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
     }
 
@@ -485,14 +446,12 @@ class EntityOrchestratorServiceImplUnitTest {
         // When
         underTest.reassignCustomers(oldEmployeeId, newEmployeeId);
 
-        // Then
-        // Verify logger entry message
+        // Then / Verify
+        // Logger info entry msg
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
         customers.forEach(
                 customer -> assertTrue(testAppender.contains(
@@ -509,15 +468,13 @@ class EntityOrchestratorServiceImplUnitTest {
                         "Customers reassigned successfully",
                         "WARN"
                 ),
-                LOG_WARN_MSG
+                String.format(WARN_SUPPLIED_MSG, "Customers reassigned successfully")
         );
-        // Verify logger exit message
+        // Logger info exit msg
+        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_EXIT_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
     }
 
@@ -539,27 +496,26 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals(
                 errorMessage,
                 exception.getMessage(),
-                String.format(ERROR_INFO_MSG, errorMessage)
+                String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
-        // Verify logger message
-        assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
-        );
+        // Logger error msg
         assertTrue(
                 testAppender.contains(
                         String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage),
                         "WARN"
-                ));
-        assertFalse(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
-                        "INFO"
                 ),
-                LOG_INFO_MSG_EXIT_POINT
+                String.format(WARN_SUPPLIED_MSG, String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage))
+        );
+        // Logger info msg
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId);
+        assertTrue(
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+        );
+        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId);
+        assertFalse(
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
     }
 
@@ -575,31 +531,29 @@ class EntityOrchestratorServiceImplUnitTest {
             underTest.reassignCustomerToEmployee(customerId, employeeId);
         });
 
-        // Then
-        // Verify the exception message
+        // Then / Verify
+        // Error exception msg
         assertEquals(
                 errorMessage,
                 exception.getMessage(),
-                String.format(ERROR_INFO_MSG, errorMessage)
+                String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
-        // Verify the logger message
-        assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
-        );
+        // Logger error msg
         assertTrue(testAppender.contains(
                 String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage),
                 "WARN"
         ));
+        // Logger info entry msg
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId);
+        assertTrue(
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+        );
+        // Logger info exit msg
+        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId);
         assertFalse(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_EXIT_POINT
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
     }
 
@@ -620,25 +574,23 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals(
                 errorMessage,
                 exception.getMessage(),
-                String.format(ERROR_INFO_MSG, errorMessage)
-        );
-        // Verify the logger message
-        assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
+                String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
         assertTrue(testAppender.contains(
                 String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage),
                 "WARN"
         ));
+        // Logger info entry msg
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId);
+        assertTrue(
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+        );
         assertFalse(testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
+                        String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
                         "INFO"
                 ),
-                LOG_INFO_MSG_EXIT_POINT
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
         );
     }
 
@@ -659,27 +611,29 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals(
                 errorMessage,
                 exception.getMessage(),
-                String.format(ERROR_INFO_MSG, errorMessage)
-        );
-        // Verify the logger message
-        assertTrue(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
-                        "INFO"
-                ),
-                LOG_INFO_MSG_ENTRY_POINT
+                String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
         assertTrue(
                 testAppender.contains(
                         String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage),
                         "WARN"
-                ));
+                ),
+                String.format(WARN_SUPPLIED_MSG, String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage))
+        );
+        // Logger info msg's
+        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId);
+        assertTrue(
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+        );
+        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId);
         assertFalse(
-                testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
-                        "INFO"
-                ));
+                testAppender.contains(expectedLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+        );
     }
+
+    // TODO: weiter ab hier
 
     @Test
     void itShouldThrowExceptionWhenCustomerDoesNotExistByCallingReassignCustomerToEmployee() {
@@ -700,22 +654,22 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals(
                 errorMessage,
                 exception.getMessage(),
-                String.format(ERROR_INFO_MSG, errorMessage)
+                String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
         // Verify logger message
         assertTrue(
                 testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
+                        String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
                         "INFO"
                 ),
-                LOG_INFO_MSG_ENTRY_POINT
+                INFO_SUPPLIED_MSG
         );
         assertFalse(
                 testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
+                        String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
                         "INFO"
                 ),
-                LOG_INFO_MSG_EXIT_POINT
+                INFO_SUPPLIED_MSG
         );
     }
 
@@ -741,22 +695,22 @@ class EntityOrchestratorServiceImplUnitTest {
         assertEquals(
                 errorMessage,
                 exception.getMessage(),
-                String.format(ERROR_INFO_MSG, errorMessage)
+                String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
         // Verify logger message
         assertTrue(
                 testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
+                        String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
                         "INFO"
                 ),
-                LOG_INFO_MSG_ENTRY_POINT
+                INFO_SUPPLIED_MSG
         );
         assertFalse(
                 testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
+                        String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
                         "INFO"
                 ),
-                LOG_INFO_MSG_EXIT_POINT
+                INFO_SUPPLIED_MSG
         );
     }
 
@@ -780,17 +734,17 @@ class EntityOrchestratorServiceImplUnitTest {
         // Verify logger message
         assertTrue(
                 testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
+                        String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId),
                         "INFO"
                 ),
-                LOG_INFO_MSG_ENTRY_POINT
+                INFO_SUPPLIED_MSG
         );
         assertTrue(
                 testAppender.contains(
-                        String.format(LOG_MSG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
+                        String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
                         "INFO"
                 ),
-                LOG_INFO_MSG_EXIT_POINT
+                INFO_SUPPLIED_MSG
         );
     }
 
