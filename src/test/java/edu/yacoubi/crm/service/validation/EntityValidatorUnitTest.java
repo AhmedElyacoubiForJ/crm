@@ -50,11 +50,11 @@ class EntityValidatorUnitTest {
         // Given
         final Long employeeId = 1L;
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateEmployeeExists employeeId: %d",
+                "::validateEmployeeExists employeeId: %d",
                 employeeId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateEmployeeExists employeeId: %d successfully validated",
+                "::validateEmployeeExists employeeId: %d successfully validated",
                 employeeId
         );
 
@@ -81,15 +81,15 @@ class EntityValidatorUnitTest {
         final Long employeeId = 1L;
         final String errorMessage = "Employee not found with ID: " + employeeId;
         final String expectedErrorLogMsg = String.format(
-                "EntityValidator::validateEmployeeExists error: %s",
+                "::validateEmployeeExists error: %s",
                 errorMessage
         );
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateEmployeeExists employeeId: %d",
+                "::validateEmployeeExists employeeId: %d",
                 employeeId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateEmployeeExists employeeId: %d successfully validated",
+                "::validateEmployeeExists employeeId: %d successfully validated",
                 employeeId
         );
         when(employeeRepository.existsById(employeeId)).thenReturn(false);
@@ -121,11 +121,11 @@ class EntityValidatorUnitTest {
         // Given
         Long noteId = 1L;
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateNoteExists id: %d",
+                "::validateNoteExists id: %d",
                 noteId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateNoteExists id: %d successfully validated",
+                "::validateNoteExists id: %d successfully validated",
                 noteId
         );
         when(noteRepository.existsById(noteId)).thenReturn(true);
@@ -151,15 +151,15 @@ class EntityValidatorUnitTest {
         final Long noteId = 1L;
         final String errorMessage = "Note not found with ID: " + noteId;
         final String expectedErrorLogMsg = String.format(
-                "EntityValidator::validateNoteExists error: %s",
+                "::validateNoteExists error: %s",
                 errorMessage
         );
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateNoteExists id: %d",
+                "::validateNoteExists id: %d",
                 noteId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateNoteExists id: %d successfully validated",
+                "::validateNoteExists id: %d successfully validated",
                 noteId
         );
         when(noteRepository.existsById(noteId)).thenReturn(false);
@@ -191,11 +191,11 @@ class EntityValidatorUnitTest {
         // Given
         final Long customerId = 1L;
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateCustomerExists id: %d",
+                "::validateCustomerExists id: %d",
                 customerId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateCustomerExists id: %d successfully validated",
+                "::validateCustomerExists id: %d successfully validated",
                 customerId
         );
         when(customerRepository.existsById(customerId)).thenReturn(true);
@@ -221,15 +221,15 @@ class EntityValidatorUnitTest {
         final Long customerId = 1L;
         final String errorMessage = "Customer not found with ID: " + customerId;
         final String expectedErrorLogMsg = String.format(
-                "EntityValidator::validateCustomerExists error: %s",
+                "::validateCustomerExists error: %s",
                 errorMessage
         );
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateCustomerExists id: %d",
+                "::validateCustomerExists id: %d",
                 customerId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateCustomerExists id: %d successfully validated",
+                "::validateCustomerExists id: %d successfully validated",
                 customerId
         );
         when(customerRepository.existsById(customerId)).thenReturn(false);
@@ -261,11 +261,11 @@ class EntityValidatorUnitTest {
         // Given
         final Long originalEmployeeId = 1L;
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d",
+                "::validateInactiveEmployeeExists originalEmployeeId: %d",
                 originalEmployeeId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
+                "::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
                 originalEmployeeId
         );
         when(inactiveEmployeeRepository.existsByOriginalEmployeeId(originalEmployeeId))
@@ -291,15 +291,15 @@ class EntityValidatorUnitTest {
         final Long originalEmployeeId = 1L;
         final String errorMessage = "Inactive employee not found with ID: " + originalEmployeeId;
         final String expectedErrorLogMsg = String.format(
-                "EntityValidator::validateInactiveEmployeeExists error: %s",
+                "::validateInactiveEmployeeExists error: %s",
                 errorMessage
         );
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d",
+                "::validateInactiveEmployeeExists originalEmployeeId: %d",
                 originalEmployeeId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
+                "::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
                 originalEmployeeId
         );
         when(inactiveEmployeeRepository.existsByOriginalEmployeeId(originalEmployeeId)).thenReturn(false);
@@ -331,12 +331,12 @@ class EntityValidatorUnitTest {
         // Given
         final Long employeeId = 1L;
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateEmployeeHasCustomers employeeId: %d",
+                "::validateEmployeeHasCustomers employeeId: %d",
                 employeeId
         );
         final boolean hasCustomers = false;
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
+                "::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
                 employeeId,
                 hasCustomers
         );
@@ -363,12 +363,12 @@ class EntityValidatorUnitTest {
         // Given
         final Long employeeId = 1L;
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateEmployeeHasCustomers employeeId: %d",
+                "::validateEmployeeHasCustomers employeeId: %d",
                 employeeId
         );
         final boolean hasCustomers = true;
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
+                "::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
                 employeeId,
                 hasCustomers
         );

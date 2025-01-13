@@ -20,60 +20,60 @@ public class EntityValidator {
     private final InactiveEmployeeRepository inactiveEmployeeRepository;
 
     public void validateEmployeeExists(Long employeeId) {
-        log.info("EntityValidator::validateEmployeeExists employeeId: {}", employeeId);
+        log.info("::validateEmployeeExists employeeId: {}", employeeId);
 
         if (!employeeRepository.existsById(employeeId)) {
             String errorMessage = "Employee not found with ID: " + employeeId;
-            log.error("EntityValidator::validateEmployeeExists error: {}", errorMessage);
+            log.error("::validateEmployeeExists error: {}", errorMessage);
             throw new ResourceNotFoundException(errorMessage);
         }
 
-        log.info("EntityValidator::validateEmployeeExists employeeId: {} successfully validated", employeeId);
+        log.info("::validateEmployeeExists employeeId: {} successfully validated", employeeId);
     }
 
     public void validateNoteExists(Long id) {
-        log.info("EntityValidator::validateNoteExists id: {}", id);
+        log.info("::validateNoteExists id: {}", id);
 
         if (!noteRepository.existsById(id)) {
             String errorMessage = "Note not found with ID: " + id;
-            log.error("EntityValidator::validateNoteExists error: {}", errorMessage);
+            log.error("::validateNoteExists error: {}", errorMessage);
             throw new ResourceNotFoundException(errorMessage);
         }
 
-        log.info("EntityValidator::validateNoteExists id: {} successfully validated", id);
+        log.info("::validateNoteExists id: {} successfully validated", id);
     }
 
     public void validateCustomerExists(Long id) {
-        log.info("EntityValidator::validateCustomerExists id: {}", id);
+        log.info("::validateCustomerExists id: {}", id);
 
         if (!customerRepository.existsById(id)) {
             String errorMessage = "Customer not found with ID: " + id;
-            log.error("EntityValidator::validateCustomerExists error: {}", errorMessage);
+            log.error("::validateCustomerExists error: {}", errorMessage);
             throw new ResourceNotFoundException(errorMessage);
         }
 
-        log.info("EntityValidator::validateCustomerExists id: {} successfully validated", id);
+        log.info("::validateCustomerExists id: {} successfully validated", id);
     }
 
     public void validateInactiveEmployeeExists(Long originalEmployeeId) {
-        log.info("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: {}", originalEmployeeId);
+        log.info("::validateInactiveEmployeeExists originalEmployeeId: {}", originalEmployeeId);
 
         if (!inactiveEmployeeRepository.existsByOriginalEmployeeId(originalEmployeeId)) {
             String errorMessage = "Inactive employee not found with ID: " + originalEmployeeId;
-            log.error("EntityValidator::validateInactiveEmployeeExists error: {}", errorMessage);
+            log.error("::validateInactiveEmployeeExists error: {}", errorMessage);
             throw new ResourceNotFoundException(errorMessage);
         }
 
-        log.info("EntityValidator::validateInactiveEmployeeExists originalEmployeeId: {} successfully validated", originalEmployeeId);
+        log.info("::validateInactiveEmployeeExists originalEmployeeId: {} successfully validated", originalEmployeeId);
     }
 
     // Methode zur Überprüfung, ob ein Employee Kunden hat
     public boolean validateEmployeeHasCustomers(Long employeeId) {
-        log.info("EntityValidator::validateEmployeeHasCustomers employeeId: {}", employeeId);
+        log.info("::validateEmployeeHasCustomers employeeId: {}", employeeId);
 
         boolean hasCustomers = employeeRepository.hasCustomers(employeeId);
 
-        log.info("EntityValidator::validateEmployeeHasCustomers employeeId: {} hasCustomers: {}", employeeId, hasCustomers);
+        log.info("::validateEmployeeHasCustomers employeeId: {} hasCustomers: {}", employeeId, hasCustomers);
         return hasCustomers;
     }
 }

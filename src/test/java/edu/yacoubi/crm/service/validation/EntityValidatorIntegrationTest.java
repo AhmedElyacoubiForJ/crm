@@ -55,11 +55,11 @@ class EntityValidatorIntegrationTest {
         final Employee existingEmployee = employeeRepository.save(TestDataUtil.createEmployeeA());
         final Long employeeId = existingEmployee.getId();
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateEmployeeExists employeeId: %d",
+                "::validateEmployeeExists employeeId: %d",
                 employeeId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateEmployeeExists employeeId: %d successfully validated",
+                "::validateEmployeeExists employeeId: %d successfully validated",
                 employeeId
         );
 
@@ -83,15 +83,15 @@ class EntityValidatorIntegrationTest {
         final Long employeeId = 999L;
         final String errorMessage = "Employee not found with ID: " + employeeId;
         final String expectedErrorLogMsg = String.format(
-                "EntityValidator::validateEmployeeExists error: %s",
+                "::validateEmployeeExists error: %s",
                 errorMessage
         );
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateEmployeeExists employeeId: %d",
+                "::validateEmployeeExists employeeId: %d",
                 employeeId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateEmployeeExists employeeId: %d successfully validated",
+                "::validateEmployeeExists employeeId: %d successfully validated",
                 employeeId
         );
 
@@ -127,11 +127,11 @@ class EntityValidatorIntegrationTest {
                 );
         final Long noteId = existingNote.getId();
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateNoteExists id: %d",
+                "::validateNoteExists id: %d",
                 noteId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateNoteExists id: %d successfully validated",
+                "::validateNoteExists id: %d successfully validated",
                 noteId
         );
 
@@ -155,15 +155,15 @@ class EntityValidatorIntegrationTest {
         final Long noteId = 999L;
         final String errorMessage = "Note not found with ID: " + noteId;
         final String expectedErrorLogMsg = String.format(
-                "EntityValidator::validateNoteExists error: %s",
+                "::validateNoteExists error: %s",
                 errorMessage
         );
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateNoteExists id: %d",
+                "::validateNoteExists id: %d",
                 noteId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateNoteExists id: %d successfully validated",
+                "::validateNoteExists id: %d successfully validated",
                 noteId
         );
 
@@ -198,11 +198,11 @@ class EntityValidatorIntegrationTest {
         );
         final Long customerId = existingCustomer.getId();
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateCustomerExists id: %d",
+                "::validateCustomerExists id: %d",
                 customerId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateCustomerExists id: %d successfully validated",
+                "::validateCustomerExists id: %d successfully validated",
                 customerId
         );
 
@@ -226,15 +226,15 @@ class EntityValidatorIntegrationTest {
         final Long customerId = 999L;
         final String errorMessage = "Customer not found with ID: " + customerId;
         final String expectedErrorLogMsg = String.format(
-                "EntityValidator::validateCustomerExists error: %s",
+                "::validateCustomerExists error: %s",
                 errorMessage
         );
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateCustomerExists id: %d",
+                "::validateCustomerExists id: %d",
                 customerId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateCustomerExists id: %d successfully validated",
+                "::validateCustomerExists id: %d successfully validated",
                 customerId
         );
 
@@ -264,11 +264,11 @@ class EntityValidatorIntegrationTest {
         // Given
         final Long originalEmployeeId = 101L;
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d",
+                "::validateInactiveEmployeeExists originalEmployeeId: %d",
                 originalEmployeeId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
+                "::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
                 originalEmployeeId
         );
         inactiveEmployeeRepository.save(
@@ -294,15 +294,15 @@ class EntityValidatorIntegrationTest {
         final Long originalEmployeeId = 999L;
         final String errorMessage = "Inactive employee not found with ID: " + originalEmployeeId;
         final String expectedErrorLogMsg = String.format(
-                "EntityValidator::validateInactiveEmployeeExists error: %s",
+                "::validateInactiveEmployeeExists error: %s",
                 errorMessage
         );
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d",
+                "::validateInactiveEmployeeExists originalEmployeeId: %d",
                 originalEmployeeId
         );
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
+                "::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
                 originalEmployeeId
         );
 
@@ -333,14 +333,14 @@ class EntityValidatorIntegrationTest {
         final Employee existingEmployeeWithoutCustomers = employeeRepository.save(TestDataUtil.createEmployeeA());
         final Long employeeId = existingEmployeeWithoutCustomers.getId();
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateEmployeeHasCustomers employeeId: %d",
+                "::validateEmployeeHasCustomers employeeId: %d",
                 employeeId
         );
 
         // When
         final boolean hasCustomers = underTest.validateEmployeeHasCustomers(employeeId);
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
+                "::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
                 employeeId,
                 hasCustomers
         );
@@ -364,7 +364,7 @@ class EntityValidatorIntegrationTest {
         final Employee existingEmployee = employeeRepository.save(employee);
         final Long employeeId = existingEmployee.getId();
         final String expectedEntryLogMsg = String.format(
-                "EntityValidator::validateEmployeeHasCustomers employeeId: %d",
+                "::validateEmployeeHasCustomers employeeId: %d",
                 employeeId
         );
         final Customer customerB = TestDataUtil.createCustomerB(existingEmployee);
@@ -374,7 +374,7 @@ class EntityValidatorIntegrationTest {
         // When
         final boolean hasCustomers = underTest.validateEmployeeHasCustomers(employeeId);
         final String expectedExitLogMsg = String.format(
-                "EntityValidator::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
+                "::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
                 employeeId,
                 hasCustomers
         );
