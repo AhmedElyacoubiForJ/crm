@@ -43,19 +43,19 @@ class EntityOrchestratorServiceImplUnitTest {
 
     // Logger infos
     private static final String INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT =
-            "EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d";
+            "::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d";
     private static final String INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT =
             "Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d";
 
     private static final String INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT =
-            "EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: %d, employeeId: %d";
+            "::reassignCustomerToEmployee customerId: %d, employeeId: %d";
     private static final String INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT =
             "Customer reassigned: customerId= %d, newEmployeeId= %d";
 
     // Assert supplied failure message
-    private static final String WARN_SUPPLIED_MSG = "Warn message should be: %s";
+    private static final String WARN_SUPPLIED_MSG  = "Warn message should be: %s";
     private static final String ERROR_SUPPLIED_MSG = "Error message should be: %s";
-    private static final String INFO_SUPPLIED_MSG = "Info message should be: %s";
+    private static final String INFO_SUPPLIED_MSG  = "Info message should be: %s";
 
     private static TestAppender testAppender;
 
@@ -355,7 +355,7 @@ class EntityOrchestratorServiceImplUnitTest {
         );
         assertTrue(
                 testAppender.contains(
-                        String.format("EntityOrchestratorServiceImpl::reassignCustomers warn: %s", errorMessage),
+                        String.format("::reassignCustomers warn: %s", errorMessage),
                         "WARN"
                 ),
                 String.format(WARN_SUPPLIED_MSG, errorMessage)

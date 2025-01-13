@@ -36,7 +36,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
     @Transactional
     @Override
     public void deleteEmployeeAndReassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
-        log.info("EntityOrchestratorServiceImpl::deleteEmployeeAndReassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
+        log.info("::deleteEmployeeAndReassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
                 oldEmployeeId, newEmployeeId
         );
 
@@ -59,7 +59,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
      */
     @Override
     public void reassignCustomerToEmployee(Long customerId, Long employeeId) {
-        log.info("EntityOrchestratorServiceImpl::reassignCustomerToEmployee customerId: {}, employeeId: {}",
+        log.info("::reassignCustomerToEmployee customerId: {}, employeeId: {}",
                 customerId, employeeId
         );
 
@@ -85,13 +85,13 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
      */
     @Override
     public void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
-        log.info("EntityOrchestratorServiceImpl::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
+        log.info("::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
                 oldEmployeeId, newEmployeeId
         );
 
         if (oldEmployeeId == null || newEmployeeId == null || oldEmployeeId < 0 || newEmployeeId < 0) {
             String errorMessage = "Employee IDs must not be null and must be a positive number";
-            log.warn("EntityOrchestratorServiceImpl::reassignCustomers parameter warn: {}" , errorMessage);
+            log.warn("::reassignCustomers parameter warn: {}" , errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }
 
@@ -105,7 +105,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
 
         if (customers.isEmpty()) {
             String errorMessage = "No customers found for oldEmployee ID: " + oldEmployeeId;
-            log.warn("EntityOrchestratorServiceImpl::reassignCustomers warn: {}", errorMessage);
+            log.warn("::reassignCustomers warn: {}", errorMessage);
             throw new ResourceNotFoundException(errorMessage);
         }
 
