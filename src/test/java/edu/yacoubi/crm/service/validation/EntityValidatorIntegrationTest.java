@@ -23,6 +23,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class EntityValidatorIntegrationTest {
+    // Assert supplied failure message
+    private static final String ERROR_SUPPLIED_MSG = "Error message should be: %s";
+    private static final String INFO_SUPPLIED_MSG = "Info message should be: %s";
+
     @Autowired
     private EmployeeRepository employeeRepository;
     @Autowired
@@ -50,30 +54,26 @@ class EntityValidatorIntegrationTest {
         // Given
         final Employee existingEmployee = employeeRepository.save(TestDataUtil.createEmployeeA());
         final Long employeeId = existingEmployee.getId();
+        final String expectedEntryLogMsg = String.format(
+                "EntityValidator::validateEmployeeExists employeeId: %d",
+                employeeId
+        );
+        final String expectedExitLogMsg = String.format(
+                "EntityValidator::validateEmployeeExists employeeId: %d successfully validated",
+                employeeId
+        );
 
         // When
         underTest.validateEmployeeExists(employeeId);
 
         // Then
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateEmployeeExists employeeId: %d",
-                                employeeId
-                        ),
-                        "INFO"
-                ),
-                "should indicate the validation entry point employee exists"
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateEmployeeExists employeeId: %d successfully validated",
-                                employeeId
-                        ),
-                        "INFO"
-                ),
-                "should indicate the validation exit point employee exists"
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -82,43 +82,37 @@ class EntityValidatorIntegrationTest {
         // Given
         final Long employeeId = 999L;
         final String errorMessage = "Employee not found with ID: " + employeeId;
+        final String expectedErrorLogMsg = String.format(
+                "EntityValidator::validateEmployeeExists error: %s",
+                errorMessage
+        );
+        final String expectedEntryLogMsg = String.format(
+                "EntityValidator::validateEmployeeExists employeeId: %d",
+                employeeId
+        );
+        final String expectedExitLogMsg = String.format(
+                "EntityValidator::validateEmployeeExists employeeId: %d successfully validated",
+                employeeId
+        );
 
         // When
-        ResourceNotFoundException exception = assertThrows(
-                ResourceNotFoundException.class, () -> underTest.validateEmployeeExists(employeeId)
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+                () -> underTest.validateEmployeeExists(employeeId)
         );
 
         // Then
         assertEquals(errorMessage, exception.getMessage());
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateEmployeeExists employeeId: %d",
-                                employeeId
-                        ),
-                        "INFO"
-                ),
-                "should indicate the validation entry point employee exists"
+                testAppender.contains(expectedErrorLogMsg, "ERROR"),
+                String.format(ERROR_SUPPLIED_MSG, expectedErrorLogMsg)
         );
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateEmployeeExists error: %s",
-                                errorMessage
-                        ),
-                        "ERROR"
-                ),
-                "should indicate error employee does not exist"
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
         assertFalse(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateEmployeeExists employeeId: %d successfully validated",
-                                employeeId
-                        ),
-                        "INFO"
-                ),
-                "should indicate the validation exit point employee exists"
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -132,30 +126,26 @@ class EntityValidatorIntegrationTest {
                         )))
                 );
         final Long noteId = existingNote.getId();
+        final String expectedEntryLogMsg = String.format(
+                "EntityValidator::validateNoteExists id: %d",
+                noteId
+        );
+        final String expectedExitLogMsg = String.format(
+                "EntityValidator::validateNoteExists id: %d successfully validated",
+                noteId
+        );
 
         // When
         underTest.validateNoteExists(noteId);
 
         // Then
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateNoteExists id: %d",
-                                noteId
-                        ),
-                        "INFO"
-                ),
-                "should indicate the validation entry point note exists"
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateNoteExists id: %d successfully validated",
-                                noteId
-                        ),
-                        "INFO"
-                ),
-                "should indicate the validation exit point note exists"
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -164,43 +154,37 @@ class EntityValidatorIntegrationTest {
         // Given
         final Long noteId = 999L;
         final String errorMessage = "Note not found with ID: " + noteId;
+        final String expectedErrorLogMsg = String.format(
+                "EntityValidator::validateNoteExists error: %s",
+                errorMessage
+        );
+        final String expectedEntryLogMsg = String.format(
+                "EntityValidator::validateNoteExists id: %d",
+                noteId
+        );
+        final String expectedExitLogMsg = String.format(
+                "EntityValidator::validateNoteExists id: %d successfully validated",
+                noteId
+        );
 
         // When
-        ResourceNotFoundException exception = assertThrows(
-                ResourceNotFoundException.class, () -> underTest.validateNoteExists(noteId)
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+                () -> underTest.validateNoteExists(noteId)
         );
 
         // Then
         assertEquals(errorMessage, exception.getMessage());
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateNoteExists id: %d",
-                                noteId
-                        ),
-                        "INFO"
-                ),
-                "should indicate the validation entry point note exists"
+                testAppender.contains(expectedErrorLogMsg, "ERROR"),
+                String.format(ERROR_SUPPLIED_MSG, expectedErrorLogMsg)
         );
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateNoteExists error: %s",
-                                errorMessage
-                        ),
-                        "ERROR"
-                ),
-                "should indicate error note does not exist"
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
         assertFalse(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateNoteExists id: %d successfully validated",
-                                noteId
-                        ),
-                        "INFO"
-                ),
-                "should indicate the validation exit point note exists"
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -213,30 +197,26 @@ class EntityValidatorIntegrationTest {
                 )
         );
         final Long customerId = existingCustomer.getId();
+        final String expectedEntryLogMsg = String.format(
+                "EntityValidator::validateCustomerExists id: %d",
+                customerId
+        );
+        final String expectedExitLogMsg = String.format(
+                "EntityValidator::validateCustomerExists id: %d successfully validated",
+                customerId
+        );
 
         // When
         underTest.validateCustomerExists(customerId);
 
         // Then
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateCustomerExists id: %d",
-                                customerId
-                        ),
-                        "INFO"
-                ),
-                "should indicate the validation entry point for customer exists"
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateCustomerExists id: %d successfully validated",
-                                customerId
-                        ),
-                        "INFO"
-                ),
-                "should indicate the validation exit point for customer exists"
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -245,43 +225,37 @@ class EntityValidatorIntegrationTest {
         // Given
         final Long customerId = 999L;
         final String errorMessage = "Customer not found with ID: " + customerId;
+        final String expectedErrorLogMsg = String.format(
+                "EntityValidator::validateCustomerExists error: %s",
+                errorMessage
+        );
+        final String expectedEntryLogMsg = String.format(
+                "EntityValidator::validateCustomerExists id: %d",
+                customerId
+        );
+        final String expectedExitLogMsg = String.format(
+                "EntityValidator::validateCustomerExists id: %d successfully validated",
+                customerId
+        );
 
         // When
-        ResourceNotFoundException exception = assertThrows(
-                ResourceNotFoundException.class, () -> underTest.validateCustomerExists(customerId)
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+                () -> underTest.validateCustomerExists(customerId)
         );
 
         // Then
         assertEquals(errorMessage, exception.getMessage());
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateCustomerExists id: %d",
-                                customerId
-                        ),
-                        "INFO"
-                ),
-                "should indicate the validation entry point for customer exists"
+                testAppender.contains(expectedErrorLogMsg, "ERROR"),
+                String.format(ERROR_SUPPLIED_MSG, expectedErrorLogMsg)
         );
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateCustomerExists error: %s",
-                                errorMessage
-                        ),
-                        "ERROR"
-                ),
-                "should indicate error customer does not exist"
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
         assertFalse(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateCustomerExists id: %d successfully validated",
-                                customerId
-                        ),
-                        "INFO"
-                ),
-                "should indicate the validation exit point for customer exists"
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -289,6 +263,14 @@ class EntityValidatorIntegrationTest {
     void itShouldValidateInactiveEmployeeExits() {
         // Given
         final Long originalEmployeeId = 101L;
+        final String expectedEntryLogMsg = String.format(
+                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d",
+                originalEmployeeId
+        );
+        final String expectedExitLogMsg = String.format(
+                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
+                originalEmployeeId
+        );
         inactiveEmployeeRepository.save(
                 TestDataUtil.createInactiveEmployeeA(originalEmployeeId)
         );
@@ -298,23 +280,11 @@ class EntityValidatorIntegrationTest {
 
         // Then
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d",
-                                originalEmployeeId
-                        ),
-                        "INFO"
-                ),
-                "Should indicate the validation entry point for inactiveEmployee exists"
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        assertTrue(testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
-                                originalEmployeeId
-                        ),
-                        "INFO"
-                ),
-                "Should indicate the validation exit point for inactiveEmployee exists"
+        assertTrue(testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -323,40 +293,37 @@ class EntityValidatorIntegrationTest {
         // Given
         final Long originalEmployeeId = 999L;
         final String errorMessage = "Inactive employee not found with ID: " + originalEmployeeId;
+        final String expectedErrorLogMsg = String.format(
+                "EntityValidator::validateInactiveEmployeeExists error: %s",
+                errorMessage
+        );
+        final String expectedEntryLogMsg = String.format(
+                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d",
+                originalEmployeeId
+        );
+        final String expectedExitLogMsg = String.format(
+                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
+                originalEmployeeId
+        );
 
         // When
-        ResourceNotFoundException exception = assertThrows(
-                ResourceNotFoundException.class, () -> underTest.validateInactiveEmployeeExists(originalEmployeeId)
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+                () -> underTest.validateInactiveEmployeeExists(originalEmployeeId)
         );
 
         // Then
         assertEquals(errorMessage, exception.getMessage());
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d",
-                                originalEmployeeId
-                        ),
-                        "INFO"
-                ),
-                "Should indicate the validation entry point for inactiveEmployee exists"
+                testAppender.contains(expectedErrorLogMsg, "ERROR"),
+                String.format(ERROR_SUPPLIED_MSG, expectedErrorLogMsg)
         );
         assertTrue(
-                testAppender.contains(
-                        String.format("EntityValidator::validateInactiveEmployeeExists error: %s", errorMessage),
-                        "ERROR"
-                ),
-                "Should indicate error inactive employee does not exist"
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
         assertFalse(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
-                                originalEmployeeId
-                        ),
-                        "INFO"
-                ),
-                "Should indicate the validation exit point for inactiveEmployee exists"
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -365,32 +332,28 @@ class EntityValidatorIntegrationTest {
         // Given
         final Employee existingEmployeeWithoutCustomers = employeeRepository.save(TestDataUtil.createEmployeeA());
         final Long employeeId = existingEmployeeWithoutCustomers.getId();
+        final String expectedEntryLogMsg = String.format(
+                "EntityValidator::validateEmployeeHasCustomers employeeId: %d",
+                employeeId
+        );
 
         // When
         final boolean hasCustomers = underTest.validateEmployeeHasCustomers(employeeId);
+        final String expectedExitLogMsg = String.format(
+                "EntityValidator::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
+                employeeId,
+                hasCustomers
+        );
 
         // Then
         assertFalse(hasCustomers);
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateEmployeeHasCustomers employeeId: %d",
-                                employeeId
-                        ),
-                        "INFO"
-                ),
-                "Should indicate the validation entry point for hasCustomers"
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
-                                employeeId,
-                                hasCustomers
-                        ),
-                        "INFO"
-                ),
-                "Should indicate the validation exit point for hasCustomers"
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -400,34 +363,30 @@ class EntityValidatorIntegrationTest {
         final Employee employee = TestDataUtil.createEmployeeA();
         final Employee existingEmployee = employeeRepository.save(employee);
         final Long employeeId = existingEmployee.getId();
+        final String expectedEntryLogMsg = String.format(
+                "EntityValidator::validateEmployeeHasCustomers employeeId: %d",
+                employeeId
+        );
         final Customer customerB = TestDataUtil.createCustomerB(existingEmployee);
         existingEmployee.getCustomers().add(customerB);
         employeeRepository.save(existingEmployee);
 
         // When
         final boolean hasCustomers = underTest.validateEmployeeHasCustomers(employeeId);
+        final String expectedExitLogMsg = String.format(
+                "EntityValidator::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
+                employeeId,
+                hasCustomers
+        );
 
         // Then
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateEmployeeHasCustomers employeeId: %d",
-                                employeeId
-                        ),
-                        "INFO"
-                ),
-                "Should indicate the validation entry point for hasCustomers"
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
         assertTrue(
-                testAppender.contains(
-                        String.format(
-                                "EntityValidator::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
-                                employeeId,
-                                hasCustomers
-                        ),
-                        "INFO"
-                ),
-                "Should indicate the validation exit point for hasCustomers"
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 }
