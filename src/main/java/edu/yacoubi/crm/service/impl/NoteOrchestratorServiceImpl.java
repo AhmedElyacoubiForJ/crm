@@ -18,7 +18,7 @@ public class NoteOrchestratorServiceImpl implements INoteOrchestratorService {
 
     @Override
     public Note createNoteForCustomer(Note note, Long customerId) {
-        log.info("NoteOrchestrator::createNoteForCustomer execution start: note {}, customerId {}", note, customerId);
+        log.info("::createNoteForCustomer started with note: {}, customerId: {}", note, customerId);
 
         // Abruf des Kunden mit get(), da die Validierung im CustomerService stattfindet
         Customer customer = customerService.getCustomerById(customerId).get();
@@ -27,7 +27,7 @@ public class NoteOrchestratorServiceImpl implements INoteOrchestratorService {
         note.setCustomer(customer);
         Note savedNote = noteService.createNote(note);
 
-        log.info("NoteOrchestrator::createNoteForCustomer execution end");
+        log.info("::createNoteForCustomer completed successfully with note ID: {}", savedNote.getId());
         return savedNote;
     }
 }
