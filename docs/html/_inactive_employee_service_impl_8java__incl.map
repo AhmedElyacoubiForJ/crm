@@ -1,0 +1,25 @@
+<map id="src/main/java/edu/yacoubi/crm/service/impl/InactiveEmployeeServiceImpl.java" name="src/main/java/edu/yacoubi/crm/service/impl/InactiveEmployeeServiceImpl.java">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1112,5,1341,64"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,120,224,147"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1112,44,723,69,480,89,236,115,199,120,199,114,236,109,480,84,722,63,1111,39"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="247,112,454,155"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1112,48,824,73,470,114,469,109,824,68,1111,42"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="478,112,666,155"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1112,53,915,79,682,114,681,109,915,74,1111,48"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="690,112,864,155"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1112,63,880,113,879,108,1111,58"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="888,112,1114,155"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1161,67,1065,108,1063,103,1158,62"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="1138,112,1315,155"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1229,64,1229,97,1224,97,1224,64"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="1338,120,1571,147"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1295,62,1412,111,1410,116,1293,67"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="1595,120,1810,147"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1342,57,1626,114,1625,119,1341,62"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="1834,120,1995,147"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1342,45,1564,72,1822,109,1845,114,1844,119,1821,115,1564,77,1341,50"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="2020,112,2228,155"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1342,42,1638,68,2005,109,2004,114,1637,73,1341,47"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="2253,120,2371,147"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1342,35,1517,40,1741,52,1990,74,2117,90,2240,109,2258,113,2257,118,2239,115,2116,95,1990,80,1741,58,1516,45,1342,40"/>
+</map>

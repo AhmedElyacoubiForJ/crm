@@ -1,0 +1,37 @@
+<map id="src/main/java/edu/yacoubi/crm/controllers/api/NoteRestController.java" name="src/main/java/edu/yacoubi/crm/controllers/api/NoteRestController.java">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1617,5,1893,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,104,230,131"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1616,32,1360,36,1018,47,632,67,242,99,202,104,201,98,241,93,631,61,1018,41,1360,31,1616,26"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="254,96,426,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1616,31,1393,35,1103,45,775,65,607,80,442,98,441,93,607,75,775,60,1103,40,1393,29,1616,26"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="450,96,622,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1616,33,1425,38,1183,50,913,69,638,98,637,93,912,64,1183,44,1425,33,1616,27"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="646,96,818,139"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1616,35,1265,55,1051,73,834,98,833,93,1051,68,1265,50,1616,30"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="842,104,1030,131"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1617,40,1350,63,1042,99,1013,103,1012,98,1041,93,1349,57,1616,35"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="1054,96,1224,139"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1617,46,1441,68,1239,98,1238,93,1440,63,1616,41"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="1247,96,1414,139"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1656,51,1431,98,1430,93,1655,46"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="1439,96,1615,139"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1702,51,1595,92,1594,87,1700,46"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="1639,104,1871,131"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1758,48,1758,88,1752,88,1752,48"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1895,96,2097,139"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1812,46,1926,88,1925,93,1811,51"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="2122,104,2273,131"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1868,46,2110,93,2129,97,2128,103,2109,99,1867,51"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="2297,104,2511,131"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1894,42,2286,93,2318,98,2317,104,2285,99,1893,47"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="2536,104,2697,131"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1894,32,2184,54,2354,71,2523,93,2548,98,2547,103,2522,99,2354,77,2184,59,1893,38"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="2721,96,2890,139"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="1894,29,2257,49,2480,67,2706,93,2705,98,2479,72,2257,54,1893,35"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="2914,96,3084,139"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="1893,27,2089,32,2338,43,2616,63,2899,93,2899,98,2616,68,2337,49,2088,38,1893,32"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="3107,104,3376,131"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="1894,28,2422,48,2758,67,3096,93,3144,99,3143,104,3096,99,2758,72,2422,53,1894,34"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="3400,96,3574,139"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="1894,28,2648,50,3067,69,3245,80,3385,93,3384,98,3244,86,3067,74,2647,56,1893,34"/>
+</map>

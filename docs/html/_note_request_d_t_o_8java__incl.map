@@ -1,0 +1,19 @@
+<map id="src/main/java/edu/yacoubi/crm/dto/note/NoteRequestDTO.java" name="src/main/java/edu/yacoubi/crm/dto/note/NoteRequestDTO.java">
+<area shape="rect" id="Node000001" title=" " alt="" coords="851,5,1086,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,104,255,131"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="851,40,583,65,266,99,227,104,226,99,266,93,582,59,850,35"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="279,96,520,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="851,49,536,98,535,92,850,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="544,96,735,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="892,51,732,94,731,89,891,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="760,96,951,139"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="944,51,895,88,892,84,941,46"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="975,104,1192,131"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="997,46,1057,93,1054,97,994,51"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="1216,104,1324,131"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1042,46,1205,93,1215,96,1214,102,1204,99,1040,51"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="1348,104,1443,131"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1087,43,1208,65,1336,93,1346,96,1345,101,1335,99,1207,70,1086,48"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="1467,104,1604,131"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1087,38,1262,61,1456,93,1475,97,1473,103,1455,99,1261,66,1086,44"/>
+</map>

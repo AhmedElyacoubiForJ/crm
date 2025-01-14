@@ -1,0 +1,13 @@
+<map id="src/main/java/edu/yacoubi/crm/security/model/UserCustomerKey.java" name="src/main/java/edu/yacoubi/crm/security/model/UserCustomerKey.java">
+<area shape="rect" id="Node000001" title=" " alt="" coords="372,5,598,64"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,112,213,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="372,65,178,111,177,105,371,60"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="236,112,414,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="434,67,362,107,359,102,432,62"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="437,112,533,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="488,64,488,96,482,96,482,64"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="557,112,736,139"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="539,62,612,102,609,107,536,67"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="760,112,890,139"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="596,62,763,105,761,110,595,67"/>
+</map>
