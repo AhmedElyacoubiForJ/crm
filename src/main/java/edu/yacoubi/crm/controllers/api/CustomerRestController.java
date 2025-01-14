@@ -41,16 +41,12 @@ public class CustomerRestController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String search) {
-
-        log.info("::getAllEmployees starting to fetch employees...");
-        log.debug("::getAllEmployees request received - page: {}, size: {}, search: {}", page, size, search);
+        log.info("::getAllEmployees started with: page: {}, size: {}, search: {}", page, size, search);
 
         Page<Customer> customersPage;
         if (search != null && !search.isEmpty()) {
-            // Filtere nach Vorname oder E-Mail, falls ein Suchbegriff vorhanden ist
             customersPage = customerService.getCustomersByFirstNameOrEmail(search, page, size);
         } else {
-            // Keine Suche, also alle Kunden abfragen
             customersPage = customerService.getCustomersWithPagination(page, size);
         }
 
@@ -64,8 +60,7 @@ public class CustomerRestController {
                 .data(customerResponseDTOPage)
                 .build();
 
-        log.info("Response successfully created.");
-        log.info("::getAllCustomers response {}", jsonAsString(response));
+        log.info("::getAllCustomers completed successfully with: response {}", jsonAsString(response));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -74,10 +69,10 @@ public class CustomerRestController {
             description = "Retrieve a customer by their unique ID."
     )
     @GetMapping("/{id}")
-    public ResponseEntity<APIResponse<CustomerResponseDTO>> getCustomerById(@PathVariable Long id) {
-        log.info("::getCustomerById request id {}", id);
+    public ResponseEntity<APIResponse<CustomerResponseDTO>> getCustomerById(@PathVariable Long customerId) {
+        log.info("::getCustomerById started with: customerId {}", customerId);
 
-        Customer existingCustomer = customerService.getCustomerById(id).get();
+        Customer existingCustomer = customerService.getCustomerById(customerId).get();
 
         CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
                 EntityTransformer.customerToCustomerResponseDto,
@@ -90,7 +85,7 @@ public class CustomerRestController {
                 .data(customerResponseDTO)
                 .build();
 
-        log.info("::getCustomerById response dto {}", jsonAsString(response));
+        log.info("::getCustomerById completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -179,7 +174,8 @@ public class CustomerRestController {
     public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomerByExample(
             @PathVariable Long customerId,
             @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
-        log.info("::updateCustomerByExample started with: customerId {}, customerRequestDTO {}", customerId, jsonAsString(customerRequestDTO));
+        log.info("::updateCustomerByExample started with: customerId {}, customerRequestDTO {}",
+                customerId, jsonAsString(customerRequestDTO));
 
         Customer updatedCustomer = customerService.updateCustomerByExample(customerRequestDTO, customerId);
 
@@ -206,7 +202,8 @@ public class CustomerRestController {
     public ResponseEntity<APIResponse<CustomerResponseDTO>> patchCustomer(
             @PathVariable Long customerId,
             @Valid @RequestBody CustomerPatchDTO customerPatchDTO) {
-        log.info("::patchCustomer started with: customerId {}, customerPatchDTO {}", customerId, jsonAsString(customerPatchDTO));
+        log.info("::patchCustomer started with: customerId {}, customerPatchDTO {}",
+                customerId, jsonAsString(customerPatchDTO));
 
         customerService.partialUpdateCustomer(customerId, customerPatchDTO);
 
@@ -235,11 +232,8 @@ public class CustomerRestController {
     public ResponseEntity<APIResponse<Void>> deleteCustomer(@PathVariable Long customerId) {
         log.info("::deleteCustomer started with: customerId {}", customerId);
 
-        // Delete the customer
         customerService.deleteCustomer(customerId);
-        log.info("Customer successfully deleted, id: {}", customerId);
 
-        // Build the API response
         APIResponse<Void> response = APIResponse.<Void>builder()
                 .status("success")
                 .statusCode(HttpStatus.OK.value())
