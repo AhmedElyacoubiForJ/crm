@@ -7,6 +7,7 @@ import edu.yacoubi.crm.repository.EmployeeRepository;
 import edu.yacoubi.crm.repository.InactiveEmployeeRepository;
 import edu.yacoubi.crm.repository.NoteRepository;
 import edu.yacoubi.crm.util.TestAppender;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -43,6 +44,13 @@ class EntityValidatorUnitTest {
         testAppender = new TestAppender();
         testAppender.start();
         logger.addAppender(testAppender);
+    }
+
+    @AfterEach
+    void tearDown() {
+        final Logger logger = (Logger) LoggerFactory.getLogger(EntityValidator.class);
+        logger.detachAppender(testAppender);
+        testAppender.stop();
     }
 
     @Test

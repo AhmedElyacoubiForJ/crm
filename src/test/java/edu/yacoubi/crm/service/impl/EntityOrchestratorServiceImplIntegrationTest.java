@@ -9,6 +9,7 @@ import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.service.IInactiveEmployeeService;
 import edu.yacoubi.crm.util.TestAppender;
 import edu.yacoubi.crm.util.TestDataUtil;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
@@ -50,9 +51,9 @@ class EntityOrchestratorServiceImplIntegrationTest {
             "Customer reassigned: customerId= %d, newEmployeeId= %d";
 
     // Assert supplied failure message
-    private static final String WARN_SUPPLIED_MSG  = "Warn message should be: %s";
+    private static final String WARN_SUPPLIED_MSG = "Warn message should be: %s";
     private static final String ERROR_SUPPLIED_MSG = "Error message should be: %s";
-    private static final String INFO_SUPPLIED_MSG  = "Info message should be: %s";
+    private static final String INFO_SUPPLIED_MSG = "Info message should be: %s";
 
     private static TestAppender testAppender;
 
@@ -72,6 +73,13 @@ class EntityOrchestratorServiceImplIntegrationTest {
         testAppender = new TestAppender();
         testAppender.start();
         logger.addAppender(testAppender);
+    }
+
+    @AfterEach
+    void tearDown() {
+        final Logger logger = (Logger) LoggerFactory.getLogger(EntityOrchestratorServiceImpl.class);
+        logger.detachAppender(testAppender);
+        testAppender.stop();
     }
 
     // Hinweis: Diese Tests für die Parameter-Validierung ähneln denen der Unit-Tests,

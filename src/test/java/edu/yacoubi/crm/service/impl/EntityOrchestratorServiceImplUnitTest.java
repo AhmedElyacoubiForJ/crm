@@ -53,9 +53,9 @@ class EntityOrchestratorServiceImplUnitTest {
             "Customer reassigned: customerId= %d, newEmployeeId= %d";
 
     // Assert supplied failure message
-    private static final String WARN_SUPPLIED_MSG  = "Warn message should be: %s";
+    private static final String WARN_SUPPLIED_MSG = "Warn message should be: %s";
     private static final String ERROR_SUPPLIED_MSG = "Error message should be: %s";
-    private static final String INFO_SUPPLIED_MSG  = "Info message should be: %s";
+    private static final String INFO_SUPPLIED_MSG = "Info message should be: %s";
 
     private static TestAppender testAppender;
 
@@ -80,6 +80,9 @@ class EntityOrchestratorServiceImplUnitTest {
 
     @AfterEach
     void tearDown() {
+        final Logger logger = (Logger) LoggerFactory.getLogger(EntityOrchestratorServiceImpl.class);
+        logger.detachAppender(testAppender);
+        testAppender.stop();
     }
 
     @Test

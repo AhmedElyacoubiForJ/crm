@@ -7,6 +7,7 @@ import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.repository.NoteRepository;
 import edu.yacoubi.crm.service.validation.EntityValidator;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -39,6 +40,13 @@ class NoteServiceImplUnitTest {
         testAppender = new TestAppender();
         testAppender.start();
         logger.addAppender(testAppender);
+    }
+
+    @AfterEach
+    void tearDown() {
+        final Logger logger = (Logger) LoggerFactory.getLogger(NoteServiceImpl.class);
+        logger.detachAppender(testAppender);
+        testAppender.stop();
     }
 
 //    @Test
