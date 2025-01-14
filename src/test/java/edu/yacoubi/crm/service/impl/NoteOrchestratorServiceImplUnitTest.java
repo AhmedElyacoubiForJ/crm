@@ -2,7 +2,6 @@ package edu.yacoubi.crm.service.impl;
 
 import ch.qos.logback.classic.Logger;
 import edu.yacoubi.crm.model.Customer;
-import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.INoteService;
@@ -23,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 class NoteOrchestratorServiceImplUnitTest {
     // Assert supplied failure message
-    private static final String INFO_SUPPLIED_MSG  = "Info message should be: %s";
+    private static final String INFO_SUPPLIED_MSG = "Info message should be: %s";
     private static TestAppender testAppender;
 
     @Mock
