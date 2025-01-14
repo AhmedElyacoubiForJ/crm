@@ -754,4 +754,8 @@ class EntityOrchestratorServiceImplUnitTest {
         verify(employeeService, times(1)).getEmployeeById(oldEmployee.getId());
         verify(employeeService, times(1)).deleteEmployee(anyLong());
     }
+    // TODO
+    // test für createCustomerForEmployee(Customer customer, Long employeeId)
+    @Test
+    void itShouldCreateCustomerForEmployee() {}
 }

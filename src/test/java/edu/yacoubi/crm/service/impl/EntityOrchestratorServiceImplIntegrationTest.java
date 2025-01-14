@@ -805,4 +805,9 @@ class EntityOrchestratorServiceImplIntegrationTest {
                 "Should indicate the exit point for delete employee and reassign customers"
         );
     }
+
+    // TODO
+    // test für createCustomerForEmployee(Customer customer, Long employeeId)
+    @Test
+    void itShouldCreateCustomerForEmployee() {}
 }
