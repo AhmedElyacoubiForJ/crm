@@ -12,6 +12,7 @@ import edu.yacoubi.crm.util.TransformerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -27,10 +28,8 @@ import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
 @RestController
 @RequestMapping("/api/employees")
 @RequiredArgsConstructor
-//@Slf4j
+@Slf4j
 public class EmployeeRestController {
-    private static final Logger log = LoggerFactory.getLogger(EmployeeRestController.class);
-
     private final IEmployeeService employeeService;
     private final IEntityOrchestratorService orchestratorService;
 
@@ -43,38 +42,18 @@ public class EmployeeRestController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam(value = "search", required = false) String search) {
-
-        log.info("EmployeeRestController::getAllEmployees starting to fetch employees...");
-        log.debug(
-                "EmployeeRestController::getAllEmployees request received - page: {}, size: {}, search: {}",
-                page,
-                size,
-                search
-        );
+        log.info("::getAllEmployees started with: page: {}, size: {}, search: {}", page, size, search);
 
         Page<Employee> employeesPage;
         if (search != null && !search.isEmpty()) {
-            log.info("Retrieving employees with pagination and Search query");
-            log.debug("Retrieving employees with pagination and Search query - page: {}, size: {}, search: {}", page, size, search);
             employeesPage = employeeService.getEmployeesByFirstNameOrDepartment(search, page, size);
         } else {
-            log.info("Retrieving employees with pagination");
-            log.debug(
-                    "Retrieving employees with pagination - page: {}, size: {}, search: {}",
-                    page,
-                    size,
-                    search
-            );
             employeesPage = employeeService.getEmployeesWithPagination(page, size);
         }
 
         Page<EmployeeResponseDTO> employeeResponseDTOPage = employeesPage.map(
                 employee -> TransformerUtil.transform(EntityTransformer.employeeToEmployeeResponseDto, employee)
         );
-
-        // Page<EmployeeResponseDTO> employeeResponseDTOPage = employeesPage.map(
-        //      employee -> EntityTransformer.employeeToEmployeeResponseDto.transform(employee)
-        // );
 
         APIResponse<Page<EmployeeResponseDTO>> response = APIResponse
                 .<Page<EmployeeResponseDTO>>builder()
@@ -83,8 +62,7 @@ public class EmployeeRestController {
                 .data(employeeResponseDTOPage)
                 .build();
 
-        log.info("Response successfully created.");
-        log.debug("Response details: {}", jsonAsString(response));
+        log.info("::getAllEmployees completed successfully with: response {}", jsonAsString(response));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -93,20 +71,16 @@ public class EmployeeRestController {
             description = "Retrieve an employee by their unique ID."
     )
     @GetMapping("/{id}")
-    public ResponseEntity<APIResponse<EmployeeResponseDTO>> getEmployeeById(@PathVariable Long id) {
-        log.info("EmployeeRestController::getEmployeeById request id {}", id);
+    public ResponseEntity<APIResponse<EmployeeResponseDTO>> getEmployeeById(@PathVariable Long employeeId) {
+        log.info("::getEmployeeById started with: employeeId {}", employeeId);
 
         // exception werden im service behandelt und im globaler handler abgefangen
-        Employee existingEmployee = employeeService.getEmployeeById(id).get();
+        Employee existingEmployee = employeeService.getEmployeeById(employeeId).get();
 
         EmployeeResponseDTO employeeResponseDTO = TransformerUtil.transform(
                 EntityTransformer.employeeToEmployeeResponseDto,
                 existingEmployee
         );
-
-        // 2. variante
-        // EmployeeResponseDTO employeeResponseDTO =
-        // EntityTransformer.employeeToEmployeeResponseDto.transform(existingEmployee);
 
         APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
                 .status("success")
@@ -114,7 +88,7 @@ public class EmployeeRestController {
                 .data(employeeResponseDTO)
                 .build();
 
-        log.info("EmployeeRestController::getEmployeeById response {}", jsonAsString(response));
+        log.info("::getEmployeeById completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -125,7 +99,7 @@ public class EmployeeRestController {
     @PostMapping
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> createEmployee(
             @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
-        log.info("EmployeeRestController::createEmployee request {}", jsonAsString(employeeRequestDTO));
+        log.info("::createEmployee started with: employeeRequestDTO {}", jsonAsString(employeeRequestDTO));
 
         Employee employeeRequest = TransformerUtil.transform(
                 EntityTransformer.employeeRequestDtoToEmployee,
@@ -145,7 +119,7 @@ public class EmployeeRestController {
                 .data(employeeResponseDTO)
                 .build();
 
-        log.info("EmployeeRestController::createEmployee response {}", jsonAsString(response));
+        log.info("::createEmployee completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -155,11 +129,10 @@ public class EmployeeRestController {
     )
     @PutMapping("/{id}")
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> updateEmployee(
-            @PathVariable Long id,
+            @PathVariable Long employeeId,
             @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
-        log.info(
-                "EmployeeRestController::updateEmployee request id {}, employee {}",
-                id, jsonAsString(employeeRequestDTO)
+        log.info("::updateEmployee started with: employeeId {}, employeeRequestDTO {}",
+                employeeId, jsonAsString(employeeRequestDTO)
         );
 
         // transform to entity
@@ -169,7 +142,7 @@ public class EmployeeRestController {
         );
 
         // update
-        Employee updatedEmployee = employeeService.updateEmployee(id, employeeRequest);
+        Employee updatedEmployee = employeeService.updateEmployee(employeeId, employeeRequest);
 
         // transform to response DOT
         EmployeeResponseDTO employeeResponseDTO = TransformerUtil.transform(
@@ -184,7 +157,7 @@ public class EmployeeRestController {
                 .data(employeeResponseDTO)
                 .build();
 
-        log.info("EmployeeRestController::updateEmployee response {}", jsonAsString(response));
+        log.info("::updateEmployee completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -194,19 +167,16 @@ public class EmployeeRestController {
     )
     @PatchMapping("/{id}")
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> patchEmployee(
-            @PathVariable Long id,
+            @PathVariable Long employeeId,
             @Valid @RequestBody EmployeePatchDTO employeePatchDTO) {
-        log.info(
-                "EmployeeRestController::patchEmployee request id {}, employee {}",
-                id,
-                jsonAsString(employeePatchDTO)
-        );
+        log.info("::patchEmployee started with: employeeId {}, employeePatchDTO {}",
+                employeeId, jsonAsString(employeePatchDTO));
 
         // partial update
-        employeeService.partialUpdateEmployee(id, employeePatchDTO);
+        employeeService.partialUpdateEmployee(employeeId, employeePatchDTO);
 
         // get the updated employee
-        Employee updatedEmployee = employeeService.getEmployeeById(id).get();
+        Employee updatedEmployee = employeeService.getEmployeeById(employeeId).get();
 
         // transform to response DTO
         EmployeeResponseDTO employeeResponseDTO = TransformerUtil.transform(
@@ -221,7 +191,7 @@ public class EmployeeRestController {
                 .data(employeeResponseDTO)
                 .build();
 
-        log.info("EmployeeRestController::patchEmployee response {}", jsonAsString(response));
+        log.info("::patchEmployee completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -233,8 +203,7 @@ public class EmployeeRestController {
     public ResponseEntity<APIResponse<Void>> reassignAndDeleteEmployee(
             @PathVariable Long employeeId,
             @RequestParam Long newEmployeeId) {
-        log.info(
-                "EmployeeRestController::reassignAndDeleteEmployee request employeeId {}, newEmployeeId {}",
+        log.info("::reassignAndDeleteEmployee started with: employeeId {}, newEmployeeId {}",
                 employeeId,
                 newEmployeeId
         );
@@ -247,7 +216,7 @@ public class EmployeeRestController {
                 .message("Employee customers reassigned and deleted successfully.")
                 .build();
 
-        log.info("EmployeeRestController::reassignAndDeleteEmployee response {}", jsonAsString(response));
+        log.info("::reassignAndDeleteEmployee completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -257,7 +226,7 @@ public class EmployeeRestController {
     )
     @GetMapping("/departments")
     public ResponseEntity<APIResponse<List<String>>> getAllDepartments() {
-        log.info("EmployeeRestController::getAllDepartments request");
+        log.info("::getAllDepartments");
 
         List<String> allDepartments = employeeService.getAllDepartments()
                 .orElse(Collections.emptyList());
@@ -269,7 +238,7 @@ public class EmployeeRestController {
                 .data(allDepartments)
                 .build();
 
-        log.info("EmployeeRestController::getAllDepartments response {}", jsonAsString(response));
+        log.info("::getAllDepartments completed successfully with: response {}", jsonAsString(response));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

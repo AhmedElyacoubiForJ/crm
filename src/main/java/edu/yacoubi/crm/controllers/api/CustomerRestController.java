@@ -5,10 +5,8 @@ import edu.yacoubi.crm.dto.customer.CustomerPatchDTO;
 import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.dto.customer.CustomerResponseDTO;
 import edu.yacoubi.crm.model.Customer;
-import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
-import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.service.IEntityOrchestratorService;
 import edu.yacoubi.crm.util.EntityTransformer;
 import edu.yacoubi.crm.util.TransformerUtil;
@@ -229,7 +227,6 @@ public class CustomerRestController {
         return ResponseEntity.ok(response);
     }
 
-
     @Operation(
             summary = "Delete customer",
             description = "Delete an existing customer by their unique ID."
@@ -250,10 +247,5 @@ public class CustomerRestController {
 
         log.info("::deleteCustomer completed successfully with: response {}", response);
         return ResponseEntity.ok(response);
-    }
-
-    private APIResponse<CustomerResponseDTO> buildApiResponse(Customer savedCustomer) {
-        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(EntityTransformer.customerToCustomerResponseDto, savedCustomer);
-        return APIResponse.<CustomerResponseDTO>builder().status("success").statusCode(HttpStatus.CREATED.value()).data(customerResponseDTO).build();
     }
 }
