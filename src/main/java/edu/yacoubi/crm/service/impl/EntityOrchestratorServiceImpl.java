@@ -91,7 +91,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
 
         if (oldEmployeeId == null || newEmployeeId == null || oldEmployeeId < 0 || newEmployeeId < 0) {
             String errorMessage = "Employee IDs must not be null and must be a positive number";
-            log.warn("::reassignCustomers parameter warn: {}" , errorMessage);
+            log.warn("::reassignCustomers parameter warn: {}", errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }
 
@@ -119,13 +119,34 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
     }
 
     /**
+     * @brief Creates a customer and assigns them to an employee.
+     *
+     * @param customer The customer to be created.
+     * @param employeeId ID of the employee to whom the customer will be assigned.
+     * @return The created customer.
+     */
+    @Override
+    public Customer createCustomerForEmployee(Customer customer, Long employeeId) {
+        log.info("::createCustomerForEmployee started with customer: {}, employeeId: {}", customer, employeeId);
+
+        // Validierung im service
+        Employee existingEmployee = employeeService.getEmployeeById(employeeId).get();
+        customer.setEmployee(existingEmployee);
+
+        Customer savedCustomer = customerService.createCustomer(customer);
+
+        log.info("::createCustomerForEmployee completed successfully with customer ID: {}", savedCustomer.getId());
+        return savedCustomer;
+    }
+
+    /**
      * @param customers   the list of customers to be reassigned.
      * @param newEmployee the new employee to whom the customers will be assigned.
      * @brief Handles the reassignment of customers to a new employee.
      */
     private void handleCustomerReassignment(List<Customer> customers, Employee newEmployee) {
         customers.forEach(customer -> {
-            log.info("Reassigning customer ID: {} to new employee ID: {}", customer.getId() ,newEmployee.getId());
+            log.info("Reassigning customer ID: {} to new employee ID: {}", customer.getId(), newEmployee.getId());
             customer.setEmployee(newEmployee);
         });
 

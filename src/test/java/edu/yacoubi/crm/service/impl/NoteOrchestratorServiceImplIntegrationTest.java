@@ -71,14 +71,14 @@ class NoteOrchestratorServiceImplIntegrationTest {
     void itShouldCreateNoteForCustomer() {
         // Given
         final String expectedEntryLogMsg = String.format(
-                "::createNoteForCustomer started with note: %s, customerId: %d",
+                "::createNoteForCustomer started with: note %s, customerId: %d",
                 noteA, customerId
         );
 
         // When
         Note createdNote = underTest.createNoteForCustomer(noteA, customerId);
         final String expectedExitLogMsg = String.format(
-                "::createNoteForCustomer completed successfully with note ID: %d",
+                "::createNoteForCustomer completed successfully with: noteId %d",
                 createdNote.getId()
         );
 

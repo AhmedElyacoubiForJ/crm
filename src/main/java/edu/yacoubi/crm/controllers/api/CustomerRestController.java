@@ -4,15 +4,14 @@ import edu.yacoubi.crm.dto.APIResponse;
 import edu.yacoubi.crm.dto.customer.CustomerPatchDTO;
 import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.dto.customer.CustomerResponseDTO;
-import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
+import edu.yacoubi.crm.service.IEntityOrchestratorService;
 import edu.yacoubi.crm.util.EntityTransformer;
 import edu.yacoubi.crm.util.TransformerUtil;
-import edu.yacoubi.crm.util.ValueMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-import static edu.yacoubi.crm.util.ValueMapper.*;
+import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -33,7 +32,7 @@ import static edu.yacoubi.crm.util.ValueMapper.*;
 @Slf4j
 public class CustomerRestController {
     private final ICustomerService customerService;
-    private final IEmployeeService employeeService;
+    private final IEntityOrchestratorService entityOrchestratorService;
 
     @Operation(
             summary = "Get all customers",
@@ -45,8 +44,8 @@ public class CustomerRestController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String search) {
 
-        log.info("CustomerRestController::getAllEmployees starting to fetch employees...");
-        log.debug("CustomerRestController::getAllEmployees request received - page: {}, size: {}, search: {}", page, size, search);
+        log.info("::getAllEmployees starting to fetch employees...");
+        log.debug("::getAllEmployees request received - page: {}, size: {}, search: {}", page, size, search);
 
         Page<Customer> customersPage;
         if (search != null && !search.isEmpty()) {
@@ -68,7 +67,7 @@ public class CustomerRestController {
                 .build();
 
         log.info("Response successfully created.");
-        log.info("CustomerRestController::getAllCustomers response {}", jsonAsString(response));
+        log.info("::getAllCustomers response {}", jsonAsString(response));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -78,7 +77,7 @@ public class CustomerRestController {
     )
     @GetMapping("/{id}")
     public ResponseEntity<APIResponse<CustomerResponseDTO>> getCustomerById(@PathVariable Long id) {
-        log.info("CustomerRestController::getCustomerById request id {}", id);
+        log.info("::getCustomerById request id {}", id);
 
         Customer existingCustomer = customerService.getCustomerById(id).get();
 
@@ -93,7 +92,7 @@ public class CustomerRestController {
                 .data(customerResponseDTO)
                 .build();
 
-        log.info("CustomerRestController::getCustomer response dto {}", jsonAsString(response));
+        log.info("::getCustomerById response dto {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -102,28 +101,21 @@ public class CustomerRestController {
             description = "This operation creates a new customer in the CRM system."
     )
     @PostMapping
-    public ResponseEntity<APIResponse<CustomerResponseDTO>> createCustomer(
-            @RequestParam Long employeeId,
-            @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
-        log.info("CustomerRestController::createCustomer request employeeId {}, customer dto {}", employeeId, jsonAsString(customerRequestDTO));
+    public ResponseEntity<APIResponse<CustomerResponseDTO>> createCustomerForEmployee(
+            @Valid @RequestBody CustomerRequestDTO customerRequestDTO,
+            @RequestParam Long employeeId) {
+        log.info("::createCustomerForEmployee started with: customerRequestDTO {}, employeeId {}", jsonAsString(customerRequestDTO), employeeId);
 
-        Employee existingEmployee = employeeService.getEmployeeById(employeeId).get();
+        // Setze lastInteractionDate auf das aktuelle Datum
+        customerRequestDTO.setLastInteractionDate(LocalDate.now());
 
-        // Setze lastInteractionDate auf das aktuelle Datum, wenn es vor oder nach dem aktuellen Datum liegt
-        if (customerRequestDTO.getLastInteractionDate().isAfter(LocalDate.now()) ||
-                customerRequestDTO.getLastInteractionDate().isBefore(LocalDate.now())) {
-            customerRequestDTO.setLastInteractionDate(LocalDate.now());
-        }
-
-        //Customer customerRequest = convertToEntity(customerRequestDTO);
         Customer customerRequest = TransformerUtil.transform(
                 EntityTransformer.customerRequestDtoToCustomer,
                 customerRequestDTO
         );
 
-        customerRequest.setEmployee(existingEmployee);
-
-        Customer savedCustomer = customerService.createCustomer(customerRequest);
+        Customer savedCustomer = entityOrchestratorService
+                .createCustomerForEmployee(customerRequest, employeeId);
 
         CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
                 EntityTransformer.customerToCustomerResponseDto,
@@ -136,7 +128,7 @@ public class CustomerRestController {
                 .data(customerResponseDTO)
                 .build();
 
-        log.info("CustomerRestController::createCustomer response dto {}", jsonAsString(response));
+        log.info("::createCustomerForEmployee completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -148,7 +140,7 @@ public class CustomerRestController {
     public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomer(
             @PathVariable Long customerId,
             @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
-        log.info("CustomerRestController::updateCustomer request customerId {}, customer dto {}", customerId, jsonAsString(customerRequestDTO));
+        log.info("::updateCustomer started with: customerId {}, customerRequestDTO {}", customerId, jsonAsString(customerRequestDTO));
 
         Customer existingCustomer = customerService.getCustomerById(customerId).get();
 
@@ -176,7 +168,7 @@ public class CustomerRestController {
                 .data(customerResponseDTO)
                 .build();
 
-        log.info("CustomerRestController::updateCustomer response dto {}", jsonAsString(response));
+        log.info("::updateCustomer completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -187,11 +179,11 @@ public class CustomerRestController {
     @PutMapping("/{id}/updateByExample")
     @Deprecated
     public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomerByExample(
-            @PathVariable Long id,
+            @PathVariable Long customerId,
             @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
-        log.info("CustomerRestController::updateCustomerByExample request id {}, customer dto {}", id, jsonAsString(customerRequestDTO));
+        log.info("::updateCustomerByExample started with: customerId {}, customerRequestDTO {}", customerId, jsonAsString(customerRequestDTO));
 
-        Customer updatedCustomer = customerService.updateCustomerByExample(customerRequestDTO, id);
+        Customer updatedCustomer = customerService.updateCustomerByExample(customerRequestDTO, customerId);
 
         CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
                 EntityTransformer.customerToCustomerResponseDto,
@@ -204,7 +196,7 @@ public class CustomerRestController {
                 .data(customerResponseDTO)
                 .build();
 
-        log.info("CustomerRestController::updateCustomerByExample response dto {}", jsonAsString(response));
+        log.info("::updateCustomerByExample completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -214,13 +206,13 @@ public class CustomerRestController {
     )
     @PatchMapping("/{id}")
     public ResponseEntity<APIResponse<CustomerResponseDTO>> patchCustomer(
-            @PathVariable Long id,
+            @PathVariable Long customerId,
             @Valid @RequestBody CustomerPatchDTO customerPatchDTO) {
-        log.info("CustomerRestController::patchCustomer request id {}, customer dto {}", id, jsonAsString(customerPatchDTO));
+        log.info("::patchCustomer started with: customerId {}, customerPatchDTO {}", customerId, jsonAsString(customerPatchDTO));
 
-        customerService.partialUpdateCustomer(id, customerPatchDTO);
+        customerService.partialUpdateCustomer(customerId, customerPatchDTO);
 
-        Customer updatedCustomer = customerService.getCustomerById(id).get();
+        Customer updatedCustomer = customerService.getCustomerById(customerId).get();
 
         CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
                 EntityTransformer.customerToCustomerResponseDto,
@@ -233,7 +225,7 @@ public class CustomerRestController {
                 .data(customerResponseDTO)
                 .build();
 
-        log.info("CustomerRestController::patchCustomer response {}", jsonAsString(response));
+        log.info("::patchCustomer completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -243,12 +235,12 @@ public class CustomerRestController {
             description = "Delete an existing customer by their unique ID."
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<APIResponse<Void>> deleteCustomer(@PathVariable Long id) {
-        log.info("CustomerRestController::deleteCustomer request id {}", id);
+    public ResponseEntity<APIResponse<Void>> deleteCustomer(@PathVariable Long customerId) {
+        log.info("::deleteCustomer started with: customerId {}", customerId);
 
         // Delete the customer
-        customerService.deleteCustomer(id);
-        log.info("Customer successfully deleted, id: {}", id);
+        customerService.deleteCustomer(customerId);
+        log.info("Customer successfully deleted, id: {}", customerId);
 
         // Build the API response
         APIResponse<Void> response = APIResponse.<Void>builder()
@@ -256,6 +248,12 @@ public class CustomerRestController {
                 .statusCode(HttpStatus.OK.value())
                 .build();
 
+        log.info("::deleteCustomer completed successfully with: response {}", response);
         return ResponseEntity.ok(response);
+    }
+
+    private APIResponse<CustomerResponseDTO> buildApiResponse(Customer savedCustomer) {
+        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(EntityTransformer.customerToCustomerResponseDto, savedCustomer);
+        return APIResponse.<CustomerResponseDTO>builder().status("success").statusCode(HttpStatus.CREATED.value()).data(customerResponseDTO).build();
     }
 }

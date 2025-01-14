@@ -60,7 +60,7 @@ class NoteOrchestratorServiceImplUnitTest {
 
         final Note noteA = TestDataUtil.createNoteA(customerA);
         final String expectedEntryLogMsg = String.format(
-                "::createNoteForCustomer started with note: %s, customerId: %d",
+                "::createNoteForCustomer started with: note %s, customerId: %d",
                 noteA, customerId
         );
 
@@ -73,7 +73,7 @@ class NoteOrchestratorServiceImplUnitTest {
             return createdNote;
         });
         final String expectedExitLogMsg = String.format(
-                "::createNoteForCustomer completed successfully with note ID: %d",
+                "::createNoteForCustomer completed successfully with: noteId %d",
                 noteId
         );
 

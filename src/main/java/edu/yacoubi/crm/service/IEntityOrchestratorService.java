@@ -1,10 +1,6 @@
 package edu.yacoubi.crm.service;
 
 import edu.yacoubi.crm.model.Customer;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * @brief Service interface for orchestrating entities.
@@ -36,4 +32,13 @@ public interface IEntityOrchestratorService {
      * @param newEmployeeId ID of the new employee.
      */
     void reassignCustomers(Long oldEmployeeId, Long newEmployeeId);
+
+    /**
+     * @brief Creates a customer and assigns them to an employee.
+     *
+     * @param customer The customer to be created.
+     * @param employeeId ID of the employee to whom the customer will be assigned.
+     * @return The created customer.
+     */
+    Customer createCustomerForEmployee(Customer customer, Long employeeId);
 }

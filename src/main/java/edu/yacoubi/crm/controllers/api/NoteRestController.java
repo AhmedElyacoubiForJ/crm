@@ -5,7 +5,6 @@ import edu.yacoubi.crm.dto.note.NotePatchDTO;
 import edu.yacoubi.crm.dto.note.NoteRequestDTO;
 import edu.yacoubi.crm.dto.note.NoteResponseDTO;
 import edu.yacoubi.crm.model.Note;
-import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.INoteOrchestratorService;
 import edu.yacoubi.crm.service.INoteService;
 import edu.yacoubi.crm.util.EntityTransformer;
@@ -26,7 +25,6 @@ import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
 @Slf4j
 public class NoteRestController {
     private final INoteService noteService;
-    private final ICustomerService customerService;
     private final INoteOrchestratorService noteOrchestratorService;
 
     @Operation(
@@ -34,10 +32,10 @@ public class NoteRestController {
             description = "Retrieve a note by its unique ID."
     )
     @GetMapping("/{id}")
-    public ResponseEntity<APIResponse<NoteResponseDTO>> getNoteById(@PathVariable Long id) {
-        log.info("NoteRestController::getNoteById request id {}", id);
+    public ResponseEntity<APIResponse<NoteResponseDTO>> getNoteById(@PathVariable Long customerId) {
+        log.info("::getNoteById started with: customerId {}", customerId);
 
-        Note existingNote = noteService.getNoteById(id).get();
+        Note existingNote = noteService.getNoteById(customerId).get();
 
         NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
                 EntityTransformer.noteToNoteResponseDto,
@@ -50,7 +48,7 @@ public class NoteRestController {
                 .data(noteResponseDTO)
                 .build();
 
-        log.info("NoteRestController::getNoteById response {}", jsonAsString(response));
+        log.info("::getNoteById completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -59,10 +57,10 @@ public class NoteRestController {
             description = "This operation creates a new note for a specified customer in the CRM system."
     )
     @PostMapping
-    public ResponseEntity<APIResponse<NoteResponseDTO>> createNote(
+    public ResponseEntity<APIResponse<NoteResponseDTO>> createNoteForCustomer(
             @Valid @RequestBody NoteRequestDTO noteRequestDTO,
             @RequestParam Long customerId) {
-        log.info("NoteRestController::createNote request id {}, note {}", customerId, noteRequestDTO);
+        log.info("::createNoteForCustomer started with: noteRequestDTO {}, customerId {}", noteRequestDTO, customerId);
 
         Note noteRequest = TransformerUtil.transform(
                 EntityTransformer.noteRequestDtoToNote,
@@ -82,7 +80,7 @@ public class NoteRestController {
                 .data(noteResponseDTO)
                 .build();
 
-        log.info("NoteRestController::createNote response {}", jsonAsString(response));
+        log.info("::createNoteForCustomer completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -92,18 +90,18 @@ public class NoteRestController {
     )
     @PutMapping("/{id}")
     public ResponseEntity<APIResponse<NoteResponseDTO>> updateNote(
-            @PathVariable Long id,
+            @PathVariable Long noteId,
             @Valid @RequestBody NoteRequestDTO noteRequestDTO) {
-        log.info("NoteRestController::updateNote request id {}, note {}", id, noteRequestDTO);
+        log.info("::updateNote started with: noteId {}, noteRequestDTO {}", noteId, noteRequestDTO);
 
-        Note existingNote = noteService.getNoteById(id).get();
+        Note existingNote = noteService.getNoteById(noteId).get();
 
         Note noteRequest = TransformerUtil.transform(EntityTransformer.noteRequestDtoToNote, noteRequestDTO);
 
-        noteRequest.setId(id);
+        noteRequest.setId(noteId);
         noteRequest.setCustomer(existingNote.getCustomer());
 
-        Note updatedNote = noteService.updateNote(id, noteRequest);
+        Note updatedNote = noteService.updateNote(noteId, noteRequest);
 
         NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
                 EntityTransformer.noteToNoteResponseDto,
@@ -116,7 +114,7 @@ public class NoteRestController {
                 .data(noteResponseDTO)
                 .build();
 
-        log.info("NoteRestController::updateNote response {}", jsonAsString(response));
+        log.info("::updateNote completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -126,13 +124,13 @@ public class NoteRestController {
     )
     @PatchMapping("/{id}")
     public ResponseEntity<APIResponse<NoteResponseDTO>> patchNote(
-            @PathVariable Long id,
+            @PathVariable Long noteId,
             @Valid @RequestBody NotePatchDTO notePatchDTO) {
-        log.info("NoteRestController::patchNote request id {}, note {}", id, jsonAsString(notePatchDTO));
+        log.info("::patchNote started with: noteId {}, notePatchDTO {}", noteId, jsonAsString(notePatchDTO));
 
-        noteService.partialUpdateNote(id, notePatchDTO);
+        noteService.partialUpdateNote(noteId, notePatchDTO);
 
-        Note updatedNote = noteService.getNoteById(id).get();
+        Note updatedNote = noteService.getNoteById(noteId).get();
 
         NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
                 EntityTransformer.noteToNoteResponseDto,
@@ -145,7 +143,7 @@ public class NoteRestController {
                 .data(noteResponseDTO)
                 .build();
 
-        log.info("NoteRestController::patchNote response {}", jsonAsString(response));
+        log.info("::patchNote completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
     }
 
@@ -154,17 +152,17 @@ public class NoteRestController {
             description = "Delete an existing note by its unique ID."
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<APIResponse<Void>> deleteNoteById(@PathVariable Long id) {
-        log.info("NoteRestController::deleteNoteById request id {}", id);
+    public ResponseEntity<APIResponse<Void>> deleteNoteById(@PathVariable Long customerId) {
+        log.info("::deleteNoteById started with: customerId {}", customerId);
 
-        noteService.deleteNote(id);
+        noteService.deleteNote(customerId);
 
         APIResponse<Void> response = APIResponse.<Void>builder()
                 .status("success")
                 .statusCode(HttpStatus.NO_CONTENT.value())
                 .build();
 
-        log.info("NoteRestController::deleteNote");
+        log.info("::deleteNote completed successfully with: response {}");
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
 }

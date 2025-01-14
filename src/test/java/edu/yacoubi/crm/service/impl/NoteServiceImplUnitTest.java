@@ -1,12 +1,12 @@
 package edu.yacoubi.crm.service.impl;
 
 import ch.qos.logback.classic.Logger;
-import edu.yacoubi.crm.util.TestAppender;
-import edu.yacoubi.crm.util.TestDataUtil;
 import edu.yacoubi.crm.exception.ResourceNotFoundException;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.repository.NoteRepository;
 import edu.yacoubi.crm.service.validation.EntityValidator;
+import edu.yacoubi.crm.util.TestAppender;
+import edu.yacoubi.crm.util.TestDataUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,16 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class NoteServiceImplUnitTest {
+    private static TestAppender testAppender;
     @Mock
     private NoteRepository noteRepository;
-
     @Mock
     private EntityValidator entityValidator;
-
     @InjectMocks
     private NoteServiceImpl underTest;
-
-    private static TestAppender testAppender;
 
     @BeforeEach
     public void setUp() {
@@ -101,9 +98,9 @@ class NoteServiceImplUnitTest {
         assertNotNull(updatedNote);
         verify(noteRepository, times(1)).save(note);
         assertTrue(testAppender.contains(
-                "NoteServiceImpl::updateNote execution start: noteId 1, note " + note, "INFO"
+                "::updateNote started with: noteId 1, note " + note, "INFO"
         ));
-        assertTrue(testAppender.contains("NoteServiceImpl::updateNote execution end", "INFO"));
+        assertTrue(testAppender.contains("::updateNote completed successfully", "INFO"));
     }
 
     @Test
@@ -117,8 +114,8 @@ class NoteServiceImplUnitTest {
 
         // Then
         verify(noteRepository, times(1)).deleteById(noteId);
-        assertTrue(testAppender.contains(String.format("NoteServiceImpl::deleteNote execution start: noteId %d", noteId), "INFO"));
-        assertTrue(testAppender.contains("NoteServiceImpl::deleteNote execution end", "INFO"));
+        assertTrue(testAppender.contains(String.format("::deleteNote started with: noteId %d", noteId), "INFO"));
+        assertTrue(testAppender.contains("::deleteNote completed successfully", "INFO"));
     }
 
     @Test
@@ -153,7 +150,7 @@ class NoteServiceImplUnitTest {
         verify(entityValidator, times(1)).validateNoteExists(noteId);
         // Then verify the exception message
         assertEquals("Note not found with ID: " + noteId, exception.getMessage());
-        assertTrue(testAppender.contains(String.format("NoteServiceImpl::deleteNote execution start: noteId %d", noteId), "INFO"));
-        assertFalse(testAppender.contains("NoteServiceImpl::deleteNote execution end: Resource not found", "ERROR"));
+        assertTrue(testAppender.contains(String.format("::deleteNote started with: noteId %d", noteId), "INFO"));
+        assertFalse(testAppender.contains("::deleteNote completed successfully", "ERROR"));
     }
 }
