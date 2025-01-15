@@ -31,6 +31,12 @@ public class Constants {
     public static final String INFO_LOG_DEL_EMP_AND_REASSIGN_CUSTOMERS_EXIT_POINT =
             "::deleteEmployeeAndReassignCustomers completed successfully";
 
+    public static final String INFO_LOG_CREATE_CUT_4_EMP_ENTRY_POINT =
+            "::createCustomerForEmployee started with: customer: %s, employeeId: %d";
+    public static final String INFO_LOG_CREATE_CUT_4_EMP_EXIT_POINT =
+            "::createCustomerForEmployee completed successfully";
+
+
     // Assert supplied failure message
     public static final String WARN_SUPPLIED_MSG = "Warn message should be: %s";
     public static final String ERROR_SUPPLIED_MSG = "Error message should be: %s";

@@ -805,9 +805,34 @@ class EntityOrchestratorServiceImplIntegrationTest {
         );
     }
 
-    // TODO
-    // test für createCustomerForEmployee(Customer customer, Long employeeId)
     @Test
     void itShouldCreateCustomerForEmployee() {
+        // Given
+        Employee employeeA = TestDataUtil.createEmployeeA();
+        Employee existingEmployeeA = employeeService.createEmployee(employeeA);// Save Employee in DB
+        Long employeeId = existingEmployeeA.getId();
+        Customer customer = TestDataUtil.createCustomerB(existingEmployeeA);
+        final String expectedEntryLogMsg = String.format(INFO_LOG_CREATE_CUT_4_EMP_ENTRY_POINT,
+                customer, employeeId);
+        final String expectedExitLogMsg = INFO_LOG_CREATE_CUT_4_EMP_EXIT_POINT;
+
+        // When
+        Customer result = underTest.createCustomerForEmployee(customer, employeeId);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(customer.getFirstName(), result.getFirstName());
+        assertEquals(employeeA.getId(), result.getEmployee().getId());
+
+        // Verify logger entry message
+        assertTrue(
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
+        );
+        // Verify logger exit message
+        assertTrue(
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
+        );
     }
 }

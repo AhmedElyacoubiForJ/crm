@@ -9,6 +9,7 @@ import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.service.IInactiveEmployeeService;
 import edu.yacoubi.crm.util.TestAppender;
+import edu.yacoubi.crm.util.TestDataUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -786,5 +787,37 @@ class EntityOrchestratorServiceImplUnitTest {
     // test für createCustomerForEmployee(Customer customer, Long employeeId)
     @Test
     void itShouldCreateCustomerForEmployee() {
+        // Given
+        Long employeeId = 1L;
+        Employee existingEmployee = TestDataUtil.createEmployeeA();
+        existingEmployee.setId(employeeId);
+        Customer customer = TestDataUtil.createCustomerB(existingEmployee);
+
+        final String expectedEntryLogMsg = String.format(INFO_LOG_CREATE_CUT_4_EMP_ENTRY_POINT,
+                customer, employeeId);
+        final String expectedExitLogMsg = INFO_LOG_CREATE_CUT_4_EMP_EXIT_POINT;
+
+        when(employeeService.getEmployeeById(employeeId)).thenReturn(Optional.of(existingEmployee));
+        when(customerService.createCustomer(any(Customer.class))).thenReturn(customer);
+
+        // When
+        Customer result = underTest.createCustomerForEmployee(customer, employeeId);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(customer, result);
+        verify(employeeService, times(1)).getEmployeeById(employeeId);
+        verify(customerService, times(1)).createCustomer(customer);
+
+        // Verify logger entry message
+        assertTrue(
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
+        );
+        // Verify logger exit message
+        assertTrue(
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
+        );
     }
 }
