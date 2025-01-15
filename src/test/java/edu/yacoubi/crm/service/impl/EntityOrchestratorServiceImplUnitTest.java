@@ -55,6 +55,11 @@ class EntityOrchestratorServiceImplUnitTest {
     private static final String WARN_LOG_REASSIGN_CUS_2_EMP =
             "::reassignCustomerToEmployee parameter warn: %s";
 
+    private static final String INFO_LOG_DEL_EMP_AND_REASSIGN_CUSTOMERS_ENTRY_POINT =
+            "::deleteEmployeeAndReassignCustomers started with: oldEmployeeId: %d, newEmployeeId: %d";
+    private static final String INFO_LOG_DEL_EMP_AND_REASSIGN_CUSTOMERS_EXIT_POINT =
+            "::deleteEmployeeAndReassignCustomers completed successfully";
+
     // Assert supplied failure message
     private static final String WARN_SUPPLIED_MSG = "Warn message should be: %s";
     private static final String ERROR_SUPPLIED_MSG = "Error message should be: %s";
@@ -760,6 +765,9 @@ class EntityOrchestratorServiceImplUnitTest {
     void itShouldReassignCustomersAndArchiveEmployeeByCallingDeleteEmployeeAndReassignCustomers() {
         final Long oldEmployeeId = 1L;
         final Long newEmployeeId = 2L;
+        final String expectedEntryLogMsg = String.format(INFO_LOG_DEL_EMP_AND_REASSIGN_CUSTOMERS_ENTRY_POINT,
+                oldEmployeeId, newEmployeeId);
+        final String expectedExitLogMsg = INFO_LOG_DEL_EMP_AND_REASSIGN_CUSTOMERS_EXIT_POINT;
 
         final Employee oldEmployee = new Employee();
         oldEmployee.setId(oldEmployeeId);
@@ -792,6 +800,17 @@ class EntityOrchestratorServiceImplUnitTest {
         verify(inactiveEmployeeService, times(1)).createInactiveEmployee(oldEmployee);
         verify(employeeService, times(1)).getEmployeeById(oldEmployee.getId());
         verify(employeeService, times(1)).deleteEmployee(anyLong());
+
+        // Verify logger entry message
+        assertTrue(
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
+        );
+        // Verify logger exit message
+        assertTrue(
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
+        );
     }
 
     // TODO

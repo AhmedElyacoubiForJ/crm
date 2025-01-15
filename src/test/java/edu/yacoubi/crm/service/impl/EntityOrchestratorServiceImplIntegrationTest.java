@@ -53,6 +53,11 @@ class EntityOrchestratorServiceImplIntegrationTest {
     private static final String WARN_LOG_REASSIGN_CUS_2_EMP =
             "::reassignCustomerToEmployee parameter warn: %s";
 
+    private static final String INFO_LOG_DEL_EMP_AND_REASSIGN_CUSTOMERS_ENTRY_POINT =
+            "::deleteEmployeeAndReassignCustomers started with: oldEmployeeId: %d, newEmployeeId: %d";
+    private static final String INFO_LOG_DEL_EMP_AND_REASSIGN_CUSTOMERS_EXIT_POINT =
+            "::deleteEmployeeAndReassignCustomers completed successfully";
+
     // Assert supplied failure message
     private static final String WARN_SUPPLIED_MSG = "Warn message should be: %s";
     private static final String ERROR_SUPPLIED_MSG = "Error message should be: %s";
@@ -796,10 +801,9 @@ class EntityOrchestratorServiceImplIntegrationTest {
         final Employee newEmployee = employeeService.createEmployee(TestDataUtil.createEmployeeB());
         final Long newEmployeeId = newEmployee.getId();
 
-        final String expectedEntryLogMsg = String.format(
-                "::deleteEmployeeAndReassignCustomers started with: oldEmployeeId: %d, newEmployeeId: %d",
+        final String expectedEntryLogMsg = String.format(INFO_LOG_DEL_EMP_AND_REASSIGN_CUSTOMERS_ENTRY_POINT,
                 oldEmployeeId, newEmployeeId);
-        final String expectedExitLogMsg = "::deleteEmployeeAndReassignCustomers completed successfully";;
+        final String expectedExitLogMsg = INFO_LOG_DEL_EMP_AND_REASSIGN_CUSTOMERS_EXIT_POINT;
 
         // When
         underTest.deleteEmployeeAndReassignCustomers(oldEmployeeId, newEmployeeId);
