@@ -123,7 +123,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
      */
     @Override
     public Customer createCustomerForEmployee(Customer customer, Long employeeId) {
-        log.info("::createCustomerForEmployee started with customer: {}, employeeId: {}", customer, employeeId);
+        log.info("::createCustomerForEmployee started with: customer: {}, employeeId: {}", customer, employeeId);
 
         // Validierung im service
         Employee existingEmployee = employeeService.getEmployeeById(employeeId).get();
@@ -131,7 +131,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
 
         Customer savedCustomer = customerService.createCustomer(customer);
 
-        log.info("::createCustomerForEmployee completed successfully with customer ID: {}", savedCustomer.getId());
+        log.info("::createCustomerForEmployee completed successfully");
         return savedCustomer;
     }
 
