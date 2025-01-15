@@ -27,63 +27,64 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public Customer createCustomer(Customer customer) {
-        log.info("CustomerServiceImpl::createCustomer execution start: customer {}", customer);
+        log.info("::createCustomer started with: customer {}", customer);
 
+        customer.setId(null);
         Customer savedCustomer = customerRepository.save(customer);
 
-        log.info("CustomerServiceImpl::createCustomer execution end");
+        log.info("::createCustomer completed successfully");
         return savedCustomer;
     }
 
     @Override
     public Optional<Customer> getCustomerById(Long customerId) {
-        log.info("CustomerServiceImpl::getCustomerById execution start: customerId {}", customerId);
+        log.info("::getCustomerById started with: customerId {}", customerId);
 
         entityValidator.validateCustomerExists(customerId);
 
         Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
 
-        log.info("CustomerServiceImpl::getCustomerById execution end");
+        log.info("::getCustomerById completed successfully");
         return optionalCustomer;
     }
 
     @Override
     public Customer updateCustomer(Long customerId, Customer customer) {
-        log.info("CustomerServiceImpl::updateCustomer execution start: customerId {}, customer {}", customerId, customer);
+        log.info("::updateCustomer started with: customerId {}, customer {}", customerId, customer);
 
         entityValidator.validateCustomerExists(customerId);
         customer.setId(customerId);
 
         Customer updatedCustomer = customerRepository.save(customer);
 
-        log.info("CustomerServiceImpl::updateCustomer execution end");
+        log.info("::updateCustomer completed successfully");
         return updatedCustomer;
     }
 
     @Override
     public void deleteCustomer(Long customerId) {
-        log.info("CustomerServiceImpl::deleteCustomer execution start: customerId {}", customerId);
+        log.info("::deleteCustomer started with: customerId {}", customerId);
 
         entityValidator.validateCustomerExists(customerId);
 
         customerRepository.deleteById(customerId);
 
-        log.info("CustomerServiceImpl::deleteCustomer execution end");
+        log.info("::deleteCustomer completed successfully");
     }
 
     @Override
     public Optional<Customer> getCustomerByEmail(String email) {
-        log.info("CustomerServiceImpl::getCustomerByEmail execution start: email {}", email);
+        log.info("::getCustomerByEmail started with: email {}", email);
 
         Optional<Customer> optionalCustomer = customerRepository.findByEmail(email);
 
-        log.info("CustomerServiceImpl::getCustomerByEmail execution end");
+        log.info("::getCustomerByEmail completed successfully");
         return optionalCustomer;
     }
 
     @Override
     public List<Customer> getCustomersByExample(CustomerRequestDTO customerDTO) {
-        log.info("CustomerServiceImpl::getCustomersByExample execution start: customerDTO {}", customerDTO);
+        log.info("::getCustomersByExample started with: customerDTO {}", customerDTO);
         Customer customerProbe = new Customer();
 
         if (customerDTO.getFirstName() != null) {
@@ -104,7 +105,7 @@ public class CustomerServiceImpl implements ICustomerService {
         Example<Customer> example = Example.of(customerProbe, matcher);
         List<Customer> customers = customerRepository.findAll(example);
 
-        log.info("CustomerServiceImpl::getCustomersByExample execution end");
+        log.info("::getCustomersByExample completed successfully");
         return customers;
     }
 
@@ -112,31 +113,32 @@ public class CustomerServiceImpl implements ICustomerService {
     @Transactional
     @Deprecated // Example nur für suche, obwohl die Methode funktioniert.
     public Customer updateCustomerByExample(CustomerRequestDTO customerExample, Long customerId) {
-        log.info("CustomerServiceImpl::updateCustomerByExample execution start: customerId {}, customerExample {}", customerId, customerExample);
+        log.info("::updateCustomerByExample started with: customerExample {}, customerId {}",
+                customerExample, customerId);
 
         entityValidator.validateCustomerExists(customerId);
 
         Customer updatedCustomer = customerRepository.updateCustomerByExample(customerExample, customerId);
 
-        log.info("CustomerServiceImpl::updateCustomerByExample execution end");
+        log.info("::updateCustomerByExample completed successfully");
         return updatedCustomer;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<Customer> getCustomerByEmailWithNotesAndEmployeeCustomers(String email) {
-        log.info("CustomerServiceImpl::getCustomerByEmailWithNotesAndEmployeeCustomers execution start: email: {}", email);
+        log.info("::getCustomerByEmailWithNotesAndEmployeeCustomers started with: email: {}", email);
 
         Optional<Customer> optionalCustomer = customerRepository.findByEmailWithNotesAndEmployeeCustomers(email);
 
-        log.info("CustomerServiceImpl::getCustomerByEmailWithNotesAndEmployeeCustomers execution end");
+        log.info("::getCustomerByEmailWithNotesAndEmployeeCustomers completed successfully");
         return optionalCustomer;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Customer getCustomerWithNotes(Long customerId) {
-        log.info("CustomerServiceImpl::getCustomerWithNotes execution start: customerId {}", customerId);
+        log.info("::getCustomerWithNotes started with: customerId {}", customerId);
 
         entityValidator.validateCustomerExists(customerId);
 
@@ -144,61 +146,63 @@ public class CustomerServiceImpl implements ICustomerService {
         // Durch den Zugriff werden die Notes initialisiert
         customer.getNotes().size();
 
-        log.info("CustomerServiceImpl::getCustomerWithNotes execution end");
+        log.info("::getCustomerWithNotes completed successfully");
         return customer;
     }
 
     @Override
     @Transactional
     public void partialUpdateCustomer(Long customerId, CustomerPatchDTO customerPatchDTO) {
-        log.info("CustomerServiceImpl::partialUpdateCustomer execution start: customerId {}, customerPatchDTO {}", customerId, customerPatchDTO);
+        log.info("::partialUpdateCustomer started: customerId {}, customerPatchDTO {}",
+                customerId, customerPatchDTO);
 
         entityValidator.validateCustomerExists(customerId);
 
         // delegate
         customerCustomRepository.partialUpdateCustomer(customerId, customerPatchDTO);
 
-        log.info("CustomerServiceImpl::partialUpdateCustomer execution end");
+        log.info("::partialUpdateCustomer completed successfully");
     }
 
     @Override
     public Page<Customer> getCustomersByFirstNameOrEmail(String search, int page, int size) {
-        log.info("CustomerServiceImpl::getCustomersByFirstNameOrEmail execution start: searchString: {}, page: {}, size: {}", search, page, size);
+        log.info("::getCustomersByFirstNameOrEmail started with: search: {}, page: {}, size: {}",
+                search, page, size);
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Customer> customerPage = customerRepository
                 .findByFirstNameContainingIgnoreCaseOrEmailContainingIgnoreCase(search, search, pageable);
 
-        log.info("CustomerServiceImpl::getCustomersByFirstNameOrEmail execution end");
+        log.info("::getCustomersByFirstNameOrEmail completed successfully");
         return customerPage;
     }
 
     @Override
     public Page<Customer> getCustomersWithPagination(int page, int size) {
-        log.info("CustomerServiceImpl::getCustomersWithPagination execution start: page: {}, size: {}", page, size);
+        log.info("::getCustomersWithPagination started with: page: {}, size: {}", page, size);
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Customer> customerPage = customerRepository.findAll(pageable);
 
-        log.info("CustomerServiceImpl::getCustomersWithPagination execution end");
+        log.info("::getCustomersWithPagination completed successfully");
         return customerPage;
     }
 
     @Override
     public List<Customer> getCustomersByEmployeeId(Long employeeId) {
-        log.info("CustomerServiceImpl::getCustomersByEmployeeId execution start: employeeId: {}", employeeId);
+        log.info("::getCustomersByEmployeeId started with: employeeId: {}", employeeId);
 
         entityValidator.validateEmployeeExists(employeeId);
 
         List<Customer> customers = customerRepository.findByEmployeeId(employeeId);
 
-        log.info("CustomerServiceImpl::getCustomersByEmployeeId execution end");
+        log.info("::getCustomersByEmployeeId completed successfully");
         return customers;
     }
 
     @Override
     public void updateCustomers(List<Customer> customers) {
-        log.info("CustomerServiceImpl::updateCustomers execution start");
+        log.info("::updateCustomers started with: customers {}", customers);
 
         if (customers == null || customers.isEmpty()) {
             log.warn("No customers provided for update");
@@ -215,6 +219,6 @@ public class CustomerServiceImpl implements ICustomerService {
         }
 
         customerRepository.saveAll(customers);
-        log.info("CustomerServiceImpl::updateCustomers execution end");
+        log.info("::updateCustomers completed successfully");
     }
 }

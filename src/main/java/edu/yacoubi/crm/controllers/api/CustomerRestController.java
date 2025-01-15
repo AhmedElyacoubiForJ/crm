@@ -68,7 +68,7 @@ public class CustomerRestController {
             summary = "Get customer by ID",
             description = "Retrieve a customer by their unique ID."
     )
-    @GetMapping("/{id}")
+    @GetMapping("/{customerId}")
     public ResponseEntity<APIResponse<CustomerResponseDTO>> getCustomerById(@PathVariable Long customerId) {
         log.info("::getCustomerById started with: customerId {}", customerId);
 
@@ -165,40 +165,40 @@ public class CustomerRestController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(
-            summary = "Partial update of customer by example, Deprecated",
-            description = "Partial update of an existing customer using a provided example."
-    )
-    @PutMapping("/{id}/updateByExample")
-    @Deprecated
-    public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomerByExample(
-            @PathVariable Long customerId,
-            @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
-        log.info("::updateCustomerByExample started with: customerId {}, customerRequestDTO {}",
-                customerId, jsonAsString(customerRequestDTO));
-
-        Customer updatedCustomer = customerService.updateCustomerByExample(customerRequestDTO, customerId);
-
-        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
-                EntityTransformer.customerToCustomerResponseDto,
-                updatedCustomer
-        );
-
-        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .data(customerResponseDTO)
-                .build();
-
-        log.info("::updateCustomerByExample completed successfully with: response {}", jsonAsString(response));
-        return ResponseEntity.ok(response);
-    }
+//    @Operation(
+//            summary = "Partial update of customer by example, Deprecated",
+//            description = "Partial update of an existing customer using a provided example."
+//    )
+//    @PutMapping("/{customerId}/updateByExample")
+//    @Deprecated
+//    public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomerByExample(
+//            @PathVariable Long customerId,
+//            @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
+//        log.info("::updateCustomerByExample started with: customerId {}, customerRequestDTO {}",
+//                customerId, jsonAsString(customerRequestDTO));
+//
+//        Customer updatedCustomer = customerService.updateCustomerByExample(customerRequestDTO, customerId);
+//
+//        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
+//                EntityTransformer.customerToCustomerResponseDto,
+//                updatedCustomer
+//        );
+//
+//        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
+//                .status("success")
+//                .statusCode(HttpStatus.OK.value())
+//                .data(customerResponseDTO)
+//                .build();
+//
+//        log.info("::updateCustomerByExample completed successfully with: response {}", jsonAsString(response));
+//        return ResponseEntity.ok(response);
+//    }
 
     @Operation(
             summary = "Partial update of customer",
             description = "Partial update of an existing customer by their unique ID."
     )
-    @PatchMapping("/{id}")
+    @PatchMapping("/{customerId}")
     public ResponseEntity<APIResponse<CustomerResponseDTO>> patchCustomer(
             @PathVariable Long customerId,
             @Valid @RequestBody CustomerPatchDTO customerPatchDTO) {
@@ -228,7 +228,7 @@ public class CustomerRestController {
             summary = "Delete customer",
             description = "Delete an existing customer by their unique ID."
     )
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{customerId}")
     public ResponseEntity<APIResponse<Void>> deleteCustomer(@PathVariable Long customerId) {
         log.info("::deleteCustomer started with: customerId {}", customerId);
 

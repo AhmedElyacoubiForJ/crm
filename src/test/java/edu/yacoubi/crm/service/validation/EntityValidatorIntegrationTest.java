@@ -54,14 +54,10 @@ class EntityValidatorIntegrationTest {
         // Given
         final Employee existingEmployee = employeeRepository.save(TestDataUtil.createEmployeeA());
         final Long employeeId = existingEmployee.getId();
-        final String expectedEntryLogMsg = String.format(
-                "::validateEmployeeExists employeeId: %d",
-                employeeId
-        );
-        final String expectedExitLogMsg = String.format(
-                "::validateEmployeeExists employeeId: %d successfully validated",
-                employeeId
-        );
+        final String expectedEntryLogMsg = String.format("::validateEmployeeExists started with: employeeId %d",
+                employeeId);
+        final String expectedExitLogMsg = "::validateEmployeeExists completed successfully";
+
 
         // When
         underTest.validateEmployeeExists(employeeId);
@@ -82,18 +78,14 @@ class EntityValidatorIntegrationTest {
         // Given
         final Long employeeId = 999L;
         final String errorMessage = "Employee not found with ID: " + employeeId;
-        final String expectedErrorLogMsg = String.format(
-                "::validateEmployeeExists error: %s",
-                errorMessage
-        );
+        final String expectedErrorLogMsg = String.format("::validateEmployeeExists error: %s",
+                errorMessage);
         final String expectedEntryLogMsg = String.format(
-                "::validateEmployeeExists employeeId: %d",
+                "::validateEmployeeExists started with: employeeId %d",
                 employeeId
         );
-        final String expectedExitLogMsg = String.format(
-                "::validateEmployeeExists employeeId: %d successfully validated",
-                employeeId
-        );
+        final String expectedExitLogMsg = "::validateEmployeeExists completed successfully";
+
 
         // When
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
@@ -126,14 +118,9 @@ class EntityValidatorIntegrationTest {
                         )))
                 );
         final Long noteId = existingNote.getId();
-        final String expectedEntryLogMsg = String.format(
-                "::validateNoteExists id: %d",
-                noteId
-        );
-        final String expectedExitLogMsg = String.format(
-                "::validateNoteExists id: %d successfully validated",
-                noteId
-        );
+        final String expectedEntryLogMsg = String.format("::validateNoteExists started with: noteId %d",
+                noteId);
+        final String expectedExitLogMsg = "::validateNoteExists completed successfully";
 
         // When
         underTest.validateNoteExists(noteId);
@@ -158,14 +145,9 @@ class EntityValidatorIntegrationTest {
                 "::validateNoteExists error: %s",
                 errorMessage
         );
-        final String expectedEntryLogMsg = String.format(
-                "::validateNoteExists id: %d",
-                noteId
-        );
-        final String expectedExitLogMsg = String.format(
-                "::validateNoteExists id: %d successfully validated",
-                noteId
-        );
+        final String expectedEntryLogMsg = String.format("::validateNoteExists started with: noteId %d",
+                noteId);
+        final String expectedExitLogMsg = "::validateNoteExists completed successfully";
 
         // When
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
@@ -198,13 +180,10 @@ class EntityValidatorIntegrationTest {
         );
         final Long customerId = existingCustomer.getId();
         final String expectedEntryLogMsg = String.format(
-                "::validateCustomerExists id: %d",
+                "::validateCustomerExists started with: customerId %d",
                 customerId
         );
-        final String expectedExitLogMsg = String.format(
-                "::validateCustomerExists id: %d successfully validated",
-                customerId
-        );
+        final String expectedExitLogMsg = "::validateCustomerExists completed successfully";
 
         // When
         underTest.validateCustomerExists(customerId);
@@ -230,13 +209,10 @@ class EntityValidatorIntegrationTest {
                 errorMessage
         );
         final String expectedEntryLogMsg = String.format(
-                "::validateCustomerExists id: %d",
+                "::validateCustomerExists started with: customerId %d",
                 customerId
         );
-        final String expectedExitLogMsg = String.format(
-                "::validateCustomerExists id: %d successfully validated",
-                customerId
-        );
+        final String expectedExitLogMsg = "::validateCustomerExists completed successfully";
 
         // When
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
@@ -264,13 +240,10 @@ class EntityValidatorIntegrationTest {
         // Given
         final Long originalEmployeeId = 101L;
         final String expectedEntryLogMsg = String.format(
-                "::validateInactiveEmployeeExists originalEmployeeId: %d",
+                "::validateInactiveEmployeeExists started with: originalEmployeeId: %d",
                 originalEmployeeId
         );
-        final String expectedExitLogMsg = String.format(
-                "::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
-                originalEmployeeId
-        );
+        final String expectedExitLogMsg = "::validateInactiveEmployeeExists completed successfully";
         inactiveEmployeeRepository.save(
                 TestDataUtil.createInactiveEmployeeA(originalEmployeeId)
         );
@@ -298,13 +271,10 @@ class EntityValidatorIntegrationTest {
                 errorMessage
         );
         final String expectedEntryLogMsg = String.format(
-                "::validateInactiveEmployeeExists originalEmployeeId: %d",
+                "::validateInactiveEmployeeExists started with: originalEmployeeId: %d",
                 originalEmployeeId
         );
-        final String expectedExitLogMsg = String.format(
-                "::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
-                originalEmployeeId
-        );
+        final String expectedExitLogMsg = "::validateInactiveEmployeeExists completed successfully";
 
         // When
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
@@ -333,14 +303,14 @@ class EntityValidatorIntegrationTest {
         final Employee existingEmployeeWithoutCustomers = employeeRepository.save(TestDataUtil.createEmployeeA());
         final Long employeeId = existingEmployeeWithoutCustomers.getId();
         final String expectedEntryLogMsg = String.format(
-                "::validateEmployeeHasCustomers employeeId: %d",
+                "::validateEmployeeHasCustomers started with: employeeId: %d",
                 employeeId
         );
 
         // When
         final boolean hasCustomers = underTest.validateEmployeeHasCustomers(employeeId);
         final String expectedExitLogMsg = String.format(
-                "::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
+                "::validateEmployeeHasCustomers completed successfully: employeeId: %d hasCustomers: %s",
                 employeeId,
                 hasCustomers
         );
@@ -364,7 +334,7 @@ class EntityValidatorIntegrationTest {
         final Employee existingEmployee = employeeRepository.save(employee);
         final Long employeeId = existingEmployee.getId();
         final String expectedEntryLogMsg = String.format(
-                "::validateEmployeeHasCustomers employeeId: %d",
+                "::validateEmployeeHasCustomers started with: employeeId: %d",
                 employeeId
         );
         final Customer customerB = TestDataUtil.createCustomerB(existingEmployee);
@@ -374,7 +344,7 @@ class EntityValidatorIntegrationTest {
         // When
         final boolean hasCustomers = underTest.validateEmployeeHasCustomers(employeeId);
         final String expectedExitLogMsg = String.format(
-                "::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
+                "::validateEmployeeHasCustomers completed successfully: employeeId: %d hasCustomers: %s",
                 employeeId,
                 hasCustomers
         );

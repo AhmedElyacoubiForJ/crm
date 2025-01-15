@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 class EntityValidatorUnitTest {
     // Assert supplied failure message
     private static final String ERROR_SUPPLIED_MSG = "Error message should be: %s";
-    private static final String INFO_SUPPLIED_MSG = "Info message should be: %s";
+    private static final String INFO_SUPPLIED_MSG  = "Info message should be: %s";
 
     @Mock
     private EmployeeRepository employeeRepository;
@@ -57,14 +57,9 @@ class EntityValidatorUnitTest {
     void itShouldValidateEmployeeExists() {
         // Given
         final Long employeeId = 1L;
-        final String expectedEntryLogMsg = String.format(
-                "::validateEmployeeExists employeeId: %d",
-                employeeId
-        );
-        final String expectedExitLogMsg = String.format(
-                "::validateEmployeeExists employeeId: %d successfully validated",
-                employeeId
-        );
+        final String expectedEntryLogMsg = String.format("::validateEmployeeExists started with: employeeId %d",
+                employeeId);
+        final String expectedExitLogMsg = "::validateEmployeeExists completed successfully";
 
         when(employeeRepository.existsById(employeeId)).thenReturn(true);
 
@@ -88,18 +83,13 @@ class EntityValidatorUnitTest {
         // Given
         final Long employeeId = 1L;
         final String errorMessage = "Employee not found with ID: " + employeeId;
-        final String expectedErrorLogMsg = String.format(
-                "::validateEmployeeExists error: %s",
-                errorMessage
-        );
-        final String expectedEntryLogMsg = String.format(
-                "::validateEmployeeExists employeeId: %d",
-                employeeId
-        );
-        final String expectedExitLogMsg = String.format(
-                "::validateEmployeeExists employeeId: %d successfully validated",
-                employeeId
-        );
+        final String expectedErrorLogMsg = String.format("::validateEmployeeExists error: %s",
+                errorMessage);
+
+        final String expectedEntryLogMsg = String.format("::validateEmployeeExists started with: employeeId %d",
+                employeeId);
+        final String expectedExitLogMsg = "::validateEmployeeExists completed successfully";
+
         when(employeeRepository.existsById(employeeId)).thenReturn(false);
 
         // When
@@ -128,14 +118,10 @@ class EntityValidatorUnitTest {
     void itShouldValidateNoteExists() {
         // Given
         Long noteId = 1L;
-        final String expectedEntryLogMsg = String.format(
-                "::validateNoteExists id: %d",
-                noteId
-        );
-        final String expectedExitLogMsg = String.format(
-                "::validateNoteExists id: %d successfully validated",
-                noteId
-        );
+        final String expectedEntryLogMsg = String.format("::validateNoteExists started with: noteId %d",
+                noteId);
+        final String expectedExitLogMsg = "::validateNoteExists completed successfully";
+
         when(noteRepository.existsById(noteId)).thenReturn(true);
 
         // When
@@ -162,14 +148,10 @@ class EntityValidatorUnitTest {
                 "::validateNoteExists error: %s",
                 errorMessage
         );
-        final String expectedEntryLogMsg = String.format(
-                "::validateNoteExists id: %d",
-                noteId
-        );
-        final String expectedExitLogMsg = String.format(
-                "::validateNoteExists id: %d successfully validated",
-                noteId
-        );
+        final String expectedEntryLogMsg = String.format("::validateNoteExists started with: noteId %d",
+                noteId);
+        final String expectedExitLogMsg = "::validateNoteExists completed successfully";
+
         when(noteRepository.existsById(noteId)).thenReturn(false);
 
         // When
@@ -198,14 +180,10 @@ class EntityValidatorUnitTest {
     void itShouldValidateCustomerExists() {
         // Given
         final Long customerId = 1L;
-        final String expectedEntryLogMsg = String.format(
-                "::validateCustomerExists id: %d",
-                customerId
-        );
-        final String expectedExitLogMsg = String.format(
-                "::validateCustomerExists id: %d successfully validated",
-                customerId
-        );
+        final String expectedEntryLogMsg = String.format("::validateCustomerExists started with: customerId %d",
+                customerId);
+        final String expectedExitLogMsg = "::validateCustomerExists completed successfully";
+
         when(customerRepository.existsById(customerId)).thenReturn(true);
 
         // When
@@ -233,13 +211,10 @@ class EntityValidatorUnitTest {
                 errorMessage
         );
         final String expectedEntryLogMsg = String.format(
-                "::validateCustomerExists id: %d",
+                "::validateCustomerExists started with: customerId %d",
                 customerId
         );
-        final String expectedExitLogMsg = String.format(
-                "::validateCustomerExists id: %d successfully validated",
-                customerId
-        );
+        final String expectedExitLogMsg = "::validateCustomerExists completed successfully";
         when(customerRepository.existsById(customerId)).thenReturn(false);
 
         // When
@@ -269,13 +244,10 @@ class EntityValidatorUnitTest {
         // Given
         final Long originalEmployeeId = 1L;
         final String expectedEntryLogMsg = String.format(
-                "::validateInactiveEmployeeExists originalEmployeeId: %d",
+                "::validateInactiveEmployeeExists started with: originalEmployeeId: %d",
                 originalEmployeeId
         );
-        final String expectedExitLogMsg = String.format(
-                "::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
-                originalEmployeeId
-        );
+        final String expectedExitLogMsg = "::validateInactiveEmployeeExists completed successfully";
         when(inactiveEmployeeRepository.existsByOriginalEmployeeId(originalEmployeeId))
                 .thenReturn(true);
 
@@ -303,13 +275,10 @@ class EntityValidatorUnitTest {
                 errorMessage
         );
         final String expectedEntryLogMsg = String.format(
-                "::validateInactiveEmployeeExists originalEmployeeId: %d",
+                "::validateInactiveEmployeeExists started with: originalEmployeeId: %d",
                 originalEmployeeId
         );
-        final String expectedExitLogMsg = String.format(
-                "::validateInactiveEmployeeExists originalEmployeeId: %d successfully validated",
-                originalEmployeeId
-        );
+        final String expectedExitLogMsg = "::validateInactiveEmployeeExists completed successfully";
         when(inactiveEmployeeRepository.existsByOriginalEmployeeId(originalEmployeeId)).thenReturn(false);
 
         // When
@@ -339,12 +308,12 @@ class EntityValidatorUnitTest {
         // Given
         final Long employeeId = 1L;
         final String expectedEntryLogMsg = String.format(
-                "::validateEmployeeHasCustomers employeeId: %d",
+                "::validateEmployeeHasCustomers started with: employeeId: %d",
                 employeeId
         );
         final boolean hasCustomers = false;
         final String expectedExitLogMsg = String.format(
-                "::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
+                "::validateEmployeeHasCustomers completed successfully: employeeId: %d hasCustomers: %s",
                 employeeId,
                 hasCustomers
         );
@@ -371,12 +340,12 @@ class EntityValidatorUnitTest {
         // Given
         final Long employeeId = 1L;
         final String expectedEntryLogMsg = String.format(
-                "::validateEmployeeHasCustomers employeeId: %d",
+                "::validateEmployeeHasCustomers started with: employeeId: %d",
                 employeeId
         );
         final boolean hasCustomers = true;
         final String expectedExitLogMsg = String.format(
-                "::validateEmployeeHasCustomers employeeId: %d hasCustomers: %s",
+                "::validateEmployeeHasCustomers completed successfully: employeeId: %d hasCustomers: %s",
                 employeeId,
                 hasCustomers
         );
