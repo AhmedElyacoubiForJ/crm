@@ -20,6 +20,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.yacoubi.crm.util.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -31,38 +32,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class EntityOrchestratorServiceImplIntegrationTest {
-    // Error messages
-    private static final String ERROR_INVALID_IDS_MSG =
-            "Employee IDs must not be null and must be a positive number";
-    private static final String ERROR_SAME_IDS_MSG =
-            "Old and new employee IDs must be different";
-    private static final String ERROR_MSG_NO_CUSTOMERS =
-            "No customers found for oldEmployee ID: %d";
-
-    // Logger infos
-    private static final String INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT =
-            "::reassignCustomers oldEmployeeId: %d, newEmployeeId: %d";
-    private static final String INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT =
-            "Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d";
-
-    private static final String INFO_LOG_REASSIGN_CUS_2_EMP_ENTRY_POINT =
-            "::reassignCustomerToEmployee started with: customerId: %d, employeeId: %d";
-    private static final String INFO_LOG_REASSIGN_CUS_2_EMP_EXIT_POINT =
-            "::reassignCustomerToEmployee completed successfully";
-    // reassignCustomerToEmployee parameter warn
-    private static final String WARN_LOG_REASSIGN_CUS_2_EMP =
-            "::reassignCustomerToEmployee parameter warn: %s";
-
-    private static final String INFO_LOG_DEL_EMP_AND_REASSIGN_CUSTOMERS_ENTRY_POINT =
-            "::deleteEmployeeAndReassignCustomers started with: oldEmployeeId: %d, newEmployeeId: %d";
-    private static final String INFO_LOG_DEL_EMP_AND_REASSIGN_CUSTOMERS_EXIT_POINT =
-            "::deleteEmployeeAndReassignCustomers completed successfully";
-
-    // Assert supplied failure message
-    private static final String WARN_SUPPLIED_MSG = "Warn message should be: %s";
-    private static final String ERROR_SUPPLIED_MSG = "Error message should be: %s";
-    private static final String INFO_SUPPLIED_MSG = "Info message should be: %s";
-
     private static TestAppender testAppender;
 
     @Autowired
@@ -380,7 +349,7 @@ class EntityOrchestratorServiceImplIntegrationTest {
         );
         assertTrue(
                 testAppender.contains(
-                        String.format("::reassignCustomers warn: %s", errorMessage),
+                        String.format(WARN_ENTITY_LOG_REASSIGN_CUS_2_EMP, errorMessage),
                         "WARN"
                 ),
                 String.format(WARN_SUPPLIED_MSG, errorMessage)
@@ -529,9 +498,9 @@ class EntityOrchestratorServiceImplIntegrationTest {
         // Logger warn message
         assertTrue(
                 testAppender.contains(
-                        String.format(WARN_LOG_REASSIGN_CUS_2_EMP, errorMessage),
+                        String.format(WARN_PARAM_LOG_REASSIGN_CUS_2_EMP, errorMessage),
                         "WARN"
-                ), String.format(WARN_SUPPLIED_MSG, String.format(WARN_LOG_REASSIGN_CUS_2_EMP, errorMessage))
+                ), String.format(WARN_SUPPLIED_MSG, String.format(WARN_PARAM_LOG_REASSIGN_CUS_2_EMP, errorMessage))
         );
 
         // Logger info entry & exit message
@@ -569,7 +538,7 @@ class EntityOrchestratorServiceImplIntegrationTest {
                 String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
         assertTrue(testAppender.contains(
-                String.format("::reassignCustomerToEmployee parameter warn: %s", errorMessage),
+                String.format(WARN_PARAM_LOG_REASSIGN_CUS_2_EMP, errorMessage),
                 "WARN"
         ));
         // Logger info entry & exit messages
@@ -607,7 +576,7 @@ class EntityOrchestratorServiceImplIntegrationTest {
                 String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
         assertTrue(testAppender.contains(
-                String.format("::reassignCustomerToEmployee parameter warn: %s", errorMessage),
+                String.format(WARN_PARAM_LOG_REASSIGN_CUS_2_EMP, errorMessage),
                 "WARN"
         ));
         // Logger info entry & exit messages
@@ -646,11 +615,11 @@ class EntityOrchestratorServiceImplIntegrationTest {
         );
         assertTrue(
                 testAppender.contains(
-                        String.format(WARN_LOG_REASSIGN_CUS_2_EMP, errorMessage),
+                        String.format(WARN_PARAM_LOG_REASSIGN_CUS_2_EMP, errorMessage),
                         "WARN"
                 ),
                 String.format(WARN_SUPPLIED_MSG,
-                        String.format(WARN_LOG_REASSIGN_CUS_2_EMP, errorMessage))
+                        String.format(WARN_PARAM_LOG_REASSIGN_CUS_2_EMP, errorMessage))
         );
 
         // Logger info entry & exit messages
@@ -839,5 +808,6 @@ class EntityOrchestratorServiceImplIntegrationTest {
     // TODO
     // test für createCustomerForEmployee(Customer customer, Long employeeId)
     @Test
-    void itShouldCreateCustomerForEmployee() {}
+    void itShouldCreateCustomerForEmployee() {
+    }
 }

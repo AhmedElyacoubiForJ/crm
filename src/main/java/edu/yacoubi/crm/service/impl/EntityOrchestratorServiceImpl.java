@@ -83,7 +83,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
      */
     @Override
     public void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
-        log.info("::reassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
+        log.info("::reassignCustomers started with: oldEmployeeId: {}, newEmployeeId: {}",
                 oldEmployeeId, newEmployeeId
         );
 
@@ -103,7 +103,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
 
         if (customers.isEmpty()) {
             String errorMessage = "No customers found for oldEmployee ID: " + oldEmployeeId;
-            log.warn("::reassignCustomers warn: {}", errorMessage);
+            log.warn("::reassignCustomers entity warn: {}", errorMessage);
             throw new ResourceNotFoundException(errorMessage);
         }
 
@@ -111,9 +111,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
 
         handleCustomerReassignment(customers, newEmployee);
 
-        log.info("Customers reassigned successfully: oldEmployeeId= {}, newEmployeeId= {}",
-                oldEmployeeId, newEmployeeId
-        );
+        log.info("::reassignCustomers completed successfully");
     }
 
     /**
