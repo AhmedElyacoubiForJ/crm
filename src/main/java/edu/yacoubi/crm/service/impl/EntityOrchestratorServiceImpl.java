@@ -36,7 +36,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
     @Transactional
     @Override
     public void deleteEmployeeAndReassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
-        log.info("::deleteEmployeeAndReassignCustomers oldEmployeeId: {}, newEmployeeId: {}",
+        log.info("::deleteEmployeeAndReassignCustomers started with: oldEmployeeId: {}, newEmployeeId: {}",
                 oldEmployeeId, newEmployeeId
         );
 
@@ -47,9 +47,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
         EntityAction deleteEmployeeAction = createDeleteEmployeeAction();
         processEntityAction(oldEmployeeId, deleteEmployeeAction);
 
-        log.info("Employee deleted and customers reassigned: oldEmployeeId= {}, newEmployeeId= {}",
-                oldEmployeeId, newEmployeeId
-        );
+        log.info("::deleteEmployeeAndReassignCustomers completed successfully");
     }
 
     /**
@@ -59,13 +57,13 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
      */
     @Override
     public void reassignCustomerToEmployee(Long customerId, Long employeeId) {
-        log.info("::reassignCustomerToEmployee customerId: {}, employeeId: {}",
+        log.info("::reassignCustomerToEmployee started with: customerId: {}, employeeId: {}",
                 customerId, employeeId
         );
-
+        // EntityOrchestratorServiceImpl parameter warn
         if (customerId == null || employeeId == null || customerId < 0 || employeeId < 0) {
             String errorMessage = "Customer or Employee IDs must not be null and must be a positive number";
-            log.warn("EntityOrchestratorServiceImpl parameter warn: {}", errorMessage);
+            log.warn("::reassignCustomerToEmployee parameter warn: {}", errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }
 
@@ -75,7 +73,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
         customer.setEmployee(employee);
         customerService.updateCustomer(customerId, customer);
 
-        log.info("Customer reassigned: customerId= {}, newEmployeeId= {}", customerId, employeeId);
+        log.info("::reassignCustomerToEmployee completed successfully");
     }
 
     /**

@@ -47,10 +47,13 @@ class EntityOrchestratorServiceImplUnitTest {
     private static final String INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT =
             "Customers reassigned successfully: oldEmployeeId= %d, newEmployeeId= %d";
 
-    private static final String INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT =
-            "::reassignCustomerToEmployee customerId: %d, employeeId: %d";
-    private static final String INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT =
-            "Customer reassigned: customerId= %d, newEmployeeId= %d";
+    private static final String INFO_LOG_REASSIGN_CUS_2_EMP_ENTRY_POINT =
+            "::reassignCustomerToEmployee started with: customerId: %d, employeeId: %d";
+    private static final String INFO_LOG_REASSIGN_CUS_2_EMP_EXIT_POINT =
+            "::reassignCustomerToEmployee completed successfully";
+    // reassignCustomerToEmployee parameter warn
+    private static final String WARN_LOG_REASSIGN_CUS_2_EMP =
+            "::reassignCustomerToEmployee parameter warn: %s";
 
     // Assert supplied failure message
     private static final String WARN_SUPPLIED_MSG = "Warn message should be: %s";
@@ -90,6 +93,10 @@ class EntityOrchestratorServiceImplUnitTest {
         // Given
         final Long oldEmployeeId = null;
         final Long newEmployeeId = 1L;
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT,
+                oldEmployeeId, newEmployeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT,
+                oldEmployeeId, newEmployeeId);
 
         // When
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -107,15 +114,13 @@ class EntityOrchestratorServiceImplUnitTest {
                 String.format(ERROR_SUPPLIED_MSG, ERROR_INVALID_IDS_MSG)
         );
         // Logger entry & exit messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -124,6 +129,10 @@ class EntityOrchestratorServiceImplUnitTest {
         // Given
         final Long oldEmployeeId = 1L;
         final Long newEmployeeId = null; // set to null to test the precondition
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT,
+                oldEmployeeId, newEmployeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT,
+                oldEmployeeId, newEmployeeId);
 
         // When
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -141,15 +150,13 @@ class EntityOrchestratorServiceImplUnitTest {
                 String.format(ERROR_SUPPLIED_MSG, ERROR_INVALID_IDS_MSG)
         );
         // Logger entry & exit messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -158,6 +165,10 @@ class EntityOrchestratorServiceImplUnitTest {
         // Given
         final Long oldEmployeeId = -1L;
         final Long newEmployeeId = 1L;
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT,
+                oldEmployeeId, newEmployeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT,
+                oldEmployeeId, newEmployeeId);
 
         // When
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -175,15 +186,13 @@ class EntityOrchestratorServiceImplUnitTest {
                 String.format(ERROR_SUPPLIED_MSG, ERROR_INVALID_IDS_MSG)
         );
         // Logger entry & exit messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -192,6 +201,10 @@ class EntityOrchestratorServiceImplUnitTest {
         // Given
         final Long oldEmployeeId = 1L;
         final Long newEmployeeId = -1L;
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT,
+                oldEmployeeId, newEmployeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT,
+                oldEmployeeId, newEmployeeId);
 
         // When
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -209,15 +222,13 @@ class EntityOrchestratorServiceImplUnitTest {
                 String.format(ERROR_SUPPLIED_MSG, ERROR_INVALID_IDS_MSG)
         );
         // Logger entry & exit messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -226,6 +237,10 @@ class EntityOrchestratorServiceImplUnitTest {
         // Given
         final Long oldEmployeeId = 1L;
         final Long newEmployeeId = 1L;
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT,
+                oldEmployeeId, newEmployeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT,
+                oldEmployeeId, newEmployeeId);
 
         // When
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -248,15 +263,13 @@ class EntityOrchestratorServiceImplUnitTest {
         );
 
         // Logger entry & exit messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -265,6 +278,10 @@ class EntityOrchestratorServiceImplUnitTest {
         // Given
         final Long oldEmployeeId = 1L;
         final Long newEmployeeId = 2L;
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT,
+                oldEmployeeId, newEmployeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT,
+                oldEmployeeId, newEmployeeId);
 
         when(customerService.getCustomersByEmployeeId(oldEmployeeId))
                 .thenReturn(new ArrayList<>());
@@ -287,15 +304,13 @@ class EntityOrchestratorServiceImplUnitTest {
                 String.format(WARN_SUPPLIED_MSG, expectedErrorMsg)
         );
         // Logger entry & exit messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -305,6 +320,10 @@ class EntityOrchestratorServiceImplUnitTest {
         final Long oldEmployeeId = 999L;
         final Long newEmployeeId = 2L;
         final String errorMessage = "Employee not found with ID: " + oldEmployeeId;
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT,
+                oldEmployeeId, newEmployeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT,
+                oldEmployeeId, newEmployeeId);
 
         doThrow(new ResourceNotFoundException(errorMessage))
                 .when(customerService).getCustomersByEmployeeId(oldEmployeeId);
@@ -322,15 +341,13 @@ class EntityOrchestratorServiceImplUnitTest {
                 String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
         // Logger entry & exit message
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(String.format(expectedLogMsg), "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -340,6 +357,10 @@ class EntityOrchestratorServiceImplUnitTest {
         final Long oldEmployeeId = 1L;
         final Long newEmployeeId = 2L;
         final String errorMessage = "No customers found for oldEmployee ID: " + oldEmployeeId;
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT,
+                oldEmployeeId, newEmployeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT,
+                oldEmployeeId, newEmployeeId);
 
         when(customerService.getCustomersByEmployeeId(oldEmployeeId))
                 .thenReturn(Collections.emptyList());
@@ -364,15 +385,13 @@ class EntityOrchestratorServiceImplUnitTest {
                 String.format(WARN_SUPPLIED_MSG, errorMessage)
         );
         // Logger info entry & exit messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -382,6 +401,10 @@ class EntityOrchestratorServiceImplUnitTest {
         final Long oldEmployeeId = 1L;
         final Long newEmployeeId = 999L;
         final String errorMessage = "Employee not found with ID: " + newEmployeeId;
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT,
+                oldEmployeeId, newEmployeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT,
+                oldEmployeeId, newEmployeeId);
 
         doThrow(new ResourceNotFoundException(errorMessage))
                 .when(employeeService).getEmployeeById(anyLong());
@@ -401,15 +424,13 @@ class EntityOrchestratorServiceImplUnitTest {
                 String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
         // Logger info entry & exit messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertFalse(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -418,6 +439,11 @@ class EntityOrchestratorServiceImplUnitTest {
         // Given
         final Long oldEmployeeId = 1L;
         final Long newEmployeeId = 2L;
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT,
+                oldEmployeeId, newEmployeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT,
+                oldEmployeeId, newEmployeeId);
+
         final List<Customer> customers = List.of(
                 Customer.builder().id(111L).build(),
                 Customer.builder().id(222L).build()
@@ -430,31 +456,30 @@ class EntityOrchestratorServiceImplUnitTest {
                 .thenReturn(Optional.of(newEmployee));
         doNothing().when(customerService).updateCustomers(anyList());
 
-
         // When
         underTest.reassignCustomers(oldEmployeeId, newEmployeeId);
 
         // Then / Verify
         // Logger info entry & exit & assignment messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_ENTRY_POINT, oldEmployeeId, newEmployeeId);
-        assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
-        );
+        final String expectedReassigningMsg = "Reassigning customer ID: %d to new employee ID: %d";
         customers.forEach(
-                customer -> assertTrue(testAppender.contains(
-                        String.format(
-                                "Reassigning customer ID: %d to new employee ID: %d",
-                                customer.getId(),
-                                newEmployeeId
+                customer -> assertTrue(
+                        testAppender.contains(
+                                String.format(expectedReassigningMsg, customer.getId(), newEmployeeId),
+                                "INFO"
                         ),
-                        "INFO"
-                ))
+                        String.format(
+                                INFO_SUPPLIED_MSG,
+                                String.format(expectedReassigningMsg, customer.getId(), newEmployeeId)
+                        ))
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT, oldEmployeeId, newEmployeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
+        );
+        assertTrue(
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -465,6 +490,10 @@ class EntityOrchestratorServiceImplUnitTest {
         final Long customerId = null; // set to null to test the precondition
         final Long employeeId = 1L;
         final String errorMessage = "Customer or Employee IDs must not be null and must be a positive number";
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_ENTRY_POINT,
+                customerId, employeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_EXIT_POINT,
+                customerId, employeeId);
 
         // When
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -481,21 +510,19 @@ class EntityOrchestratorServiceImplUnitTest {
         // Logger warn message
         assertTrue(
                 testAppender.contains(
-                        String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage),
+                        String.format(WARN_LOG_REASSIGN_CUS_2_EMP, errorMessage),
                         "WARN"
                 ),
-                String.format(WARN_SUPPLIED_MSG, String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage))
+                String.format(WARN_SUPPLIED_MSG, String.format(WARN_LOG_REASSIGN_CUS_2_EMP, errorMessage))
         );
         // Logger info entry & exit message
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId);
         assertFalse(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -505,6 +532,10 @@ class EntityOrchestratorServiceImplUnitTest {
         final Long customerId = 1L;
         final Long employeeId = null; // set to null to test the precondition
         final String errorMessage = "Customer or Employee IDs must not be null and must be a positive number";
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_ENTRY_POINT,
+                customerId, employeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_EXIT_POINT,
+                customerId, employeeId);
 
         // When
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -520,20 +551,17 @@ class EntityOrchestratorServiceImplUnitTest {
         );
         // Logger error msg
         assertTrue(testAppender.contains(
-                String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage),
+                String.format(WARN_LOG_REASSIGN_CUS_2_EMP, errorMessage),
                 "WARN"
         ));
         // Logger info entry msg
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        // Logger info exit msg
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId);
         assertFalse(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -543,6 +571,10 @@ class EntityOrchestratorServiceImplUnitTest {
         final Long customerId = -1L;
         final Long employeeId = 1L;
         final String errorMessage = "Customer or Employee IDs must not be null and must be a positive number";
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_ENTRY_POINT,
+                customerId, employeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_EXIT_POINT,
+                customerId, employeeId);
 
         // When
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -557,21 +589,17 @@ class EntityOrchestratorServiceImplUnitTest {
                 String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
         assertTrue(testAppender.contains(
-                String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage),
+                String.format(WARN_LOG_REASSIGN_CUS_2_EMP, errorMessage),
                 "WARN"
         ));
         // Logger info entry & exit messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId);
-        assertFalse(testAppender.contains(
-                        String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId),
-                        "INFO"
-                ),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+        assertFalse(
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -581,6 +609,10 @@ class EntityOrchestratorServiceImplUnitTest {
         final Long customerId = 1L;
         final Long employeeId = -1L;
         final String errorMessage = "Customer or Employee IDs must not be null and must be a positive number";
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_ENTRY_POINT,
+                customerId, employeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_EXIT_POINT,
+                customerId, employeeId);
 
         // When
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -596,21 +628,20 @@ class EntityOrchestratorServiceImplUnitTest {
         );
         assertTrue(
                 testAppender.contains(
-                        String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage),
+                        String.format(WARN_LOG_REASSIGN_CUS_2_EMP, errorMessage),
                         "WARN"
                 ),
-                String.format(WARN_SUPPLIED_MSG, String.format("EntityOrchestratorServiceImpl parameter warn: %s", errorMessage))
+                String.format(WARN_SUPPLIED_MSG,
+                        String.format(WARN_LOG_REASSIGN_CUS_2_EMP, errorMessage))
         );
         // Logger info entry & exit messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId);
         assertFalse(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -620,6 +651,11 @@ class EntityOrchestratorServiceImplUnitTest {
         final Long customerId = 999L;
         final Long employeeId = 2L;
         final String errorMessage = "Customer not found with ID: " + customerId;
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_ENTRY_POINT,
+                customerId, employeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_EXIT_POINT,
+                customerId, employeeId);
+
         doThrow(new ResourceNotFoundException(errorMessage))
                 .when(customerService).getCustomerById(anyLong());
 
@@ -636,15 +672,13 @@ class EntityOrchestratorServiceImplUnitTest {
                 String.format(ERROR_SUPPLIED_MSG, errorMessage)
         );
         // Logger info messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId);
         assertFalse(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -654,6 +688,10 @@ class EntityOrchestratorServiceImplUnitTest {
         final Long customerId = 2L;
         final Long employeeId = 999L; // set to a non-existing employee id to test the precondition
         final String errorMessage = "Employee not found with ID: " + employeeId;
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_ENTRY_POINT,
+                customerId, employeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_EXIT_POINT,
+                customerId, employeeId);
 
         when(customerService.getCustomerById(anyLong()))
                 .thenReturn(Optional.of(new Customer()));
@@ -674,15 +712,13 @@ class EntityOrchestratorServiceImplUnitTest {
         );
 
         // Logger info entry & exit messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId);
         assertFalse(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -691,6 +727,11 @@ class EntityOrchestratorServiceImplUnitTest {
         // Given
         final Long employeeId = 1L;
         final Long customerId = 101L;
+        final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_ENTRY_POINT,
+                customerId, employeeId);
+        final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_EXIT_POINT,
+                customerId, employeeId);
+
         when(customerService.getCustomerById(anyLong())).thenReturn(Optional.of(new Customer()));
         when(employeeService.getEmployeeById(anyLong())).thenReturn(Optional.of(new Employee()));
         when(customerService.updateCustomer(anyLong(), any(Customer.class))).thenReturn(new Customer());
@@ -705,15 +746,13 @@ class EntityOrchestratorServiceImplUnitTest {
         verify(customerService).updateCustomer(anyLong(), any(Customer.class));
 
         // Logger info entry & exit messages
-        String expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_ENTRY_POINT, customerId, employeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedEntryLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedEntryLogMsg)
         );
-        expectedLogMsg = String.format(INFO_LOG_REASSIGN_CUSTOMER_TO_EMPLOYEE_EXIT_POINT, customerId, employeeId);
         assertTrue(
-                testAppender.contains(expectedLogMsg, "INFO"),
-                String.format(INFO_SUPPLIED_MSG, expectedLogMsg)
+                testAppender.contains(expectedExitLogMsg, "INFO"),
+                String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
 
@@ -754,8 +793,10 @@ class EntityOrchestratorServiceImplUnitTest {
         verify(employeeService, times(1)).getEmployeeById(oldEmployee.getId());
         verify(employeeService, times(1)).deleteEmployee(anyLong());
     }
+
     // TODO
     // test für createCustomerForEmployee(Customer customer, Long employeeId)
     @Test
-    void itShouldCreateCustomerForEmployee() {}
+    void itShouldCreateCustomerForEmployee() {
+    }
 }
