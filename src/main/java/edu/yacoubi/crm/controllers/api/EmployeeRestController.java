@@ -33,7 +33,7 @@ public class EmployeeRestController {
     public static final String SUCCESS = "Success";
     public static final String COMPLETED = "Operation completed";
     private final IEmployeeService employeeService;
-    private final IEntityOrchestratorService orchestratorService;
+    private final IEntityOrchestratorService orchestratorSvc;
 
     @Operation(
             summary = "Get all employees",
@@ -48,12 +48,12 @@ public class EmployeeRestController {
 
         final Page<Employee> employeesPage = getEmployeePage(page, size, search);
 
-        final Page<EmployeeResponseDTO> employeeResponseDTOPage = employeesPage.map(
+        final Page<EmployeeResponseDTO> empRespDTO = employeesPage.map(
                 employee -> TransformerUtil.transform(EntityTransformer.employeeToEmployeeResponseDto, employee)
         );
 
         final APIResponse<Page<EmployeeResponseDTO>> response =
-                getPageAPIResponse(COMPLETED, SUCCESS, HttpStatus.OK, employeeResponseDTOPage);
+                getPageAPIResponse(COMPLETED, SUCCESS, HttpStatus.OK, empRespDTO);
 
         log.info("::getAllEmployees completed successfully with: response {}", jsonAsString(response));
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -72,13 +72,13 @@ public class EmployeeRestController {
         // exception werden im service behandelt und im globaler handler abgefangen
         final Employee existingEmployee = employeeService.getEmployeeById(employeeId).get();
 
-        final EmployeeResponseDTO employeeResponseDTO = TransformerUtil.transform(
+        final EmployeeResponseDTO empResDTO = TransformerUtil.transform(
                 EntityTransformer.employeeToEmployeeResponseDto,
                 existingEmployee
         );
 
         final APIResponse<EmployeeResponseDTO> response =
-                getDTOAPIResponse(COMPLETED, SUCCESS, HttpStatus.OK, employeeResponseDTO);
+                getDTOAPIResponse(COMPLETED, SUCCESS, HttpStatus.OK, empResDTO);
 
         log.info("::getEmployeeById completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
@@ -90,23 +90,23 @@ public class EmployeeRestController {
     )
     @PostMapping
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> createEmployee(
-            final @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
-        log.info("::createEmployee started with: employeeRequestDTO {}", jsonAsString(employeeRequestDTO));
+            final @Valid @RequestBody EmployeeRequestDTO empReqDTO) {
+        log.info("::createEmployee started with: employeeRequestDTO {}", jsonAsString(empReqDTO));
 
         final Employee employeeRequest = TransformerUtil.transform(
                 EntityTransformer.employeeRequestDtoToEmployee,
-                employeeRequestDTO
+                empReqDTO
         );
 
         final Employee savedEmployee = employeeService.createEmployee(employeeRequest);
 
-        final EmployeeResponseDTO employeeResponseDTO = TransformerUtil.transform(
+        final EmployeeResponseDTO empRespDTO = TransformerUtil.transform(
                 EntityTransformer.employeeToEmployeeResponseDto,
                 savedEmployee
         );
 
         final APIResponse<EmployeeResponseDTO> response =
-                getDTOAPIResponse(COMPLETED, SUCCESS, HttpStatus.CREATED, employeeResponseDTO);
+                getDTOAPIResponse(COMPLETED, SUCCESS, HttpStatus.CREATED, empRespDTO);
 
         log.info("::createEmployee completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
@@ -119,28 +119,28 @@ public class EmployeeRestController {
     @PutMapping("/{employeeId}")
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> updateEmployee(
             final @PathVariable Long employeeId,
-            final @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
+            final @Valid @RequestBody EmployeeRequestDTO empReqDTO) {
         log.info("::updateEmployee started with: employeeId {}, employeeRequestDTO {}",
-                employeeId, jsonAsString(employeeRequestDTO)
+                employeeId, jsonAsString(empReqDTO)
         );
 
         // transform to entity
         final Employee employeeRequest = TransformerUtil.transform(
                 EntityTransformer.employeeRequestDtoToEmployee,
-                employeeRequestDTO
+                empReqDTO
         );
 
         // update
         final Employee updatedEmployee = employeeService.updateEmployee(employeeId, employeeRequest);
 
         // transform to response DOT
-        final EmployeeResponseDTO employeeResponseDTO = TransformerUtil.transform(
+        final EmployeeResponseDTO empRespDTO = TransformerUtil.transform(
                 EntityTransformer.employeeToEmployeeResponseDto,
                 updatedEmployee
         );
 
         final APIResponse<EmployeeResponseDTO> response =
-                getDTOAPIResponse(COMPLETED, SUCCESS, HttpStatus.OK, employeeResponseDTO);
+                getDTOAPIResponse(COMPLETED, SUCCESS, HttpStatus.OK, empRespDTO);
 
         log.info("::updateEmployee completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
@@ -164,13 +164,13 @@ public class EmployeeRestController {
         final Employee updatedEmployee = employeeService.getEmployeeById(employeeId).get();
 
         // transform to response DTO
-        final EmployeeResponseDTO employeeResponseDTO = TransformerUtil.transform(
+        final EmployeeResponseDTO empRespDTO = TransformerUtil.transform(
                 EntityTransformer.employeeToEmployeeResponseDto,
                 updatedEmployee
         );
 
         final APIResponse<EmployeeResponseDTO> response =
-                getDTOAPIResponse(COMPLETED, SUCCESS, HttpStatus.OK, employeeResponseDTO);
+                getDTOAPIResponse(COMPLETED, SUCCESS, HttpStatus.OK, empRespDTO);
 
         log.info("::patchEmployee completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
@@ -189,7 +189,7 @@ public class EmployeeRestController {
                 newEmployeeId
         );
 
-        orchestratorService.deleteEmployeeAndReassignCustomers(employeeId, newEmployeeId);
+        orchestratorSvc.deleteEmployeeAndReassignCustomers(employeeId, newEmployeeId);
 
         final APIResponse<Void> response =
                 getDTOAPIResponse("Employee customers reassigned and deleted successfully", "success",
