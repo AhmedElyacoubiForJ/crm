@@ -128,8 +128,9 @@ public class CustomerRestController {
 
     /**
      * This operation creates a new customer in the CRM system.
+     *
      * @param customerRequestDTO the customer request data transfer object containing the details of the customer to be created
-     * @param employeeId the unique ID of the employee to whom the customer will be assigned
+     * @param employeeId         the unique ID of the employee to whom the customer will be assigned
      * @return the created customer details wrapped in an APIResponse
      */
     @Operation(
@@ -153,8 +154,9 @@ public class CustomerRestController {
                 customerRequestDTO
         );
 
-        final Customer savedCustomer = entityOrchestratorService
-                .createCustomerForEmployee(customerRequest, employeeId);
+        final Customer savedCustomer = entityOrchestratorService.createCustomerForEmployee(
+                customerRequest, employeeId
+        );
 
         final CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
                 EntityTransformer.customerToCustomerResponseDto,
@@ -165,50 +167,59 @@ public class CustomerRestController {
                 COMPLETED, SUCCESS, HttpStatus.CREATED, customerResponseDTO
         );
 
-
         if (log.isInfoEnabled()) {
             log.info("::createCustomerForEmployee completed successfully with: response {}", jsonAsString(response));
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * Full update of an existing customer by their unique ID.
+     * @param customerId the unique ID of the customer to update
+     * @param customerRequestDTO the customer request data transfer object containing the updated details of the customer
+     * @return the updated customer details wrapped in an APIResponse
+     */
     @Operation(
             summary = "Full update of customer",
             description = "Full update of an existing customer by their unique ID."
     )
     @PutMapping("/{customerId}")
     public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomer(
-            @PathVariable Long customerId,
-            @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
-        log.info("::updateCustomer started with: customerId {}, customerRequestDTO {}", customerId, jsonAsString(customerRequestDTO));
+            final @PathVariable Long customerId,
+            final @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
+        if (log.isInfoEnabled()) {
+            log.info("::updateCustomer started with: customerId {}, customerRequestDTO {}",
+                    customerId, jsonAsString(customerRequestDTO));
+        }
 
-        Customer existingCustomer = customerService.getCustomerById(customerId).get();
+        final Customer existingCustomer = customerService.getCustomerById(customerId).get();
 
-        // Laden der bestehenden Notizen, um sicherzustellen, dass sie referenziert werden
-        List<Note> existingNotes = existingCustomer.getNotes();
+        // Load existing notes to ensure they are referenced
+        final List<Note> existingNotes = existingCustomer.getNotes();
 
-        // Mapping des DTO auf das Entität-Objekt, ohne die bestehende Notizen zu überschreiben
-        Customer customerRequest = TransformerUtil.transform(
-                EntityTransformer.customerRequestDtoToCustomer, customerRequestDTO
+        // Map the DTO to the entity object without overwriting existing notes
+        final Customer customerRequest = TransformerUtil.transform(
+                EntityTransformer.customerRequestDtoToCustomer,
+                customerRequestDTO
         );
 
         customerRequest.setId(customerId);
         customerRequest.setEmployee(existingCustomer.getEmployee());
-        customerRequest.setNotes(existingNotes); // Setzen der bestehenden Notizen
+        customerRequest.setNotes(existingNotes); // Set existing notes
 
-        Customer updatedCustomer = customerService.updateCustomer(customerId, customerRequest);
-        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
+        final Customer updatedCustomer = customerService.updateCustomer(customerId, customerRequest);
+        final CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
                 EntityTransformer.customerToCustomerResponseDto,
                 updatedCustomer
         );
 
-        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .data(customerResponseDTO)
-                .build();
+        final APIResponse<CustomerResponseDTO> response = ApiResponseHelper.getDTOAPIResponse(
+                COMPLETED, SUCCESS, HttpStatus.OK, customerResponseDTO
+        );
 
-        log.info("::updateCustomer completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::updateCustomer completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.ok(response);
     }
 
