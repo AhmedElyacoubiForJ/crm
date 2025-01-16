@@ -49,22 +49,26 @@ public class CustomerRestController {
     )
     @GetMapping
     public ResponseEntity<APIResponse<Page<CustomerResponseDTO>>> getAllCustomers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String search) {
-        log.info("::getAllEmployees started with: page: {}, size: {}, search: {}", page, size, search);
+            final @RequestParam(defaultValue = "0") int page,
+            final @RequestParam(defaultValue = "10") int size,
+            final @RequestParam(required = false) String search) {
+        if (log.isInfoEnabled()) {
+            log.info("::getAllEmployees started with: page: {}, size: {}, search: {}", page, size, search);
+        }
 
-        Page<Customer> customersPage = getCustomerPage(page, size, search);
+        final Page<Customer> customersPage = getCustomerPage(page, size, search);
 
-        Page<CustomerResponseDTO> customerResponseDTOPage = customersPage.map(
+        final Page<CustomerResponseDTO> customerResponseDTOPage = customersPage.map(
                 customer -> TransformerUtil.transform(EntityTransformer.customerToCustomerResponseDto, customer)
         );
 
-        APIResponse<Page<CustomerResponseDTO>> response = ApiResponseHelper.getPageAPIResponse(
+        final APIResponse<Page<CustomerResponseDTO>> response = ApiResponseHelper.getPageAPIResponse(
                 COMPLETED, SUCCESS, HttpStatus.OK, customerResponseDTOPage
         );
 
-        log.info("::getAllCustomers completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::getAllCustomers completed successfully with: response {}", jsonAsString(response));
+        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
