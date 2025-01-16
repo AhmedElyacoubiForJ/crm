@@ -44,7 +44,9 @@ public class EmployeeRestController {
             final @RequestParam(value = "page", defaultValue = "0") int page,
             final @RequestParam(value = "size", defaultValue = "10") int size,
             final @RequestParam(value = "search", required = false) String search) {
-        log.info("::getAllEmployees started with: page: {}, size: {}, search: {}", page, size, search);
+        if (log.isInfoEnabled()) {
+            log.info("::getAllEmployees started with: page: {}, size: {}, search: {}", page, size, search);
+        }
 
         final Page<Employee> employeesPage = getEmployeePage(page, size, search);
 
@@ -55,7 +57,9 @@ public class EmployeeRestController {
         final APIResponse<Page<EmployeeResponseDTO>> response =
                 getPageAPIResponse(COMPLETED, SUCCESS, HttpStatus.OK, empRespDTO);
 
-        log.info("::getAllEmployees completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::getAllEmployees completed successfully with: response {}", jsonAsString(response));
+        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -67,7 +71,9 @@ public class EmployeeRestController {
     @GetMapping("/{employeeId}")
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> getEmployeeById(
             final @PathVariable Long employeeId) {
-        log.info("::getEmployeeById started with: employeeId {}", employeeId);
+        if (log.isInfoEnabled()) {
+            log.info("::getEmployeeById started with: employeeId {}", employeeId);
+        }
 
         // exception werden im service behandelt und im globaler handler abgefangen
         final Employee existingEmployee = employeeService.getEmployeeById(employeeId).get();
@@ -80,7 +86,9 @@ public class EmployeeRestController {
         final APIResponse<EmployeeResponseDTO> response =
                 getDTOAPIResponse(COMPLETED, SUCCESS, HttpStatus.OK, empResDTO);
 
-        log.info("::getEmployeeById completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::getEmployeeById completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -91,7 +99,9 @@ public class EmployeeRestController {
     @PostMapping
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> createEmployee(
             final @Valid @RequestBody EmployeeRequestDTO empReqDTO) {
-        log.info("::createEmployee started with: employeeRequestDTO {}", jsonAsString(empReqDTO));
+        if (log.isInfoEnabled()) {
+            log.info("::createEmployee started with: employeeRequestDTO {}", jsonAsString(empReqDTO));
+        }
 
         final Employee employeeRequest = TransformerUtil.transform(
                 EntityTransformer.employeeRequestDtoToEmployee,
@@ -108,7 +118,9 @@ public class EmployeeRestController {
         final APIResponse<EmployeeResponseDTO> response =
                 getDTOAPIResponse(COMPLETED, SUCCESS, HttpStatus.CREATED, empRespDTO);
 
-        log.info("::createEmployee completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::createEmployee completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -120,9 +132,11 @@ public class EmployeeRestController {
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> updateEmployee(
             final @PathVariable Long employeeId,
             final @Valid @RequestBody EmployeeRequestDTO empReqDTO) {
-        log.info("::updateEmployee started with: employeeId {}, employeeRequestDTO {}",
-                employeeId, jsonAsString(empReqDTO)
-        );
+        if (log.isInfoEnabled()) {
+            log.info("::updateEmployee started with: employeeId {}, employeeRequestDTO {}",
+                    employeeId, jsonAsString(empReqDTO)
+            );
+        }
 
         // transform to entity
         final Employee employeeRequest = TransformerUtil.transform(
@@ -142,7 +156,9 @@ public class EmployeeRestController {
         final APIResponse<EmployeeResponseDTO> response =
                 getDTOAPIResponse(COMPLETED, SUCCESS, HttpStatus.OK, empRespDTO);
 
-        log.info("::updateEmployee completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::updateEmployee completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -154,8 +170,10 @@ public class EmployeeRestController {
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> patchEmployee(
             final @PathVariable Long employeeId,
             final @Valid @RequestBody EmployeePatchDTO employeePatchDTO) {
-        log.info("::patchEmployee started with: employeeId {}, employeePatchDTO {}",
-                employeeId, jsonAsString(employeePatchDTO));
+        if (log.isInfoEnabled()) {
+            log.info("::patchEmployee started with: employeeId {}, employeePatchDTO {}",
+                    employeeId, jsonAsString(employeePatchDTO));
+        }
 
         // partial update
         employeeService.partialUpdateEmployee(employeeId, employeePatchDTO);
@@ -172,7 +190,9 @@ public class EmployeeRestController {
         final APIResponse<EmployeeResponseDTO> response =
                 getDTOAPIResponse(COMPLETED, SUCCESS, HttpStatus.OK, empRespDTO);
 
-        log.info("::patchEmployee completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::patchEmployee completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -184,10 +204,12 @@ public class EmployeeRestController {
     public ResponseEntity<APIResponse<Void>> reassignAndDeleteEmployee(
             final @PathVariable Long employeeId,
             final @RequestParam Long newEmployeeId) {
-        log.info("::reassignAndDeleteEmployee started with: employeeId {}, newEmployeeId {}",
-                employeeId,
-                newEmployeeId
-        );
+        if (log.isInfoEnabled()) {
+            log.info("::reassignAndDeleteEmployee started with: employeeId {}, newEmployeeId {}",
+                    employeeId,
+                    newEmployeeId
+            );
+        }
 
         orchestratorSvc.deleteEmployeeAndReassignCustomers(employeeId, newEmployeeId);
 
@@ -195,7 +217,9 @@ public class EmployeeRestController {
                 getDTOAPIResponse("Employee customers reassigned and deleted successfully", "success",
                         HttpStatus.OK, null);
 
-        log.info("::reassignAndDeleteEmployee completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::reassignAndDeleteEmployee completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -205,7 +229,9 @@ public class EmployeeRestController {
     )
     @GetMapping("/departments")
     public ResponseEntity<APIResponse<List<String>>> getAllDepartments() {
-        log.info("::getAllDepartments started");
+        if (log.isInfoEnabled()) {
+            log.info("::getAllDepartments started");
+        }
 
         final List<String> allDepartments = employeeService.getAllDepartments()
                 .orElse(Collections.emptyList());
@@ -214,7 +240,9 @@ public class EmployeeRestController {
         final APIResponse<List<String>> response = getDTOAPIResponse(
                 "All departments retrieved successfully", "success", HttpStatus.OK, allDepartments);
 
-        log.info("::getAllDepartments completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::getAllDepartments completed successfully with: response {}", jsonAsString(response));
+        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
