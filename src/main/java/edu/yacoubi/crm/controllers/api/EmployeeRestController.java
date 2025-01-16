@@ -25,16 +25,44 @@ import static edu.yacoubi.crm.util.ApiResponseHelper.getDTOAPIResponse;
 import static edu.yacoubi.crm.util.ApiResponseHelper.getPageAPIResponse;
 import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
 
+/**
+ * REST controller for managing employee resources in the CRM system.
+ *
+ * @author A. El Yacoubi
+ */
 @RestController
 @RequestMapping("/api/employees")
 @RequiredArgsConstructor
 @Slf4j
 public class EmployeeRestController {
+
+    /**
+     * Success message.
+     */
     public static final String SUCCESS = "Success";
+
+    /**
+     * Completion message for a successful operation.
+     */
     public static final String COMPLETED = "Operation completed";
+
+    /**
+     * Service for employee operations.
+     */
     private final IEmployeeService employeeService;
+
+    /**
+     * Orchestrator service for deleting and reassigning customers.
+     */
     private final IEntityOrchestratorService orchestratorSvc;
 
+    /**
+     * Retrieve a list of all employees in the CRM system with pagination and optional search.
+     * @param page   the page number to retrieve, default is 0
+     * @param size   the size of the page to retrieve, default is 10
+     * @param search an optional search parameter to filter employees by first name or department
+     * @return a paginated list of all employees wrapped in an APIResponse
+     */
     @Operation(
             summary = "Get all employees",
             description = "Retrieve a list of all employees in the CRM system with pagination and optional search."
@@ -63,7 +91,12 @@ public class EmployeeRestController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
+    /**
+     * Retrieve an employee by their unique ID.
+     *
+     * @param employeeId the unique ID of the employee to retrieve
+     * @return the employee details wrapped in an APIResponse
+     */
     @Operation(
             summary = "Get employee by ID",
             description = "Retrieve an employee by their unique ID."
@@ -75,7 +108,7 @@ public class EmployeeRestController {
             log.info("::getEmployeeById started with: employeeId {}", employeeId);
         }
 
-        // exception werden im service behandelt und im globaler handler abgefangen
+        // Exception handling is done in the service and caught by the global handler
         final Employee existingEmployee = employeeService.getEmployeeById(employeeId).get();
 
         final EmployeeResponseDTO empResDTO = TransformerUtil.transform(
@@ -92,6 +125,12 @@ public class EmployeeRestController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * This operation creates a new employee in the CRM system.
+     *
+     * @param empReqDTO the employee request data transfer object containing the details of the employee to be created
+     * @return the created employee details wrapped in an APIResponse
+     */
     @Operation(
             summary = "Create a new employee",
             description = "This operation creates a new employee in the CRM system."
@@ -124,6 +163,13 @@ public class EmployeeRestController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Update the details of an existing employee by their unique ID.
+     *
+     * @param employeeId the unique ID of the employee to update
+     * @param empReqDTO  the employee request data transfer object containing the updated details of the employee
+     * @return the updated employee details wrapped in an APIResponse
+     */
     @Operation(
             summary = "Update employee",
             description = "Update the details of an existing employee by their unique ID."
@@ -138,16 +184,13 @@ public class EmployeeRestController {
             );
         }
 
-        // transform to entity
         final Employee employeeRequest = TransformerUtil.transform(
                 EntityTransformer.employeeRequestDtoToEmployee,
                 empReqDTO
         );
 
-        // update
         final Employee updatedEmployee = employeeService.updateEmployee(employeeId, employeeRequest);
 
-        // transform to response DOT
         final EmployeeResponseDTO empRespDTO = TransformerUtil.transform(
                 EntityTransformer.employeeToEmployeeResponseDto,
                 updatedEmployee
@@ -162,6 +205,13 @@ public class EmployeeRestController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Partial update of an existing employee by their unique ID.
+     *
+     * @param employeeId       the unique ID of the employee to partially update
+     * @param employeePatchDTO the employee patch data transfer object containing the partial update details of the employee
+     * @return the updated employee details wrapped in an APIResponse
+     */
     @Operation(
             summary = "Partial update employee",
             description = "Partial update of an existing employee by their unique ID."
@@ -175,13 +225,10 @@ public class EmployeeRestController {
                     employeeId, jsonAsString(employeePatchDTO));
         }
 
-        // partial update
         employeeService.partialUpdateEmployee(employeeId, employeePatchDTO);
 
-        // get the updated employee
         final Employee updatedEmployee = employeeService.getEmployeeById(employeeId).get();
 
-        // transform to response DTO
         final EmployeeResponseDTO empRespDTO = TransformerUtil.transform(
                 EntityTransformer.employeeToEmployeeResponseDto,
                 updatedEmployee
@@ -196,6 +243,13 @@ public class EmployeeRestController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Assign a customer to a new employee and delete the old employee.
+     *
+     * @param employeeId    the unique ID of the employee to delete
+     * @param newEmployeeId the unique ID of the new employee to whom the customers will be reassigned
+     * @return a response indicating the successful reassignment and deletion
+     */
     @Operation(
             summary = "Assign customer to new employee and delete old employee",
             description = "Assign a customer to an employee by their unique ID."
@@ -223,6 +277,11 @@ public class EmployeeRestController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Get all departments in the CRM system.
+     *
+     * @return a list of all departments wrapped in an APIResponse
+     */
     @Operation(
             summary = "Get all departments",
             description = "Get all departments in the CRM system."
@@ -236,7 +295,6 @@ public class EmployeeRestController {
         final List<String> allDepartments = employeeService.getAllDepartments()
                 .orElse(Collections.emptyList());
 
-        // Verwende die generische ApiResponse-Methode
         final APIResponse<List<String>> response = getDTOAPIResponse(
                 "All departments retrieved successfully", "success", HttpStatus.OK, allDepartments);
 
@@ -246,6 +304,14 @@ public class EmployeeRestController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a page of employees, optionally filtered by a search term.
+     *
+     * @param page   the page number to retrieve
+     * @param size   the size of the page to retrieve
+     * @param search an optional search parameter to filter employees by first name or department
+     * @return a page of employees matching the search criteria
+     */
     private Page<Employee> getEmployeePage(final int page, final int size, final String search) {
         final Page<Employee> employeesPage;
         if (search != null && !search.isEmpty()) {
