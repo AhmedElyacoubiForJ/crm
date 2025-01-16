@@ -25,6 +25,11 @@ import java.util.List;
 
 import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
 
+/**
+ * REST controller for managing customer resources in the CRM system.
+ *
+ * @author A. El Yacoubi
+ */
 @RestController
 @RequestMapping("/api/customers")
 @RequiredArgsConstructor
@@ -40,9 +45,24 @@ public class CustomerRestController {
      */
     public static final String COMPLETED = "Operation completed";
 
+    /**
+     * Service for customer operations.
+     */
     private final ICustomerService customerService;
+
+    /**
+     * Orchestrator service for deleting and reassigning customers.
+     */
     private final IEntityOrchestratorService entityOrchestratorService;
 
+    /**
+     * Retrieve a list of all customers in the CRM system with pagination and optional search.
+     *
+     * @param page   the page number to retrieve, default is 0
+     * @param size   the size of the page to retrieve, default is 10
+     * @param search an optional search parameter to filter customers by first name or email
+     * @return a paginated list of all customers wrapped in an APIResponse
+     */
     @Operation(
             summary = "Get all customers",
             description = "Retrieve a list of all customers in the CRM system with pagination and optional search."
@@ -72,6 +92,14 @@ public class CustomerRestController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a page of customers, optionally filtered by a search term.
+     *
+     * @param page   the page number to retrieve
+     * @param size   the size of the page to retrieve
+     * @param search an optional search parameter to filter customers by first name or email
+     * @return a page of customers matching the search criteria
+     */
     private Page<Customer> getCustomerPage(int page, int size, String search) {
         Page<Customer> customersPage;
         if (search != null && !search.isEmpty()) {
