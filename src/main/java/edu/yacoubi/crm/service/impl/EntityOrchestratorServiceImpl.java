@@ -95,7 +95,8 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
 
         if (newEmployeeId.equals(oldEmployeeId)) {
             String errorMessage = "Old and new employee IDs must be different";
-            log.warn(errorMessage);
+            log.warn("::reassignCustomers parameter warn: {}", errorMessage);
+            //log.warn(errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }
 

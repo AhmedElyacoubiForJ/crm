@@ -233,7 +233,10 @@ class EntityOrchestratorServiceImplUnitTest {
                 String.format(ERROR_SUPPLIED_MSG, ERROR_SAME_IDS_MSG)
         );
         assertTrue(
-                testAppender.contains(ERROR_SAME_IDS_MSG, "WARN"),
+                testAppender.contains(
+                        String.format(WARN_PARAM_LOG_REASSIGN_CUSTOMERS, ERROR_SAME_IDS_MSG),
+                        "WARN"
+                ),
                 String.format(WARN_SUPPLIED_MSG, ERROR_SAME_IDS_MSG)
         );
 
@@ -246,6 +249,7 @@ class EntityOrchestratorServiceImplUnitTest {
                 testAppender.contains(expectedExitLogMsg, "INFO"),
                 String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
+        System.out.println(testAppender);
     }
 
     @Test
@@ -354,7 +358,7 @@ class EntityOrchestratorServiceImplUnitTest {
         );
         assertTrue(
                 testAppender.contains(
-                        String.format(WARN_ENTITY_LOG_REASSIGN_CUS_2_EMP, errorMessage),
+                        String.format(WARN_ENTITY_LOG_REASSIGN_CUSTOMERS, errorMessage),
                         "WARN"
                 ),
                 String.format(WARN_SUPPLIED_MSG, errorMessage)
@@ -783,7 +787,6 @@ class EntityOrchestratorServiceImplUnitTest {
         );
     }
 
-    // TODO
     // test für createCustomerForEmployee(Customer customer, Long employeeId)
     @Test
     void itShouldCreateCustomerForEmployee() {

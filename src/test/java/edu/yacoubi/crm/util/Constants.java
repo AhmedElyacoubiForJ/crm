@@ -14,9 +14,11 @@ public class Constants {
             "::reassignCustomers started with: oldEmployeeId: %d, newEmployeeId: %d";
     public static final String INFO_LOG_REASSIGN_CUSTOMERS_EXIT_POINT =
             "::reassignCustomers completed successfully";
-    // reassignCustomerToEmployee parameter warn
-    public static final String WARN_ENTITY_LOG_REASSIGN_CUS_2_EMP =
+    // reassignCustomer parameter warn
+    public static final String WARN_ENTITY_LOG_REASSIGN_CUSTOMERS =
             "::reassignCustomers entity warn: %s";
+    public static final String WARN_PARAM_LOG_REASSIGN_CUSTOMERS =
+            "::reassignCustomers parameter warn: %s";
 
     public static final String INFO_LOG_REASSIGN_CUS_2_EMP_ENTRY_POINT =
             "::reassignCustomerToEmployee started with: customerId: %d, employeeId: %d";

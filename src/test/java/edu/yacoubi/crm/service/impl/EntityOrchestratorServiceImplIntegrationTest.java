@@ -231,7 +231,10 @@ class EntityOrchestratorServiceImplIntegrationTest {
                 String.format(ERROR_SUPPLIED_MSG, ERROR_SAME_IDS_MSG)
         );
         assertTrue(
-                testAppender.contains(ERROR_SAME_IDS_MSG, "WARN"),
+                testAppender.contains(
+                        String.format(WARN_PARAM_LOG_REASSIGN_CUSTOMERS, ERROR_SAME_IDS_MSG),
+                        "WARN"
+                ),
                 String.format(WARN_SUPPLIED_MSG, ERROR_SAME_IDS_MSG)
         );
 
@@ -349,7 +352,7 @@ class EntityOrchestratorServiceImplIntegrationTest {
         );
         assertTrue(
                 testAppender.contains(
-                        String.format(WARN_ENTITY_LOG_REASSIGN_CUS_2_EMP, errorMessage),
+                        String.format(WARN_ENTITY_LOG_REASSIGN_CUSTOMERS, errorMessage),
                         "WARN"
                 ),
                 String.format(WARN_SUPPLIED_MSG, errorMessage)
