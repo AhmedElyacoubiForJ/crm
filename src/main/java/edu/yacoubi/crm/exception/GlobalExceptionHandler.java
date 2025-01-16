@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static edu.yacoubi.crm.util.ApiResponseHelper.getDTOAPIResponse;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -18,11 +20,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<APIResponse<Object>> handleResourceNotFoundException(ResourceNotFoundException ex) {
         List<ValidationError> errors = List.of(new ValidationError("Resource", ex.getMessage()));
 
-        APIResponse<Object> response = APIResponse.<Object>builder()
-                .status("error")
-                .statusCode(HttpStatus.NOT_FOUND.value())
-                .errors(errors)
-                .build();
+        APIResponse<Object> response = getDTOAPIResponse("Resource not found", "error", HttpStatus.NOT_FOUND, errors);
+
+//        APIResponse<Object> response = APIResponse.<Object>builder()
+//                .status("error")
+//                .statusCode(HttpStatus.NOT_FOUND.value())
+//                .errors(errors)
+//                .build();
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
@@ -33,12 +37,14 @@ public class GlobalExceptionHandler {
                 .map(error -> new ValidationError(error.getField(), error.getDefaultMessage()))
                 .collect(Collectors.toList());
 
-        APIResponse<Object> response = APIResponse.<Object>builder()
-                .status("error")
-                .statusCode(HttpStatus.BAD_REQUEST.value())
-                .message("Validierungsfehler")
-                .errors(errors)
-                .build();
+        APIResponse<Object> response = getDTOAPIResponse("Validation error", "error", HttpStatus.BAD_REQUEST, errors);
+
+//        APIResponse<Object> response = APIResponse.<Object>builder()
+//                .status("error")
+//                .statusCode(HttpStatus.BAD_REQUEST.value())
+//                .message("Validierungsfehler")
+//                .errors(errors)
+//                .build();
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
@@ -47,11 +53,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<APIResponse<Object>> handleGeneralException(Exception ex) {
         List<ValidationError> errors = List.of(new ValidationError("Exception", "An unexpected error occurred: " + ex.getMessage()));
 
-        APIResponse<Object> response = APIResponse.<Object>builder()
-                .status("error")
-                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .errors(errors)
-                .build();
+        APIResponse<Object> response = getDTOAPIResponse("Internal server error", "error", HttpStatus.INTERNAL_SERVER_ERROR, errors);
+
+//        APIResponse<Object> response = APIResponse.<Object>builder()
+//                .status("error")
+//                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+//                .errors(errors)
+//                .build();
 
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -60,11 +68,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<APIResponse<Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
         List<ValidationError> errors = List.of(new ValidationError("Argument", ex.getMessage()));
 
-        APIResponse<Object> response = APIResponse.<Object>builder()
-                .status("error")
-                .statusCode(HttpStatus.BAD_REQUEST.value())
-                .errors(errors)
-                .build();
+        APIResponse<Object> response = getDTOAPIResponse("Bad request", "error", HttpStatus.BAD_REQUEST, errors);
+
+//        APIResponse<Object> response = APIResponse.<Object>builder()
+//                .status("error")
+//                .statusCode(HttpStatus.BAD_REQUEST.value())
+//                .errors(errors)
+//                .build();
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

@@ -7,14 +7,13 @@ import edu.yacoubi.crm.dto.employee.EmployeeResponseDTO;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.service.IEmployeeService;
 import edu.yacoubi.crm.service.IEntityOrchestratorService;
+import edu.yacoubi.crm.util.ApiResponseHelper;
 import edu.yacoubi.crm.util.EntityTransformer;
 import edu.yacoubi.crm.util.TransformerUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 
+import static edu.yacoubi.crm.util.ApiResponseHelper.getDTOAPIResponse;
+import static edu.yacoubi.crm.util.ApiResponseHelper.getPageAPIResponse;
 import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
 
 @RestController
@@ -55,12 +56,8 @@ public class EmployeeRestController {
                 employee -> TransformerUtil.transform(EntityTransformer.employeeToEmployeeResponseDto, employee)
         );
 
-        APIResponse<Page<EmployeeResponseDTO>> response = APIResponse
-                .<Page<EmployeeResponseDTO>>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .data(employeeResponseDTOPage)
-                .build();
+        APIResponse<Page<EmployeeResponseDTO>> response =
+                getPageAPIResponse("Operation completed", "Success", HttpStatus.OK, employeeResponseDTOPage);
 
         log.info("::getAllEmployees completed successfully with: response {}", jsonAsString(response));
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -70,7 +67,7 @@ public class EmployeeRestController {
             summary = "Get employee by ID",
             description = "Retrieve an employee by their unique ID."
     )
-    @GetMapping("/{id}")
+    @GetMapping("/{employeeId}")
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> getEmployeeById(@PathVariable Long employeeId) {
         log.info("::getEmployeeById started with: employeeId {}", employeeId);
 
@@ -82,11 +79,8 @@ public class EmployeeRestController {
                 existingEmployee
         );
 
-        APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .data(employeeResponseDTO)
-                .build();
+        APIResponse<EmployeeResponseDTO> response =
+                getDTOAPIResponse("Operation completed", "Success", HttpStatus.OK, employeeResponseDTO);
 
         log.info("::getEmployeeById completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
@@ -113,11 +107,8 @@ public class EmployeeRestController {
                 savedEmployee
         );
 
-        APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
-                .status("success")
-                .statusCode(HttpStatus.CREATED.value())
-                .data(employeeResponseDTO)
-                .build();
+        APIResponse<EmployeeResponseDTO> response =
+                getDTOAPIResponse("Operation completed", "Success", HttpStatus.CREATED, employeeResponseDTO);
 
         log.info("::createEmployee completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
@@ -127,7 +118,7 @@ public class EmployeeRestController {
             summary = "Update employee",
             description = "Update the details of an existing employee by their unique ID."
     )
-    @PutMapping("/{id}")
+    @PutMapping("/{employeeId}")
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> updateEmployee(
             @PathVariable Long employeeId,
             @Valid @RequestBody EmployeeRequestDTO employeeRequestDTO) {
@@ -150,12 +141,8 @@ public class EmployeeRestController {
                 updatedEmployee
         );
 
-        // build the response
-        APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .data(employeeResponseDTO)
-                .build();
+        APIResponse<EmployeeResponseDTO> response =
+                getDTOAPIResponse("Operation completed", "Success", HttpStatus.OK, employeeResponseDTO);
 
         log.info("::updateEmployee completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
@@ -165,7 +152,7 @@ public class EmployeeRestController {
             summary = "Partial update employee",
             description = "Partial update of an existing employee by their unique ID."
     )
-    @PatchMapping("/{id}")
+    @PatchMapping("/{employeeId}")
     public ResponseEntity<APIResponse<EmployeeResponseDTO>> patchEmployee(
             @PathVariable Long employeeId,
             @Valid @RequestBody EmployeePatchDTO employeePatchDTO) {
@@ -184,12 +171,8 @@ public class EmployeeRestController {
                 updatedEmployee
         );
 
-        // build the response
-        APIResponse<EmployeeResponseDTO> response = APIResponse.<EmployeeResponseDTO>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .data(employeeResponseDTO)
-                .build();
+        APIResponse<EmployeeResponseDTO> response =
+                getDTOAPIResponse("Operation completed", "Success", HttpStatus.OK, employeeResponseDTO);
 
         log.info("::patchEmployee completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
@@ -210,11 +193,9 @@ public class EmployeeRestController {
 
         orchestratorService.deleteEmployeeAndReassignCustomers(employeeId, newEmployeeId);
 
-        APIResponse<Void> response = APIResponse.<Void>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .message("Employee customers reassigned and deleted successfully.")
-                .build();
+        APIResponse<Void> response =
+                getDTOAPIResponse("Employee customers reassigned and deleted successfully", "success",
+                        HttpStatus.OK, null);
 
         log.info("::reassignAndDeleteEmployee completed successfully with: response {}", jsonAsString(response));
         return ResponseEntity.ok(response);
@@ -226,17 +207,14 @@ public class EmployeeRestController {
     )
     @GetMapping("/departments")
     public ResponseEntity<APIResponse<List<String>>> getAllDepartments() {
-        log.info("::getAllDepartments");
+        log.info("::getAllDepartments started");
 
         List<String> allDepartments = employeeService.getAllDepartments()
                 .orElse(Collections.emptyList());
 
-        APIResponse<List<String>> response = APIResponse
-                .<List<String>>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .data(allDepartments)
-                .build();
+        // Verwende die generische ApiResponse-Methode
+        APIResponse<List<String>> response = getDTOAPIResponse(
+                "All departments retrieved successfully", "success", HttpStatus.OK, allDepartments );
 
         log.info("::getAllDepartments completed successfully with: response {}", jsonAsString(response));
         return new ResponseEntity<>(response, HttpStatus.OK);

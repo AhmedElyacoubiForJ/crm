@@ -35,7 +35,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     @Transactional
     public Employee createEmployee(Employee employee) {
-        log.info("EmployeeServiceImpl::createEmployee execution start: employee {}", employee);
+        log.info("::createEmployee started with: employee {}", employee);
 
         // Validate parameters first
         if (employee == null) {
@@ -49,7 +49,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
         // Speichere den Mitarbeiter in der Datenbank
         Employee savedEmployee = employeeRepository.save(employee);
 
-        log.info("EmployeeServiceImpl::createEmployee execution end");
+        log.info("::createEmployee completed successfully");
         return savedEmployee;
     }
 
@@ -59,11 +59,11 @@ public class EmployeeServiceImpl implements IEmployeeService {
      */
     @Override
     public List<Employee> getAllEmployees() {
-        log.info("EmployeeServiceImpl::getAllEmployees execution start");
+        log.info("::getAllEmployees started");
 
         List<Employee> employees = employeeRepository.findAll();
 
-        log.info("EmployeeServiceImpl::getAllEmployees execution end");
+        log.info("::getAllEmployees completed successfully");
         return employees;
     }
 
@@ -73,12 +73,12 @@ public class EmployeeServiceImpl implements IEmployeeService {
      */
     @Override
     public Page<Employee> getEmployeesWithPagination(int page, int size) {
-        log.info("EmployeeServiceImpl::getEmployeesWithPagination execution start: page {}, size {}", page, size);
+        log.info("::getEmployeesWithPagination started with: page {}, size {}", page, size);
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Employee> employeePage = employeeRepository.findAll(pageable);
 
-        log.info("EmployeeServiceImpl::getEmployeesWithPagination execution end");
+        log.info("::getEmployeesWithPagination completed successfully");
         return employeePage;
     }
 
@@ -90,7 +90,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     @Transactional(readOnly = true)
     public Optional<Employee> getEmployeeById(Long employeeId) {
-        log.info("EmployeeServiceImpl::getEmployeeById execution start: employeeId {}", employeeId);
+        log.info("::getEmployeeById started with: employeeId {}", employeeId);
 
         if (employeeId == null) {
             log.warn("Employee ID must not be null");
@@ -101,7 +101,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
 
-        log.info("EmployeeServiceImpl::getEmployeeById execution end");
+        log.info("::getEmployeeById completed successfully");
         return optionalEmployee;
     }
 
@@ -113,14 +113,14 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     @Transactional
     public Employee updateEmployee(Long employeeId, Employee employee) {
-        log.info("EmployeeServiceImpl::updateEmployee execution start: employee {}", employee);
+        log.info("::updateEmployee started with: employee {}", employee);
 
         entityValidator.validateEmployeeExists(employeeId);
         employee.setId(employeeId);
 
         Employee updatedEmployee = employeeRepository.save(employee);
 
-        log.info("EmployeeServiceImpl::updateEmployee execution end");
+        log.info("::updateEmployee completed successfully");
         return updatedEmployee;
     }
 
@@ -130,11 +130,11 @@ public class EmployeeServiceImpl implements IEmployeeService {
      */
     @Override
     public Optional<Employee> getEmployeeByEmail(String email) {
-        log.info("EmployeeServiceImpl::getEmployeeByEmail execution start: email {}", email);
+        log.info("::getEmployeeByEmail started with: email {}", email);
 
         Optional<Employee> optionalEmployee = employeeRepository.findByEmail(email);
 
-        log.info("EmployeeServiceImpl::getEmployeeByEmail execution end");
+        log.info("::getEmployeeByEmail completed successfully");
         return optionalEmployee;
     }
 
@@ -146,13 +146,14 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     @Transactional
     public void partialUpdateEmployee(Long employeeId, EmployeePatchDTO employeePatchDTO) {
-        log.info("EmployeeServiceImpl::partialUpdateEmployee execution start: employeeId {}, employeePatchDTO {}", employeeId, employeePatchDTO);
+        log.info("::partialUpdateEmployee started with: employeeId {}, employeePatchDTO {}",
+                employeeId, employeePatchDTO);
 
         entityValidator.validateEmployeeExists(employeeId);
 
         // delegate to custom repository for more complex queries
         employeeCustomRepository.partialUpdateEmployee(employeeId, employeePatchDTO);
-        log.info("EmployeeServiceImpl::partialUpdateEmployee execution end");
+        log.info("::partialUpdateEmployee completed successfully");
     }
 
     /**
@@ -161,7 +162,8 @@ public class EmployeeServiceImpl implements IEmployeeService {
      */
     @Override
     public Page<Employee> getEmployeesByFirstNameOrDepartment(String searchString, int page, int size) {
-        log.info("EmployeeServiceImpl::searchByFirstNameOrDepartment execution start: searchString {}, page {}, size {}", searchString, page, size);
+        log.info("::searchByFirstNameOrDepartment started with: searchString {}, page {}, size {}",
+                searchString, page, size);
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -172,7 +174,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
                         pageable
                 );
 
-        log.info("EmployeeServiceImpl::searchByFirstNameOrDepartment execution end");
+        log.info("::searchByFirstNameOrDepartment completed successfully");
         return employeePage;
     }
 
@@ -182,11 +184,11 @@ public class EmployeeServiceImpl implements IEmployeeService {
      */
     @Override
     public Optional<List<String>> getAllDepartments() {
-        log.info("EmployeeServiceImpl::getAllDepartments execution start");
+        log.info("::getAllDepartments started");
 
         Optional<List<String>> optionalDepartments = employeeRepository.findAllDepartments();
 
-        log.info("EmployeeServiceImpl::getAllDepartments execution end");
+        log.info("::getAllDepartments completed successfully");
         return optionalDepartments;
     }
 
@@ -198,7 +200,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     @Transactional
     public void deleteEmployee(Long employeeId) {
-        log.info("EmployeeServiceImpl::deleteEmployee employeeId: {}", employeeId);
+        log.info("::deleteEmployee started with: employeeId: {}", employeeId);
 
         entityValidator.validateEmployeeExists(employeeId);
 
@@ -217,7 +219,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
         }
 
         employeeRepository.deleteById(employeeId);
-        log.info("EmployeeServiceImpl::deleteEmployee execution end");
+        log.info("::deleteEmployee completed successfully");
     }
 
     /**
@@ -228,14 +230,14 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     @Transactional(readOnly = true)
     public boolean hasCustomers(Long employeeId) {
-        log.info("EmployeeServiceImpl::hasCustomers execution start: employeeId {}", employeeId);
+        log.info("::hasCustomers started with: employeeId {}", employeeId);
         // Validate that the employee exists
         entityValidator.validateEmployeeExists(employeeId);
 
         // Use the query defined in the EmployeeRepository
         boolean hasCustomers = employeeRepository.hasCustomers(employeeId);
 
-        log.info("EmployeeServiceImpl::hasCustomers execution end");
+        log.info("::hasCustomers completed successfully");
         return hasCustomers;
     }
 }
