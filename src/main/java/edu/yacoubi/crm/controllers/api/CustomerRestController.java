@@ -5,7 +5,6 @@ import edu.yacoubi.crm.dto.customer.CustomerPatchDTO;
 import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.dto.customer.CustomerResponseDTO;
 import edu.yacoubi.crm.model.Customer;
-import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEntityOrchestratorService;
 import edu.yacoubi.crm.util.ApiResponseHelper;
@@ -21,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
 
@@ -175,7 +173,8 @@ public class CustomerRestController {
 
     /**
      * Full update of an existing customer by their unique ID.
-     * @param customerId the unique ID of the customer to update
+     *
+     * @param customerId         the unique ID of the customer to update
      * @param customerRequestDTO the customer request data transfer object containing the updated details of the customer
      * @return the updated customer details wrapped in an APIResponse
      */
@@ -192,22 +191,10 @@ public class CustomerRestController {
                     customerId, jsonAsString(customerRequestDTO));
         }
 
-        final Customer existingCustomer = customerService.getCustomerById(customerId).get();
-
-        // Load existing notes to ensure they are referenced
-        final List<Note> existingNotes = existingCustomer.getNotes();
-
-        // Map the DTO to the entity object without overwriting existing notes
-        final Customer customerRequest = TransformerUtil.transform(
-                EntityTransformer.customerRequestDtoToCustomer,
-                customerRequestDTO
+        final Customer updatedCustomer = customerService.updateCustomer(customerId, TransformerUtil.transform(
+                EntityTransformer.customerRequestDtoToCustomer, customerRequestDTO)
         );
 
-        customerRequest.setId(customerId);
-        customerRequest.setEmployee(existingCustomer.getEmployee());
-        customerRequest.setNotes(existingNotes); // Set existing notes
-
-        final Customer updatedCustomer = customerService.updateCustomer(customerId, customerRequest);
         final CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
                 EntityTransformer.customerToCustomerResponseDto,
                 updatedCustomer
@@ -222,6 +209,7 @@ public class CustomerRestController {
         }
         return ResponseEntity.ok(response);
     }
+
 
     @Operation(
             summary = "Partial update of customer",

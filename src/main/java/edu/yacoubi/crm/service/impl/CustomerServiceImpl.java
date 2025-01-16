@@ -3,6 +3,7 @@ package edu.yacoubi.crm.service.impl;
 import edu.yacoubi.crm.dto.customer.CustomerPatchDTO;
 import edu.yacoubi.crm.dto.customer.CustomerRequestDTO;
 import edu.yacoubi.crm.model.Customer;
+import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.repository.CustomerRepository;
 import edu.yacoubi.crm.repository.ICustomerCustomRepository;
 import edu.yacoubi.crm.service.ICustomerService;
@@ -49,17 +50,33 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public Customer updateCustomer(Long customerId, Customer customer) {
-        log.info("::updateCustomer started with: customerId {}, customer {}", customerId, customer);
+    @Transactional
+    public Customer updateCustomer(Long customerId, Customer customerRequest) {
+        log.info("::updateCustomer started with: customerId {}, customer {}", customerId, customerRequest);
 
+        // Überprüfen, ob der Kunde existiert
         entityValidator.validateCustomerExists(customerId);
-        customer.setId(customerId);
 
-        Customer updatedCustomer = customerRepository.save(customer);
+        // Vorhandenen Kunden laden
+        Customer existingCustomer = customerRepository.findById(customerId).get();
+
+        // Laden der bestehenden Notizen
+        List<Note> existingNotes = existingCustomer.getNotes();
+        existingNotes.forEach(note ->
+                System.out.println(note)
+        );
+
+        // Setzen der ID und anderer unveränderter Eigenschaften
+        customerRequest.setId(customerId);
+        customerRequest.setEmployee(existingCustomer.getEmployee());
+        customerRequest.setNotes(existingNotes); // Setzen der bestehenden Notizen
+
+        Customer updatedCustomer = customerRepository.save(customerRequest);
 
         log.info("::updateCustomer completed successfully");
         return updatedCustomer;
     }
+
 
     @Override
     public void deleteCustomer(Long customerId) {
