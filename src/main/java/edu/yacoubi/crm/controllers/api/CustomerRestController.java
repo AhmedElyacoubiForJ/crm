@@ -8,6 +8,7 @@ import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.ICustomerService;
 import edu.yacoubi.crm.service.IEntityOrchestratorService;
+import edu.yacoubi.crm.util.ApiResponseHelper;
 import edu.yacoubi.crm.util.EntityTransformer;
 import edu.yacoubi.crm.util.TransformerUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +30,16 @@ import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
 @RequiredArgsConstructor
 @Slf4j
 public class CustomerRestController {
+    /**
+     * Success message.
+     */
+    public static final String SUCCESS = "Success";
+
+    /**
+     * Completion message for a successful operation.
+     */
+    public static final String COMPLETED = "Operation completed";
+
     private final ICustomerService customerService;
     private final IEntityOrchestratorService entityOrchestratorService;
 
@@ -49,11 +60,9 @@ public class CustomerRestController {
                 customer -> TransformerUtil.transform(EntityTransformer.customerToCustomerResponseDto, customer)
         );
 
-        APIResponse<Page<CustomerResponseDTO>> response = APIResponse.<Page<CustomerResponseDTO>>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .data(customerResponseDTOPage)
-                .build();
+        APIResponse<Page<CustomerResponseDTO>> response = ApiResponseHelper.getPageAPIResponse(
+                COMPLETED, SUCCESS, HttpStatus.OK, customerResponseDTOPage
+        );
 
         log.info("::getAllCustomers completed successfully with: response {}", jsonAsString(response));
         return new ResponseEntity<>(response, HttpStatus.OK);
