@@ -94,6 +94,7 @@ public class CustomerRestController {
 
     /**
      * Retrieve a customer by their unique ID.
+     *
      * @param customerId the unique ID of the customer to retrieve
      * @return the customer details wrapped in an APIResponse
      */
@@ -125,39 +126,49 @@ public class CustomerRestController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * This operation creates a new customer in the CRM system.
+     * @param customerRequestDTO the customer request data transfer object containing the details of the customer to be created
+     * @param employeeId the unique ID of the employee to whom the customer will be assigned
+     * @return the created customer details wrapped in an APIResponse
+     */
     @Operation(
             summary = "Create a new customer",
             description = "This operation creates a new customer in the CRM system."
     )
     @PostMapping
     public ResponseEntity<APIResponse<CustomerResponseDTO>> createCustomerForEmployee(
-            @Valid @RequestBody CustomerRequestDTO customerRequestDTO,
-            @RequestParam Long employeeId) {
-        log.info("::createCustomerForEmployee started with: customerRequestDTO {}, employeeId {}", jsonAsString(customerRequestDTO), employeeId);
+            final @Valid @RequestBody CustomerRequestDTO customerRequestDTO,
+            final @RequestParam Long employeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::createCustomerForEmployee started with: customerRequestDTO {}, employeeId {}",
+                    jsonAsString(customerRequestDTO), employeeId);
+        }
 
         // Setze lastInteractionDate auf das aktuelle Datum
         customerRequestDTO.setLastInteractionDate(LocalDate.now());
 
-        Customer customerRequest = TransformerUtil.transform(
+        final Customer customerRequest = TransformerUtil.transform(
                 EntityTransformer.customerRequestDtoToCustomer,
                 customerRequestDTO
         );
 
-        Customer savedCustomer = entityOrchestratorService
+        final Customer savedCustomer = entityOrchestratorService
                 .createCustomerForEmployee(customerRequest, employeeId);
 
-        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
+        final CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
                 EntityTransformer.customerToCustomerResponseDto,
                 savedCustomer
         );
 
-        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
-                .status("success")
-                .statusCode(HttpStatus.CREATED.value())
-                .data(customerResponseDTO)
-                .build();
+        final APIResponse<CustomerResponseDTO> response = ApiResponseHelper.getDTOAPIResponse(
+                COMPLETED, SUCCESS, HttpStatus.CREATED, customerResponseDTO
+        );
 
-        log.info("::createCustomerForEmployee completed successfully with: response {}", jsonAsString(response));
+
+        if (log.isInfoEnabled()) {
+            log.info("::createCustomerForEmployee completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
