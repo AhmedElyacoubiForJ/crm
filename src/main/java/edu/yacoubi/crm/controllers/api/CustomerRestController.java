@@ -93,45 +93,35 @@ public class CustomerRestController {
     }
 
     /**
-     * Retrieves a page of customers, optionally filtered by a search term.
-     *
-     * @param page   the page number to retrieve
-     * @param size   the size of the page to retrieve
-     * @param search an optional search parameter to filter customers by first name or email
-     * @return a page of customers matching the search criteria
+     * Retrieve a customer by their unique ID.
+     * @param customerId the unique ID of the customer to retrieve
+     * @return the customer details wrapped in an APIResponse
      */
-    private Page<Customer> getCustomerPage(int page, int size, String search) {
-        Page<Customer> customersPage;
-        if (search != null && !search.isEmpty()) {
-            customersPage = customerService.getCustomersByFirstNameOrEmail(search, page, size);
-        } else {
-            customersPage = customerService.getCustomersWithPagination(page, size);
-        }
-        return customersPage;
-    }
-
     @Operation(
             summary = "Get customer by ID",
             description = "Retrieve a customer by their unique ID."
     )
     @GetMapping("/{customerId}")
-    public ResponseEntity<APIResponse<CustomerResponseDTO>> getCustomerById(@PathVariable Long customerId) {
-        log.info("::getCustomerById started with: customerId {}", customerId);
+    public ResponseEntity<APIResponse<CustomerResponseDTO>> getCustomerById(
+            final @PathVariable Long customerId) {
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomerById started with: customerId {}", customerId);
+        }
 
-        Customer existingCustomer = customerService.getCustomerById(customerId).get();
+        final Customer existingCustomer = customerService.getCustomerById(customerId).get();
 
-        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
+        final CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
                 EntityTransformer.customerToCustomerResponseDto,
                 existingCustomer
         );
 
-        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .data(customerResponseDTO)
-                .build();
+        final APIResponse<CustomerResponseDTO> response = ApiResponseHelper.getDTOAPIResponse(
+                COMPLETED, SUCCESS, HttpStatus.OK, customerResponseDTO
+        );
 
-        log.info("::getCustomerById completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomerById completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -211,35 +201,6 @@ public class CustomerRestController {
         return ResponseEntity.ok(response);
     }
 
-//    @Operation(
-//            summary = "Partial update of customer by example, Deprecated",
-//            description = "Partial update of an existing customer using a provided example."
-//    )
-//    @PutMapping("/{customerId}/updateByExample")
-//    @Deprecated
-//    public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomerByExample(
-//            @PathVariable Long customerId,
-//            @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
-//        log.info("::updateCustomerByExample started with: customerId {}, customerRequestDTO {}",
-//                customerId, jsonAsString(customerRequestDTO));
-//
-//        Customer updatedCustomer = customerService.updateCustomerByExample(customerRequestDTO, customerId);
-//
-//        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
-//                EntityTransformer.customerToCustomerResponseDto,
-//                updatedCustomer
-//        );
-//
-//        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
-//                .status("success")
-//                .statusCode(HttpStatus.OK.value())
-//                .data(customerResponseDTO)
-//                .build();
-//
-//        log.info("::updateCustomerByExample completed successfully with: response {}", jsonAsString(response));
-//        return ResponseEntity.ok(response);
-//    }
-
     @Operation(
             summary = "Partial update of customer",
             description = "Partial update of an existing customer by their unique ID."
@@ -287,5 +248,52 @@ public class CustomerRestController {
 
         log.info("::deleteCustomer completed successfully with: response {}", response);
         return ResponseEntity.ok(response);
+    }
+
+//    @Operation(
+//            summary = "Partial update of customer by example, Deprecated",
+//            description = "Partial update of an existing customer using a provided example."
+//    )
+//    @PutMapping("/{customerId}/updateByExample")
+//    @Deprecated
+//    public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomerByExample(
+//            @PathVariable Long customerId,
+//            @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
+//        log.info("::updateCustomerByExample started with: customerId {}, customerRequestDTO {}",
+//                customerId, jsonAsString(customerRequestDTO));
+//
+//        Customer updatedCustomer = customerService.updateCustomerByExample(customerRequestDTO, customerId);
+//
+//        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
+//                EntityTransformer.customerToCustomerResponseDto,
+//                updatedCustomer
+//        );
+//
+//        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
+//                .status("success")
+//                .statusCode(HttpStatus.OK.value())
+//                .data(customerResponseDTO)
+//                .build();
+//
+//        log.info("::updateCustomerByExample completed successfully with: response {}", jsonAsString(response));
+//        return ResponseEntity.ok(response);
+//    }
+
+    /**
+     * Retrieves a page of customers, optionally filtered by a search term.
+     *
+     * @param page   the page number to retrieve
+     * @param size   the size of the page to retrieve
+     * @param search an optional search parameter to filter customers by first name or email
+     * @return a page of customers matching the search criteria
+     */
+    private Page<Customer> getCustomerPage(int page, int size, String search) {
+        Page<Customer> customersPage;
+        if (search != null && !search.isEmpty()) {
+            customersPage = customerService.getCustomersByFirstNameOrEmail(search, page, size);
+        } else {
+            customersPage = customerService.getCustomersWithPagination(page, size);
+        }
+        return customersPage;
     }
 }
