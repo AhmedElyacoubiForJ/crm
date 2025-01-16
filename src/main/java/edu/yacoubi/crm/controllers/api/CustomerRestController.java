@@ -43,12 +43,7 @@ public class CustomerRestController {
             @RequestParam(required = false) String search) {
         log.info("::getAllEmployees started with: page: {}, size: {}, search: {}", page, size, search);
 
-        Page<Customer> customersPage;
-        if (search != null && !search.isEmpty()) {
-            customersPage = customerService.getCustomersByFirstNameOrEmail(search, page, size);
-        } else {
-            customersPage = customerService.getCustomersWithPagination(page, size);
-        }
+        Page<Customer> customersPage = getCustomerPage(page, size, search);
 
         Page<CustomerResponseDTO> customerResponseDTOPage = customersPage.map(
                 customer -> TransformerUtil.transform(EntityTransformer.customerToCustomerResponseDto, customer)
@@ -62,6 +57,16 @@ public class CustomerRestController {
 
         log.info("::getAllCustomers completed successfully with: response {}", jsonAsString(response));
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    private Page<Customer> getCustomerPage(int page, int size, String search) {
+        Page<Customer> customersPage;
+        if (search != null && !search.isEmpty()) {
+            customersPage = customerService.getCustomersByFirstNameOrEmail(search, page, size);
+        } else {
+            customersPage = customerService.getCustomersWithPagination(page, size);
+        }
+        return customersPage;
     }
 
     @Operation(
