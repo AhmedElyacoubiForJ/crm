@@ -68,15 +68,18 @@ class CustomerServiceImplIntegrationTest {
         assertEquals(savedCustomer.getId(), foundCustomer.getId());
     }
 
-    // TODO FIX cause refactor of the service method
-    //@Test
+    // TODO FIX cause refactor of the the new customer update method
+    @Test
     @Transactional
     public void itShouldUpdateCustomer() {
         // Given
         Employee employee = TestDataUtil.createEmployeeA();
         Employee savedEmployee = employeeRepository.save(employee);
+
         Customer customer = TestDataUtil.createCustomerA(savedEmployee);
         Customer savedCustomer = underTest.createCustomer(customer);
+
+        // Aktualisierung des Kundennamens
         savedCustomer.setFirstName("Updated Name");
 
         // When
@@ -86,6 +89,7 @@ class CustomerServiceImplIntegrationTest {
         assertNotNull(updatedCustomer);
         assertEquals("Updated Name", updatedCustomer.getFirstName());
     }
+
 
     @Test
     public void itShouldDeleteCustomer() {

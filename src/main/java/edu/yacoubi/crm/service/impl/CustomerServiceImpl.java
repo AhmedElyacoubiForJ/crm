@@ -62,9 +62,6 @@ public class CustomerServiceImpl implements ICustomerService {
 
         // Laden der bestehenden Notizen
         List<Note> existingNotes = existingCustomer.getNotes();
-        existingNotes.forEach(note ->
-                System.out.println(note)
-        );
 
         // Setzen der ID und anderer unveränderter Eigenschaften
         customerRequest.setId(customerId);

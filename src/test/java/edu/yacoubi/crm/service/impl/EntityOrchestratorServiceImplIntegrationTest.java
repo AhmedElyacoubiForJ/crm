@@ -710,8 +710,7 @@ class EntityOrchestratorServiceImplIntegrationTest {
                 String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
-    // TODO FIX cause refactor of the service method, related to new implementation of updateCustomer
-    //@Test
+    // TODO FIX cause refactor of the service method, related to new implementation of updateCustomer@Test
     void itShouldAssignCustomerToEmployeeByCallingReassignCustomerToEmployee() {
         // Given
         Employee employeeB = employeeService.createEmployee(TestDataUtil.createEmployeeB());

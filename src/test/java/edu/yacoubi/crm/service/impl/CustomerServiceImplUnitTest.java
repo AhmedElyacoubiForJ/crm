@@ -8,6 +8,7 @@ import edu.yacoubi.crm.service.validation.EntityValidator;
 import edu.yacoubi.crm.util.TestDataUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -66,14 +67,16 @@ class CustomerServiceImplUnitTest {
         verify(customerRepository, times(1)).findById(customerId);
     }
 
-    // TODO FIX cause refactor of the service method
-    //@Test
+    @Test
     public void itShouldUpdateCustomer() {
         // Given
         Long customerId = 1L;
         Customer customer = TestDataUtil.createCustomerA(null);
         customer.setId(customerId);
-        when(customerRepository.existsById(customerId)).thenReturn(true);
+        customer.setFirstName("Updated Name"); // Beispiel für eine Aktualisierung
+
+        doNothing().when(entityValidator).validateCustomerExists(customerId);
+        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
 
         // When
@@ -81,8 +84,14 @@ class CustomerServiceImplUnitTest {
 
         // Then
         assertNotNull(updatedCustomer);
-        verify(customerRepository, times(1)).save(customer);
+        assertEquals("Updated Name", updatedCustomer.getFirstName()); // Überprüfung der Aktualisierung
+
+        ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
+        verify(customerRepository, times(1)).save(customerArgumentCaptor.capture());
+        Customer capturedCustomer = customerArgumentCaptor.getValue();
+        assertEquals(customerId, capturedCustomer.getId()); // Überprüfung, dass die ID korrekt ist
     }
+
 
     @Test
     public void itShouldDeleteCustomer() {
