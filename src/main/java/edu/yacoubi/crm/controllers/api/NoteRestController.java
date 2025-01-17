@@ -135,7 +135,9 @@ public class NoteRestController {
 
         Note existingNote = noteService.getNoteById(noteId).get();
 
-        Note noteRequest = TransformerUtil.transform(EntityTransformer.noteRequestDtoToNote, noteRequestDTO);
+        Note noteRequest = TransformerUtil.transform(
+                EntityTransformer.noteRequestDtoToNote, noteRequestDTO
+        );
 
         noteRequest.setId(noteId);
         noteRequest.setCustomer(existingNote.getCustomer());
@@ -157,32 +159,41 @@ public class NoteRestController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Partial update of an existing note by their unique ID.
+     *
+     * @param noteId       the unique ID of the note to update
+     * @param notePatchDTO the note patch data transfer object containing the partial updates of the note
+     * @return the updated note details wrapped in an APIResponse
+     */
     @Operation(
             summary = "Partial update of note",
             description = "Partial update of an existing note by their unique ID."
     )
     @PatchMapping("/{id}")
     public ResponseEntity<APIResponse<NoteResponseDTO>> patchNote(
-            @PathVariable Long noteId,
-            @Valid @RequestBody NotePatchDTO notePatchDTO) {
-        log.info("::patchNote started with: noteId {}, notePatchDTO {}", noteId, jsonAsString(notePatchDTO));
+            final @PathVariable Long noteId,
+            final @Valid @RequestBody NotePatchDTO notePatchDTO) {
+        if (log.isInfoEnabled()) {
+            log.info("::patchNote started with: noteId {}, notePatchDTO {}", noteId, jsonAsString(notePatchDTO));
+        }
 
         noteService.partialUpdateNote(noteId, notePatchDTO);
 
-        Note updatedNote = noteService.getNoteById(noteId).get();
+        final Note updatedNote = noteService.getNoteById(noteId).get();
 
-        NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
+        final NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
                 EntityTransformer.noteToNoteResponseDto,
                 updatedNote
         );
 
-        APIResponse<NoteResponseDTO> response = APIResponse.<NoteResponseDTO>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .data(noteResponseDTO)
-                .build();
+        final APIResponse<NoteResponseDTO> response = ApiResponseHelper.getDTOAPIResponse(
+                COMPLETED, SUCCESS, HttpStatus.OK, noteResponseDTO
+        );
 
-        log.info("::patchNote completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::patchNote completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.ok(response);
     }
 
