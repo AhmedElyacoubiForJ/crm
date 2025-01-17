@@ -249,53 +249,34 @@ public class CustomerRestController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Delete an existing customer by their unique ID.
+     *
+     * @param customerId the unique ID of the customer to delete
+     * @return a response indicating the success of the deletion
+     */
     @Operation(
             summary = "Delete customer",
             description = "Delete an existing customer by their unique ID."
     )
     @DeleteMapping("/{customerId}")
-    public ResponseEntity<APIResponse<Void>> deleteCustomer(@PathVariable Long customerId) {
-        log.info("::deleteCustomer started with: customerId {}", customerId);
+    public ResponseEntity<APIResponse<Void>> deleteCustomer(final @PathVariable Long customerId) {
+        if (log.isInfoEnabled()) {
+            log.info("::deleteCustomer started with: customerId {}", customerId);
+        }
 
         customerService.deleteCustomer(customerId);
 
-        APIResponse<Void> response = APIResponse.<Void>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .build();
+        final APIResponse<Void> response = ApiResponseHelper.getVoidAPIResponse(
+                COMPLETED, SUCCESS, HttpStatus.OK
+        );
 
-        log.info("::deleteCustomer completed successfully with: response {}", response);
+        if (log.isInfoEnabled()) {
+            log.info("::deleteCustomer completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.ok(response);
     }
 
-//    @Operation(
-//            summary = "Partial update of customer by example, Deprecated",
-//            description = "Partial update of an existing customer using a provided example."
-//    )
-//    @PutMapping("/{customerId}/updateByExample")
-//    @Deprecated
-//    public ResponseEntity<APIResponse<CustomerResponseDTO>> updateCustomerByExample(
-//            @PathVariable Long customerId,
-//            @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
-//        log.info("::updateCustomerByExample started with: customerId {}, customerRequestDTO {}",
-//                customerId, jsonAsString(customerRequestDTO));
-//
-//        Customer updatedCustomer = customerService.updateCustomerByExample(customerRequestDTO, customerId);
-//
-//        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
-//                EntityTransformer.customerToCustomerResponseDto,
-//                updatedCustomer
-//        );
-//
-//        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
-//                .status("success")
-//                .statusCode(HttpStatus.OK.value())
-//                .data(customerResponseDTO)
-//                .build();
-//
-//        log.info("::updateCustomerByExample completed successfully with: response {}", jsonAsString(response));
-//        return ResponseEntity.ok(response);
-//    }
 
     /**
      * Retrieves a page of customers, optionally filtered by a search term.
