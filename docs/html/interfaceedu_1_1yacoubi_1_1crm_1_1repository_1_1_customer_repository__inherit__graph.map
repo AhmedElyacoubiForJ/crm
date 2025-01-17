@@ -1,9 +1,0 @@
-<map id="edu.yacoubi.crm.repository.CustomerRepository" name="edu.yacoubi.crm.repository.CustomerRepository">
-<area shape="rect" id="Node000001" title=" " alt="" coords="161,139,398,357"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,173,91"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="141,99,178,137,174,141,137,103"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="198,5,362,91"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="282,106,282,139,277,139,277,106"/>
-<area shape="rect" id="Node000004" href="$interfaceedu_1_1yacoubi_1_1crm_1_1repository_1_1_custom_customer_repository.html" title=" " alt="" coords="386,5,581,91"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="433,103,393,141,389,137,429,99"/>
-</map>

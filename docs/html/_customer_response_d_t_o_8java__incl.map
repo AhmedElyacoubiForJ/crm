@@ -1,9 +1,0 @@
-<map id="src/main/java/edu/yacoubi/crm/dto/customer/CustomerResponseDTO.java" name="src/main/java/edu/yacoubi/crm/dto/customer/CustomerResponseDTO.java">
-<area shape="rect" id="Node000001" title=" " alt="" coords="61,5,308,64"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,112,113,139"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="145,67,90,105,87,101,142,62"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="137,112,232,139"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="187,64,187,96,182,96,182,64"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="256,112,393,139"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="231,62,293,101,290,106,228,67"/>
-</map>

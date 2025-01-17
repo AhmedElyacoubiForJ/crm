@@ -1,9 +1,0 @@
-<map id="edu.yacoubi.crm.service.impl.NoteOrchestratorServiceImpl" name="edu.yacoubi.crm.service.impl.NoteOrchestratorServiceImpl">
-<area shape="rect" id="Node000001" title=" " alt="" coords="214,464,398,549"/>
-<area shape="rect" id="Node000002" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_orchestrator_service.html" title="Service interface for orchestrating notes." alt="" coords="5,160,177,245"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,258,147,327,191,398,221,432,253,462,250,466,217,436,187,402,142,330,110,260"/>
-<area shape="rect" id="Node000003" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_customer_service.html" title=" " alt="" coords="201,5,411,400"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="309,400,309,447,303,447,303,400"/>
-<area shape="rect" id="Node000004" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service.html" title=" " alt="" coords="435,107,604,299"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="497,300,466,373,445,409,420,442,406,455,402,452,416,438,440,406,461,370,492,297"/>
-</map>

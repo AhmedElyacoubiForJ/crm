@@ -20,6 +20,11 @@ import org.springframework.web.bind.annotation.*;
 
 import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
 
+/**
+ * REST controller for managing note resources in the CRM system.
+ *
+ * @author A. El Yacoubi
+ */
 @RestController
 @RequestMapping("/api/notes")
 @RequiredArgsConstructor
@@ -209,20 +214,21 @@ public class NoteRestController {
     /**
      * Delete an existing note by its unique ID.
      *
-     * @param customerId the unique ID of the note to delete
+     * @param noteId the unique ID of the note to delete
      * @return a response indicating the success of the deletion
      */
     @Operation(
             summary = "Delete note",
             description = "Delete an existing note by its unique ID."
     )
-    @DeleteMapping("/{customerId}")
-    public ResponseEntity<APIResponse<Void>> deleteNoteById(final @PathVariable Long customerId) {
+    @DeleteMapping("/{noteId}")
+    public ResponseEntity<APIResponse<Void>> deleteNoteById(
+            final @PathVariable Long noteId) {
         if (log.isInfoEnabled()) {
-            log.info("::deleteNoteById started with: customerId {}", customerId);
+            log.info("::deleteNoteById started with: noteId {}", noteId);
         }
 
-        noteService.deleteNote(customerId);
+        noteService.deleteNote(noteId);
 
         final APIResponse<Void> response = ApiResponseHelper.getVoidAPIResponse(
                 COMPLETED, SUCCESS, HttpStatus.NO_CONTENT

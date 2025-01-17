@@ -1,7 +1,0 @@
-<map id="edu.yacoubi.crm.controllers.api.NoteRestController" name="edu.yacoubi.crm.controllers.api.NoteRestController">
-<area shape="rect" id="Node000001" title=" " alt="" coords="89,261,285,432"/>
-<area shape="rect" id="Node000002" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_service.html" title=" " alt="" coords="5,5,174,197"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,196,150,245,145,247,125,198"/>
-<area shape="rect" id="Node000003" href="$interfaceedu_1_1yacoubi_1_1crm_1_1service_1_1_i_note_orchestrator_service.html" title="Service interface for orchestrating notes." alt="" coords="198,59,370,144"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="270,145,230,246,225,245,266,143"/>
-</map>
