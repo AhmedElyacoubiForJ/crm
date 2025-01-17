@@ -210,34 +210,42 @@ public class CustomerRestController {
         return ResponseEntity.ok(response);
     }
 
-
+    /**
+     * Partial update of an existing customer by their unique ID.
+     *
+     * @param customerId the unique ID of the customer to update
+     * @param customerPatchDTO the customer patch data transfer object containing the partial updates of the customer
+     * @return the updated customer details wrapped in an APIResponse
+     */
     @Operation(
             summary = "Partial update of customer",
             description = "Partial update of an existing customer by their unique ID."
     )
     @PatchMapping("/{customerId}")
     public ResponseEntity<APIResponse<CustomerResponseDTO>> patchCustomer(
-            @PathVariable Long customerId,
-            @Valid @RequestBody CustomerPatchDTO customerPatchDTO) {
-        log.info("::patchCustomer started with: customerId {}, customerPatchDTO {}",
-                customerId, jsonAsString(customerPatchDTO));
+            final @PathVariable Long customerId,
+            final @Valid @RequestBody CustomerPatchDTO customerPatchDTO) {
+        if (log.isInfoEnabled()) {
+            log.info("::patchCustomer started with: customerId {}, customerPatchDTO {}",
+                    customerId, jsonAsString(customerPatchDTO));
+        }
 
         customerService.partialUpdateCustomer(customerId, customerPatchDTO);
 
-        Customer updatedCustomer = customerService.getCustomerById(customerId).get();
+        final Customer updatedCustomer = customerService.getCustomerById(customerId).get();
 
-        CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
+        final CustomerResponseDTO customerResponseDTO = TransformerUtil.transform(
                 EntityTransformer.customerToCustomerResponseDto,
                 updatedCustomer
         );
 
-        APIResponse<CustomerResponseDTO> response = APIResponse.<CustomerResponseDTO>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .data(customerResponseDTO)
-                .build();
+        final APIResponse<CustomerResponseDTO> response = ApiResponseHelper.getDTOAPIResponse(
+                COMPLETED, SUCCESS, HttpStatus.OK, customerResponseDTO
+        );
 
-        log.info("::patchCustomer completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::patchCustomer completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.ok(response);
     }
 
