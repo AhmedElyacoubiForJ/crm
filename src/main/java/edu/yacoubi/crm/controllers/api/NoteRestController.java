@@ -18,7 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
+import static edu.yacoubi.crm.util.EntityTransformer.jsonAsString;
 
 /**
  * REST controller for managing note resources in the CRM system.
@@ -54,21 +54,21 @@ public class NoteRestController {
     /**
      * Retrieve a note by its unique ID.
      *
-     * @param customerId the unique ID of the note to retrieve
+     * @param noteId the unique ID of the note to retrieve
      * @return the retrieved note details wrapped in an APIResponse
      */
     @Operation(
             summary = "Get note by ID",
             description = "Retrieve a note by its unique ID."
     )
-    @GetMapping("/{customerId}")
+    @GetMapping("/{noteId}")
     public ResponseEntity<APIResponse<NoteResponseDTO>> getNoteById(
-            final @PathVariable Long customerId) {
+            final @PathVariable Long noteId) {
         if (log.isInfoEnabled()) {
-            log.info("::getNoteById started with: customerId {}", customerId);
+            log.info("::getNoteById started with: noteId {}", noteId);
         }
 
-        final Note existingNote = noteService.getNoteById(customerId).get();
+        final Note existingNote = noteService.getNoteById(noteId).get();
 
         final NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
                 EntityTransformer.noteToNoteResponseDto,

@@ -23,7 +23,7 @@ import java.util.List;
 
 import static edu.yacoubi.crm.util.ApiResponseHelper.getDTOAPIResponse;
 import static edu.yacoubi.crm.util.ApiResponseHelper.getPageAPIResponse;
-import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
+import static edu.yacoubi.crm.util.EntityTransformer.jsonAsString;
 
 /**
  * REST controller for managing employee resources in the CRM system.

@@ -19,7 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
+import static edu.yacoubi.crm.util.EntityTransformer.jsonAsString;
 
 /**
  * REST controller for managing customer resources in the CRM system.
