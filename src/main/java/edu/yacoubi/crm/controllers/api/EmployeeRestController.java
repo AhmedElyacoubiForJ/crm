@@ -58,6 +58,7 @@ public class EmployeeRestController {
 
     /**
      * Retrieve a list of all employees in the CRM system with pagination and optional search.
+     *
      * @param page   the page number to retrieve, default is 0
      * @param size   the size of the page to retrieve, default is 10
      * @param search an optional search parameter to filter employees by first name or department

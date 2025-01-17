@@ -19,8 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-
 import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
 
 /**
@@ -210,7 +208,7 @@ public class CustomerRestController {
     /**
      * Partial update of an existing customer by their unique ID.
      *
-     * @param customerId the unique ID of the customer to update
+     * @param customerId       the unique ID of the customer to update
      * @param customerPatchDTO the customer patch data transfer object containing the partial updates of the customer
      * @return the updated customer details wrapped in an APIResponse
      */

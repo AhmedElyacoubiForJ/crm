@@ -33,7 +33,7 @@ public interface ICustomerService {
      * Updates an existing customer.
      *
      * @param customerId the ID of the customer to be updated.
-     * @param customer the updated customer information.
+     * @param customer   the updated customer information.
      * @return the updated customer.
      */
     Customer updateCustomer(Long customerId, Customer customer);
@@ -65,7 +65,7 @@ public interface ICustomerService {
      * Updates an existing customer based on an example customer DTO.
      *
      * @param customerExample the example customer DTO.
-     * @param customerId the ID of the customer to be updated.
+     * @param customerId      the ID of the customer to be updated.
      * @return the updated customer.
      */
     Customer updateCustomerByExample(CustomerRequestDTO customerExample, Long customerId);
@@ -89,7 +89,7 @@ public interface ICustomerService {
     /**
      * Partially updates an existing customer based on a patch DTO.
      *
-     * @param customerId the ID of the customer to be partially updated.
+     * @param customerId       the ID of the customer to be partially updated.
      * @param customerPatchDTO the partial update information.
      */
     void partialUpdateCustomer(Long customerId, CustomerPatchDTO customerPatchDTO);
@@ -98,8 +98,8 @@ public interface ICustomerService {
      * Retrieves customers by either their first name or email, in a paginated format.
      *
      * @param search the search string for the first name or email.
-     * @param page the page number to retrieve.
-     * @param size the number of customers per page.
+     * @param page   the page number to retrieve.
+     * @param size   the number of customers per page.
      * @return a page of customers matching the search criteria.
      */
     Page<Customer> getCustomersByFirstNameOrEmail(String search, int page, int size);

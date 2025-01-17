@@ -118,11 +118,10 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
     }
 
     /**
-     * @brief Creates a customer and assigns them to an employee.
-     *
-     * @param customer The customer to be created.
+     * @param customer   The customer to be created.
      * @param employeeId ID of the employee to whom the customer will be assigned.
      * @return The created customer.
+     * @brief Creates a customer and assigns them to an employee.
      */
     @Override
     public Customer createCustomerForEmployee(Customer customer, Long employeeId) {
