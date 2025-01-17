@@ -710,19 +710,25 @@ class EntityOrchestratorServiceImplIntegrationTest {
                 String.format(INFO_SUPPLIED_MSG, expectedExitLogMsg)
         );
     }
-    // TODO FIX cause refactor of the service method, related to new implementation of updateCustomer@Test
+
+    @Test
     void itShouldAssignCustomerToEmployeeByCallingReassignCustomerToEmployee() {
         // Given
-        Employee employeeB = employeeService.createEmployee(TestDataUtil.createEmployeeB());
-        final Long customerId = customerService.createCustomer(TestDataUtil.createCustomerB(employeeB))
-                .getId();
-        final Long employeeId = employeeService.createEmployee(TestDataUtil.createEmployeeC()).getId();
+        // has one customer
+        final Employee existingEmployeeA = employeeService.createEmployee(TestDataUtil.createEmployeeA());
+        final Long customerId = customerService.createCustomer(
+                TestDataUtil.createCustomerA(existingEmployeeA)
+        ).getId();
+
+        // has no customers
+        final Long employeeId = employeeService.createEmployee(TestDataUtil.createEmployeeB()).getId();
+
         final String expectedEntryLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_ENTRY_POINT,
                 customerId, employeeId);
         final String expectedExitLogMsg = String.format(INFO_LOG_REASSIGN_CUS_2_EMP_EXIT_POINT,
                 customerId, employeeId);
 
-        // When
+        // When, assign customerA (customerId) to employeeB (employeeId)
         underTest.reassignCustomerToEmployee(customerId, employeeId);
 
         // Then / Verify
@@ -739,7 +745,7 @@ class EntityOrchestratorServiceImplIntegrationTest {
         );
         // customer is not assigned more to the old employee
         assertNotEquals(
-                employeeB.getId(),
+                existingEmployeeA.getId(),
                 customerService.getCustomerById(customerId).get().getEmployee().getId(),
                 "Customer should not be assigned to the old employee"
         );

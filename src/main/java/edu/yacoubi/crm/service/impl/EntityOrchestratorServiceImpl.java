@@ -56,6 +56,7 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
      * @brief Reassigns a customer to a different employee.
      */
     @Override
+    @Transactional
     public void reassignCustomerToEmployee(Long customerId, Long employeeId) {
         log.info("::reassignCustomerToEmployee started with: customerId: {}, employeeId: {}",
                 customerId, employeeId
