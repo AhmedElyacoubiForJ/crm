@@ -80,37 +80,48 @@ public class NoteRestController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * This operation creates a new note for a specified customer in the CRM system.
+     *
+     * @param noteRequestDTO the note request data transfer object containing the details of the note to be created
+     * @param customerId     the unique ID of the customer to whom the note will be assigned
+     * @return the created note details wrapped in an APIResponse
+     */
     @Operation(
             summary = "Create a new note",
             description = "This operation creates a new note for a specified customer in the CRM system."
     )
     @PostMapping
     public ResponseEntity<APIResponse<NoteResponseDTO>> createNoteForCustomer(
-            @Valid @RequestBody NoteRequestDTO noteRequestDTO,
-            @RequestParam Long customerId) {
-        log.info("::createNoteForCustomer started with: noteRequestDTO {}, customerId {}", noteRequestDTO, customerId);
+            final @Valid @RequestBody NoteRequestDTO noteRequestDTO,
+            final @RequestParam Long customerId) {
+        if (log.isInfoEnabled()) {
+            log.info("::createNoteForCustomer started with: noteRequestDTO {}, customerId {}",
+                    jsonAsString(noteRequestDTO), customerId);
+        }
 
-        Note noteRequest = TransformerUtil.transform(
+        final Note noteRequest = TransformerUtil.transform(
                 EntityTransformer.noteRequestDtoToNote,
                 noteRequestDTO
         );
 
-        Note createdNote = noteOrchestratorService.createNoteForCustomer(noteRequest, customerId);
+        final Note createdNote = noteOrchestratorService.createNoteForCustomer(noteRequest, customerId);
 
-        NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
+        final NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
                 EntityTransformer.noteToNoteResponseDto,
                 createdNote
         );
 
-        APIResponse<NoteResponseDTO> response = APIResponse.<NoteResponseDTO>builder()
-                .status("success")
-                .statusCode(HttpStatus.CREATED.value())
-                .data(noteResponseDTO)
-                .build();
+        final APIResponse<NoteResponseDTO> response = ApiResponseHelper.getDTOAPIResponse(
+                COMPLETED, SUCCESS, HttpStatus.CREATED, noteResponseDTO
+        );
 
-        log.info("::createNoteForCustomer completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::createNoteForCustomer completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
 
     @Operation(
             summary = "Full update note",
