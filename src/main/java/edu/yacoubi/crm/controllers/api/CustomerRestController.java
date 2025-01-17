@@ -144,9 +144,6 @@ public class CustomerRestController {
                     jsonAsString(customerRequestDTO), employeeId);
         }
 
-        // Setze lastInteractionDate auf das aktuelle Datum
-        customerRequestDTO.setLastInteractionDate(LocalDate.now());
-
         final Customer customerRequest = TransformerUtil.transform(
                 EntityTransformer.customerRequestDtoToCustomer,
                 customerRequestDTO
