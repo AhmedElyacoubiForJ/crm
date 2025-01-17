@@ -7,6 +7,7 @@ import edu.yacoubi.crm.dto.note.NoteResponseDTO;
 import edu.yacoubi.crm.model.Note;
 import edu.yacoubi.crm.service.INoteOrchestratorService;
 import edu.yacoubi.crm.service.INoteService;
+import edu.yacoubi.crm.util.ApiResponseHelper;
 import edu.yacoubi.crm.util.EntityTransformer;
 import edu.yacoubi.crm.util.TransformerUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,31 +25,58 @@ import static edu.yacoubi.crm.util.ValueMapper.jsonAsString;
 @RequiredArgsConstructor
 @Slf4j
 public class NoteRestController {
+
+    /**
+     * Success message.
+     */
+    public static final String SUCCESS = "Success";
+
+    /**
+     * Completion message for a successful operation.
+     */
+    public static final String COMPLETED = "Operation completed";
+
+    /**
+     * Service for note operations.
+     */
     private final INoteService noteService;
+
+    /**
+     * Orchestrator service for creating note for customer.
+     */
     private final INoteOrchestratorService noteOrchestratorService;
 
+    /**
+     * Retrieve a note by its unique ID.
+     *
+     * @param customerId the unique ID of the note to retrieve
+     * @return the retrieved note details wrapped in an APIResponse
+     */
     @Operation(
             summary = "Get note by ID",
             description = "Retrieve a note by its unique ID."
     )
-    @GetMapping("/{id}")
-    public ResponseEntity<APIResponse<NoteResponseDTO>> getNoteById(@PathVariable Long customerId) {
-        log.info("::getNoteById started with: customerId {}", customerId);
+    @GetMapping("/{customerId}")
+    public ResponseEntity<APIResponse<NoteResponseDTO>> getNoteById(
+            final @PathVariable Long customerId) {
+        if (log.isInfoEnabled()) {
+            log.info("::getNoteById started with: customerId {}", customerId);
+        }
 
-        Note existingNote = noteService.getNoteById(customerId).get();
+        final Note existingNote = noteService.getNoteById(customerId).get();
 
-        NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
+        final NoteResponseDTO noteResponseDTO = TransformerUtil.transform(
                 EntityTransformer.noteToNoteResponseDto,
                 existingNote
         );
 
-        APIResponse<NoteResponseDTO> response = APIResponse.<NoteResponseDTO>builder()
-                .status("success")
-                .statusCode(HttpStatus.OK.value())
-                .data(noteResponseDTO)
-                .build();
+        final APIResponse<NoteResponseDTO> response = ApiResponseHelper.getDTOAPIResponse(
+                COMPLETED, SUCCESS, HttpStatus.OK, noteResponseDTO
+        );
 
-        log.info("::getNoteById completed successfully with: response {}", jsonAsString(response));
+        if (log.isInfoEnabled()) {
+            log.info("::getNoteById completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -165,5 +193,33 @@ public class NoteRestController {
         log.info("::deleteNote completed successfully with: response {}");
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
+
+//    /**
+//     * Retrieve all notes from the system.
+//     *
+//     * @return a list of all notes wrapped in an APIResponse
+//     */
+//    @Operation(
+//            summary = "Get all notes",
+//            description = "Retrieve all notes from the system."
+//    )
+//    @GetMapping
+//    public ResponseEntity<APIResponse<List<NoteResponseDTO>>> getAllNotes() {
+//        if (log.isInfoEnabled()) {
+//            log.info("::getAllNotes started");
+//        }
+//
+//        List<NoteResponseDTO> notes = noteService.getAllNotes();
+//
+//        final APIResponse<List<NoteResponseDTO>> response = ApiResponseHelper.getDTOAPIResponse(
+//                COMPLETED, SUCCESS, HttpStatus.OK, notes
+//        );
+//
+//        if (log.isInfoEnabled()) {
+//            log.info("::getAllNotes completed successfully with: response {}", jsonAsString(response));
+//        }
+//        return ResponseEntity.ok(response);
+//    }
+
 }
 
