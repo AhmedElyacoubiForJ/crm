@@ -197,22 +197,31 @@ public class NoteRestController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Delete an existing note by its unique ID.
+     *
+     * @param customerId the unique ID of the note to delete
+     * @return a response indicating the success of the deletion
+     */
     @Operation(
             summary = "Delete note",
             description = "Delete an existing note by its unique ID."
     )
-    @DeleteMapping("/{id}")
-    public ResponseEntity<APIResponse<Void>> deleteNoteById(@PathVariable Long customerId) {
-        log.info("::deleteNoteById started with: customerId {}", customerId);
+    @DeleteMapping("/{customerId}")
+    public ResponseEntity<APIResponse<Void>> deleteNoteById(final @PathVariable Long customerId) {
+        if (log.isInfoEnabled()) {
+            log.info("::deleteNoteById started with: customerId {}", customerId);
+        }
 
         noteService.deleteNote(customerId);
 
-        APIResponse<Void> response = APIResponse.<Void>builder()
-                .status("success")
-                .statusCode(HttpStatus.NO_CONTENT.value())
-                .build();
+        final APIResponse<Void> response = ApiResponseHelper.getVoidAPIResponse(
+                COMPLETED, SUCCESS, HttpStatus.NO_CONTENT
+        );
 
-        log.info("::deleteNote completed successfully with: response {}");
+        if (log.isInfoEnabled()) {
+            log.info("::deleteNote completed successfully with: response {}", jsonAsString(response));
+        }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
 
