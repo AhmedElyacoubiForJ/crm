@@ -17,9 +17,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * @brief Service implementation for orchestrating entities.
- * <p>
- * This service handles operations related to employees and customers.
+ * Service implementation for orchestrating entities.
+ *
+ * <p>This service handles operations related to employees and customers.</p>
+ *
+ * @author A. El Yacoubi
  */
 @Service
 @RequiredArgsConstructor
@@ -30,147 +32,164 @@ public class EntityOrchestratorServiceImpl implements IEntityOrchestratorService
     private final IInactiveEmployeeService inactiveEmployeeService;
 
     /**
-     * @param oldEmployeeId ID of the employee to be deleted.
-     * @param newEmployeeId ID of the employee to whom the customers will be reassigned.
-     * @brief Deletes an employee and reassigns their customers to another employee.
+     * Deletes an employee and reassigns their customers to another employee.
+     *
+     * @param oldEmployeeId ID of the employee to be deleted
+     * @param newEmployeeId ID of the employee to whom the customers will be reassigned
      */
     @Transactional
     @Override
-    public void deleteEmployeeAndReassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
-        log.info("::deleteEmployeeAndReassignCustomers started with: oldEmployeeId: {}, newEmployeeId: {}",
-                oldEmployeeId, newEmployeeId
-        );
+    public void deleteEmployeeAndReassignCustomers(final Long oldEmployeeId, final Long newEmployeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::deleteEmployeeAndReassignCustomers started with: oldEmployeeId: {}, newEmployeeId: {}", oldEmployeeId, newEmployeeId);
+        }
 
-        // parameter validation in this.reassignCustomers, otherwise we have double validation
-
+        // Parameter-Validierung in this.reassignCustomers, um doppelte Validierung zu vermeiden
         this.reassignCustomers(oldEmployeeId, newEmployeeId);
 
-        EntityAction deleteEmployeeAction = createDeleteEmployeeAction();
+        final EntityAction deleteEmployeeAction = createDeleteEmployeeAction();
         processEntityAction(oldEmployeeId, deleteEmployeeAction);
 
-        log.info("::deleteEmployeeAndReassignCustomers completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::deleteEmployeeAndReassignCustomers completed successfully");
+        }
     }
 
     /**
-     * @param customerId ID of the customer to be reassigned.
-     * @param employeeId ID of the employee to whom the customer will be assigned.
-     * @brief Reassigns a customer to a different employee.
+     * Reassigns a customer to a different employee.
+     *
+     * @param customerId ID of the customer to be reassigned
+     * @param employeeId ID of the employee to whom the customer will be assigned
      */
     @Override
     @Transactional
-    public void reassignCustomerToEmployee(Long customerId, Long employeeId) {
-        log.info("::reassignCustomerToEmployee started with: customerId: {}, employeeId: {}",
-                customerId, employeeId
-        );
-        // EntityOrchestratorServiceImpl parameter warn
+    public void reassignCustomerToEmployee(final Long customerId, final Long employeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::reassignCustomerToEmployee started with: customerId: {}, employeeId: {}", customerId, employeeId);
+        }
+
         if (customerId == null || employeeId == null || customerId < 0 || employeeId < 0) {
-            String errorMessage = "Customer or Employee IDs must not be null and must be a positive number";
+            final String errorMessage = "Customer or Employee IDs must not be null and must be a positive number";
             log.warn("::reassignCustomerToEmployee parameter warn: {}", errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }
 
-        Customer customer = customerService.getCustomerById(customerId).get();
-        Employee employee = employeeService.getEmployeeById(employeeId).get();
+        final Customer customer = customerService.getCustomerById(customerId).get();
+        final Employee employee = employeeService.getEmployeeById(employeeId).get();
 
         customer.setEmployee(employee);
         customerService.updateCustomer(customerId, customer);
 
-        log.info("::reassignCustomerToEmployee completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::reassignCustomerToEmployee completed successfully");
+        }
     }
 
     /**
-     * @param oldEmployeeId ID of the old employee.
-     * @param newEmployeeId ID of the new employee.
-     * @brief Reassigns customers from an old employee to a new employee.
+     * Reassigns customers from an old employee to a new employee.
+     *
+     * @param oldEmployeeId ID of the old employee
+     * @param newEmployeeId ID of the new employee
      */
     @Override
-    public void reassignCustomers(Long oldEmployeeId, Long newEmployeeId) {
-        log.info("::reassignCustomers started with: oldEmployeeId: {}, newEmployeeId: {}",
-                oldEmployeeId, newEmployeeId
-        );
+    public void reassignCustomers(final Long oldEmployeeId, final Long newEmployeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::reassignCustomers started with: oldEmployeeId: {}, newEmployeeId: {}", oldEmployeeId, newEmployeeId);
+        }
 
         if (oldEmployeeId == null || newEmployeeId == null || oldEmployeeId < 0 || newEmployeeId < 0) {
-            String errorMessage = "Employee IDs must not be null and must be a positive number";
+            final String errorMessage = "Employee IDs must not be null and must be a positive number";
             log.warn("::reassignCustomers parameter warn: {}", errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }
 
         if (newEmployeeId.equals(oldEmployeeId)) {
-            String errorMessage = "Old and new employee IDs must be different";
+            final String errorMessage = "Old and new employee IDs must be different";
             log.warn("::reassignCustomers parameter warn: {}", errorMessage);
-            //log.warn(errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }
 
-        List<Customer> customers = customerService.getCustomersByEmployeeId(oldEmployeeId);
+        final List<Customer> customers = customerService.getCustomersByEmployeeId(oldEmployeeId);
 
         if (customers.isEmpty()) {
-            String errorMessage = "No customers found for oldEmployee ID: " + oldEmployeeId;
+            final String errorMessage = "No customers found for oldEmployee ID: " + oldEmployeeId;
             log.warn("::reassignCustomers entity warn: {}", errorMessage);
             throw new ResourceNotFoundException(errorMessage);
         }
 
-        Employee newEmployee = employeeService.getEmployeeById(newEmployeeId).get();
+        final Employee newEmployee = employeeService.getEmployeeById(newEmployeeId).get();
 
         handleCustomerReassignment(customers, newEmployee);
 
-        log.info("::reassignCustomers completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::reassignCustomers completed successfully");
+        }
     }
 
     /**
-     * @param customer   The customer to be created.
-     * @param employeeId ID of the employee to whom the customer will be assigned.
-     * @return The created customer.
-     * @brief Creates a customer and assigns them to an employee.
+     * Creates a customer and assigns them to an employee.
+     *
+     * @param customer   the customer to be created
+     * @param employeeId ID of the employee to whom the customer will be assigned
+     * @return the created customer
      */
     @Override
-    public Customer createCustomerForEmployee(Customer customer, Long employeeId) {
-        log.info("::createCustomerForEmployee started with: customer: {}, employeeId: {}", customer, employeeId);
+    public Customer createCustomerForEmployee(final Customer customer, final Long employeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::createCustomerForEmployee started with: customer: {}, employeeId: {}", customer, employeeId);
+        }
 
         // Validierung im service
-        Employee existingEmployee = employeeService.getEmployeeById(employeeId).get();
+        final Employee existingEmployee = employeeService.getEmployeeById(employeeId).get();
         customer.setEmployee(existingEmployee);
         customer.setLastInteractionDate(LocalDate.now());
 
-        Customer savedCustomer = customerService.createCustomer(customer);
+        final Customer savedCustomer = customerService.createCustomer(customer);
 
-        log.info("::createCustomerForEmployee completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::createCustomerForEmployee completed successfully");
+        }
         return savedCustomer;
     }
 
     /**
-     * @param customers   the list of customers to be reassigned.
-     * @param newEmployee the new employee to whom the customers will be assigned.
-     * @brief Handles the reassignment of customers to a new employee.
+     * Handles the reassignment of customers to a new employee.
+     *
+     * @param customers   the list of customers to be reassigned
+     * @param newEmployee the new employee to whom the customers will be assigned
      */
-    private void handleCustomerReassignment(List<Customer> customers, Employee newEmployee) {
+    private void handleCustomerReassignment(final List<Customer> customers, final Employee newEmployee) {
         customers.forEach(customer -> {
             log.info("Reassigning customer ID: {} to new employee ID: {}", customer.getId(), newEmployee.getId());
             customer.setEmployee(newEmployee);
         });
 
         customerService.updateCustomers(customers);
-        log.info("Customers reassigned successfully");
+        if (log.isInfoEnabled()) {
+            log.info("Customers reassigned successfully");
+        }
     }
 
     /**
-     * @return the action to delete an employee.
-     * @brief Creates an action to delete an employee.
+     * Creates an action to delete an employee.
+     *
+     * @return the action to delete an employee
      */
     private EntityAction createDeleteEmployeeAction() {
         return id -> {
-            Employee oldEmployee = employeeService.getEmployeeById(id).get();
+            final Employee oldEmployee = employeeService.getEmployeeById(id).get();
             inactiveEmployeeService.createInactiveEmployee(oldEmployee);
             employeeService.deleteEmployee(id);
         };
     }
 
     /**
-     * @param id     the ID of the entity on which the action is to be performed.
-     * @param action the action to be executed.
-     * @brief Executes an action on an entity identified by a Long ID.
+     * Executes an action on an entity identified by a Long ID.
+     *
+     * @param id     the ID of the entity on which the action is to be performed
+     * @param action the action to be executed
      */
-    private void processEntityAction(Long id, EntityAction action) {
+    private void processEntityAction(final Long id, final EntityAction action) {
         action.execute(id);
     }
 }
