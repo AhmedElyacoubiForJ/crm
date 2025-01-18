@@ -11,6 +11,18 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * Entity representing a note in the CRM system.
+ *
+ * <p>This class represents a note and includes information such as content,
+ * date, interaction type, and the customer it belongs to.</p>
+ * <p>The relationships include:</p>
+ * <ul>
+ *     <li>A many-to-one relationship with a customer (Customer).</li>
+ * </ul>
+ *
+ * @author A. El Yacoubi
+ */
 @Entity
 @Data
 @Builder

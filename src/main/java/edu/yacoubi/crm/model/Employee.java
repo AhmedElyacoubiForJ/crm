@@ -10,6 +10,18 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity representing an employee in the CRM system.
+ *
+ * <p>This class represents an employee and includes information such as first name,
+ * last name, email, and department.</p>
+ * <p>The relationships include:</p>
+ * <ul>
+ *     <li>A one-to-many relationship with customers (Customer).</li>
+ * </ul>
+ *
+ * @author A. El Yacoubi
+ */
 @Entity
 @Data
 @Builder

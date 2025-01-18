@@ -1,11 +1,24 @@
 package edu.yacoubi.crm.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+/**
+ * Entity representing an inactive employee in the CRM system.
+ * <p>This class represents an inactive employee and includes information such as first name,
+ * last name, email, department, and the original employee ID before the employee became inactive.</p>
+ *
+ * @author A. El Yacoubi
+ */
 @Entity
 @Data
 @Builder

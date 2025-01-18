@@ -11,6 +11,20 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity representing a customer in the CRM system.
+ *
+ * <p>This class represents a customer and includes information such as first name,
+ * last name, email, phone number, address, and the date of the last interaction.</p>
+ *
+ * <p>The relationships include:</p>
+ * <ul>
+ *     <li>A many-to-one relationship with an employee (Employee).</li>
+ *     <li>A one-to-many relationship with notes (Note).</li>
+ * </ul>
+ *
+ * @author A. El Yacoubi
+ */
 @Entity
 @Data
 @Builder
