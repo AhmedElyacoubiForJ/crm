@@ -18,6 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of the Employee Service.
+ *
+ * <p>This class implements the logic for managing employees, including
+ * creating, updating, and deleting employee records.</p>
+ *
+ * @author A. El Yacoubi
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -28,69 +36,90 @@ public class EmployeeServiceImpl implements IEmployeeService {
     private final EntityValidator entityValidator;
 
     /**
-     * Erstellt einen neuen Mitarbeiter.
-     * Diese Methode ist als transaktional markiert, um sicherzustellen, dass die Operationen atomar sind,
-     * und um bei Rollbacks Datenkonsistenz zu gewährleisten.
+     * Creates a new employee.
+     * This method is marked as transactional to ensure operations are atomic
+     * and to maintain data consistency in case of rollbacks.
+     *
+     * @param employee the employee to be created
+     * @return the created employee
+     * @throws IllegalArgumentException if the employee is null
      */
     @Override
     @Transactional
-    public Employee createEmployee(Employee employee) {
-        log.info("::createEmployee started with: employee {}", employee);
+    public Employee createEmployee(final Employee employee) {
+        if (log.isInfoEnabled()) {
+            log.info("::createEmployee started with: employee {}", employee);
+        }
 
-        // Validate parameters first
         if (employee == null) {
             log.warn("Employee must not be null");
             throw new IllegalArgumentException("Employee must not be null");
         }
 
-        // Setze die ID auf null, um sicherzustellen, dass ein neuer Datensatz erstellt wird
         employee.setId(null);
+        final Employee savedEmployee = employeeRepository.save(employee);
 
-        // Speichere den Mitarbeiter in der Datenbank
-        Employee savedEmployee = employeeRepository.save(employee);
-
-        log.info("::createEmployee completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::createEmployee completed successfully");
+        }
         return savedEmployee;
     }
 
     /**
-     * Ruft alle Mitarbeiter ab.
-     * Diese Methode benötigt keine Transaktion, da sie nur Leseoperationen durchführt.
+     * Retrieves all employees.
+     *
+     * @return a list of all employees
      */
     @Override
     public List<Employee> getAllEmployees() {
-        log.info("::getAllEmployees started");
+        if (log.isInfoEnabled()) {
+            log.info("::getAllEmployees started");
+        }
 
-        List<Employee> employees = employeeRepository.findAll();
+        final List<Employee> employees = employeeRepository.findAll();
 
-        log.info("::getAllEmployees completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getAllEmployees completed successfully");
+        }
         return employees;
     }
 
     /**
-     * Ruft Mitarbeiter mit Paginierung ab.
-     * Diese Methode benötigt ebenfalls keine Transaktion, da sie nur Leseoperationen durchführt.
+     * Retrieves a paginated list of employees.
+     *
+     * @param page the page number to retrieve
+     * @param size the number of employees per page
+     * @return a paginated list of employees
      */
     @Override
-    public Page<Employee> getEmployeesWithPagination(int page, int size) {
-        log.info("::getEmployeesWithPagination started with: page {}, size {}", page, size);
+    public Page<Employee> getEmployeesWithPagination(
+            final int page, final int size) {
+        if (log.isInfoEnabled()) {
+            log.info("::getEmployeesWithPagination started with: page {}, size {}", page, size);
+        }
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Employee> employeePage = employeeRepository.findAll(pageable);
+        final Pageable pageable = PageRequest.of(page, size);
+        final Page<Employee> employeePage = employeeRepository.findAll(pageable);
 
-        log.info("::getEmployeesWithPagination completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getEmployeesWithPagination completed successfully");
+        }
         return employeePage;
     }
 
     /**
-     * Ruft einen Mitarbeiter nach ID ab.
-     * Diese Methode ist als read-only transaktional markiert,
-     * um Datenkonsistenz bei gleichzeitiger Erhöhung der Performance zu gewährleisten.
+     * Retrieves an employee by its ID.
+     *
+     * @param employeeId the ID of the employee to retrieve
+     * @return an Optional containing the found employee, or an empty Optional if no employee was found
+     * @throws IllegalArgumentException if the employee ID is null
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Employee> getEmployeeById(Long employeeId) {
-        log.info("::getEmployeeById started with: employeeId {}", employeeId);
+    public Optional<Employee> getEmployeeById(final Long employeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::getEmployeeById started with: employeeId {}", employeeId);
+        }
 
         if (employeeId == null) {
             log.warn("Employee ID must not be null");
@@ -99,118 +128,156 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
         entityValidator.validateEmployeeExists(employeeId);
 
-        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+        final Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
 
-        log.info("::getEmployeeById completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getEmployeeById completed successfully");
+        }
         return optionalEmployee;
     }
 
     /**
-     * Aktualisiert einen bestehenden Mitarbeiter.
-     * Diese Methode ist als transaktional markiert, um sicherzustellen,
-     * dass die Operation atomar ist und um Datenkonsistenz zu gewährleisten.
+     * Updates an existing employee by their ID.
+     *
+     * @param employeeId the ID of the employee to update
+     * @param employee   the updated employee details
+     * @return the updated employee
      */
     @Override
     @Transactional
-    public Employee updateEmployee(Long employeeId, Employee employee) {
-        log.info("::updateEmployee started with: employee {}", employee);
+    public Employee updateEmployee(final Long employeeId, final Employee employee) {
+        if (log.isInfoEnabled()) {
+            log.info("::updateEmployee started with: employee {}", employee);
+        }
 
         entityValidator.validateEmployeeExists(employeeId);
+
         employee.setId(employeeId);
+        final Employee updatedEmployee = employeeRepository.save(employee);
 
-        Employee updatedEmployee = employeeRepository.save(employee);
-
-        log.info("::updateEmployee completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::updateEmployee completed successfully");
+        }
         return updatedEmployee;
     }
 
     /**
-     * Ruft einen Mitarbeiter nach E-Mail ab.
-     * Diese Methode benötigt keine Transaktion, da sie nur Leseoperationen durchführt.
+     * Retrieves an employee by their email.
+     *
+     * @param email the email of the employee to retrieve
+     * @return an Optional containing the found employee, or an empty Optional if no employee was found
      */
     @Override
-    public Optional<Employee> getEmployeeByEmail(String email) {
-        log.info("::getEmployeeByEmail started with: email {}", email);
+    public Optional<Employee> getEmployeeByEmail(final String email) {
+        if (log.isInfoEnabled()) {
+            log.info("::getEmployeeByEmail started with: email {}", email);
+        }
 
-        Optional<Employee> optionalEmployee = employeeRepository.findByEmail(email);
+        final Optional<Employee> optionalEmployee = employeeRepository.findByEmail(email);
 
-        log.info("::getEmployeeByEmail completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getEmployeeByEmail completed successfully");
+        }
         return optionalEmployee;
     }
 
     /**
-     * Führt eine teilweise Aktualisierung eines Mitarbeiters durch.
-     * Diese Methode ist als transaktional markiert, da komplexe Schreiboperationen durchgeführt werden,
-     * die atomar erfolgen sollten.
+     * Partially updates an employee's details.
+     *
+     * @param employeeId       the ID of the employee to update
+     * @param employeePatchDTO the partial update details
      */
     @Override
     @Transactional
-    public void partialUpdateEmployee(Long employeeId, EmployeePatchDTO employeePatchDTO) {
-        log.info("::partialUpdateEmployee started with: employeeId {}, employeePatchDTO {}",
-                employeeId, employeePatchDTO);
+    public void partialUpdateEmployee(
+            final Long employeeId, final EmployeePatchDTO employeePatchDTO) {
+        if (log.isInfoEnabled()) {
+            log.info("::partialUpdateEmployee started with: employeeId {}, employeePatchDTO {}",
+                    employeeId, employeePatchDTO);
+        }
 
         entityValidator.validateEmployeeExists(employeeId);
 
-        // delegate to custom repository for more complex queries
         employeeCustomRepository.partialUpdateEmployee(employeeId, employeePatchDTO);
-        log.info("::partialUpdateEmployee completed successfully");
+
+        if (log.isInfoEnabled()) {
+            log.info("::partialUpdateEmployee completed successfully");
+        }
     }
 
     /**
-     * Sucht Mitarbeiter nach Vorname oder Abteilung.
-     * Diese Methode benötigt keine Transaktion, da sie nur Leseoperationen durchführt.
+     * Retrieves a paginated list of employees by their first name or department.
+     *
+     * @param searchString the string to search for in the first name or department
+     * @param page         the page number to retrieve
+     * @param size         the number of employees per page
+     * @return a paginated list of employees matching the search criteria
      */
     @Override
-    public Page<Employee> getEmployeesByFirstNameOrDepartment(String searchString, int page, int size) {
-        log.info("::searchByFirstNameOrDepartment started with: searchString {}, page {}, size {}",
-                searchString, page, size);
+    public Page<Employee> getEmployeesByFirstNameOrDepartment(
+            final String searchString, final int page, final int size) {
+        if (log.isInfoEnabled()) {
+            log.info("::searchByFirstNameOrDepartment started with: searchString {}, page {}, size {}", searchString, page, size);
+        }
 
-        Pageable pageable = PageRequest.of(page, size);
+        final Pageable pageable = PageRequest.of(page, size);
 
-        Page<Employee> employeePage = employeeRepository
+        final Page<Employee> employeePage = employeeRepository
                 .findByFirstNameContainingIgnoreCaseOrDepartmentContainingIgnoreCase(
                         searchString,
                         searchString,
                         pageable
                 );
 
-        log.info("::searchByFirstNameOrDepartment completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::searchByFirstNameOrDepartment completed successfully");
+        }
         return employeePage;
     }
 
+
     /**
-     * Ruft alle Abteilungen ab.
-     * Diese Methode benötigt keine Transaktion, da sie nur Leseoperationen durchführt.
+     * Retrieves a list of all departments.
+     *
+     * @return an Optional containing the list of all departments
      */
     @Override
     public Optional<List<String>> getAllDepartments() {
-        log.info("::getAllDepartments started");
+        if (log.isInfoEnabled()) {
+            log.info("::getAllDepartments started");
+        }
 
-        Optional<List<String>> optionalDepartments = employeeRepository.findAllDepartments();
+        final Optional<List<String>> optionalDepartments =
+                employeeRepository.findAllDepartments();
 
-        log.info("::getAllDepartments completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getAllDepartments completed successfully");
+        }
         return optionalDepartments;
     }
 
     /**
-     * Löscht einen Mitarbeiter.
-     * Diese Methode ist als transaktional markiert, um sicherzustellen,
-     * dass die Validierungen und die Löschoperation atomar erfolgen.
+     * Deletes an employee by their ID.
+     *
+     * @param employeeId the ID of the employee to delete
+     * @throws IllegalArgumentException if the employee has assigned customers or is not archived
      */
     @Override
     @Transactional
-    public void deleteEmployee(Long employeeId) {
-        log.info("::deleteEmployee started with: employeeId: {}", employeeId);
+    public void deleteEmployee(final Long employeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::deleteEmployee started with: employeeId: {}", employeeId);
+        }
 
         entityValidator.validateEmployeeExists(employeeId);
 
-        // Überprüfung, ob der Mitarbeiter Kunden zugewiesen sind
+        // Check if the employee has assigned customers
         if (employeeRepository.hasCustomers(employeeId)) {
             log.warn("Cannot delete employee, customers are still assigned. employeeId: {}", employeeId);
             throw new IllegalArgumentException("Cannot delete employee, customers are still assigned.");
         }
 
-        // Überprüfung, ob der Mitarbeiter archiviert ist
+        // Check if the employee is archived
         try {
             entityValidator.validateInactiveEmployeeExists(employeeId);
         } catch (ResourceNotFoundException exception) {
@@ -219,25 +286,33 @@ public class EmployeeServiceImpl implements IEmployeeService {
         }
 
         employeeRepository.deleteById(employeeId);
-        log.info("::deleteEmployee completed successfully");
+
+        if (log.isInfoEnabled()) {
+            log.info("::deleteEmployee completed successfully");
+        }
     }
 
     /**
-     * Überprüft, ob einem Mitarbeiter Kunden zugewiesen sind.
-     * Diese Methode ist als read-only transaktional markiert,
-     * um Datenkonsistenz bei gleichzeitiger Erhöhung der Performance zu gewährleisten.
+     * Checks if an employee has assigned customers.
+     *
+     * @param employeeId the ID of the employee to check
+     * @return true if the employee has assigned customers, false otherwise
      */
     @Override
     @Transactional(readOnly = true)
-    public boolean hasCustomers(Long employeeId) {
-        log.info("::hasCustomers started with: employeeId {}", employeeId);
-        // Validate that the employee exists
+    public boolean hasCustomers(final Long employeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::hasCustomers started with: employeeId {}", employeeId);
+        }
+
         entityValidator.validateEmployeeExists(employeeId);
 
         // Use the query defined in the EmployeeRepository
-        boolean hasCustomers = employeeRepository.hasCustomers(employeeId);
+        final boolean hasCustomers = employeeRepository.hasCustomers(employeeId);
 
-        log.info("::hasCustomers completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::hasCustomers completed successfully");
+        }
         return hasCustomers;
     }
 }
