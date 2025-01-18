@@ -13,6 +13,7 @@ import edu.yacoubi.crm.model.Customer;
 import edu.yacoubi.crm.model.Employee;
 import edu.yacoubi.crm.model.InactiveEmployee;
 import edu.yacoubi.crm.model.Note;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Utility-Klasse für die Transformation von Entitäten und DTOs.
@@ -21,7 +22,10 @@ import edu.yacoubi.crm.model.Note;
  * um Entitäten in DTOs und umgekehrt zu transformieren. Jeder Transformer ist als
  * {@link ITransformer} implementiert und kann auf die entsprechenden Eingabe- und
  * Ausgabe-Typen angewendet werden.</p>
+ *
+ * @author A. El Yacoubi
  */
+@Slf4j
 public class EntityTransformer {
 
     // Transformer für Note
@@ -143,8 +147,13 @@ public class EntityTransformer {
      */
     public static String jsonAsString(Object obj) {
         try {
+            if (log.isInfoEnabled()) {
+                log.info("Converting object to JSON string: {}", obj);
+            }
+
             return objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
+            log.error("Error converting object to JSON string", e);
             throw new RuntimeException("Error converting object to JSON string", e);
         }
     }
