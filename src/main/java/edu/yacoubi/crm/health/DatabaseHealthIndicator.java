@@ -20,7 +20,9 @@ public class DatabaseHealthIndicator implements HealthIndicator {
             if (connection.isValid(1)) {
                 return Health.up().build();
             } else {
-                return Health.down().withDetail("Error", "Database is not responding").build();
+                return Health.down()
+                        .withDetail("Error", "Database is not responding")
+                        .build();
             }
         } catch (SQLException e) {
             return Health.down(e).build();
