@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * <p>This class implements the logic for orchestrating note creation for customers, including
  * validating the customer and delegating the note creation to the note service.</p>
  *
- * @author Your Name
+ * @author A. El Yacoubi
  */
 @Service
 @RequiredArgsConstructor

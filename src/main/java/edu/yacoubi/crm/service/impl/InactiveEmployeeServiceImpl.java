@@ -19,7 +19,7 @@ import java.util.Optional;
  * <p>This class implements the logic for managing inactive employees, including
  * creating, retrieving, and checking existence of inactive employee records.</p>
  *
- * @author Your Name
+ * @author A. El Yacoubi
  */
 @Service
 @RequiredArgsConstructor
