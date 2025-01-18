@@ -17,49 +17,38 @@ import static edu.yacoubi.crm.util.ApiResponseHelper.getDTOAPIResponse;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<APIResponse<Object>> handleResourceNotFoundException(ResourceNotFoundException ex) {
+    public ResponseEntity<APIResponse<Object>> handleResourceNotFoundException(
+            ResourceNotFoundException ex) {
         List<ValidationError> errors = List.of(new ValidationError("Resource", ex.getMessage()));
 
-        APIResponse<Object> response = getDTOAPIResponse("Resource not found", "error", HttpStatus.NOT_FOUND, errors);
-
-//        APIResponse<Object> response = APIResponse.<Object>builder()
-//                .status("error")
-//                .statusCode(HttpStatus.NOT_FOUND.value())
-//                .errors(errors)
-//                .build();
+        APIResponse<Object> response = getDTOAPIResponse("Resource not found", "error",
+                HttpStatus.NOT_FOUND, errors);
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<APIResponse<Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<APIResponse<Object>> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
         List<ValidationError> errors = ex.getBindingResult().getFieldErrors().stream()
-                .map(error -> new ValidationError(error.getField(), error.getDefaultMessage()))
-                .collect(Collectors.toList());
+                .map(
+                        error -> new ValidationError(error.getField(), error.getDefaultMessage())
+                ).collect(Collectors.toList());
 
-        APIResponse<Object> response = getDTOAPIResponse("Validation error", "error", HttpStatus.BAD_REQUEST, errors);
-
-//        APIResponse<Object> response = APIResponse.<Object>builder()
-//                .status("error")
-//                .statusCode(HttpStatus.BAD_REQUEST.value())
-//                .message("Validierungsfehler")
-//                .errors(errors)
-//                .build();
+        APIResponse<Object> response = getDTOAPIResponse("Validation error", "error",
+                HttpStatus.BAD_REQUEST, errors);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<APIResponse<Object>> handleGeneralException(Exception ex) {
-        List<ValidationError> errors = List.of(new ValidationError("Exception", "An unexpected error occurred: " + ex.getMessage()));
+        List<ValidationError> errors = List.of(
+                new ValidationError("Exception", "An unexpected error occurred: " + ex.getMessage())
+        );
 
-        APIResponse<Object> response = getDTOAPIResponse("Internal server error", "error", HttpStatus.INTERNAL_SERVER_ERROR, errors);
-
-//        APIResponse<Object> response = APIResponse.<Object>builder()
-//                .status("error")
-//                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-//                .errors(errors)
-//                .build();
+        APIResponse<Object> response = getDTOAPIResponse("Internal server error", "error",
+                        HttpStatus.INTERNAL_SERVER_ERROR, errors);
 
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -68,13 +57,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<APIResponse<Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
         List<ValidationError> errors = List.of(new ValidationError("Argument", ex.getMessage()));
 
-        APIResponse<Object> response = getDTOAPIResponse("Bad request", "error", HttpStatus.BAD_REQUEST, errors);
-
-//        APIResponse<Object> response = APIResponse.<Object>builder()
-//                .status("error")
-//                .statusCode(HttpStatus.BAD_REQUEST.value())
-//                .errors(errors)
-//                .build();
+        APIResponse<Object> response = getDTOAPIResponse("Bad request", "error",
+                        HttpStatus.BAD_REQUEST, errors);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
