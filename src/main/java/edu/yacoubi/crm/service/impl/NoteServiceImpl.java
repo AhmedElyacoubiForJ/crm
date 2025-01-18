@@ -14,6 +14,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of the Note Service.
+ *
+ * <p>This class implements the logic for managing notes, including
+ * creating, updating, and deleting note records.</p>
+ *
+ * @author A. El Yacoubi
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -22,80 +30,141 @@ public class NoteServiceImpl implements INoteService {
     private final INoteCustomRepository noteCustomRepository;
     private final EntityValidator entityValidator;
 
+    /**
+     * Creates a new note.
+     *
+     * @param note the note to be created
+     * @return the created note
+     * @throws IllegalArgumentException if the note or its customer is invalid
+     */
     @Override
-    public Note createNote(Note note) {
-        log.info("::createNote started with: note {}", note);
+    public Note createNote(final Note note) {
+        if (log.isInfoEnabled()) {
+            log.info("::createNote started with: note {}", note);
+        }
 
         if (note == null || note.getCustomer() == null) {
             throw new IllegalArgumentException("Note is invalid");
         }
 
         note.setId(null);
-        Note savedNote = noteRepository.save(note);
+        final Note savedNote = noteRepository.save(note);
 
-        log.info("::createNote completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::createNote completed successfully");
+        }
         return savedNote;
     }
 
+    /**
+     * Retrieves a note by its ID.
+     *
+     * @param noteId the ID of the note to retrieve
+     * @return an Optional containing the found note, or an empty Optional if no note was found
+     */
     @Override
-    public Optional<Note> getNoteById(Long noteId) {
-        log.info("::getNoteById started with: noteId {}", noteId);
+    public Optional<Note> getNoteById(final Long noteId) {
+        if (log.isInfoEnabled()) {
+            log.info("::getNoteById started with: noteId {}", noteId);
+        }
 
         entityValidator.validateNoteExists(noteId);
 
-        Optional<Note> optionalNote = noteRepository.findById(noteId);
+        final Optional<Note> optionalNote = noteRepository.findById(noteId);
 
-        log.info("::getNoteById completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getNoteById completed successfully");
+        }
         return optionalNote;
     }
 
+    /**
+     * Fully updates a note.
+     *
+     * @param noteId the ID of the note to update
+     * @param note   the updated note details
+     * @return the updated note
+     */
     @Override
-    public Note updateNote(Long noteId, Note note) {
-        log.info("::updateNote started with: noteId {}, note {}", noteId, note);
+    public Note updateNote(final Long noteId, final Note note) {
+        if (log.isInfoEnabled()) {
+            log.info("::updateNote started with: noteId {}, note {}", noteId, note);
+        }
 
         entityValidator.validateNoteExists(noteId);
         note.setId(noteId);
 
-        Note updatedNote = noteRepository.save(note);
+        final Note updatedNote = noteRepository.save(note);
 
-        log.info("::updateNote completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::updateNote completed successfully");
+        }
         return updatedNote;
     }
 
+    /**
+     * Deletes a note by its ID.
+     *
+     * @param noteId the ID of the note to delete
+     */
     @Override
-    public void deleteNote(Long noteId) {
-        log.info("::deleteNote started with: noteId {}", noteId);
+    public void deleteNote(final Long noteId) {
+        if (log.isInfoEnabled()) {
+            log.info("::deleteNote started with: noteId {}", noteId);
+        }
 
         entityValidator.validateNoteExists(noteId);
 
         noteRepository.deleteById(noteId);
 
-        log.info("::deleteNote completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::deleteNote completed successfully");
+        }
     }
 
+    /**
+     * Retrieves a list of notes by the customer's ID.
+     *
+     * @param customerId the ID of the customer whose notes to retrieve
+     * @return a list of notes assigned to the customer
+     */
     @Override
-    public List<Note> getNotesByCustomerId(Long customerId) {
-        log.info("::getNotesByCustomerId started with: customerId {}", customerId);
+    public List<Note> getNotesByCustomerId(final Long customerId) {
+        if (log.isInfoEnabled()) {
+            log.info("::getNotesByCustomerId started with: customerId {}", customerId);
+        }
 
-        // Da die Ausnahme bereits geworfen wird, wenn der Kunde nicht existiert
+        // Since the exception is already thrown if the customer does not exist
         entityValidator.validateCustomerExists(customerId);
 
-        List<Note> notesByCustomerId = noteRepository.findAllByCustomerId(customerId);
+        final List<Note> notesByCustomerId = noteRepository.findAllByCustomerId(customerId);
 
-        log.info("::getNotesByCustomerId completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getNotesByCustomerId completed successfully");
+        }
         return notesByCustomerId;
     }
 
+    /**
+     * Partially updates a note's details.
+     *
+     * @param noteId       the ID of the note to update
+     * @param notePatchDTO the partial update details
+     */
     @Override
     @Transactional
-    public void partialUpdateNote(Long noteId, NotePatchDTO notePatchDTO) {
-        log.info("::partialUpdateNote started with: noteId {}, notePatchDTO {}", noteId, notePatchDTO);
+    public void partialUpdateNote(final Long noteId, final NotePatchDTO notePatchDTO) {
+        if (log.isInfoEnabled()) {
+            log.info("::partialUpdateNote started with: noteId {}, notePatchDTO {}", noteId, notePatchDTO);
+        }
 
         entityValidator.validateNoteExists(noteId);
 
         // delegate
         noteCustomRepository.partialUpdateNote(noteId, notePatchDTO);
 
-        log.info("::partialUpdateNote completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::partialUpdateNote completed successfully");
+        }
     }
 }
