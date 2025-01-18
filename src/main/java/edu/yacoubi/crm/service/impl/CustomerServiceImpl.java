@@ -17,6 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of the Customer Service.
+ *
+ * <p>This class implements the logic for managing customers, including
+ * creating, updating, and deleting customer records.</p>
+ *
+ * @author A. El Yacoubi
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -26,80 +34,139 @@ public class CustomerServiceImpl implements ICustomerService {
     private final ICustomerCustomRepository customerCustomRepository;
     private final EntityValidator entityValidator;
 
+    /**
+     * Creates a new customer.
+     *
+     * @param customer the customer to be created
+     * @return the created customer
+     */
     @Override
-    public Customer createCustomer(Customer customer) {
-        log.info("::createCustomer started with: customer {}", customer);
+    public Customer createCustomer(final Customer customer) {
+        if (log.isInfoEnabled()) {
+            log.info("::createCustomer started with: customer {}", customer);
+        }
 
         customer.setId(null);
-        Customer savedCustomer = customerRepository.save(customer);
+        final Customer savedCustomer = customerRepository.save(customer);
 
-        log.info("::createCustomer completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::createCustomer completed successfully");
+        }
         return savedCustomer;
     }
 
+    /**
+     * Retrieves a customer by their ID.
+     *
+     * @param customerId the ID of the customer to retrieve
+     * @return an Optional containing the found customer, or an empty Optional if no customer was found
+     */
     @Override
-    public Optional<Customer> getCustomerById(Long customerId) {
-        log.info("::getCustomerById started with: customerId {}", customerId);
+    public Optional<Customer> getCustomerById(final Long customerId) {
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomerById started with: customerId {}", customerId);
+        }
 
         entityValidator.validateCustomerExists(customerId);
 
-        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+        final Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
 
-        log.info("::getCustomerById completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomerById completed successfully");
+        }
         return optionalCustomer;
     }
 
+    /**
+     * Updates an existing customer by their ID.
+     *
+     * @param customerId      the ID of the customer to update
+     * @param customerRequest the updated customer details
+     * @return the updated customer
+     */
     @Override
     @Transactional
-    public Customer updateCustomer(Long customerId, Customer customerRequest) {
-        log.info("::updateCustomer started with: customerId {}, customer {}", customerId, customerRequest);
+    public Customer updateCustomer(final Long customerId, final Customer customerRequest) {
+        if (log.isInfoEnabled()) {
+            log.info("::updateCustomer started with: customerId {}, customer {}",
+                    customerId, customerRequest);
+        }
 
-        // Überprüfen, ob der Kunde existiert
+        // Validate that the customer exists
         entityValidator.validateCustomerExists(customerId);
 
-        // Vorhandenen Kunden laden
-        Customer existingCustomer = customerRepository.findById(customerId).get();
+        // Load the existing customer
+        final Customer existingCustomer = customerRepository.findById(customerId).get();
 
-        // Laden der bestehenden Notizen
-        List<Note> existingNotes = existingCustomer.getNotes();
+        // Load the existing notes
+        final List<Note> existingNotes = existingCustomer.getNotes();
 
-        // Setzen der ID und anderer unveränderter Eigenschaften
+        // Set the ID and other unchanged properties
         customerRequest.setId(customerId);
         customerRequest.setEmployee(existingCustomer.getEmployee());
-        customerRequest.setNotes(existingNotes); // Setzen der bestehenden Notizen
+        customerRequest.setNotes(existingNotes); // Set the existing notes
 
-        Customer updatedCustomer = customerRepository.save(customerRequest);
+        final Customer updatedCustomer = customerRepository.save(customerRequest);
 
-        log.info("::updateCustomer completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::updateCustomer completed successfully");
+        }
         return updatedCustomer;
     }
 
-
+    /**
+     * Deletes a customer by their ID.
+     *
+     * @param customerId the ID of the customer to delete
+     */
     @Override
-    public void deleteCustomer(Long customerId) {
-        log.info("::deleteCustomer started with: customerId {}", customerId);
+    public void deleteCustomer(final Long customerId) {
+        if (log.isInfoEnabled()) {
+            log.info("::deleteCustomer started with: customerId {}", customerId);
+        }
 
         entityValidator.validateCustomerExists(customerId);
 
         customerRepository.deleteById(customerId);
 
-        log.info("::deleteCustomer completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::deleteCustomer completed successfully");
+        }
     }
 
+    /**
+     * Retrieves a customer by their email.
+     *
+     * @param email the email of the customer to retrieve
+     * @return an Optional containing the found customer, or an empty Optional if no customer was found
+     */
     @Override
-    public Optional<Customer> getCustomerByEmail(String email) {
-        log.info("::getCustomerByEmail started with: email {}", email);
+    public Optional<Customer> getCustomerByEmail(final String email) {
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomerByEmail started with: email {}", email);
+        }
 
-        Optional<Customer> optionalCustomer = customerRepository.findByEmail(email);
+        final Optional<Customer> optionalCustomer = customerRepository.findByEmail(email);
 
-        log.info("::getCustomerByEmail completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomerByEmail completed successfully");
+        }
         return optionalCustomer;
     }
 
+    /**
+     * Retrieves a list of customers based on example criteria.
+     *
+     * @param customerDTO the criteria for finding customers
+     * @return a list of customers matching the example criteria
+     */
     @Override
-    public List<Customer> getCustomersByExample(CustomerRequestDTO customerDTO) {
-        log.info("::getCustomersByExample started with: customerDTO {}", customerDTO);
-        Customer customerProbe = new Customer();
+    public List<Customer> getCustomersByExample(final CustomerRequestDTO customerDTO) {
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomersByExample started with: customerDTO {}", customerDTO);
+        }
+
+        final Customer customerProbe = new Customer();
 
         if (customerDTO.getFirstName() != null) {
             customerProbe.setFirstName(customerDTO.getFirstName());
@@ -110,129 +177,255 @@ public class CustomerServiceImpl implements ICustomerService {
         if (customerDTO.getEmail() != null) {
             customerProbe.setEmail(customerDTO.getEmail());
         }
-        // Setze weitere Felder nach Bedarf
+        // Set other fields as needed
 
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withIgnorePaths("id", "notes"); // Ignoriere Felder, die nicht relevant sind
+        final ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("id", "notes"); // Ignore fields that are not relevant
         //.withIncludeNullValues();
 
-        Example<Customer> example = Example.of(customerProbe, matcher);
-        List<Customer> customers = customerRepository.findAll(example);
+        final Example<Customer> example = Example.of(customerProbe, matcher);
+        final List<Customer> customers = customerRepository.findAll(example);
 
-        log.info("::getCustomersByExample completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomersByExample completed successfully");
+        }
         return customers;
     }
+    // TODO Later
+    /**
+     * import org.springframework.data.jpa.domain.Specification;
+     *
+     * public List<Customer> findCustomersByCriteria(CustomerRequestDTO customerDTO) {
+     *     Specification<Customer> specification = (root, query, criteriaBuilder) -> {
+     *         List<Predicate> predicates = new ArrayList<>();
+     *
+     *         if (customerDTO.getFirstName() != null) {
+     *             predicates.add(criteriaBuilder.equal(root.get("firstName"), customerDTO.getFirstName()));
+     *         }
+     *         if (customerDTO.getLastName() != null) {
+     *             predicates.add(criteriaBuilder.equal(root.get("lastName"), customerDTO.getLastName()));
+     *         }
+     *         if (customerDTO.getEmail() != null) {
+     *             predicates.add(criteriaBuilder.equal(root.get("email"), customerDTO.getEmail()));
+     *         }
+     *         // Füge weitere Felder nach Bedarf hinzu
+     *
+     *         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+     *     };
+     *
+     *     return customerRepository.findAll(specification);
+     * }
+     */
 
+    /**
+     * Updates a customer by example criteria.
+     *
+     * @param customerExample the example criteria for updating the customer
+     * @param customerId      the ID of the customer to update
+     * @return the updated customer
+     * @deprecated This method is intended for search example only, though it functions correctly.
+     */
     @Override
     @Transactional
-    @Deprecated // Example nur für suche, obwohl die Methode funktioniert.
-    public Customer updateCustomerByExample(CustomerRequestDTO customerExample, Long customerId) {
-        log.info("::updateCustomerByExample started with: customerExample {}, customerId {}",
-                customerExample, customerId);
+    @Deprecated // Example only for search, though the method functions.
+    public Customer updateCustomerByExample(
+            final CustomerRequestDTO customerExample,
+            final Long customerId) {
+        if (log.isInfoEnabled()) {
+            log.info("::updateCustomerByExample started with: customerExample {}, customerId {}",
+                    customerExample, customerId);
+        }
 
         entityValidator.validateCustomerExists(customerId);
 
-        Customer updatedCustomer = customerRepository.updateCustomerByExample(customerExample, customerId);
+        final Customer updatedCustomer = customerRepository
+                .updateCustomerByExample(customerExample, customerId);
 
-        log.info("::updateCustomerByExample completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::updateCustomerByExample completed successfully");
+        }
         return updatedCustomer;
     }
 
+    /**
+     * Retrieves a customer by their email, including their notes and the customers assigned to the employee.
+     *
+     * @param email the email of the customer to retrieve
+     * @return an Optional containing the found customer, or an empty Optional if no customer was found
+     */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Customer> getCustomerByEmailWithNotesAndEmployeeCustomers(String email) {
-        log.info("::getCustomerByEmailWithNotesAndEmployeeCustomers started with: email: {}", email);
+    public Optional<Customer> getCustomerByEmailWithNotesAndEmployeeCustomers(
+            final String email) {
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomerByEmailWithNotesAndEmployeeCustomers started with: email: {}", email);
+        }
 
-        Optional<Customer> optionalCustomer = customerRepository.findByEmailWithNotesAndEmployeeCustomers(email);
+        final Optional<Customer> optionalCustomer = customerRepository
+                .findByEmailWithNotesAndEmployeeCustomers(email);
 
-        log.info("::getCustomerByEmailWithNotesAndEmployeeCustomers completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomerByEmailWithNotesAndEmployeeCustomers completed successfully");
+        }
         return optionalCustomer;
     }
 
+    /**
+     * Retrieves a customer by their ID, including their notes.
+     *
+     * @param customerId the ID of the customer to retrieve
+     * @return the customer with their notes initialized
+     */
     @Override
     @Transactional(readOnly = true)
-    public Customer getCustomerWithNotes(Long customerId) {
-        log.info("::getCustomerWithNotes started with: customerId {}", customerId);
+    public Customer getCustomerWithNotes(final Long customerId) {
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomerWithNotes started with: customerId {}", customerId);
+        }
 
         entityValidator.validateCustomerExists(customerId);
 
-        Customer customer = customerRepository.findById(customerId).get();
-        // Durch den Zugriff werden die Notes initialisiert
+        final Customer customer = customerRepository.findById(customerId).get();
+        // Accessing notes to initialize them
         customer.getNotes().size();
 
-        log.info("::getCustomerWithNotes completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomerWithNotes completed successfully");
+        }
         return customer;
     }
 
+    /**
+     * Partially updates a customer's details.
+     *
+     * @param customerId       the ID of the customer to update
+     * @param customerPatchDTO the partial update details
+     */
     @Override
     @Transactional
-    public void partialUpdateCustomer(Long customerId, CustomerPatchDTO customerPatchDTO) {
-        log.info("::partialUpdateCustomer started: customerId {}, customerPatchDTO {}",
-                customerId, customerPatchDTO);
+    public void partialUpdateCustomer(
+            final Long customerId,
+            final CustomerPatchDTO customerPatchDTO) {
+        if (log.isInfoEnabled()) {
+            log.info("::partialUpdateCustomer started: customerId {}, customerPatchDTO {}",
+                    customerId, customerPatchDTO);
+        }
 
         entityValidator.validateCustomerExists(customerId);
 
         // delegate
         customerCustomRepository.partialUpdateCustomer(customerId, customerPatchDTO);
 
-        log.info("::partialUpdateCustomer completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::partialUpdateCustomer completed successfully");
+        }
     }
 
+    /**
+     * Retrieves a paginated list of customers by their first name or email.
+     *
+     * @param search the search string to match against first name or email
+     * @param page   the page number to retrieve
+     * @param size   the number of customers per page
+     * @return a paginated list of customers matching the search criteria
+     */
     @Override
-    public Page<Customer> getCustomersByFirstNameOrEmail(String search, int page, int size) {
-        log.info("::getCustomersByFirstNameOrEmail started with: search: {}, page: {}, size: {}",
-                search, page, size);
+    public Page<Customer> getCustomersByFirstNameOrEmail(
+            final String search,
+            final int page,
+            final int size) {
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomersByFirstNameOrEmail started with: search: {}, page: {}, size: {}",
+                    search, page, size);
+        }
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Customer> customerPage = customerRepository
+        final Pageable pageable = PageRequest.of(page, size);
+        final Page<Customer> customerPage = customerRepository
                 .findByFirstNameContainingIgnoreCaseOrEmailContainingIgnoreCase(search, search, pageable);
 
-        log.info("::getCustomersByFirstNameOrEmail completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomersByFirstNameOrEmail completed successfully");
+        }
         return customerPage;
     }
 
+    /**
+     * Retrieves a paginated list of customers.
+     *
+     * @param page the page number to retrieve
+     * @param size the number of customers per page
+     * @return a paginated list of customers
+     */
     @Override
-    public Page<Customer> getCustomersWithPagination(int page, int size) {
-        log.info("::getCustomersWithPagination started with: page: {}, size: {}", page, size);
+    public Page<Customer> getCustomersWithPagination(
+            final int page,
+            final int size) {
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomersWithPagination started with: page: {}, size: {}",
+                    page, size);
+        }
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Customer> customerPage = customerRepository.findAll(pageable);
+        final Pageable pageable = PageRequest.of(page, size);
+        final Page<Customer> customerPage = customerRepository.findAll(pageable);
 
-        log.info("::getCustomersWithPagination completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomersWithPagination completed successfully");
+        }
         return customerPage;
     }
 
+    /**
+     * Retrieves a list of customers by the employee's ID.
+     *
+     * @param employeeId the ID of the employee whose customers to retrieve
+     * @return a list of customers assigned to the employee
+     */
     @Override
-    public List<Customer> getCustomersByEmployeeId(Long employeeId) {
-        log.info("::getCustomersByEmployeeId started with: employeeId: {}", employeeId);
+    public List<Customer> getCustomersByEmployeeId(final Long employeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomersByEmployeeId started with: employeeId: {}", employeeId);
+        }
 
         entityValidator.validateEmployeeExists(employeeId);
 
-        List<Customer> customers = customerRepository.findByEmployeeId(employeeId);
+        final List<Customer> customers = customerRepository.findByEmployeeId(employeeId);
 
-        log.info("::getCustomersByEmployeeId completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomersByEmployeeId completed successfully");
+        }
         return customers;
     }
 
+    /**
+     * Updates a list of customers.
+     *
+     * @param customers the list of customers to update
+     * @throws IllegalArgumentException if the customer list is null or empty, or if any customer does not have an assigned employee
+     */
     @Override
-    public void updateCustomers(List<Customer> customers) {
-        log.info("::updateCustomers started with: customers {}", customers);
+    public void updateCustomers(final List<Customer> customers) {
+        if (log.isInfoEnabled()) {
+            log.info("::updateCustomers started with: customers {}", customers);
+        }
 
         if (customers == null || customers.isEmpty()) {
             log.warn("No customers provided for update");
             throw new IllegalArgumentException("Customer list must not be null or empty");
         }
 
-        // Überprüfen, ob alle Kunden ein zugewiesenes Employee-Objekt haben
-        boolean allCustomersHaveEmployee = customers.stream()
+        // Check if all customers have an assigned employee
+        final boolean allCustomersHaveEmployee = customers.stream()
                 .allMatch(customer -> customer.getEmployee() != null);
 
         if (!allCustomersHaveEmployee) {
-            log.warn("One or more customers do not have a assigned employee");
+            log.warn("One or more customers do not have an assigned employee");
             throw new IllegalArgumentException("All customers must have an assigned employee");
         }
 
         customerRepository.saveAll(customers);
-        log.info("::updateCustomers completed successfully");
+
+        if (log.isInfoEnabled()) {
+            log.info("::updateCustomers completed successfully");
+        }
     }
 }
