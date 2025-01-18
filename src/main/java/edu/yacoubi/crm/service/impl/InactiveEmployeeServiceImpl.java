@@ -13,6 +13,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Implementation of the Inactive Employee Service.
+ *
+ * <p>This class implements the logic for managing inactive employees, including
+ * creating, retrieving, and checking existence of inactive employee records.</p>
+ *
+ * @author Your Name
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -21,39 +29,84 @@ public class InactiveEmployeeServiceImpl implements IInactiveEmployeeService {
     private final InactiveEmployeeRepository inactiveEmployeeRepository;
     private final EntityValidator entityValidator;
 
+    /**
+     * Creates a new inactive employee.
+     *
+     * @param employee the employee to be marked as inactive
+     * @return the created inactive employee
+     * @throws IllegalArgumentException if the employee is null or has assigned customers
+     */
     @Override
-    public InactiveEmployee createInactiveEmployee(Employee employee) {
+    public InactiveEmployee createInactiveEmployee(final Employee employee) {
+        if (log.isInfoEnabled()) {
+            log.info("::createInactiveEmployee started with: employee {}", employee);
+        }
+
         // Parameter-Validierung
         if (employee == null) {
             throw new IllegalArgumentException("Employee is null.");
         }
 
-        // Feld-Validierung des Employees
-        validateBasicEmployeeFields(employee);
-
         if (entityValidator.validateEmployeeHasCustomers(employee.getId())) {
             throw new IllegalArgumentException("Employee has assigned customers.");
         }
 
-        InactiveEmployee inactiveEmployee = TransformerUtil
+        final InactiveEmployee inactiveEmployee = TransformerUtil
                 .transform(EntityTransformer.employeeToInactiveEmployee, employee);
 
-        return inactiveEmployeeRepository.save(inactiveEmployee);
+        final InactiveEmployee savedInactiveEmployee = inactiveEmployeeRepository.save(inactiveEmployee);
+
+        if (log.isInfoEnabled()) {
+            log.info("::createInactiveEmployee completed successfully");
+        }
+        return savedInactiveEmployee;
     }
 
+    /**
+     * Retrieves an inactive employee by their ID.
+     *
+     * @param id the ID of the inactive employee to retrieve
+     * @return an Optional containing the found inactive employee, or an empty Optional if no employee was found
+     */
     @Override
-    public Optional<InactiveEmployee> getInactiveEmployeeById(Long id) {
-        return inactiveEmployeeRepository.findById(id);
+    public Optional<InactiveEmployee> getInactiveEmployeeById(final Long id) {
+        if (log.isInfoEnabled()) {
+            log.info("::getInactiveEmployeeById started with: id {}", id);
+        }
+
+        final Optional<InactiveEmployee> optionalInactiveEmployee = inactiveEmployeeRepository.findById(id);
+
+        if (log.isInfoEnabled()) {
+            log.info("::getInactiveEmployeeById completed successfully");
+        }
+        return optionalInactiveEmployee;
     }
 
+    /**
+     * Checks if an inactive employee exists by their original employee ID.
+     *
+     * @param originalEmployeeId the original employee ID to check
+     * @return true if an inactive employee exists with the original employee ID, false otherwise
+     */
     @Override
-    public boolean existsByOriginalEmployeeId(Long originalEmployeeId) {
-        return inactiveEmployeeRepository.existsByOriginalEmployeeId(originalEmployeeId);
+    public boolean existsByOriginalEmployeeId(final Long originalEmployeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::existsByOriginalEmployeeId started with: originalEmployeeId {}", originalEmployeeId);
+        }
+
+        final boolean exists = inactiveEmployeeRepository.existsByOriginalEmployeeId(originalEmployeeId);
+
+        if (log.isInfoEnabled()) {
+            log.info("::existsByOriginalEmployeeId completed successfully");
+        }
+        return exists;
     }
 
     // Methode zur Basis-Validierung von Employee-Feldern
-    private void validateBasicEmployeeFields(Employee employee) {
-        log.info("validateBasicEmployeeFields employeeId: {}", employee.getId());
+    private void validateBasicEmployeeFields(final Employee employee) {
+        if (log.isInfoEnabled()) {
+            log.info("validateBasicEmployeeFields employeeId: {}", employee.getId());
+        }
 
         if (employee.getFirstName() == null || employee.getFirstName().isEmpty() ||
                 employee.getLastName() == null || employee.getLastName().isEmpty() ||
