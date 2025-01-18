@@ -9,6 +9,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+/**
+ * Validator for entities in the system.
+ * <p>This class provides methods to validate the existence of various entities.</p>
+ *
+ * @author A. El Yacoubi
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -19,8 +25,16 @@ public class EntityValidator {
     private final CustomerRepository customerRepository;
     private final InactiveEmployeeRepository inactiveEmployeeRepository;
 
-    public void validateEmployeeExists(Long employeeId) {
-        log.info("::validateEmployeeExists started with: employeeId {}", employeeId);
+    /**
+     * Validates if an employee exists.
+     *
+     * @param employeeId the ID of the employee to validate
+     * @throws ResourceNotFoundException if the employee does not exist
+     */
+    public void validateEmployeeExists(final Long employeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::validateEmployeeExists started with: employeeId {}", employeeId);
+        }
 
         if (!employeeRepository.existsById(employeeId)) {
             String errorMessage = "Employee not found with ID: " + employeeId;
@@ -28,11 +42,21 @@ public class EntityValidator {
             throw new ResourceNotFoundException(errorMessage);
         }
 
-        log.info("::validateEmployeeExists completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::validateEmployeeExists completed successfully");
+        }
     }
 
-    public void validateNoteExists(Long noteId) {
-        log.info("::validateNoteExists started with: noteId {}", noteId);
+    /**
+     * Validates if a note exists.
+     *
+     * @param noteId the ID of the note to validate
+     * @throws ResourceNotFoundException if the note does not exist
+     */
+    public void validateNoteExists(final Long noteId) {
+        if (log.isInfoEnabled()) {
+            log.info("::validateNoteExists started with: noteId {}", noteId);
+        }
 
         if (!noteRepository.existsById(noteId)) {
             String errorMessage = "Note not found with ID: " + noteId;
@@ -40,11 +64,21 @@ public class EntityValidator {
             throw new ResourceNotFoundException(errorMessage);
         }
 
-        log.info("::validateNoteExists completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::validateNoteExists completed successfully");
+        }
     }
 
-    public void validateCustomerExists(Long customerId) {
-        log.info("::validateCustomerExists started with: customerId {}", customerId);
+    /**
+     * Validates if a customer exists.
+     *
+     * @param customerId the ID of the customer to validate
+     * @throws ResourceNotFoundException if the customer does not exist
+     */
+    public void validateCustomerExists(final Long customerId) {
+        if (log.isInfoEnabled()) {
+            log.info("::validateCustomerExists started with: customerId {}", customerId);
+        }
 
         if (!customerRepository.existsById(customerId)) {
             String errorMessage = "Customer not found with ID: " + customerId;
@@ -52,11 +86,21 @@ public class EntityValidator {
             throw new ResourceNotFoundException(errorMessage);
         }
 
-        log.info("::validateCustomerExists completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::validateCustomerExists completed successfully");
+        }
     }
 
-    public void validateInactiveEmployeeExists(Long originalEmployeeId) {
-        log.info("::validateInactiveEmployeeExists started with: originalEmployeeId: {}", originalEmployeeId);
+    /**
+     * Validates if an inactive employee exists.
+     *
+     * @param originalEmployeeId the original ID of the employee to validate
+     * @throws ResourceNotFoundException if the inactive employee does not exist
+     */
+    public void validateInactiveEmployeeExists(final Long originalEmployeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::validateInactiveEmployeeExists started with: originalEmployeeId: {}", originalEmployeeId);
+        }
 
         if (!inactiveEmployeeRepository.existsByOriginalEmployeeId(originalEmployeeId)) {
             String errorMessage = "Inactive employee not found with ID: " + originalEmployeeId;
@@ -64,16 +108,29 @@ public class EntityValidator {
             throw new ResourceNotFoundException(errorMessage);
         }
 
-        log.info("::validateInactiveEmployeeExists completed successfully");
+        if (log.isInfoEnabled()) {
+            log.info("::validateInactiveEmployeeExists completed successfully");
+        }
     }
 
-    // Methode zur Überprüfung, ob ein Employee Kunden hat
-    public boolean validateEmployeeHasCustomers(Long employeeId) {
-        log.info("::validateEmployeeHasCustomers started with: employeeId: {}", employeeId);
+    /**
+     * Validates if an employee has customers.
+     *
+     * @param employeeId the ID of the employee to check
+     * @return true if the employee has customers, false otherwise
+     */
+    public boolean validateEmployeeHasCustomers(final Long employeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::validateEmployeeHasCustomers started with: employeeId: {}", employeeId);
+        }
 
         boolean hasCustomers = employeeRepository.hasCustomers(employeeId);
 
-        log.info("::validateEmployeeHasCustomers completed successfully: employeeId: {} hasCustomers: {}", employeeId, hasCustomers);
+        if (log.isInfoEnabled()) {
+            log.info("::validateEmployeeHasCustomers completed successfully: employeeId: {} hasCustomers: {}",
+                    employeeId, hasCustomers);
+        }
         return hasCustomers;
     }
 }
+
