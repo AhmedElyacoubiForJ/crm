@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
  *     .getPageAPIResponse("Success", "OK", HttpStatus.OK, myPageData);
  * </pre>
  *
- * @author Your Name
+ * @author A. El Yacoubi
  */
 @Slf4j
 public class ApiResponseHelper {
