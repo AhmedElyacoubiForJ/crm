@@ -313,13 +313,10 @@ public class EmployeeRestController {
      * @param search an optional search parameter to filter employees by first name or department
      * @return a page of employees matching the search criteria
      */
-    private Page<Employee> getEmployeePage(final int page, final int size, final String search) {
-        final Page<Employee> employeesPage;
-        if (search != null && !search.isEmpty()) {
-            employeesPage = employeeService.getEmployeesByFirstNameOrDepartment(search, page, size);
-        } else {
-            employeesPage = employeeService.getEmployeesWithPagination(page, size);
-        }
-        return employeesPage;
+    private Page<Employee> getEmployeePage(
+            final int page, final int size, final String search) {
+        return (search != null && !search.isEmpty())
+                ? employeeService.getEmployeesByFirstNameOrDepartment(search, page, size)
+                : employeeService.getEmployeesWithPagination(page, size);
     }
 }
