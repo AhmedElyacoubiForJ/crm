@@ -1,4 +1,4 @@
 import static org.junit.jupiter.api.Assertions.*;
-class PageSerializerTest {
+class EmployeeRestControllerV2IntegrationTest {
   
 }
