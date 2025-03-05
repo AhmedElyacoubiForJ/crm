@@ -19,6 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static edu.yacoubi.crm.util.EntityTransformer.jsonAsString;
 
 /**
@@ -84,6 +87,39 @@ public class CustomerRestController {
 
         if (log.isInfoEnabled()) {
             log.info("::getAllCustomers completed successfully with: response {}", jsonAsString(response));
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Retrieve customers by their employee.
+     *
+     * @param employeeId the unique ID of the employee to retrieve customers for.
+     * @return the customers wrapped in an APIResponse
+     */
+    @Operation(
+            summary = "Get customers by employee ID",
+            description = "Retrieve a list of customers for an employee in the CRM system."
+    )
+    @GetMapping("/for/{employeeId}")
+    public ResponseEntity<APIResponse<List<CustomerResponseDTO>>> getCustomersByEmployeeId(
+            final @PathVariable Long employeeId) {
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomersByEmployeeId started with: employeeId: {}", employeeId);
+        }
+
+        List<Customer> customers = customerService.getCustomersByEmployeeId(employeeId);
+
+        final List<CustomerResponseDTO> customerResponseDTO = customers.stream().map(
+                customer -> TransformerUtil.transform(EntityTransformer.customerToCustomerResponseDto, customer)
+        ).collect(Collectors.toList());
+
+        final APIResponse<List<CustomerResponseDTO>> response = ApiResponseHelper.getDTOAPIResponse(
+                COMPLETED, SUCCESS, HttpStatus.OK, customerResponseDTO
+        );
+
+        if (log.isInfoEnabled()) {
+            log.info("::getCustomersByEmployeeId completed successfully with: response {}", jsonAsString(response));
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

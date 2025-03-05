@@ -18,6 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static edu.yacoubi.crm.util.EntityTransformer.jsonAsString;
 
 /**
@@ -239,31 +242,37 @@ public class NoteRestController {
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
-}
 
-//    /**
-//     * Retrieve all notes from the system.
-//     *
-//     * @return a list of all notes wrapped in an APIResponse
-//     */
-//    @Operation(
-//            summary = "Get all notes",
-//            description = "Retrieve all notes from the system."
-//    )
-//    @GetMapping
-//    public ResponseEntity<APIResponse<List<NoteResponseDTO>>> getAllNotes() {
-//        if (log.isInfoEnabled()) {
-//            log.info("::getAllNotes started");
-//        }
-//
-//        List<NoteResponseDTO> notes = noteService.getAllNotes();
-//
-//        final APIResponse<List<NoteResponseDTO>> response = ApiResponseHelper.getDTOAPIResponse(
-//                COMPLETED, SUCCESS, HttpStatus.OK, notes
-//        );
-//
-//        if (log.isInfoEnabled()) {
-//            log.info("::getAllNotes completed successfully with: response {}", jsonAsString(response));
-//        }
-//        return ResponseEntity.ok(response);
-//    }
+    /**
+     * Retrieves a list of notes by the customer's ID.
+     *
+     * @param customerId the ID of the customer whose notes to retrieve
+     * @return a list of notes assigned to the customer
+     */
+    @Operation(
+            summary = "Get notes by customer ID",
+            description = "Retrieve a list of notes for a customer in the CRM system."
+    )
+    @GetMapping("/for/{customerId}")
+    public ResponseEntity<APIResponse<List<NoteResponseDTO>>> getNotesByCustomerId(
+            final @PathVariable Long customerId) {
+        if (log.isInfoEnabled()) {
+            log.info("::getNotesByCustomerId started with: customerId {}", customerId);
+        }
+
+        List<Note> notes = noteService.getNotesByCustomerId(customerId);
+
+        final List<NoteResponseDTO> noteResponseDTOs = notes.stream().map(
+                note -> TransformerUtil.transform(EntityTransformer.noteToNoteResponseDto, note)
+        ).collect(Collectors.toList());
+
+        final APIResponse<List<NoteResponseDTO>> response = ApiResponseHelper.getDTOAPIResponse(
+                COMPLETED, SUCCESS, HttpStatus.OK, noteResponseDTOs
+        );
+
+        if (log.isInfoEnabled()) {
+            log.info("::getNotesByCustomerId completed successfully with: response {}", jsonAsString(response));
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+}

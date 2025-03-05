@@ -1,7 +1,6 @@
 package edu.yacoubi.crm.repository;
 
 import edu.yacoubi.crm.model.Customer;
-import edu.yacoubi.crm.model.Employee;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -34,6 +33,12 @@ public interface CustomerRepository extends
     );
 
     List<Customer> findByEmployeeId(Long employeeId);
+
+    //@Query("SELECT c FROM Customer c WHERE c.employee.id = :employeeId")
+    //List<Customer> findByEmployeeId(@Param("employeeId") Long employeeId);
+
+    @Query("SELECT c FROM Customer c WHERE LOWER(c.firstName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR LOWER(c.lastName) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
+    Page<Customer> findBySearchTerm(@Param("searchTerm") String searchTerm, Pageable pageable);
 
     //@Query("SELECT COUNT(c) > 0 FROM Customer c WHERE c.employee.id = :employeeId")
     //boolean hasCustomers(@Param("employeeId") Long employeeId);
